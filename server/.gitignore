@@ -25,7 +25,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-package-lock.json
 .env
 config.env
 
@@ -34,4 +33,6 @@ client/.eslintcache
 .eslintcache
 
 
-example.env
+.package-lock.json
+.example.env
+
