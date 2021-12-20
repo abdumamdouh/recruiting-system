@@ -10,7 +10,7 @@
     "allowImportExportEverywhere": true,
     "requireConfigFile": false
   },
-  "extends": ["airbnb", "prettier", "eslint:recommended"],
+  "extends": [],
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": [
