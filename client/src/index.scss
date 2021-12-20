@@ -1,0 +1,16 @@
+@import './assets/styles/_variables.scss';
+@import './assets/styles/_mixins.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+* {
+  text-decoration: none;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
