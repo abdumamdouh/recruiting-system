@@ -4,7 +4,7 @@ import { Redirect, Route } from "react-router";
 import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ component: Component, exact, path }) => {
-  const { userInfo } = useSelector((state) => state.user);
+  const { } = useSelector((state) => state);
 
   return (
     <Route
@@ -13,7 +13,7 @@ const ProtectedRoute = ({ component: Component, exact, path }) => {
       render={(props) =>
         // this.props.authedUser
         //TODO: add condition for Protected Route
-        userInfo ? (
+        true ? (
           <Component {...props} />
         ) : (
           <Redirect

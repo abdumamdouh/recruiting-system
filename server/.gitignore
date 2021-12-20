@@ -32,3 +32,6 @@ config.env
 client/.eslintcache
 
 .eslintcache
+
+
+example.env
