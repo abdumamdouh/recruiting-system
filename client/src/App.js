@@ -16,19 +16,19 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        <ProtectedRoute exact path="/" component={Home} name="Home Page" />
-        <Route exact path="/login" component={Login} name="Login Page" />
+        <ProtectedRoute exact path="/" component={} name="" />
+        <Route exact path="" component={} name="" />
         <ProtectedRoute
           exact
-          path="/shirts"
-          component={Shirts}
-          name="Shirts Page"
+          path=""
+          component={}
+          name=""
         />
         <Route
           exact
           path="/404"
-          component={PageNotFound404}
-          name="Error Page"
+          component={}
+          name=""
         />
         <Redirect to="/404" />
       </Switch>
