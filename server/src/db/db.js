@@ -3,7 +3,7 @@ const Sequelize = require('sequelize')
 const db = new Sequelize('gp-db','root','root',{
     dialect: 'mysql',
     host:'localhost'
- });
+});
 
 // Uncomment the following sector to test the db connection
 
