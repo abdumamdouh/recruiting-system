@@ -8,6 +8,14 @@ const Recruiter = db.define('Recruiter',{
         autoIncrement:true ,
         allowNull: false
     },
+    firstName:{
+        type: Sequelize.STRING ,
+        allowNull: false
+    },
+    lastName: {
+        type: Sequelize.STRING ,
+        allowNull: false
+    },
     email:{
         type: Sequelize.STRING,
         allowNull: false ,
