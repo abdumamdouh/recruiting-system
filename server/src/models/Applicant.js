@@ -13,6 +13,18 @@ const Applicant = db.define('Applicant',{
         allowNull: false ,
         unique: true 
     },
+    firstName:{
+        type: Sequelize.STRING ,
+        allowNull: false
+    },
+    lastName: {
+        type: Sequelize.STRING ,
+        allowNull: false
+    },
+    major: {
+        type: Sequelize.STRING ,
+        allowNull: false
+    },
     userName:{
         type: Sequelize.STRING,
         allowNull: false ,

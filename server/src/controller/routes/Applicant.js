@@ -1,6 +1,6 @@
 const express = require('express')
 const Applicant = require('../../models/Applicant')
-const Recruiter = require('./models/Recruiter')
+const Recruiter = require('../../models/Recruiter')
 
 //const auth = require('../middleware/auth') 
 
