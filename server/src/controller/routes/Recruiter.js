@@ -1,7 +1,9 @@
 const express = require('express')
+const Applicant = require('./models/Applicant')
+const Recruiter = require('../../models/Recruiter')
+
 //const auth = require('../middleware/auth') 
 
-const Recruiter = require('../../models/Recruiter')
 
 const router = new express.Router()
 
