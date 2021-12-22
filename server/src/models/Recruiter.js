@@ -1,4 +1,7 @@
 const Sequelize = require('sequelize')
+const validator = require('validator')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const db = require('../db/db')
 
 const Recruiter = db.define('Recruiter',{
@@ -40,6 +43,18 @@ const Recruiter = db.define('Recruiter',{
     },
     tokens: {
         type: Sequelize.JSON
+    }
+}, {
+    hooks: {
+        beforeCreate : async (record) => {
+            const user = this
+            // console.log(user) check
+            // console.log(record.dataValues)
+            if ( record.changed('password')) {
+                record.password = await bcrypt.hash(record.password, 8)
+            }
+            //next()   
+        }
     }
 });
 
