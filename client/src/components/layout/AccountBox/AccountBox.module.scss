@@ -1,0 +1,77 @@
+.AppContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.BoxContainer {
+  width: 280px;
+  min-height: 550px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 19px;
+  background-color: #ffffff;
+  box-shadow: 0 0 2px rgba(15, 15, 15, 0.28);
+  position: relative;
+  overflow: hidden;
+}
+
+.TopContainer {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 1.8em;
+  padding-bottom: 5em;
+}
+.BoxDrop {
+  width: 160%;
+  height: 550px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  border-radius: 50%;
+  transform: rotate(60deg);
+  top: -290px;
+  left: -70px;
+  background: rgb(223, 174, 238);
+  background: radial-gradient(
+    circle,
+    rgba(223, 174, 238, 1) 0%,
+    rgba(148, 204, 233, 1) 100%
+  );
+}
+
+.HeaderContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.24;
+  color: #fff;
+  z-index: 10;
+  margin: 0;
+}
+
+h5 {
+  color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+  z-index: 10;
+  margin: 0;
+  margin-top: 7px;
+}
+
+.InnerContainer {
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    padding: 0 1.8em;
+}
