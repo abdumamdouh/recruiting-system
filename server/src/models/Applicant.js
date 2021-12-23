@@ -57,12 +57,9 @@ const Applicant = db.define('Applicant',{
     hooks: {
         beforeCreate : async (record) => {
             const user = this
-            // console.log(user) check
-            // console.log(record.dataValues)
             if ( record.changed('password')) {
                 record.password = await bcrypt.hash(record.password, 8)
-            }
-            //next()   
+            } 
         }
     }
 });
@@ -72,17 +69,28 @@ Applicant.prototype.generateAuthToken = async function () {
 
     const token = jwt.sign({ _id: this.id.toString() },'123456')
     let tokens = []
-    if( this.tokens !== undefined )
-    {
+    if( this.tokens !== undefined ) {
         tokens = JSON.parse(this.tokens)
     }
-
     tokens = tokens.concat({token})
-
-    this.tokens = tokens
-
+    this.tokens = JSON.stringify(tokens)
     await this.save()
 
     return token
 }
+
+// Validate Applicant by it's email and password
+Applicant.findByCredentials = async (email,password) => {
+
+    const applicant = await Applicant.findOne({ email })
+    if (!applicant){
+        return undefined
+    }
+    const validLogin = await bcrypt.compare(password,applicant.password)  
+    if (!validLogin){
+        return undefined
+    } 
+    return applicant
+}
+
 module.exports = Applicant ;
