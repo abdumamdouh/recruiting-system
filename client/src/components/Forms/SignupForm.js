@@ -13,6 +13,52 @@ const Register =()=> {
     const [formValues, setFormValues]=useState(initialValues)
     const [programmingLanguages,setProgramminLanguages]=useState([])
     const [view,setView] = useState("notsw")
+    const [errors,setErrors]=useState({})
+    const [confirmpass,setconfirmpass]=useState("")
+
+
+    const validate=(formValues)=>{
+        const error={};
+
+        if(!formValues.firstname)
+        {
+            error.firstname="firstname required"
+        }
+        if(!formValues.lastname)
+        {
+            error.lastname="lastname required"
+        }
+        if(!formValues.username)
+        {
+            error.username="username required"
+        }
+        if(!formValues.password)
+        {
+            error.password="password required"
+        }
+        if(!formValues.email)
+        {
+            error.email="email required"
+        }
+        else if(!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(formValues.email)){
+            error.email="invalid email"
+
+        }
+        if(formValues.password!==confirmpass){
+            error.password2="passwords does not match"
+
+        }
+     
+     
+        setErrors(error);
+        
+        return error
+  
+
+    }
+    const confirmPassword=(e)=>{
+        setconfirmpass(e.target.value)
+    }
 
     const handleChange=(e)=>{
         const {name,value}=e.target
@@ -29,21 +75,7 @@ const Register =()=> {
         }
     }
 
-    // const handleLanguages =(e)=>{
-    //     if(programmingLanguages.includes(e.target.value))
-    //     {
-    //         setProgramminLanguages( programmingLanguages.filter(entry=>entry!=e.target.value)  )
-
-    //     }
-    //     else{
-    //         setProgramminLanguages([...programmingLanguages,e.target.value])
-
-    //     }
-    //     setFormValues({...formValues,qualifications:{...formValues.qualifications,programmingLanguages}})
-    //     console.log(formValues)
-
-    //}
-
+ 
 
     const handleView = (e)=>{
         if(e.target.value==="software-engineer"){
@@ -57,7 +89,11 @@ const Register =()=> {
         e.preventDefault();
 
         const json =JSON.stringify(formValues)
-        console.log(json)
+        const errors =validate(formValues)
+        if(Object.keys(errors).length===0){
+            console.log(json)
+        }
+       
     }
 
    
@@ -71,13 +107,25 @@ const Register =()=> {
             <form classNam={classes.FormContainer}>
               
                 <input className={classes.Input} name="firstname" placeholder='Firstname' onChange={handleChange}/>
-                <input className={classes.Input} name="lastname" placeholder='lastname'onChange={handleChange}/>
-                <input className={classes.Input} name="username" placeholder='username'onChange={handleChange}/> 
-                <input className={classes.Input}name="email" placeholder='email'onChange={handleChange}/> 
+                {errors.firstname&& <label className={classes.error}>{errors.firstname}</label>}
+
+                <input className={classes.Input}name="lastname" placeholder='lastname'onChange={handleChange}/>
+                {errors.lastname&& <label className={classes.error}>{errors.lastname}</label>}
+
+                <input className={classes.Input}name="username" placeholder='username'onChange={handleChange}/> 
+                {errors.username&& <label className={classes.error}>{errors.username}</label>}
+
+                <input className={classes.Input} name="email" placeholder='email'onChange={handleChange}/> 
+                {errors.email&& <label className={classes.error}>{errors.email}</label>}
+
                 <input className={classes.Input}name= "password"  type="password" placeholder='password'onChange={handleChange}/> 
+                {errors.password&& <label className={classes.error}>{errors.password}</label>}
+
                
 
-                <input className={classes.Input}type="password" placeholder='confirm password' />                    
+                <input className={classes.Input} type="password" placeholder='confirm password' onChange={confirmPassword}/>   
+                {errors.password2&& <label className={classes.error}>{errors.password2}</label>}
+
                    
                 <h4>Major</h4>   
                 <select onChange={handleView}>
