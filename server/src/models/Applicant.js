@@ -71,7 +71,7 @@ const Applicant = db.define('Applicant',{
 Applicant.prototype.generateAuthToken = async function () {
 
     const token = jwt.sign({ _id: this.id.toString() },'123456')
-    let tokens = [{token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxIiwiaWF0IjoxNjQwMjEyODkzfQ.gMKpxoihTY3ecpVZ8nwJGd37Ue6v9NUMB9CKeV3cbvw'}]
+    let tokens = []
     if( this.tokens !== undefined )
     {
         tokens = JSON.parse(this.tokens)
