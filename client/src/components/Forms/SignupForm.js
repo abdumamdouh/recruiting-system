@@ -138,22 +138,22 @@ const Register =()=> {
                 <div>
                     <h3>you consider yourself </h3>
                     <ul className={classes.Ul}>
-                        <li>
+                        <li className={classes.Li}>
                         <input type="radio"name="level"value="Intern"onChange={handleChange}/><label>Intern</label>
                         </li>
-                        <li>
+                        <li className={classes.Li}>
                         <input type="radio"name="level"value="Junior"onChange={handleChange}/><label>Junior</label>
 
                         </li>
-                        <li>
+                        <li className={classes.Li}>
                         <input type="radio"name="level"value="Mid-Level"onChange={handleChange}/><label>Mid Level</label>
 
                         </li>
-                        <li>
+                        <li className={classes.Li}>
                         <input type="radio"name="level"value="Senior"onChange={handleChange}/><label>Senior</label>
 
                         </li>
-                        <li>
+                        <li className={classes.Li}>
                         <input type="radio"name="level"value="Staff-Engineer"onChange={handleChange}/><label>Staff Engineer</label>
 
                         </li>
@@ -280,8 +280,8 @@ const Register =()=> {
                         {
                             stacks.map(stack=>{
                                 return (
-                                    <li key={stack}>
-                                        <input name="qualifications" type="checkbox"value={stack} onChange={handleChange}/><label key={stack}>{stack}</label>
+                                    <li className={classes.Li} key={stack}>
+                                        <input  name="qualifications" type="checkbox"value={stack} onChange={handleChange}/><label key={stack}>{stack}</label>
 
                                     </li>
                                 )
