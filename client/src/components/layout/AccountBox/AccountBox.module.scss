@@ -17,6 +17,17 @@
   position: relative;
   overflow: hidden;
 }
+.BoxContainer2 {
+  width: 1000px;
+  min-height: 550px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 19px;
+  background-color: #ffffff;
+  box-shadow: 0 0 2px rgba(15, 15, 15, 0.28);
+  position: relative;
+  overflow: hidden;
+}
 
 .TopContainer {
   width: 100%;
@@ -59,7 +70,14 @@ h2 {
   z-index: 10;
   margin: 0;
 }
-
+h3 {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.24;
+  color: rgb(8, 8, 8);
+  z-index: 10;
+  margin: 0;
+}
 h5 {
   color: #fff;
   font-weight: 500;
