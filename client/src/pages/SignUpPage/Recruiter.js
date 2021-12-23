@@ -1,9 +1,9 @@
 import React from 'react'
-
+import SignupRecruiter from '../../components/layout/AccountBox/SignupRecruiterBox'
 function Recruiter() {
     return (
-        <h1>Signup Recruiter</h1>
-    )
+        <SignupRecruiter/>
+        )
 }
 
 export default Recruiter

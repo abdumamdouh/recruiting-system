@@ -1,5 +1,5 @@
 import React ,{useState} from 'react'
-import { connect } from 'react-redux'
+
 import classes from "./common.module.scss";
 
 
@@ -207,10 +207,5 @@ const Register =()=> {
   
 }
 
-function mapStateToProps({authedUser}){
-    return{authedUser
 
-    }
-}
-
-export default connect(mapStateToProps)(Register)
+export default (Register)
