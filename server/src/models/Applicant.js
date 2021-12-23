@@ -69,24 +69,20 @@ const Applicant = db.define('Applicant',{
 
 
 Applicant.prototype.generateAuthToken = async function () {
-    const applicant = this.dataValues
-    const token = jwt.sign({ _id: applicant.id.toString() },'123456')
-    let tokens = [{token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxIiwiaWF0IjoxNjQwMjEyODkzfQ.gMKpxoihTY3ecpVZ8nwJGd37Ue6v9NUMB9CKeV3cbvw'}]
-    if( applicant.tokens !== undefined )
-    {
-        tokens = JSON.parse(applicant.tokens)
-    }
 
+    const token = jwt.sign({ _id: this.id.toString() },'123456')
+    let tokens = [{token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxIiwiaWF0IjoxNjQwMjEyODkzfQ.gMKpxoihTY3ecpVZ8nwJGd37Ue6v9NUMB9CKeV3cbvw'}]
+    if( this.tokens !== undefined )
+    {
+        tokens = JSON.parse(this.tokens)
+    }
 
     tokens = tokens.concat({token})
 
-    const tokensJSON = tokens
+    this.tokens = tokens
 
-    this.dataValues.tokens = tokensJSON
-    this.dataValues.tokens = { token : '123'}
-    console.log(this)
     await this.save()
-    
+
     return token
 }
 module.exports = Applicant ;
