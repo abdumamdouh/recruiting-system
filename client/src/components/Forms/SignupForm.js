@@ -166,20 +166,7 @@ const Register =()=> {
                 <div>
                 {/* <h3>your Favourit stack </h3>
                     <ul>
-                        <li>
-                        <input type="checkbox"value="c++"onChange={handleLanguages}/><label>C++</label>
-                        </li>
-                        <li>
-                        <input type="checkbox"value="java"onChange={handleLanguages}/><label>java</label>
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="python"onChange={handleLanguages}/><label>python</label>
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="javascript"onChange={handleLanguages}/><label>java</label>
-
+               
                         </li>
                         <li>
                         <input type="checkbox"value="r"onChange={handleLanguages}/><label>r</label>
