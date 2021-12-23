@@ -1,5 +1,5 @@
 import React ,{useState} from 'react'
-import { connect } from 'react-redux'
+
 import classes from "./common.module.scss";
 
 
@@ -65,10 +65,10 @@ const Register =()=> {
     return (
         <div className={classes.BoxContainer}>
             <h3>Account information</h3>
-            <div classNam={classes.InnerContainer}>
+            <div classNam={classes.FormContainer}>
 
            
-            <form >
+            <form classNam={classes.FormContainer}>
               
                 <input className={classes.Input} name="firstname" placeholder='Firstname' onChange={handleChange}/>
                 <input className={classes.Input} name="lastname" placeholder='lastname'onChange={handleChange}/>
@@ -164,103 +164,6 @@ const Register =()=> {
 
                 </div>
                 <div>
-                {/* <h3>your Favourit stack </h3>
-                    <ul>
-               
-                        </li>
-                        <li>
-                        <input type="checkbox"value="r"onChange={handleLanguages}/><label>r</label>
-                        
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="C#"onChange={handleLanguages}/><label>C#</label>
-                        
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="kotlin"onChange={handleLanguages}/><label>kotlin</label>
-                        
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="typescript"onChange={handleLanguages}/><label>typescript</label>
-                        
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="PHP"onChange={handleLanguages}/><label>PHP</label>
-                        
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="ReactJs"/><label>ReactJs</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="ReactNative"/><label>React Native</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="VueJs"/><label>VueJs</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="NodeJs"/><label>NodeJs</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="QT"/><label>QT</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="DotNet"/><label>DotNet</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="Laravel"/><label>Laravel</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="MongoDB"/><label>MongoDB</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="PostgreSQL"/><label>PostgreSQL</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="Unity"/><label>Unity</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value=" Flutter"/><label> Flutter</label>
-
-
-                        </li>
-                        <li>
-                        <input type="checkbox"value="Ionic"/><label>Ionic</label>
-
-
-                        </li>
-
-                        
-                        
-                    </ul> */}
-
-
-                </div>
-                <div>
                     <h3>Your Favourite stack</h3>
                     <ul className={classes.Ul}>
 
@@ -304,10 +207,5 @@ const Register =()=> {
   
 }
 
-function mapStateToProps({authedUser}){
-    return{authedUser
 
-    }
-}
-
-export default connect(mapStateToProps)(Register)
+export default (Register)
