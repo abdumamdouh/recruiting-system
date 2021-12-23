@@ -10,13 +10,12 @@ router.post('/Applicant/Sign-up' , async (req,res) =>{
     const applicant = req.body
     // console.log( applicant )
     try {
+        
         const record = await Applicant.create( applicant )
+        
         const token = await record.generateAuthToken()
 
-        const applicants = await Applicant.findAll()
-        console.log(applicant)
-        // console.log(typeof record.dataValues.tokens)
-        res.status(200).send(record)   
+        res.status(200).send(token)   
      
     } catch (error) {
         res.status(400).send(error.message)

@@ -59,4 +59,21 @@ const Recruiter = db.define('Recruiter',{
 });
 
 
+Recruiter.prototype.generateAuthToken = async function () {
+
+    const token = jwt.sign({ _id: this.id.toString() },'123456')
+    let tokens = []
+    if( this.tokens !== undefined )
+    {
+        tokens = JSON.parse(this.tokens)
+    }
+
+    tokens = tokens.concat({token})
+
+    this.tokens = tokens
+
+    await this.save()
+
+    return token
+}
 module.exports = Recruiter ;
