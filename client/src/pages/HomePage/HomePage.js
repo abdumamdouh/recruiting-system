@@ -1,23 +1,19 @@
 import React from "react";
-import {useHistory} from 'react-router-dom'
-function HomePage() {
-    const history= useHistory()
-    const handleApplicant = ()=>{
-        history.push('/signup-applicant')
-    }
-    const handleRecruiter = ()=>{
-        history.push('/signup-recruiter')
-    }
 
+import styled from "styled-components";
+
+import { TopSection } from "./TopSection";
+const PageContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+function HomePage() {
   return (
-    <>
-      {/* <h1>
-            Home
-        </h1> */}
-      <p>Find Your next opportunity</p>
-      <button onClick={handleApplicant}> Apply as an applicant </button>
-      <button onClick={handleRecruiter}> Apply as a recruiter </button>
-    </>
+    <PageContainer>
+      <TopSection />
+    </PageContainer>
   );
 }
 
