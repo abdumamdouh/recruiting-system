@@ -12,6 +12,20 @@
   flex-direction: column;
   box-shadow: 0px 0px 2.5px rgba(15, 15, 15, 0.19);
 }
+.Ul{
+  columns: 5;
+  -webkit-columns: 5;
+  -moz-columns: 5;
+  padding-left: 0;
+
+
+}
+
+.Li {
+  list-style-type: none;
+  padding: 2px;
+  text-decoration: none;
+}
 
 .MutedLink {
   font-size: 11px;
@@ -70,4 +84,5 @@
   &:hover {
     filter: brightness(1.03);
   }
+
 }
