@@ -21,35 +21,37 @@ const Register =()=> {
         const error={};
 
         if(!formValues.firstname)
-        {
-            error.firstname="firstname required"
-        }
+            error.firstname="Firstname required"
+        
         if(!formValues.lastname)
-        {
-            error.lastname="lastname required"
-        }
+            error.lastname="Lastname required"
+        
         if(!formValues.username)
-        {
-            error.username="username required"
-        }
+            error.username="Username required"
+        
         if(!formValues.password)
-        {
-            error.password="password required"
-        }
+            error.password="Password required"
+        
         if(!formValues.email)
-        {
-            error.email="email required"
-        }
+            error.email="Email required"
+        
         else if(!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(formValues.email)){
-            error.email="invalid email"
+            error.email="Invalid Email"
 
         }
-        if(formValues.password!==confirmpass){
-            error.password2="passwords do not match"
+        if(formValues.password!==confirmpass)
+            error.password2="Passwords do not match"
 
-        }
-     
-     
+        if(!formValues.yearsOfExperience)
+            error.yearsOfExperience="Years Of Experience required"
+        
+        if(!formValues.major)
+            error.major="Major required"
+
+        if(!formValues.level)
+            error.level="Level required"
+
+
         setErrors(error);
         
         return error
@@ -106,13 +108,13 @@ const Register =()=> {
            
             <form classNam={classes.FormContainer}>
               
-                <input className={classes.Input} name="firstname" placeholder='Firstname' onChange={handleChange}/>
+                <input className={classes.Input} name="firstName" placeholder='Firstname' onChange={handleChange}/>
                 {errors.firstname&& <label className={classes.error}>{errors.firstname}</label>}
 
-                <input className={classes.Input}name="lastname" placeholder='lastname'onChange={handleChange}/>
+                <input className={classes.Input}name="lastName" placeholder='lastname'onChange={handleChange}/>
                 {errors.lastname&& <label className={classes.error}>{errors.lastname}</label>}
 
-                <input className={classes.Input}name="username" placeholder='username'onChange={handleChange}/> 
+                <input className={classes.Input}name="userName" placeholder='username'onChange={handleChange}/> 
                 {errors.username&& <label className={classes.error}>{errors.username}</label>}
 
                 <input className={classes.Input} name="email" placeholder='email'onChange={handleChange}/> 
@@ -147,35 +149,35 @@ const Register =()=> {
                 <h3>you are more into </h3>
                     <ul className={classes.Ul}>
                         <li className={classes.Li}>
-                        <input  type="radio"name="pref"value="BackEnd"onChange={handleChange}/><label>BackEnd</label>
+                        <input  type="radio"name="major"value="BackEnd"onChange={handleChange}/><label>BackEnd</label>
                         
                         </li>
                         <li className={classes.Li}>
-                        <input type="radio"name="pref"value="FrontEnd"onChange={handleChange}/><label>FrontEnd</label>
+                        <input type="radio"name="major"value="FrontEnd"onChange={handleChange}/><label>FrontEnd</label>
 
                         </li>
                         <li className={classes.Li}>
-                        <input type="radio"name="pref"value="Fullstack"onChange={handleChange}/><label>Fullstack</label>
+                        <input type="radio"name="major"value="Fullstack"onChange={handleChange}/><label>Fullstack</label>
 
                         </li>
                         <li className={classes.Li}>
-                        <input type="radio"name="pref"value="testing"onChange={handleChange}/><label>testing</label>
+                        <input type="radio"name="major"value="testing"onChange={handleChange}/><label>testing</label>
 
                         </li>
                         <li className={classes.Li}>
-                        <input type="radio"name="pref"value="DevOps"onChange={handleChange}/><label>DevOps</label>
+                        <input type="radio"name="major"value="DevOps"onChange={handleChange}/><label>DevOps</label>
 
                         </li>
                         <li className={classes.Li}>
-                        <input type="radio"name="pref"value="mobile"onChange={handleChange}/><label>mobile dev</label>
+                        <input type="radio"name="major"value="mobile"onChange={handleChange}/><label>mobile dev</label>
 
                         </li>
                         <li className={classes.Li}>
-                        <input type="radio"name="pref"value="embedded"onChange={handleChange}/><label>embedded</label>
+                        <input type="radio"name="major"value="embedded"onChange={handleChange}/><label>embedded</label>
 
                         </li>
                         <li className={classes.Li}>
-                        <input type="radio"name="pref"value="R&D"onChange={handleChange}/><label>R&D</label>
+                        <input type="radio"name="major"value="R&D"onChange={handleChange}/><label>R&D</label>
                         </li>
       
                     </ul>
@@ -209,6 +211,10 @@ const Register =()=> {
                    
 
                 </div>
+                <h3>years Of Experience</h3>
+                <input className={classes.Input} name="yearsOfExperience" placeholder='years Of Experience' onChange={handleChange}/>
+                {errors.yearsOfExperience&& <label className={classes.error}>{errors.yearsOfExperience}</label>}
+
                 <div>
                     <h3>Your Favourite stack</h3>
                     <ul className={classes.Ul}>
