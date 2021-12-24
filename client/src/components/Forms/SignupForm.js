@@ -9,7 +9,7 @@ const Register =()=> {
     "C/C++", "Ruby", "on", "Rails", "Unity", "R", "JavaScript", "AngularJs", "Angular", "TypeScript",
     "ReactJs", "VueJs", "React-Native", "Kotlin", "Flutter", "Xamarin", "Ionic", "PhoneGap", "iOS",
     "Objective", "C", "Swift", "Android", "Docker", "Electron", "Rust", "Scala", "Go"]
-    const initialValues={firstname:"",lastname:"",username:"",email:"",password:"",pref:"",level:"",qualifications:{programmingLanguages:[]}}
+    const initialValues={firstName:"",lastName:"",userName:"",email:"",password:"",major:"",level:"",qualifications:{programmingLanguages:[]}}
     const [formValues, setFormValues]=useState(initialValues)
     const [programmingLanguages,setProgramminLanguages]=useState([])
     const [view,setView] = useState("notsw")
@@ -20,14 +20,14 @@ const Register =()=> {
     const validate=(formValues)=>{
         const error={};
 
-        if(!formValues.firstname)
-            error.firstname="Firstname required"
+        if(!formValues.firstName)
+            error.firstName="Firstname required"
         
-        if(!formValues.lastname)
-            error.lastname="Lastname required"
+        if(!formValues.lastName)
+            error.lastName="Lastname required"
         
-        if(!formValues.username)
-            error.username="Username required"
+        if(!formValues.userName)
+            error.userName="Username required"
         
         if(!formValues.password)
             error.password="Password required"
@@ -103,19 +103,19 @@ const Register =()=> {
     return (
         <div className={classes.BoxContainer}>
             <h3>Account information</h3>
-            <div classNam={classes.FormContainer}>
+            <div className={classes.FormContainer}>
 
            
-            <form classNam={classes.FormContainer}>
+            <form className={classes.FormContainer}>
               
                 <input className={classes.Input} name="firstName" placeholder='Firstname' onChange={handleChange}/>
-                {errors.firstname&& <label className={classes.error}>{errors.firstname}</label>}
+                {errors.firstName&& <label className={classes.error}>{errors.firstName}</label>}
 
                 <input className={classes.Input}name="lastName" placeholder='lastname'onChange={handleChange}/>
-                {errors.lastname&& <label className={classes.error}>{errors.lastname}</label>}
+                {errors.lastName&& <label className={classes.error}>{errors.lastName}</label>}
 
                 <input className={classes.Input}name="userName" placeholder='username'onChange={handleChange}/> 
-                {errors.username&& <label className={classes.error}>{errors.username}</label>}
+                {errors.userName&& <label className={classes.error}>{errors.userName}</label>}
 
                 <input className={classes.Input} name="email" placeholder='email'onChange={handleChange}/> 
                 {errors.email&& <label className={classes.error}>{errors.email}</label>}
@@ -181,7 +181,7 @@ const Register =()=> {
                         </li>
       
                     </ul>
-
+                    {errors.major&& <label className={classes.error}>{errors.major}</label>}
                    
                 </div>
                 <div>
@@ -204,11 +204,9 @@ const Register =()=> {
                         </li>
                         <li className={classes.Li}>
                         <input type="radio"name="level"value="Staff-Engineer"onChange={handleChange}/><label>Staff Engineer</label>
-
                         </li>
                     </ul>
-
-                   
+                    {errors.level&& <label className={classes.error}>{errors.level}</label>}
 
                 </div>
                 <h3>years Of Experience</h3>
