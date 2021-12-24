@@ -39,7 +39,7 @@ const RegisterAsRecruiter =()=> {
 
         }
         if(formValues.password!==confirmpass){
-            error.password2="passwords does not match"
+            error.password2="passwords do not match"
 
         }
         if(!formValues.position)
