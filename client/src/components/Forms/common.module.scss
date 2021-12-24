@@ -68,7 +68,7 @@
 .SubmitButton {
   width: 90%;
   padding: 11px 20%;
-  color: #fff;
+  color: rgb(248, 245, 245);
   font-size: 15px;
   font-weight: 600;
   border: none;
@@ -79,11 +79,49 @@
   background: rgb(223, 174, 238);
   background: radial-gradient(
     circle,
-    rgba(223, 174, 238, 1) 0%,
-    rgba(148, 204, 233, 1) 100%
+    rgb(162,162, 246) 0%,
+    #2D5AA3 100% 
   );
   &:hover {
-    filter: brightness(1.03);
+    filter: brightness(1.5);
+  }
+
+}
+
+.Select{
+  margin: 12px;
+  
+  padding: 11px ;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  width: 90%;
+  color: rgb(248, 245, 245);
+  cursor: pointer;
+  background:radial-gradient(
+    circle,
+    rgb(162,162, 246) 0%,
+    #2D5AA3 100% 
+  );
+  &:focus{
+    outline: none #2D5AA3 ;
+    border: 1px solid ;
+
+  }
+  &:hover{
+    outline: none #2D5AA3 ;
+    border: 1px solid ;
+
+  }
+  option{
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 0 10px 100px #1882A8 inset;
+    color: #0c0c0c;
+  
+
+
   }
 
 }

@@ -53,8 +53,8 @@
   background: rgb(223, 174, 238);
   background: radial-gradient(
     circle,
-    rgba(223, 174, 238, 1) 0%,
-    rgba(148, 204, 233, 1) 100%
+    rgb(162,162, 246) 0%,
+    #2D5AA3 100% 
   );
 }
 
@@ -69,21 +69,21 @@ h2 {
   font-size: 30px;
   font-weight: 600;
   line-height: 1.24;
-  color: rgb(8, 8, 8);
+  color: rgb(248, 245, 245);
   z-index: 10;
   margin: 0;
 }
 h3 {
-  font-size: 25px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 1.24;
-  color: rgb(8, 8, 8);
+  color: rgb(7, 7, 7);
   z-index: 10;
   margin: 0;
 }
 h5 {
   text-align: center;
-  color: rgb(8, 8, 8);
+  color: rgb(248, 245, 245);
   font-weight: 500;
   font-size: 14px;
   z-index: 10;
