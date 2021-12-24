@@ -127,8 +127,8 @@ const Register =()=> {
                 {errors.password2&& <label className={classes.error}>{errors.password2}</label>}
 
                    
-                <h4>Major</h4>   
-                <select onChange={handleView}>
+              
+                <select className={classes.Select} onChange={handleView}>
                     <option>--select major--</option>
                     <option value = "software-engineer">software engineer</option>
 
@@ -179,7 +179,6 @@ const Register =()=> {
                         </li>
       
                     </ul>
-                    <h3>{formValues.pref}</h3>
 
                    
                 </div>
@@ -206,7 +205,6 @@ const Register =()=> {
 
                         </li>
                     </ul>
-                    <h3>{formValues.level}</h3>
 
                    
 
@@ -231,7 +229,6 @@ const Register =()=> {
                      
 
                     </ul>
-                    <h3>{formValues.qualifications.programmingLanguages}</h3>
  
                 </div>
                 </div>
