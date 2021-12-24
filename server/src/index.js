@@ -19,8 +19,8 @@ app.use(RecruiterRouter)
 app.use(GeneralRouter)
 
 // creating tables if not existed
-Applicant.sync({ force: true })
-Recruiter.sync({ force: true })
+Applicant.sync()
+Recruiter.sync()
 
 app.listen(PORT , () =>{
     console.log('Server is up on port '+ PORT)

@@ -81,8 +81,7 @@ Applicant.prototype.generateAuthToken = async function () {
 
 // Validate Applicant by it's email and password
 Applicant.findByCredentials = async (email,password) => {
-
-    const applicant = await Applicant.findOne({ email })
+    const applicant = await Applicant.findOne({ where: { email } })
     if (!applicant){
         return undefined
     }
