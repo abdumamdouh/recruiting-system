@@ -14,6 +14,13 @@ function LoginForm(props) {
     const handleLoginForm = (e) => {
         e.preventDefault();
         dispatch(loginUserAction(email, password));
+
+        const fromObj = this.props.location.state || {
+            from: { pathname: "/" }
+        };
+
+        const path = fromObj.from.pathname;
+        this.props.history.push(path);
     };
     return (
         <div className={classes.BoxContainer}>
