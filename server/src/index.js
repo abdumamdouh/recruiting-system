@@ -1,6 +1,6 @@
 const express = require('express')
 const db = require('./db/db')
-
+const cors = require('cors')
 const Applicant = require('./models/Applicant')
 const Recruiter = require('./models/Recruiter')
 
@@ -9,10 +9,10 @@ const RecruiterRouter = require('./controller/routes/Recruiter')
 const GeneralRouter = require('./controller/routes/General')
 
 const app = express();
-const PORT = 3000;
+const PORT = 5000;
 
 app.use(express.json()) 
-
+app.use(cors())
 // using App routers
 app.use(ApplicantRouter)
 app.use(RecruiterRouter)
