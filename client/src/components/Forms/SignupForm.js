@@ -125,7 +125,7 @@ function Register(props) {
             dispatch(registerApplicantAction(formValues));
         }
 
-        const fromObj = this.props.location.state || {
+        const fromObj = props.location.state || {
             from: { pathname: "/" }
         };
 
