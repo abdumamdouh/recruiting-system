@@ -1,8 +1,8 @@
 import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    Redirect
 } from "react-router-dom";
 
 // pages
@@ -11,6 +11,8 @@ import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import Applicant from "./pages/SignUpPage/Applicant";
 import Recruiter from "./pages/SignUpPage/Recruiter";
+import PageNotFound404 from "./pages/PageNotFound404";
+
 // components
 import HelloWorld from "./components/HelloWorld";
 import Layout from "./components/layout/Layout";
@@ -18,44 +20,50 @@ import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./ProtectedRoute";
 
 const App = () => {
-  return (
-    <Router>
-     <Layout>
-      <Switch>
-        <Route path="/" exact>
-          <HomePage />
-        </Route>
-        <Route path="/login" exact>
-          <LoginPage />
-        </Route>
-        <Route path="/signup-applicant" exact>
-          <Applicant />
-        </Route>
-        <Route path="/signup-recruiter" exact>
-          <Recruiter/>
-        </Route>
-      </Switch>
-    </Layout>
-      {/* <Switch>
-        <ProtectedRoute exact path="/" component={HelloWorld} name="" />
-        <Route exact path="" component={HelloWorld} name="" />
-        <ProtectedRoute
-          exact
-          path=""
-          component={}
-          name=""
-        />
-        <Route
-          exact
-          path="/404"
-          component={}
-          name=""
-        />
-        <Redirect to="/404" />
-      </Switch>
-      <Footer /> */}
-    </Router>
-  );
+    return (
+        <Router>
+            <Layout>
+                <Switch>
+                    <ProtectedRoute
+                        exact
+                        path="/"
+                        component={HomePage}
+                        name="HomePage"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/login"
+                        component={LoginPage}
+                        name="LoginPage"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/signup-applicant"
+                        component={Applicant}
+                        name="Applicant"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/signup-recruiter"
+                        component={Recruiter}
+                        name="signup-recruiter"
+                    />
+
+                    <Route
+                        exact
+                        path="/404"
+                        component={PageNotFound404}
+                        name="PageNotFound404"
+                    />
+
+                    <Redirect to="/404" />
+                </Switch>
+            </Layout>
+        </Router>
+    );
 };
 
 export default App;
