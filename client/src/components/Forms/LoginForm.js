@@ -2,15 +2,15 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import classes from "./common.module.scss";
-
-function LoginForm() {
+import { loginUserAction } from "../../redux/actions/user";
+function LoginForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-
+  console.log(dispatch);
   const handleLoginForm = e => {
     e.preventDefault();
-    console.log(email, password);
+    dispatch(loginUserAction(email, password));
   };
   return (
     <div className={classes.BoxContainer}>
