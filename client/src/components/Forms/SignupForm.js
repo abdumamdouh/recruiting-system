@@ -124,6 +124,13 @@ function Register(props) {
             console.log(json);
             dispatch(registerApplicantAction(formValues));
         }
+
+        const fromObj = this.props.location.state || {
+            from: { pathname: "/" }
+        };
+
+        const path = fromObj.from.pathname;
+        this.props.history.push(path);
     };
 
     return (
