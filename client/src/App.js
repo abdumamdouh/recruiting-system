@@ -28,14 +28,14 @@ const App = () => {
                         exact
                         path="/"
                         component={HomePage}
-                        name="HomePage"
+                        name="/"
                     />
 
-                    <ProtectedRoute
+                    <Route
                         exact
                         path="/login"
                         component={LoginPage}
-                        name="LoginPage"
+                        name="login"
                     />
 
                     <ProtectedRoute
