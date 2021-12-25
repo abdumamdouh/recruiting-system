@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import classes from "./common.module.scss";
 
-import { registerRecruiterAction } from "../../redux/actions";
+import { registerRecruiterAction } from "../../redux/actions/user";
 
 const RegisterAsRecruiter = () => {
   const initialValues = {
-    firstname: "",
-    lastname: "",
-    username: "",
+    firstName: "",
+    lastName: "",
+    userName: "",
     email: "",
     password: "",
     company: "",
@@ -21,14 +21,14 @@ const RegisterAsRecruiter = () => {
   const validate = formValues => {
     const error = {};
 
-    if (!formValues.firstname) {
-      error.firstname = "firstname required";
+    if (!formValues.firstName) {
+      error.firstName = "firstname required";
     }
-    if (!formValues.lastname) {
-      error.lastname = "lastname required";
+    if (!formValues.lastName) {
+      error.lastName = "lastname required";
     }
-    if (!formValues.username) {
-      error.username = "username required";
+    if (!formValues.userName) {
+      error.userName = "username required";
     }
     if (!formValues.password) {
       error.password = "password required";
@@ -70,8 +70,9 @@ const RegisterAsRecruiter = () => {
     const errors = validate(formValues);
     if (Object.keys(errors).length === 0) {
       console.log(formValues);
+      dispatch(registerRecruiterAction(formValues));
     }
-    dispatch(registerRecruiterAction(formValues));
+   
   };
 
   return (
@@ -80,32 +81,32 @@ const RegisterAsRecruiter = () => {
       <form className={classes.FormContainer}>
         <input
           className={classes.Input}
-          name="firstname"
+          name="firstName"
           placeholder="Firstname"
           onChange={handleChange}
         />
         {errors.firstname && (
-          <label className={classes.error}>{errors.firstname}</label>
+          <label className={classes.error}>{errors.firstName}</label>
         )}
 
         <input
           className={classes.Input}
-          name="lastname"
+          name="lastName"
           placeholder="lastname"
           onChange={handleChange}
         />
         {errors.lastname && (
-          <label className={classes.error}>{errors.lastname}</label>
+          <label className={classes.error}>{errors.lastName}</label>
         )}
 
         <input
           className={classes.Input}
-          name="username"
+          name="userName"
           placeholder="username"
           onChange={handleChange}
         />
         {errors.username && (
-          <label className={classes.error}>{errors.username}</label>
+          <label className={classes.error}>{errors.userName}</label>
         )}
 
         <input
