@@ -5,7 +5,7 @@ import classes from "./common.module.scss";
 
 import { registerRecruiterAction } from "../../redux/actions/user";
 
-const RegisterAsRecruiter = () => {
+const RegisterAsRecruiter = (props) => {
     const initialValues = {
         firstName: "",
         lastName: "",
@@ -74,12 +74,12 @@ const RegisterAsRecruiter = () => {
             dispatch(registerRecruiterAction(formValues));
         }
 
-        const fromObj = this.props.location.state || {
+        const fromObj = props.location.state || {
             from: { pathname: "/" }
         };
 
         const path = fromObj.from.pathname;
-        this.props.history.push(path);
+        props.history.push(path);
     };
 
     return (
