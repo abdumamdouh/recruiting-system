@@ -17,7 +17,7 @@ const RegisterAsRecruiter = () => {
   const [formValues, setFormValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [confirmpass, setconfirmpass] = useState("");
-
+  const dispatch =useDispatch()
   const validate = formValues => {
     const error = {};
 
