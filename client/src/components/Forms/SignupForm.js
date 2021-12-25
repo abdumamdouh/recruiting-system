@@ -130,7 +130,7 @@ function Register(props) {
         };
 
         const path = fromObj.from.pathname;
-        this.props.history.push(path);
+        props.history.push(path);
     };
 
     return (
