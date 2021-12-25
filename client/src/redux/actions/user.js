@@ -9,14 +9,15 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT,
+  LOGOUT
 } from "../types";
 
-const serverURL = "http://localhost:3000"
+const serverURL = "http://localhost:5000";
 
 // register Applicant
-const registerApplicantAction = (Applicant) => {
-  return async (dispatch) => {
+const registerApplicantAction = Applicant => {
+  console.log(Applicant);
+  return async dispatch => {
     try {
       dispatch({ type: REGISTER_APPLICANT_REQUEST });
       const config = {
@@ -40,8 +41,8 @@ const registerApplicantAction = (Applicant) => {
 };
 
 // register Recruiter
-const registerRecruiterAction = (Recruiter) => {
-  return async (dispatch) => {
+const registerRecruiterAction = Recruiter => {
+  return async dispatch => {
     try {
       dispatch({ type: REGISTER_RECRUITER_REQUEST });
       const config = {
@@ -51,7 +52,7 @@ const registerRecruiterAction = (Recruiter) => {
       };
       const { data } = await axios.post(
         `${serverURL}/Recruiter/Sign-up`,
-          Recruiter,
+        Recruiter,
         config
       );
       dispatch({ type: REGISTER_RECRUITER_SUCCESS, payload: data });
@@ -64,9 +65,8 @@ const registerRecruiterAction = (Recruiter) => {
   };
 };
 
-
 const loginUserAction = (email, password) => {
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       dispatch({ type: LOGIN_REQUEST });
       const config = {
@@ -74,7 +74,7 @@ const loginUserAction = (email, password) => {
           "Content-Type": "application/json"
         }
       };
-  
+
       const { data } = await axios.post(
         `${serverURL}/login`,
         {
@@ -100,5 +100,9 @@ const logoutUserAction = () => {
   };
 };
 
-
-export { registerApplicantAction, registerRecruiterAction, loginUserAction, logoutUserAction };
+export {
+  registerApplicantAction,
+  registerRecruiterAction,
+  loginUserAction,
+  logoutUserAction
+};
