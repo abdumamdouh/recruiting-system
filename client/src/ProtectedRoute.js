@@ -12,9 +12,9 @@ const ProtectedRoute = ({ component: Component, exact, path }) => {
             path={path}
             render={(props) =>
                 //TODO: test the condition with the server
-                // true or fasle for testing
+                // true or fasle for testing and development
                 // userInfo is the condition
-                userInfo ? (
+                true ? (
                     <Component {...props} />
                 ) : (
                     <Redirect
