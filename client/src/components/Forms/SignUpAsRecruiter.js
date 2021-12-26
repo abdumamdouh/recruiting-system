@@ -72,14 +72,15 @@ const RegisterAsRecruiter = (props) => {
         if (Object.keys(errors).length === 0) {
             console.log(formValues);
             dispatch(registerRecruiterAction(formValues));
+            const fromObj = props.location.state || {
+                from: { pathname: "/" }
+            };
+    
+            const path = fromObj.from.pathname;
+            props.history.push(path);
         }
 
-        const fromObj = props.location.state || {
-            from: { pathname: "/" }
-        };
-
-        const path = fromObj.from.pathname;
-        props.history.push(path);
+      
     };
 
     return (
