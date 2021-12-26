@@ -16,9 +16,7 @@ function Register(props) {
         "DotNet",
         "Java",
         "C/C++",
-        "Ruby",
-        "on",
-        "Rails",
+        "Ruby-on-Rails",
         "Unity",
         "R",
         "JavaScript",
@@ -123,14 +121,15 @@ function Register(props) {
         if (Object.keys(errors).length === 0) {
             console.log(json);
             dispatch(registerApplicantAction(formValues));
+            const fromObj = props.location.state || {
+                from: { pathname: "/" }
+            };
+    
+            const path = fromObj.from.pathname;
+            props.history.push(path);
         }
 
-        const fromObj = props.location.state || {
-            from: { pathname: "/" }
-        };
-
-        const path = fromObj.from.pathname;
-        props.history.push(path);
+      
     };
 
     return (
