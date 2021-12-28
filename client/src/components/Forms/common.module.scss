@@ -48,9 +48,8 @@
   width: 100%;
   height: 42px;
   outline: none;
-  border: 1px solid rgba(200, 200, 200, 0.3);
+  border: 2px solid rgba(200, 200, 200, 0.3);
   padding: 0px 10px;
-  border-bottom: 1.4px solid transparent;
   transition: all 200ms ease-in-out;
   font-size: 12px;
   &::placeholder {
@@ -86,6 +85,9 @@
     filter: brightness(1.5);
   }
 
+}
+.Box{
+  border: 1px solid rgba(200, 200, 200, 1)  ;
 }
 
 .Select{

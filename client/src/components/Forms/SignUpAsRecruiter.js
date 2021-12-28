@@ -100,7 +100,7 @@ const RegisterAsRecruiter = (props) => {
                 <input
                     className={classes.Input}
                     name="lastName"
-                    placeholder="lastname"
+                    placeholder="Lastname"
                     onChange={handleChange}
                 />
                 {errors.lastname && (
@@ -110,7 +110,7 @@ const RegisterAsRecruiter = (props) => {
                 <input
                     className={classes.Input}
                     name="userName"
-                    placeholder="username"
+                    placeholder="Username"
                     onChange={handleChange}
                 />
                 {errors.username && (
@@ -120,7 +120,7 @@ const RegisterAsRecruiter = (props) => {
                 <input
                     className={classes.Input}
                     name="email"
-                    placeholder="email"
+                    placeholder="Email"
                     onChange={handleChange}
                 />
                 {errors.email && (
@@ -131,7 +131,7 @@ const RegisterAsRecruiter = (props) => {
                     className={classes.Input}
                     name="password"
                     type="password"
-                    placeholder="password"
+                    placeholder="Password"
                     onChange={handleChange}
                 />
                 {errors.password && (
@@ -141,7 +141,7 @@ const RegisterAsRecruiter = (props) => {
                 <input
                     className={classes.Input}
                     type="password"
-                    placeholder="confirm password"
+                    placeholder="Confirm password"
                     onChange={confirmPassword}
                 />
                 {errors.password2 && (
@@ -151,7 +151,7 @@ const RegisterAsRecruiter = (props) => {
                 <input
                     className={classes.Input}
                     name="company"
-                    placeholder="company"
+                    placeholder="Company"
                     onChange={handleChange}
                 />
                 {errors.firstname && (
@@ -161,7 +161,7 @@ const RegisterAsRecruiter = (props) => {
                 <input
                     className={classes.Input}
                     name="position"
-                    placeholder="position"
+                    placeholder="Position"
                     onChange={handleChange}
                 />
                 {errors.position && (
@@ -174,7 +174,7 @@ const RegisterAsRecruiter = (props) => {
                     onClick={handleSubmit}
                 >
                     {" "}
-                    sign up{" "}
+                    Sign up{" "}
                 </button>
             </form>
         </div>

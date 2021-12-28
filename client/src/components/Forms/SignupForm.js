@@ -152,7 +152,7 @@ function Register(props) {
                     <input
                         className={classes.Input}
                         name="lastName"
-                        placeholder="lastname"
+                        placeholder="Lastname"
                         onChange={handleChange}
                     />
                     {errors.lastName && (
@@ -164,7 +164,7 @@ function Register(props) {
                     <input
                         className={classes.Input}
                         name="userName"
-                        placeholder="username"
+                        placeholder="Username"
                         onChange={handleChange}
                     />
                     {errors.userName && (
@@ -176,7 +176,7 @@ function Register(props) {
                     <input
                         className={classes.Input}
                         name="email"
-                        placeholder="email"
+                        placeholder="Email"
                         onChange={handleChange}
                     />
                     {errors.email && (
@@ -187,7 +187,7 @@ function Register(props) {
                         className={classes.Input}
                         name="password"
                         type="password"
-                        placeholder="password"
+                        placeholder="Password"
                         onChange={handleChange}
                     />
                     {errors.password && (
@@ -199,7 +199,7 @@ function Register(props) {
                     <input
                         className={classes.Input}
                         type="password"
-                        placeholder="confirm password"
+                        placeholder="Confirm password"
                         onChange={confirmPassword}
                     />
                     {errors.password2 && (
@@ -209,33 +209,36 @@ function Register(props) {
                     )}
 
                     <select className={classes.Select} onChange={handleView}>
-                        <option>--select major--</option>
+                        <option>--Select major--</option>
                         <option value="software-engineer">
-                            software engineer
+                            Software engineer
                         </option>
 
-                        <option value="doctor">doctor</option>
+                        <option value="doctor">Doctor</option>
                         <option value="Pharmacist">Pharmacist</option>
                         <option value="graphic-designer">
-                            graphic designer
+                            Graphic designer
                         </option>
-                        <option value="data-analyst">data analyst</option>
-                        <option value="teacher">teacher</option>
+                        <option value="data-analyst">Data analyst</option>
+                        <option value="teacher">Teacher</option>
                     </select>
 
                     {view === "sw" && (
                         <div>
-                            <div>
-                                <h3>you are more into </h3>
+                            <div className={classes.Box}>
+                                <h3>You are more into </h3>
                                 <ul className={classes.Ul}>
                                     <li className={classes.Li}>
                                         <input
+                                           
                                             type="radio"
                                             name="major"
                                             value="BackEnd"
                                             onChange={handleChange}
+                                            
                                         />
                                         <label>BackEnd</label>
+                                        
                                     </li>
                                     <li className={classes.Li}>
                                         <input
@@ -262,7 +265,7 @@ function Register(props) {
                                             value="testing"
                                             onChange={handleChange}
                                         />
-                                        <label>testing</label>
+                                        <label>Testing</label>
                                     </li>
                                     <li className={classes.Li}>
                                         <input
@@ -280,7 +283,7 @@ function Register(props) {
                                             value="mobile"
                                             onChange={handleChange}
                                         />
-                                        <label>mobile dev</label>
+                                        <label>Mobile dev</label>
                                     </li>
                                     <li className={classes.Li}>
                                         <input
@@ -289,7 +292,7 @@ function Register(props) {
                                             value="embedded"
                                             onChange={handleChange}
                                         />
-                                        <label>embedded</label>
+                                        <label>Embedded</label>
                                     </li>
                                     <li className={classes.Li}>
                                         <input
@@ -307,8 +310,10 @@ function Register(props) {
                                     </label>
                                 )}
                             </div>
-                            <div>
-                                <h3>you consider yourself </h3>
+                            <br/>
+
+                            <div className={classes.Box}>
+                                <h3>You consider yourself </h3>
                                 <ul className={classes.Ul}>
                                     <li className={classes.Li}>
                                         <input
@@ -362,20 +367,28 @@ function Register(props) {
                                     </label>
                                 )}
                             </div>
-                            <h3>years Of Experience</h3>
+                            <br/>
+                            <div className={classes.Box}>
+                            <h3>Years Of Experience</h3>
                             <input
                                 className={classes.Input}
                                 name="yearsOfExperience"
-                                placeholder="years Of Experience"
+                                placeholder="Years Of Experience"
                                 onChange={handleChange}
                             />
+                            
                             {errors.yearsOfExperience && (
                                 <label className={classes.error}>
                                     {errors.yearsOfExperience}
                                 </label>
                             )}
 
-                            <div>
+                            </div>
+                            
+                             
+                             <br/>
+                            <div className={classes.Box}>
+                            
                                 <h3>Your Favourite stack</h3>
                                 <ul className={classes.Ul}>
                                     {stacks.map((stack) => {
@@ -402,7 +415,7 @@ function Register(props) {
                     )}
                     <button className={classes.SubmitButton} type="submit">
                         {" "}
-                        sign up
+                        Sign up
                     </button>
                 </form>
             </div>
