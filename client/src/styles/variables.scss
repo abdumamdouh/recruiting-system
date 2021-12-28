@@ -1,17 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
-$Poppins: 'Poppins', sans-serif;
+$Poppins: "Poppins", sans-serif;
 
 //colors
 
 //$dark: rgb(29, 29, 29);
 // $dark : rgb(89, 63, 97);
-$dark: #2D5AA3;
+$dark: #2d5aa3;
 $light: #fff;
-$primary: rgb(162,162, 246);
+$primary: rgb(162, 162, 246);
 // $bg: rgb(244, 244, 255);
 $bg: #fff;
-//spacing 
+//spacing
 $spacing-md: 16px;
 $spacing-lg: 32px;
 
@@ -19,11 +19,11 @@ $spacing-lg: 32px;
 $borderRadius: 12px;
 
 //header height
-$headerHeight: 70px;
+$headerHeight: 10vh;
 
-@mixin breakpoint($point){
+@mixin breakpoint($point) {
     @if $point == md {
-        @media(min-width: 48em){
+        @media (min-width: 48em) {
             @content;
         }
     }
