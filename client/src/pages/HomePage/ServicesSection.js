@@ -5,9 +5,9 @@ import { Marginer } from "../../components/Marginer/Marginer";
 import { OurSerivce } from "../../components/CustomSection";
 import { SectionTitle } from "../../components/SectionTitle";
 
-import Service1Img from "../../assets/illustrations/web_development_.png";
-import Service2Img from "../../assets/illustrations/mobile_phone.png";
-import Service3Img from "../../assets/illustrations/bug_fixed.png";
+import Service1Img from "../../assets/illustrations/automation.png";
+import Service2Img from "../../assets/illustrations/job.png";
+import Service3Img from "../../assets/illustrations/qualityPriority.png";
 
 const ServicesContainer = styled(Element)`
     width: 100%;
