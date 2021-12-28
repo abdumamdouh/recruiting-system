@@ -28,10 +28,11 @@ const BackgroundFilter = styled.div`
 `;
 
 const MotivitionalText = styled.h2`
-    font-size: 33px;
+    font-size: 60px;
     font-weight: bold;
     margin: 0;
     color: #fff;
+    max-width: 65%;
 `;
 
 const DownArrowContainer = styled.div`
