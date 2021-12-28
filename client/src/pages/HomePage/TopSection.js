@@ -1,4 +1,6 @@
 import React from "react";
+import { Element, scroller } from "react-scroll";
+
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
@@ -41,30 +43,42 @@ const DownArrowContainer = styled.div`
 
 export function TopSection(props) {
     const history = useHistory();
+
     const handleApplicant = () => {
         history.push("/signup-applicant");
     };
+
     const handleRecruiter = () => {
         history.push("/signup-recruiter");
     };
-    z;
+
+    const scrollToNextSection = () => {
+        scroller.scrollTo("servicesSection", { smooth: true, duration: 1500 });
+    };
+
     return (
-        <TopContainer>
-            <BackgroundFilter>
-                <Marginer direction="vertical" margin="5em" />
-                <Logo />
-                <Marginer direction="vertical" margin="2em" />
-                <MotivitionalText>
-                    To make the hiring process easier and more organized
-                </MotivitionalText>
-                <Marginer direction="vertical" margin="2em" />
-                <Button onClick={handleApplicant}>Apply as Applicant</Button>
-                <Marginer direction="vertical" margin="1em" />
-                <Button onClick={handleRecruiter}>Apply as Recruiter</Button>
-                <DownArrowContainer>
-                    <DownArrow />
-                </DownArrowContainer>
-            </BackgroundFilter>
-        </TopContainer>
+        <Element name="topSection">
+            <TopContainer>
+                <BackgroundFilter>
+                    <Marginer direction="vertical" margin="5em" />
+                    <Logo />
+                    <Marginer direction="vertical" margin="2em" />
+                    <MotivitionalText>
+                        To make the hiring process easier and more organized
+                    </MotivitionalText>
+                    <Marginer direction="vertical" margin="2em" />
+                    <Button onClick={handleApplicant}>
+                        Apply as Applicant
+                    </Button>
+                    <Marginer direction="vertical" margin="1em" />
+                    <Button onClick={handleRecruiter}>
+                        Apply as Recruiter
+                    </Button>
+                    <DownArrowContainer onClick={scrollToNextSection}>
+                        <DownArrow />
+                    </DownArrowContainer>
+                </BackgroundFilter>
+            </TopContainer>
+        </Element>
     );
 }
