@@ -15,7 +15,7 @@ import {
 const serverURL = "http://localhost:5000";
 
 // register Applicant
-const registerApplicantAction = (Applicant,redirect) => {
+const registerApplicantAction = (Applicant,redirect,showError) => {
   console.log(Applicant);
   return async dispatch => {
     try {
@@ -35,14 +35,15 @@ const registerApplicantAction = (Applicant,redirect) => {
     } catch (error) {
       dispatch({
         type: REGISTER_APPLICANT_FAIL,
-        payload: error.response && error.response.data.message
+        payload: error.response && error.response.data
       });
+      showError();
     }
   };
 };
 
 // register Recruiter
-const registerRecruiterAction = Recruiter => {
+const registerRecruiterAction = (Recruiter,redirect,showError) => {
   return async dispatch => {
     try {
       dispatch({ type: REGISTER_RECRUITER_REQUEST });
@@ -57,11 +58,14 @@ const registerRecruiterAction = Recruiter => {
         config
       );
       dispatch({ type: REGISTER_RECRUITER_SUCCESS, payload: data });
+      redirect()
     } catch (error) {
       dispatch({
         type: REGISTER_RECRUITER_FAIL,
-        payload: error.response && error.response.data.message
+        payload: error.response && error.response.data
+        
       });
+      showError();
     }
   };
 };
