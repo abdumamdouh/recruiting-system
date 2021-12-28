@@ -59,17 +59,17 @@ function Header() {
                             <Link to="/feed">Feed</Link>
                         </li>
                        
-                        {Object.keys(user).length !== 0 && (
+                        {user.hasOwnProperty("userInfo") && (
                         <li>
                             <Link to="/account">Account</Link>
                         </li>
                       )}
-                        {Object.keys(user).length === 0 && (
+                        {!user.hasOwnProperty("userInfo") && (
                             <li>
                                 <Link to="/login">Login</Link>
                             </li>
                         )}
-                        {Object.keys(user).length !== 0 && (
+                        {user.hasOwnProperty("userInfo") && (
                           <li>
                             <Link to="/login">
                                 <span onClick={handleLogOut}>Logout</span>

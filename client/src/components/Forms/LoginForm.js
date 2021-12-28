@@ -30,6 +30,7 @@ function LoginForm(props) {
     };
     const showError = () => {
         setApiError("Email or password is incorrect.");
+       
     };
     const redirect = () => {
         const fromObj = props.location.state || {
@@ -72,7 +73,7 @@ function LoginForm(props) {
                 {errors.password && (
                     <label className={classes.error}>{errors.password}</label>
                 )}
-                {errors === null && (
+                {Object.keys(errors).length === 0  && (
                     <label className={classes.error}>{apiError}</label>
                 )}
                 <button type="submit" className={classes.SubmitButton}>
