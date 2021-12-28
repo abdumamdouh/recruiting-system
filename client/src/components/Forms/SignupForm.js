@@ -83,11 +83,11 @@ function Register(props) {
 
         if (!formValues.yearsOfExperience)
             error.yearsOfExperience = "Years Of Experience required";
+      
+        if (!formValues.major||formValues.major==='software-engineer') error.major = "Major required";
 
-        if (!formValues.major) error.major = "Major required";
-
-        if (!formValues.level) error.level = "Level required";
-
+        if (view==="sw"&&!formValues.level) error.level = "Level required";
+        
         setErrors(error);
 
         return error;
@@ -98,7 +98,9 @@ function Register(props) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === "qualifications") {
+        console.log(name,value)
+       
+         if (name === "qualifications") {
             const arr = formValues.qualifications.programmingLanguages;
             arr.push(value);
             // setFormValues({...formValues,[name]:value})
@@ -112,7 +114,13 @@ function Register(props) {
         if (e.target.value === "software-engineer") {
             setView("sw");
         } else setView("notsw");
+        
+
+       handleChange(e);
+
     };
+
+    
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -208,22 +216,28 @@ function Register(props) {
                         </label>
                     )}
 
-                    <select className={classes.Select} onChange={handleView}>
+                    <select name="major" className={classes.Select} onChange={handleView}>
                         <option>--Select major--</option>
                         <option value="software-engineer">
-                            Software engineer
+                            Software engineer 
                         </option>
 
-                        <option value="doctor">Doctor</option>
-                        <option value="Pharmacist">Pharmacist</option>
+                        <option  value="doctor" >Doctor</option>
+                        <option  value="Pharmacist">Pharmacist</option>
                         <option value="graphic-designer">
                             Graphic designer
                         </option>
-                        <option value="data-analyst">Data analyst</option>
-                        <option value="teacher">Teacher</option>
+                        <option  value="data-analyst">Data analyst</option>
+                        <option  value="teacher">Teacher</option>
                     </select>
+                 
+                    {errors.major&&view==="notsw" && (
+                                    <label className={classes.error}>
+                                        {errors.major}
+                                    </label>
+                                )}
 
-                    {view === "sw" && (
+                    {view === "sw"? 
                         <div>
                             <div className={classes.Box}>
                                 <h3>You are more into </h3>
@@ -412,7 +426,23 @@ function Register(props) {
                                 </ul>
                             </div>
                         </div>
-                    )}
+                    :
+                    <div className={classes.Box}>
+                            <h3>Years Of Experience</h3>
+                            <input
+                                className={classes.Input}
+                                name="yearsOfExperience"
+                                placeholder="Years Of Experience"
+                                onChange={handleChange}
+                            />
+                            
+                            {errors.yearsOfExperience && (
+                                <label className={classes.error}>
+                                    {errors.yearsOfExperience}
+                                </label>
+                            )}
+
+                            </div>         }
                     <button className={classes.SubmitButton} type="submit">
                         {" "}
                         Sign up
