@@ -57,6 +57,12 @@ function Register(props) {
     const [view, setView] = useState("notsw");
     const [errors, setErrors] = useState({});
     const [confirmpass, setconfirmpass] = useState("");
+
+    const [registrationError,setRegistrationError]=useState("");
+    
+    
+
+
     const dispatch = useDispatch();
     const user = useSelector(state=>state.user);
    // console.log(user)
@@ -69,10 +75,16 @@ function Register(props) {
         from: { pathname: "/" }
     };
 
+
     const path = fromObj.from.pathname;
     props.history.push(path);
 
    }
+
+   const showError=()=>{
+
+    setRegistrationError("Email is already registered")
+}
 
 
 
@@ -147,8 +159,8 @@ function Register(props) {
         if (Object.keys(errors).length === 0) {
             console.log(json);
 
-            dispatch(registerApplicantAction(formValues,redirect))
-            console.log(user)
+            dispatch(registerApplicantAction(formValues,redirect,showError))
+           // console.log(user)
            
             
             
@@ -221,6 +233,8 @@ function Register(props) {
                     {errors.email && (
                         <label className={classes.error}>{errors.email}</label>
                     )}
+                   {registrationError!==""&&<label className={classes.error}>{registrationError}</label>}
+
 
                     <input
                         className={classes.Input}
