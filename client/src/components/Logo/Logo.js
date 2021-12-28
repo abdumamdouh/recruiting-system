@@ -1,7 +1,7 @@
 import React from "react";
 import styled,{ css } from "styled-components";
 
-
+import recLogo from '../../assets/images/logo.png'
 import { theme } from "../../theme";
 
 const LogoContainer = styled.div`
@@ -38,9 +38,9 @@ const LogoText = styled.div`
 export const Logo = props => {
   const { inline, small } = props;
   return    <LogoContainer inline={inline} small={small}>
-  <LogoImg inline={inline} small={small} />
+  <LogoImg  src= {recLogo} inline={inline} small={small}  />
   <LogoText  inline={inline} small={small}>
-    HINW 
+   Job coach
   </LogoText>
 </LogoContainer>;
 };
