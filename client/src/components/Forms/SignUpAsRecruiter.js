@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import classes from "./common.module.scss";
 
 import { registerRecruiterAction } from "../../redux/actions/user";
@@ -19,6 +19,25 @@ const RegisterAsRecruiter = (props) => {
     const [errors, setErrors] = useState({});
     const [confirmpass, setconfirmpass] = useState("");
     const dispatch = useDispatch();
+    const [registrationError,setRegistrationError]=useState("");
+    const user = useSelector(state=>state.user);
+
+   const redirect =()=>{
+    const fromObj = props.location.state || {
+        from: { pathname: "/" }
+    };
+
+    const path = fromObj.from.pathname;
+    props.history.push(path);
+
+   }
+
+   const showError=()=>{
+
+    setRegistrationError("Email is already registered")
+    //setRegistrationError(user.error)
+}
+
     const validate = (formValues) => {
         const error = {};
 
@@ -71,13 +90,8 @@ const RegisterAsRecruiter = (props) => {
         const errors = validate(formValues);
         if (Object.keys(errors).length === 0) {
             console.log(formValues);
-            dispatch(registerRecruiterAction(formValues));
-            const fromObj = props.location.state || {
-                from: { pathname: "/" }
-            };
-    
-            const path = fromObj.from.pathname;
-            props.history.push(path);
+            dispatch(registerRecruiterAction(formValues,redirect,showError));
+          
         }
 
       
@@ -126,6 +140,8 @@ const RegisterAsRecruiter = (props) => {
                 {errors.email && (
                     <label className={classes.error}>{errors.email}</label>
                 )}
+                {registrationError!==""&&<label className={classes.error}>{registrationError}</label>}
+
 
                 <input
                     className={classes.Input}
