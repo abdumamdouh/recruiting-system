@@ -9,59 +9,62 @@ import { Button } from "../../components/Button/Button";
 import { DownArrow } from "../../components/DownArrow/DownArrow";
 
 const TopContainer = styled.div`
-  width: 100%;
-  height: 100vh;
-  padding: 0;
-  background-image: url(${BackgroundImg});
-  position: relative;
+    width: 100%;
+    height: 100vh;
+    padding: 0;
+    background-image: url(${BackgroundImg});
+    position: relative;
 `;
 
 const BackgroundFilter = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: rgba(55, 55, 55, 0.89);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(55, 55, 55, 0.89);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const MotivitionalText = styled.h2`
-  font-size: 33px;
-  font-weight: bold;
-  margin: 0;
-  color: #fff;
+    font-size: 33px;
+    font-weight: bold;
+    margin: 0;
+    color: #fff;
 `;
 
 const DownArrowContainer = styled.div`
-  position: absolute;
-  bottom: 25px;
-  left: 50%;
-  transform: translateX(-50%);
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
 `;
 
 export function TopSection(props) {
-  const history = useHistory();
-  const handleApplicant = () => {
-    history.push("/signup-applicant");
-  };
-  const handleRecruiter = () => {
-    history.push("/signup-recruiter");
-  };
-  return (
-    <TopContainer>
-      <BackgroundFilter>
-        <Marginer direction="vertical" margin="5em" />
-        <Logo />
-        <Marginer direction="vertical" margin="2em" />
-        <MotivitionalText>To make the hiring process easier and more organized</MotivitionalText>
-        <Marginer direction="vertical" margin="2em" />
-        <Button onClick={handleApplicant}>Apply as Applicant</Button>
-        <Marginer direction="vertical" margin="1em" />
-        <Button onClick={handleRecruiter}>Apply as Recruiter</Button>
-        <DownArrowContainer>
-          <DownArrow />
-        </DownArrowContainer>
-      </BackgroundFilter>
-    </TopContainer>
-  );
+    const history = useHistory();
+    const handleApplicant = () => {
+        history.push("/signup-applicant");
+    };
+    const handleRecruiter = () => {
+        history.push("/signup-recruiter");
+    };
+    z;
+    return (
+        <TopContainer>
+            <BackgroundFilter>
+                <Marginer direction="vertical" margin="5em" />
+                <Logo />
+                <Marginer direction="vertical" margin="2em" />
+                <MotivitionalText>
+                    To make the hiring process easier and more organized
+                </MotivitionalText>
+                <Marginer direction="vertical" margin="2em" />
+                <Button onClick={handleApplicant}>Apply as Applicant</Button>
+                <Marginer direction="vertical" margin="1em" />
+                <Button onClick={handleRecruiter}>Apply as Recruiter</Button>
+                <DownArrowContainer>
+                    <DownArrow />
+                </DownArrowContainer>
+            </BackgroundFilter>
+        </TopContainer>
+    );
 }
