@@ -225,17 +225,20 @@ function Register(props) {
 
                     {view === "sw" && (
                         <div>
-                            <div>
+                            <div className={classes.Box}>
                                 <h3>You are more into </h3>
                                 <ul className={classes.Ul}>
                                     <li className={classes.Li}>
                                         <input
+                                           
                                             type="radio"
                                             name="major"
                                             value="BackEnd"
                                             onChange={handleChange}
+                                            
                                         />
                                         <label>BackEnd</label>
+                                        
                                     </li>
                                     <li className={classes.Li}>
                                         <input
@@ -307,7 +310,9 @@ function Register(props) {
                                     </label>
                                 )}
                             </div>
-                            <div>
+                            <br/>
+
+                            <div className={classes.Box}>
                                 <h3>You consider yourself </h3>
                                 <ul className={classes.Ul}>
                                     <li className={classes.Li}>
@@ -362,6 +367,8 @@ function Register(props) {
                                     </label>
                                 )}
                             </div>
+                            <br/>
+                            <div className={classes.Box}>
                             <h3>Years Of Experience</h3>
                             <input
                                 className={classes.Input}
@@ -369,13 +376,19 @@ function Register(props) {
                                 placeholder="Years Of Experience"
                                 onChange={handleChange}
                             />
+                            
                             {errors.yearsOfExperience && (
                                 <label className={classes.error}>
                                     {errors.yearsOfExperience}
                                 </label>
                             )}
 
-                            <div>
+                            </div>
+                            
+                             
+                             <br/>
+                            <div className={classes.Box}>
+                            
                                 <h3>Your Favourite stack</h3>
                                 <ul className={classes.Ul}>
                                     {stacks.map((stack) => {
