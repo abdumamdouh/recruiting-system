@@ -36,7 +36,7 @@ function Header() {
   return (
     <header className={classes.header}>
       <div className={classes.header__content}>
-        <h2 className={classes.header__content__logo}>navbar</h2>
+        <h2 className={classes.header__content__logo}>Job Coach</h2>
 
         <nav
           className={`${classes.header__content__nav} ${

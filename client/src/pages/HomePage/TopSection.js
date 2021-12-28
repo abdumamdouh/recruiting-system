@@ -53,11 +53,11 @@ export function TopSection(props) {
         <Marginer direction="vertical" margin="5em" />
         <Logo />
         <Marginer direction="vertical" margin="2em" />
-        <MotivitionalText>Find your next opportunity</MotivitionalText>
+        <MotivitionalText>To make the hiring process easier and more organized</MotivitionalText>
         <Marginer direction="vertical" margin="2em" />
-        <Button onClick={handleApplicant}>Apply as an Applicant</Button>
+        <Button onClick={handleApplicant}>Apply as Applicant</Button>
         <Marginer direction="vertical" margin="1em" />
-        <Button onClick={handleRecruiter}>Apply as a Recruiter</Button>
+        <Button onClick={handleRecruiter}>Apply as Recruiter</Button>
         <DownArrowContainer>
           <DownArrow />
         </DownArrowContainer>
