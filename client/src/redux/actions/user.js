@@ -15,7 +15,7 @@ import {
 const serverURL = "http://localhost:5000";
 
 // register Applicant
-const registerApplicantAction = Applicant => {
+const registerApplicantAction = (Applicant,redirect) => {
   console.log(Applicant);
   return async dispatch => {
     try {
@@ -31,6 +31,7 @@ const registerApplicantAction = Applicant => {
         config
       );
       dispatch({ type: REGISTER_APPLICANT_SUCCESS, payload: data });
+      redirect();
     } catch (error) {
       dispatch({
         type: REGISTER_APPLICANT_FAIL,

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import classes from "./common.module.scss";
 import { registerApplicantAction } from "../../redux/actions/user";
 
@@ -58,8 +58,26 @@ function Register(props) {
     const [errors, setErrors] = useState({});
     const [confirmpass, setconfirmpass] = useState("");
     const dispatch = useDispatch();
+    const user = useSelector(state=>state.user);
+   // console.log(user)
 
-    const validate = (formValues) => {
+
+
+
+   const redirect =()=>{
+    const fromObj = props.location.state || {
+        from: { pathname: "/" }
+    };
+
+    const path = fromObj.from.pathname;
+    props.history.push(path);
+
+   }
+
+
+
+ 
+   const validate = (formValues) => {
         const error = {};
 
         if (!formValues.firstName) error.firstName = "Firstname required";
@@ -98,7 +116,6 @@ function Register(props) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(name,value)
        
          if (name === "qualifications") {
             const arr = formValues.qualifications.programmingLanguages;
@@ -120,6 +137,7 @@ function Register(props) {
 
     };
 
+
     
 
     const handleSubmit = (e) => {
@@ -128,14 +146,27 @@ function Register(props) {
         const errors = validate(formValues);
         if (Object.keys(errors).length === 0) {
             console.log(json);
-            dispatch(registerApplicantAction(formValues));
-            const fromObj = props.location.state || {
-                from: { pathname: "/" }
-            };
-    
-            const path = fromObj.from.pathname;
-            props.history.push(path);
+
+            dispatch(registerApplicantAction(formValues,redirect))
+            console.log(user)
+           
+            
+            
+           
+       
+
+        
+      //  dispatch(registerApplicantAction(formValues))
+
+
+
+            
+
         }
+
+
+           
+    
 
       
     };
