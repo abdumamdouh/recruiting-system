@@ -12,7 +12,7 @@ import {
     LOGOUT
 } from "../types";
 
-const serverURL = "http://localhost:5000";
+const serverURL = process.env.serverURL;
 
 // register Applicant
 const registerApplicantAction = (Applicant, redirect, showError) => {
