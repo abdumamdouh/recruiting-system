@@ -23,7 +23,7 @@ const ArrowContainer = styled.div`
 `;
 
 const ArrowIcon = styled.div`
-  margin-top: 3px;
+  margin-top: 2px;
   color: #fff;
   font-size: 29px;
 `;
