@@ -28,7 +28,7 @@ const BackgroundFilter = styled.div`
 `;
 
 const MotivitionalText = styled.h2`
-    font-size: 55px;
+    font-size: 35px;
     font-weight: bold;
     margin: 0;
     color: #fff;
