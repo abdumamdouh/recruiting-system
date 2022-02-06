@@ -68,6 +68,18 @@ Recruiter.prototype.generateAuthToken = async function () {
     return token
 }
  
+// Getting public data of the recruiter
+Recruiter.prototype.getPublicRecruiterData = function () {
+    const user = this 
+    return {
+        email: user.email ,
+        firstName: user.firstName ,
+        lastName: user.lastName ,
+        company: user.company ,
+        position: user.position 
+    }
+}
+
 // Validate Recruiter by it's email and password
 Recruiter.findByCredentials = async (email,password) => {
     const recruiter = await Recruiter.findOne({ where: { email } })
