@@ -3,15 +3,16 @@ import { useSelector, useDispatch } from 'react-redux'
 
 const EditProfile = () => {
      const initState = {
-         fullname: '', mobile: '', address: '', website: '', story: '', gender: ''
-    }
+        firstName: "",
+        lastName: "",
+        userName: "", }
      const [userData, setUserData] = useState(initState)
-     const { fullname, mobile, address, website, story, gender } = userData
+     const { firstName, lastName, userName} = userData
 
     // const [avatar, setAvatar] = useState('')
 
-    // const { user } = useSelector(state => state)
-    // const dispatch = useDispatch()
+     const { user } = useSelector(state => state)
+     const dispatch = useDispatch()
 
     // useEffect(() => {
     //     setUserData(user)
@@ -30,8 +31,8 @@ const EditProfile = () => {
      }
 
      const handleInput = e => {
-    //     const { name, value } = e.target
-    //     setUserData({ ...userData, [name]:value })
+         const { name, value } = e.target
+         setUserData({ ...userData, [name]:value })
      }
 
     const handleSubmit = e => {
@@ -58,46 +59,50 @@ const EditProfile = () => {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="fullname">Full Name</label>
+                    <label htmlFor="firstName">First Name</label>
                     <div className="position-relative">
-                        <input type="text" className="form-control" id="fullname"
-                        name="fullname" value={fullname} onChange={handleInput} />
+                        <input type="text" className="form-control" id="firstName"
+                        name="fullname" value={firstName} onChange={handleInput} />
                         <small className="text-danger position-absolute"
                         style={{top: '50%', right: '5px', transform: 'translateY(-50%)'}}>
-                            {fullname.length}/25
+                            {firstName.length}/25
+                        </small>
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="lastName">Last Name</label>
+                    <div className="position-relative">
+                        <input type="text" className="form-control" id="lastName"
+                        name="fullname" value={lastName} onChange={handleInput} />
+                        <small className="text-danger position-absolute"
+                        style={{top: '50%', right: '5px', transform: 'translateY(-50%)'}}>
+                            {lastName.length}/25
                         </small>
                     </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="mobile">Mobile</label>
-                    <input type="text" name="mobile" value={mobile}
-                    className="form-control" onChange={handleInput} />
-                </div>
 
                 <div className="form-group">
-                    <label htmlFor="address">Address</label>
-                    <input type="text" name="address" value={address}
-                    className="form-control" onChange={handleInput} />
+                    <label htmlFor="userName">UserName</label>
+                    <div className="position-relative">
+                        <input type="text" className="form-control" id="userName"
+                        name="fullname" value={userName} onChange={handleInput} />
+                        <small className="text-danger position-absolute"
+                        style={{top: '50%', right: '5px', transform: 'translateY(-50%)'}}>
+                            {userName.length}/25
+                        </small>
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="website">Website</label>
-                    <input type="text" name="website" value={website}
-                    className="form-control" onChange={handleInput} />
-                </div>
+                
 
-                <div className="form-group">
-                    <label htmlFor="story">Story</label>
-                    <textarea name="story" value={story} cols="30" rows="4"
-                    className="form-control" onChange={handleInput} />
+      
 
-                    <small className="text-danger d-block text-right">
-                        {story.length}/200
-                    </small>
-                </div>
+           
 
-                <label htmlFor="gender">Gender</label>
+
+
+               {/* <label htmlFor="gender">Gender</label>
                 <div className="input-group-prepend px-0 mb-4">
                     <select name="gender" id="gender" value={gender}
                     className="custom-select text-capitalize"
@@ -106,7 +111,7 @@ const EditProfile = () => {
                         <option value="female">Female</option>
                         <option value="other">Other</option>
                     </select>
-                </div>
+    </div>*/}
 
                 <button className="btn btn-info w-100" type="submit">Save</button>
             </form>
