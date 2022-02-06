@@ -2,7 +2,7 @@ const express = require('express')
 const Applicant = require('../../models/Applicant')
 const Recruiter = require('../../models/Recruiter')
 
-//const auth = require('../middleware/auth') 
+const applicantAuth = require('../middleware/applicantAuth') 
 
 const router = new express.Router()
 
@@ -10,7 +10,7 @@ router.post('/Applicant/Sign-up' , async (req,res) =>{
     const applicant = req.body
     try {
         const takenEmail = await Applicant.findOne({ where: { email:req.body.email } }) || await Recruiter.findOne({ where: { email:req.body.email } })
-        
+
         if (takenEmail){
             throw new Error("Email is already registered.")
         } else {
@@ -23,5 +23,8 @@ router.post('/Applicant/Sign-up' , async (req,res) =>{
     }
 })
 
+router.get('/Applicant/me' , applicantAuth , async (req,res) => {
+    res.status(200).send(req.applicant.getPublicApplicantData()) ;
+})
 
 module.exports = router

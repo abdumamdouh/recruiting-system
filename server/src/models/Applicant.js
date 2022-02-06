@@ -78,6 +78,19 @@ Applicant.prototype.generateAuthToken = async function () {
     return token
 }
 
+// Getting public data of the applicant
+Applicant.prototype.getPublicApplicantData = function () {
+    const user = this 
+    return {
+        email : user.email ,
+        firstName: user.firstName ,
+        lastName: user.lastName ,
+        major: user.major ,
+        yearsOfExperience: user.yearsOfExperience ,
+        qualifications: user.qualifications
+    }
+}
+
 // Validate Applicant by it's email and password
 Applicant.findByCredentials = async (email,password) => {
     const applicant = await Applicant.findOne({ where: { email } })
