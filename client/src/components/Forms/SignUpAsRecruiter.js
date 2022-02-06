@@ -107,7 +107,7 @@ const RegisterAsRecruiter = (props) => {
                     placeholder="Firstname"
                     onChange={handleChange}
                 />
-                {errors.firstname && (
+                {errors.firstName && (
                     <label className={classes.error}>{errors.firstName}</label>
                 )}
 
@@ -117,7 +117,7 @@ const RegisterAsRecruiter = (props) => {
                     placeholder="Lastname"
                     onChange={handleChange}
                 />
-                {errors.lastname && (
+                {errors.lastName && (
                     <label className={classes.error}>{errors.lastName}</label>
                 )}
 
