@@ -2,6 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Alert } from "@mui/material";
 import Button from "../Button/Button";
 import classes from "./common.module.scss";
 import { loginUserAction } from "../../redux/actions/user";
@@ -10,6 +11,7 @@ function LoginForm(props) {
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
     const [apiError, setApiError] = useState("");
+    const [showAlert, setShowAlert] = useState("");
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
     const validate = (email, password) => {
@@ -30,7 +32,9 @@ function LoginForm(props) {
     };
     const showError = () => {
         setApiError("Email or password is incorrect.");
-       
+    };
+    const showSuccessMessage = () => {
+        setShowAlert("f");
     };
     const redirect = () => {
         const fromObj = props.location.state || {
@@ -44,10 +48,11 @@ function LoginForm(props) {
     const handleLoginForm = e => {
         e.preventDefault();
         const errors = validate(email, password);
-        dispatch(loginUserAction(email, password, redirect, showError));
+        dispatch(loginUserAction(email, password, redirect, showError,showSuccessMessage));
     };
     return (
         <div className={classes.BoxContainer}>
+        {showAlert == 'f'&&<Alert severity="success"> You logged in successfully </Alert>}
             <form onSubmit={handleLoginForm}>
                 <input
                     type="email"
@@ -73,7 +78,7 @@ function LoginForm(props) {
                 {errors.password && (
                     <label className={classes.error}>{errors.password}</label>
                 )}
-                {Object.keys(errors).length === 0  && (
+                {Object.keys(errors).length === 0 && (
                     <label className={classes.error}>{apiError}</label>
                 )}
                 <button type="submit" className={classes.SubmitButton}>

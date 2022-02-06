@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Alert } from '@mui/material';
+
 import classes from "./common.module.scss";
 
 import { registerRecruiterAction } from "../../redux/actions/user";
@@ -20,6 +22,7 @@ const RegisterAsRecruiter = props => {
     const [confirmpass, setconfirmpass] = useState("");
     const dispatch = useDispatch();
     const [registrationError, setRegistrationError] = useState("");
+    const [showAlert,setShowAlert] = useState('');
     const user = useSelector(state => state.user);
 
     const redirect = () => {
@@ -36,7 +39,8 @@ const RegisterAsRecruiter = props => {
         //setRegistrationError(user.error)
     };
     const showSuccessMessage = () => {
-        alert("Registration successful");
+        //alert("Registration successful");
+        setShowAlert('f')
     };
     const validate = formValues => {
         const error = {};
@@ -96,6 +100,7 @@ const RegisterAsRecruiter = props => {
 
     return (
         <div className={classes.BoxContainer}>
+         {showAlert == 'f'&&<Alert severity="success">Registered successfully</Alert>}
             <h3>Account information</h3>
             <form className={classes.FormContainer}>
                 <input

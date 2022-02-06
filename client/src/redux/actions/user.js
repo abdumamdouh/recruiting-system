@@ -32,7 +32,9 @@ const registerApplicantAction = (Applicant, redirect, showError, showSuccessMess
             );
             dispatch({ type: REGISTER_APPLICANT_SUCCESS, payload: data });
             showSuccessMessage();
-            redirect();
+            setTimeout(() => {
+                redirect()
+              }, 1000);
         } catch (error) {
             dispatch({
                 type: REGISTER_APPLICANT_FAIL,
@@ -60,7 +62,10 @@ const registerRecruiterAction = (Recruiter, redirect, showError,showSuccessMessa
             );
             dispatch({ type: REGISTER_RECRUITER_SUCCESS, payload: data });
             showSuccessMessage()
-            redirect();
+            setTimeout(() => {
+                redirect()
+              }, 1000);
+            
         } catch (error) {
             dispatch({
                 type: REGISTER_RECRUITER_FAIL,
@@ -71,7 +76,7 @@ const registerRecruiterAction = (Recruiter, redirect, showError,showSuccessMessa
     };
 };
 
-const loginUserAction = (email, password, redirect, showError) => {
+const loginUserAction = (email, password, redirect, showError,showSuccessMessage) => {
     return async dispatch => {
         try {
             dispatch({ type: LOGIN_REQUEST });
@@ -90,7 +95,10 @@ const loginUserAction = (email, password, redirect, showError) => {
                 config
             );
             dispatch({ type: LOGIN_SUCCESS, payload: data });
-            redirect();
+            showSuccessMessage()
+            setTimeout(() => {
+                redirect()
+              }, 1000);
         } catch (error) {
             dispatch({
                 type: LOGIN_FAIL,

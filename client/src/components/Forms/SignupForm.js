@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Alert } from '@mui/material';
 import classes from "./common.module.scss";
 import { registerApplicantAction } from "../../redux/actions/user";
 
@@ -59,7 +60,7 @@ function Register(props) {
     const [confirmpass, setconfirmpass] = useState("");
 
     const [registrationError, setRegistrationError] = useState("");
-
+    const [showAlert,setShowAlert] = useState('');
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
     // console.log(user)
@@ -78,7 +79,7 @@ function Register(props) {
     };
     //To show success message
     const showSuccessMessage = () => {
-        alert("Registration successful")
+        setShowAlert('f')
     }
    
     
@@ -147,7 +148,7 @@ function Register(props) {
         const errors = validate(formValues);
         if (Object.keys(errors).length === 0) {
             console.log(json);
-
+            
             dispatch(registerApplicantAction(formValues, redirect, showError, showSuccessMessage));
             
         }
@@ -155,6 +156,7 @@ function Register(props) {
 
     return (
         <div className={classes.BoxContainer}>
+             {showAlert === 'f'&&<Alert severity="success">Registered successfully</Alert>}
             <h3>Account information</h3>
             <div className={classes.FormContainer}>
                 <form className={classes.FormContainer} onSubmit={handleSubmit}>
