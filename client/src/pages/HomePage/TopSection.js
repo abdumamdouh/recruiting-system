@@ -9,7 +9,7 @@ import { Logo } from "../../components/Logo/Logo";
 import { Marginer } from "../../components/Marginer/Marginer";
 import { Button } from "../../components/Button/Button";
 import { DownArrow } from "../../components/DownArrow/DownArrow";
-import EditProfile from "../../components/profile/EditProfile";
+
 const TopContainer = styled.div`
     width: 100%;
     height: 90vh;
@@ -63,7 +63,6 @@ export function TopSection(props) {
                 <BackgroundFilter>
                     <Marginer direction="vertical" margin="3em" />
                     <Logo />
-                    <EditProfile/>
                     <Marginer direction="vertical" margin="1em" />
                     <MotivitionalText>
                         To make the hiring process easier and more organized
