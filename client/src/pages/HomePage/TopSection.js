@@ -28,7 +28,7 @@ const BackgroundFilter = styled.div`
 `;
 
 const MotivitionalText = styled.h2`
-    font-size: 35px;
+    font-size: 33px;
     font-weight: bold;
     margin: 0;
     color: #fff;
@@ -61,9 +61,9 @@ export function TopSection(props) {
         <Element name="topSection">
             <TopContainer>
                 <BackgroundFilter>
-                    <Marginer direction="vertical" margin="5em" />
+                    <Marginer direction="vertical" margin="3em" />
                     <Logo />
-                    <Marginer direction="vertical" margin="2em" />
+                    <Marginer direction="vertical" margin="1em" />
                     <MotivitionalText>
                         To make the hiring process easier and more organized
                     </MotivitionalText>

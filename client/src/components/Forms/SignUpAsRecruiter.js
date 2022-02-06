@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classes from "./common.module.scss";
 
 import { registerRecruiterAction } from "../../redux/actions/user";
 
-const RegisterAsRecruiter = (props) => {
+const RegisterAsRecruiter = props => {
     const initialValues = {
         firstName: "",
         lastName: "",
@@ -19,26 +19,26 @@ const RegisterAsRecruiter = (props) => {
     const [errors, setErrors] = useState({});
     const [confirmpass, setconfirmpass] = useState("");
     const dispatch = useDispatch();
-    const [registrationError,setRegistrationError]=useState("");
-    const user = useSelector(state=>state.user);
+    const [registrationError, setRegistrationError] = useState("");
+    const user = useSelector(state => state.user);
 
-   const redirect =()=>{
-    const fromObj = props.location.state || {
-        from: { pathname: "/" }
+    const redirect = () => {
+        const fromObj = props.location.state || {
+            from: { pathname: "/" }
+        };
+
+        const path = fromObj.from.pathname;
+        props.history.push(path);
     };
 
-    const path = fromObj.from.pathname;
-    props.history.push(path);
-
-   }
-
-   const showError=()=>{
-
-    setRegistrationError("Email is already registered")
-    //setRegistrationError(user.error)
-}
-
-    const validate = (formValues) => {
+    const showError = () => {
+        setRegistrationError("Email is already registered");
+        //setRegistrationError(user.error)
+    };
+    const showSuccessMessage = () => {
+        alert("Registration successful");
+    };
+    const validate = formValues => {
         const error = {};
 
         if (!formValues.firstName) {
@@ -77,24 +77,21 @@ const RegisterAsRecruiter = (props) => {
         return error;
     };
 
-    const confirmPassword = (e) => {
+    const confirmPassword = e => {
         setconfirmpass(e.target.value);
     };
-    const handleChange = (e) => {
+    const handleChange = e => {
         const { name, value } = e.target;
         setFormValues({ ...formValues, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = e => {
         e.preventDefault();
         const errors = validate(formValues);
         if (Object.keys(errors).length === 0) {
             console.log(formValues);
-            dispatch(registerRecruiterAction(formValues,redirect,showError));
-          
+            dispatch(registerRecruiterAction(formValues, redirect, showError,showSuccessMessage));
         }
-
-      
     };
 
     return (
@@ -140,8 +137,9 @@ const RegisterAsRecruiter = (props) => {
                 {errors.email && (
                     <label className={classes.error}>{errors.email}</label>
                 )}
-                {registrationError!==""&&<label className={classes.error}>{registrationError}</label>}
-
+                {registrationError !== "" && (
+                    <label className={classes.error}>{registrationError}</label>
+                )}
 
                 <input
                     className={classes.Input}
