@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classes from "./common.module.scss";
 import { registerApplicantAction } from "../../redux/actions/user";
 
@@ -58,38 +58,31 @@ function Register(props) {
     const [errors, setErrors] = useState({});
     const [confirmpass, setconfirmpass] = useState("");
 
-    const [registrationError,setRegistrationError]=useState("");
-    
-    
-
+    const [registrationError, setRegistrationError] = useState("");
 
     const dispatch = useDispatch();
-    const user = useSelector(state=>state.user);
-   // console.log(user)
+    const user = useSelector(state => state.user);
+    // console.log(user)
 
+    const redirect = () => {
+        const fromObj = props.location.state || {
+            from: { pathname: "/" }
+        };
 
-
-
-   const redirect =()=>{
-    const fromObj = props.location.state || {
-        from: { pathname: "/" }
+        const path = fromObj.from.pathname;
+        props.history.push(path);
     };
 
-
-    const path = fromObj.from.pathname;
-    props.history.push(path);
-
-   }
-
-   const showError=()=>{
-
-    setRegistrationError("Email is already registered")
-}
-
-
-
- 
-   const validate = (formValues) => {
+    const showError = () => {
+        setRegistrationError("Email is already registered");
+    };
+    //To show success message
+    const showSuccessMessage = () => {
+        alert("Registration successful")
+    }
+   
+    
+    const validate = formValues => {
         const error = {};
 
         if (!formValues.firstName) error.firstName = "Firstname required";
@@ -113,23 +106,24 @@ function Register(props) {
 
         if (!formValues.yearsOfExperience)
             error.yearsOfExperience = "Years Of Experience required";
-      
-        if (!formValues.major||formValues.major==='software-engineer') error.major = "Major required";
 
-        if (view==="sw"&&!formValues.level) error.level = "Level required";
-        
+        if (!formValues.major || formValues.major === "software-engineer")
+            error.major = "Major required";
+
+        if (view === "sw" && !formValues.level) error.level = "Level required";
+
         setErrors(error);
 
         return error;
     };
-    const confirmPassword = (e) => {
+    const confirmPassword = e => {
         setconfirmpass(e.target.value);
     };
 
-    const handleChange = (e) => {
+    const handleChange = e => {
         const { name, value } = e.target;
-       
-         if (name === "qualifications") {
+
+        if (name === "qualifications") {
             const arr = formValues.qualifications.programmingLanguages;
             arr.push(value);
             // setFormValues({...formValues,[name]:value})
@@ -139,48 +133,24 @@ function Register(props) {
         }
     };
 
-    const handleView = (e) => {
+    const handleView = e => {
         if (e.target.value === "software-engineer") {
             setView("sw");
         } else setView("notsw");
-        
 
-       handleChange(e);
-
+        handleChange(e);
     };
 
-
-    
-
-    const handleSubmit = (e) => {
+    const handleSubmit = e => {
         e.preventDefault();
         const json = JSON.stringify(formValues);
         const errors = validate(formValues);
         if (Object.keys(errors).length === 0) {
             console.log(json);
 
-            dispatch(registerApplicantAction(formValues,redirect,showError))
-           // console.log(user)
-           
+            dispatch(registerApplicantAction(formValues, redirect, showError, showSuccessMessage));
             
-            
-           
-       
-
-        
-      //  dispatch(registerApplicantAction(formValues))
-
-
-
-            
-
         }
-
-
-           
-    
-
-      
     };
 
     return (
@@ -233,8 +203,11 @@ function Register(props) {
                     {errors.email && (
                         <label className={classes.error}>{errors.email}</label>
                     )}
-                   {registrationError!==""&&<label className={classes.error}>{registrationError}</label>}
-
+                    {registrationError !== "" && (
+                        <label className={classes.error}>
+                            {registrationError}
+                        </label>
+                    )}
 
                     <input
                         className={classes.Input}
@@ -261,43 +234,42 @@ function Register(props) {
                         </label>
                     )}
 
-                    <select name="major" className={classes.Select} onChange={handleView}>
+                    <select
+                        name="major"
+                        className={classes.Select}
+                        onChange={handleView}
+                    >
                         <option>--Select major--</option>
                         <option value="software-engineer">
-                            Software engineer 
+                            Software engineer
                         </option>
 
-                        <option  value="doctor" >Doctor</option>
-                        <option  value="Pharmacist">Pharmacist</option>
+                        <option value="doctor">Doctor</option>
+                        <option value="Pharmacist">Pharmacist</option>
                         <option value="graphic-designer">
                             Graphic designer
                         </option>
-                        <option  value="data-analyst">Data analyst</option>
-                        <option  value="teacher">Teacher</option>
+                        <option value="data-analyst">Data analyst</option>
+                        <option value="teacher">Teacher</option>
                     </select>
-                 
-                    {errors.major&&view==="notsw" && (
-                                    <label className={classes.error}>
-                                        {errors.major}
-                                    </label>
-                                )}
 
-                    {view === "sw"? 
+                    {errors.major && view === "notsw" && (
+                        <label className={classes.error}>{errors.major}</label>
+                    )}
+
+                    {view === "sw" ? (
                         <div>
                             <div className={classes.Box}>
                                 <h3>You are more into </h3>
                                 <ul className={classes.Ul}>
                                     <li className={classes.Li}>
                                         <input
-                                           
                                             type="radio"
                                             name="major"
                                             value="BackEnd"
                                             onChange={handleChange}
-                                            
                                         />
                                         <label>BackEnd</label>
-                                        
                                     </li>
                                     <li className={classes.Li}>
                                         <input
@@ -369,7 +341,7 @@ function Register(props) {
                                     </label>
                                 )}
                             </div>
-                            <br/>
+                            <br />
 
                             <div className={classes.Box}>
                                 <h3>You consider yourself </h3>
@@ -426,31 +398,28 @@ function Register(props) {
                                     </label>
                                 )}
                             </div>
-                            <br/>
+                            <br />
                             <div className={classes.Box}>
-                            <h3>Years Of Experience</h3>
-                            <input
-                                className={classes.Input}
-                                name="yearsOfExperience"
-                                placeholder="Years Of Experience"
-                                onChange={handleChange}
-                            />
-                            
-                            {errors.yearsOfExperience && (
-                                <label className={classes.error}>
-                                    {errors.yearsOfExperience}
-                                </label>
-                            )}
+                                <h3>Years Of Experience</h3>
+                                <input
+                                    className={classes.Input}
+                                    name="yearsOfExperience"
+                                    placeholder="Years Of Experience"
+                                    onChange={handleChange}
+                                />
 
+                                {errors.yearsOfExperience && (
+                                    <label className={classes.error}>
+                                        {errors.yearsOfExperience}
+                                    </label>
+                                )}
                             </div>
-                            
-                             
-                             <br/>
+
+                            <br />
                             <div className={classes.Box}>
-                            
                                 <h3>Your Favourite stack</h3>
                                 <ul className={classes.Ul}>
-                                    {stacks.map((stack) => {
+                                    {stacks.map(stack => {
                                         return (
                                             <li
                                                 className={classes.Li}
@@ -471,8 +440,8 @@ function Register(props) {
                                 </ul>
                             </div>
                         </div>
-                    :
-                    <div className={classes.Box}>
+                    ) : (
+                        <div className={classes.Box}>
                             <h3>Years Of Experience</h3>
                             <input
                                 className={classes.Input}
@@ -480,14 +449,14 @@ function Register(props) {
                                 placeholder="Years Of Experience"
                                 onChange={handleChange}
                             />
-                            
+
                             {errors.yearsOfExperience && (
                                 <label className={classes.error}>
                                     {errors.yearsOfExperience}
                                 </label>
                             )}
-
-                            </div>         }
+                        </div>
+                    )}
                     <button className={classes.SubmitButton} type="submit">
                         {" "}
                         Sign up
