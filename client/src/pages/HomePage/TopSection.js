@@ -61,7 +61,7 @@ export function TopSection(props) {
             <TopContainer>
                 <BackgroundFilter>
                     <Marginer direction="vertical" margin="3em" />
-                    <Logo />         
+                    <Logo />
                     <Marginer direction="vertical" margin="1em" />
                     <MotivitionalText>
                         To make the hiring process easier and more organized
