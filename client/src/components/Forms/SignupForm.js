@@ -287,7 +287,7 @@ function Register(props) {
                                         <input
                                             type="radio"
                                             name="major"
-                                            value="testing"
+                                            value="Testing"
                                             onChange={handleChange}
                                         />
                                         <label>Testing</label>
@@ -305,7 +305,7 @@ function Register(props) {
                                         <input
                                             type="radio"
                                             name="major"
-                                            value="mobile"
+                                            value="Mobile"
                                             onChange={handleChange}
                                         />
                                         <label>Mobile dev</label>
@@ -314,7 +314,7 @@ function Register(props) {
                                         <input
                                             type="radio"
                                             name="major"
-                                            value="embedded"
+                                            value="Embedded"
                                             onChange={handleChange}
                                         />
                                         <label>Embedded</label>
