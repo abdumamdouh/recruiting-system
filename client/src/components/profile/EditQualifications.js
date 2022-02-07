@@ -120,11 +120,11 @@ const EditQualifications = ({setOnEditQualifications}) => {
 
     return (
         <div className="edit_profile">
-            <button className="btn btn-danger btn_close"
+            {/* <button className="btn btn-danger btn_close"
             onClick={() => setOnEditQualifications(false)}>
                 Close
-            </button>
-
+            </button> */}
+           
             <form onSubmit={handleSubmit}>
             <div className="info_avatar">
                     
@@ -157,7 +157,7 @@ const EditQualifications = ({setOnEditQualifications}) => {
                 {view === "sw" ? (
                         <div>
                             <div className={classes.Box}>
-                                <h3>You are more into </h3>
+                                <h4  >You are more into </h4>
                                 <ul className={classes.Ul}>
                                     <li className={classes.Li}>
                                         <input
@@ -251,7 +251,7 @@ const EditQualifications = ({setOnEditQualifications}) => {
                         
 
                         <div className={classes.Box}>
-                                <h3>You consider yourself </h3>
+                                <h4>You consider yourself </h4>
                                 <ul className={classes.Ul}>
                                     <li className={classes.Li}>
                                         <input
@@ -312,7 +312,7 @@ const EditQualifications = ({setOnEditQualifications}) => {
                             </div>
                             <br />
                             <div className={classes.Box}>
-                                <h3>Years Of Experience</h3>
+                                <h4>Years Of Experience</h4>
                                 <input
                                     className={classes.Input}
                                     name="yearsOfExperience"
@@ -324,7 +324,7 @@ const EditQualifications = ({setOnEditQualifications}) => {
 
                             <br />
                             <div className={classes.Box}>
-                                <h3>Your Favourite stack</h3>
+                                <h4>Your Favourite stack</h4>
                                 <ul className={classes.Ul}>
                                     {stacks.map(stack => {
                                         return (
@@ -386,6 +386,7 @@ const EditQualifications = ({setOnEditQualifications}) => {
     </div>*/}
 
                 <button className="btn btn-info w-100" type="submit">Save</button>
+                <button style={{marginTop:"10px"}} className="btn btn-info w-100 btn-danger" type="submit"  onClick={() => setOnEditQualifications(false)}>Close</button>
             </form>
         </div>
     )
