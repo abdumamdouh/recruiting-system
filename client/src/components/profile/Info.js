@@ -45,6 +45,13 @@ const Info = () => {
                             <p className="card-text"> {record.position}</p></li> )}
                         {record.major !== undefined && (<li className="list-group-item"><h4 className="card-title">Major</h4>
                             <p className="card-text"> {record.major}</p></li> )}
+                        {record.level !== undefined && (<li className="list-group-item"><h4 className="card-title">Level</h4>
+                            <p className="card-text"> {record.level}</p></li> )}
+                        {record.yearsOfExperience !== undefined && (<li className="list-group-item"><h4 className="card-title">Years of Experience</h4>
+                            <p className="card-text"> {record.yearsOfExperience}</p></li> )}
+                        {record.qualifications !== undefined && (<li className="list-group-item"><h4 className="card-title">Qualifications</h4>
+                            {record.qualifications.programmingLanguages.map(q => <p className="card-text"> {q}</p> )}
+                            </li> )}
                             {record.company !== undefined && (    <li className="list-group-item"> <h4 className="card-title">Company</h4>
                             <p className="card-text"> {record.company}</p></li> )}
                 </ul>
@@ -57,7 +64,7 @@ const Info = () => {
                 </button>
                 }
                 {onEdit && <EditProfile setOnEdit={setOnEdit} />}
-                {
+                {record.position == undefined &&
                  <button style={{marginBottom: '20px'}}
                    className="btn btn-outline-info"
                     onClick={() => setOnEditQF(true)}
@@ -65,7 +72,7 @@ const Info = () => {
                      Edit Qualifications
                 </button>
                 }
-                {onEditQF && <EditQualifications setOnEditQualifications={setOnEditQF} />}
+                { onEditQF && <EditQualifications setOnEditQualifications={setOnEditQF} />}
             </div>
            
            
