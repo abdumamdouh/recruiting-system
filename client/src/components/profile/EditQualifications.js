@@ -66,6 +66,7 @@ const EditQualifications = ({setOnEditQualifications}) => {
         yearsOfExperience:record.yearsOfExperience,
         qualifications: record.qualifications,
     };
+   
 
     const [formValues, setFormValues] = useState(initialValues);
 
@@ -103,7 +104,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
         if (name === "qualifications") {
             const arr = formValues.qualifications.programmingLanguages;
             arr.push(value);
-            // setFormValues({...formValues,[name]:value})
+            setFormValues(formValues)
+            //setFormValues({...formValues,[formValues.qualifications.programmingLanguages]:arr})
             //console.log(formValues.qualifications.programmingLanguages)
         } else {
             setFormValues({ ...formValues, [name]: value });
