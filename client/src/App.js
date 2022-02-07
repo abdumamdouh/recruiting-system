@@ -12,15 +12,13 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import Applicant from "./pages/SignUpPage/Applicant";
 import Recruiter from "./pages/SignUpPage/Recruiter";
 import PageNotFound404 from "./pages/PageNotFound404";
-import Info from "./components/profile/Info"
+import Info from "./components/profile/Info";
 
 // components
 import HelloWorld from "./components/HelloWorld";
 import Layout from "./components/layout/Layout";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";
-
-import Info from "./components/profile/Info";
 
 const App = () => {
     return (
@@ -54,7 +52,7 @@ const App = () => {
                         component={Recruiter}
                         name="signup-recruiter"
                     />
-                     <ProtectedRoute
+                    <ProtectedRoute
                         exact
                         path="/account"
                         component={Info}
