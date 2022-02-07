@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-const EditProfile = () => {
+const EditProfile = ({setOnEdit}) => {
      const initState = {
         firstName: "",
         lastName: "",
@@ -43,7 +43,7 @@ const EditProfile = () => {
     return (
         <div className="edit_profile">
             <button className="btn btn-danger btn_close"
-            >
+            onClick={() => setOnEdit(false)}>
                 Close
             </button>
 
