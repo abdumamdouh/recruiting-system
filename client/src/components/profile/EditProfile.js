@@ -35,6 +35,8 @@ const EditProfile = ({setOnEdit}) => {
          setUserData({ ...userData, [name]:value })
      }
 
+
+
     const handleSubmit = e => {
     //     e.preventDefault()
     //     dispatch(updateProfileUser({userData, avatar, auth}))
@@ -62,7 +64,7 @@ const EditProfile = ({setOnEdit}) => {
                     <label htmlFor="firstName">First Name</label>
                     <div className="position-relative">
                         <input type="text" className="form-control" id="firstName"
-                        name="fullname" value={firstName} onChange={handleInput} />
+                        name="firstName" value={firstName} onChange={handleInput} />
                         <small className="text-danger position-absolute"
                         style={{top: '50%', right: '5px', transform: 'translateY(-50%)'}}>
                             {firstName.length}/25
@@ -73,7 +75,7 @@ const EditProfile = ({setOnEdit}) => {
                     <label htmlFor="lastName">Last Name</label>
                     <div className="position-relative">
                         <input type="text" className="form-control" id="lastName"
-                        name="fullname" value={lastName} onChange={handleInput} />
+                        name="lastName" value={lastName} onChange={handleInput} />
                         <small className="text-danger position-absolute"
                         style={{top: '50%', right: '5px', transform: 'translateY(-50%)'}}>
                             {lastName.length}/25
@@ -86,7 +88,7 @@ const EditProfile = ({setOnEdit}) => {
                     <label htmlFor="userName">UserName</label>
                     <div className="position-relative">
                         <input type="text" className="form-control" id="userName"
-                        name="fullname" value={userName} onChange={handleInput} />
+                        name="userName" value={userName} onChange={handleInput} />
                         <small className="text-danger position-absolute"
                         style={{top: '50%', right: '5px', transform: 'translateY(-50%)'}}>
                             {userName.length}/25
