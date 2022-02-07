@@ -12,7 +12,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import Applicant from "./pages/SignUpPage/Applicant";
 import Recruiter from "./pages/SignUpPage/Recruiter";
 import PageNotFound404 from "./pages/PageNotFound404";
-import Info from "./components/profile/Info"
+import Info from "./components/profile/Info";
 
 // components
 import HelloWorld from "./components/HelloWorld";
@@ -52,7 +52,7 @@ const App = () => {
                         component={Recruiter}
                         name="signup-recruiter"
                     />
-                     <ProtectedRoute
+                    <ProtectedRoute
                         exact
                         path="/account"
                         component={Info}
@@ -64,6 +64,13 @@ const App = () => {
                         path="/404"
                         component={PageNotFound404}
                         name="PageNotFound404"
+                    />
+
+                    <Route
+                        exact
+                        path="/profile"
+                        component={Info}
+                        name="profile"
                     />
 
                     <Redirect to="/404" />
