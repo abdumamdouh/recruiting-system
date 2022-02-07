@@ -20,6 +20,8 @@ import Layout from "./components/layout/Layout";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";
 
+import Info from "./components/profile/Info";
+
 const App = () => {
     return (
         <Router>
@@ -64,6 +66,13 @@ const App = () => {
                         path="/404"
                         component={PageNotFound404}
                         name="PageNotFound404"
+                    />
+
+                    <Route
+                        exact
+                        path="/profile"
+                        component={Info}
+                        name="profile"
                     />
 
                     <Redirect to="/404" />
