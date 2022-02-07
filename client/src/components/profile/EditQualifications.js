@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import classes from "./common.module.scss";
-import { registerApplicantAction } from "../../redux/actions/user";
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import classes from '../Forms/common.module.scss'
 
-function Register(props) {
+const EditQualifications = ({setOnEditQualifications}) => {
     const stacks = [
         "HTML5/CSS3",
         "NodeJs",
@@ -43,81 +41,43 @@ function Register(props) {
         "Go"
     ];
     const initialValues = {
-        firstName: "",
-        lastName: "",
-        userName: "",
-        email: "",
-        password: "",
         major: "",
         level: "",
+        yearsOfExperience:0,
         qualifications: { programmingLanguages: [] }
     };
+
+
     const [formValues, setFormValues] = useState(initialValues);
-    const [programmingLanguages, setProgramminLanguages] = useState([]);
-    const [view, setView] = useState("notsw");
-    const [errors, setErrors] = useState({});
-    const [confirmpass, setconfirmpass] = useState("");
 
-    const [registrationError, setRegistrationError] = useState("");
+     const [view, setView] = useState("notsw");
 
-    const dispatch = useDispatch();
-    const user = useSelector(state => state.user);
-    // console.log(user)
 
-    const redirect = () => {
-        const fromObj = props.location.state || {
-            from: { pathname: "/" }
-        };
 
-        const path = fromObj.from.pathname;
-        props.history.push(path);
-    };
+     const dispatch = useDispatch()
 
-    const showError = () => {
-        setRegistrationError("Email is already registered");
-    };
-    //To show success message
-    const showSuccessMessage = () => {
-        alert("Registration successful")
-    }
-   
+     const user = useSelector(state => state.user);
+     const{record}=user.userInfo;
     
-    const validate = formValues => {
-        const error = {};
+     console.log(formValues)
 
-        if (!formValues.firstName) error.firstName = "Firstname required";
+     const changeAvatar = (e) => {
+    //     const file = e.target.files[0]
 
-        if (!formValues.lastName) error.lastName = "Lastname required";
+    //     const err = checkImage(file)
+    //     if(err) return dispatch({
+    //         type: GLOBALTYPES.ALERT, payload: {error: err}
+    //     })
 
-        if (!formValues.userName) error.userName = "Username required";
+    //     setAvatar(file)
+     }
 
-        if (!formValues.password) error.password = "Password required";
+     const handleView = e => {
+        if (e.target.value === "software-engineer") {
+            setView("sw");
+        } else setView("notsw");
 
-        if (!formValues.email) error.email = "Email required";
-        else if (
-            !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-                formValues.email
-            )
-        ) {
-            error.email = "Invalid Email";
-        }
-        if (formValues.password !== confirmpass)
-            error.password2 = "Passwords do not match";
-
-        if (!formValues.yearsOfExperience)
-            error.yearsOfExperience = "Years Of Experience required";
-
-        if (!formValues.major || formValues.major === "software-engineer")
-            error.major = "Major required";
-
-        if (view === "sw" && !formValues.level) error.level = "Level required";
-
-        setErrors(error);
-
-        return error;
-    };
-    const confirmPassword = e => {
-        setconfirmpass(e.target.value);
+        handleChange(e);
     };
 
     const handleChange = e => {
@@ -132,112 +92,40 @@ function Register(props) {
             setFormValues({ ...formValues, [name]: value });
         }
     };
-
-    const handleView = e => {
-        if (e.target.value === "software-engineer") {
-            setView("sw");
-        } else setView("notsw");
-
-        handleChange(e);
-    };
+    
 
     const handleSubmit = e => {
-        e.preventDefault();
-        const json = JSON.stringify(formValues);
-        const errors = validate(formValues);
-        if (Object.keys(errors).length === 0) {
-            console.log(json);
-
-            dispatch(registerApplicantAction(formValues, redirect, showError, showSuccessMessage));
-            
-        }
-    };
+    //     e.preventDefault()
+    //     dispatch(updateProfileUser({userData, avatar, auth}))
+     }
 
     return (
-        <div className={classes.BoxContainer}>
-            <h3>Account information</h3>
-            <div className={classes.FormContainer}>
-                <form className={classes.FormContainer} onSubmit={handleSubmit}>
-                    <input
-                        className={classes.Input}
-                        name="firstName"
-                        placeholder="Firstname"
-                        onChange={handleChange}
-                    />
-                    {errors.firstName && (
-                        <label className={classes.error}>
-                            {errors.firstName}
-                        </label>
-                    )}
+        <div className="edit_profile">
+            <button className="btn btn-danger btn_close"
+            onClick={() => setOnEditQualifications(false)}>
+                Close
+            </button>
 
-                    <input
-                        className={classes.Input}
-                        name="lastName"
-                        placeholder="Lastname"
-                        onChange={handleChange}
-                    />
-                    {errors.lastName && (
-                        <label className={classes.error}>
-                            {errors.lastName}
-                        </label>
-                    )}
+            <form onSubmit={handleSubmit}>
+            <div className="info_avatar">
+                    
+                    <span>
+                        <i className="fas fa-camera" />
+                        <p>Change</p>
+                        <input type="file" name="file" id="file_up"
+                        accept="image/*" onChange={changeAvatar} />
+                    </span>
+                </div>
 
-                    <input
-                        className={classes.Input}
-                        name="userName"
-                        placeholder="Username"
-                        onChange={handleChange}
-                    />
-                    {errors.userName && (
-                        <label className={classes.error}>
-                            {errors.userName}
-                        </label>
-                    )}
 
-                    <input
-                        className={classes.Input}
-                        name="email"
-                        placeholder="Email"
-                        onChange={handleChange}
-                    />
-                    {errors.email && (
-                        <label className={classes.error}>{errors.email}</label>
-                    )}
-                    {registrationError !== "" && (
-                        <label className={classes.error}>
-                            {registrationError}
-                        </label>
-                    )}
+            <div className="form-group">
 
-                    <input
-                        className={classes.Input}
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        onChange={handleChange}
-                    />
-                    {errors.password && (
-                        <label className={classes.error}>
-                            {errors.password}
-                        </label>
-                    )}
-
-                    <input
-                        className={classes.Input}
-                        type="password"
-                        placeholder="Confirm password"
-                        onChange={confirmPassword}
-                    />
-                    {errors.password2 && (
-                        <label className={classes.error}>
-                            {errors.password2}
-                        </label>
-                    )}
-
-                    <select
+                <div className="input-group-prepend px-0 mb-4">
+                <select
                         name="major"
-                        className={classes.Select}
-                        onChange={handleView}  >
+                        onChange={handleView}
+                        className="custom-select text-capitalize">
+
                         <option>--Select major--</option>
                         <option value="software-engineer">Software engineer</option>
                         <option value="doctor">Doctor</option>
@@ -246,12 +134,8 @@ function Register(props) {
                         <option value="data-analyst">Data analyst</option>
                         <option value="teacher">Teacher</option>
                     </select>
-
-                    {errors.major && view === "notsw" && (
-                        <label className={classes.error}>{errors.major}</label>
-                    )}
-
-                    {view === "sw" ? (
+                </div>
+                {view === "sw" ? (
                         <div>
                             <div className={classes.Box}>
                                 <h3>You are more into </h3>
@@ -328,16 +212,11 @@ function Register(props) {
                                         />
                                         <label>R&D</label>
                                     </li>
-                                </ul>
-                                {errors.major && (
-                                    <label className={classes.error}>
-                                        {errors.major}
-                                    </label>
-                                )}
+                                    </ul>
                             </div>
-                            <br />
+                        
 
-                            <div className={classes.Box}>
+                        <div className={classes.Box}>
                                 <h3>You consider yourself </h3>
                                 <ul className={classes.Ul}>
                                     <li className={classes.Li}>
@@ -386,11 +265,6 @@ function Register(props) {
                                         <label>Staff Engineer</label>
                                     </li>
                                 </ul>
-                                {errors.level && (
-                                    <label className={classes.error}>
-                                        {errors.level}
-                                    </label>
-                                )}
                             </div>
                             <br />
                             <div className={classes.Box}>
@@ -401,12 +275,6 @@ function Register(props) {
                                     placeholder="Years Of Experience"
                                     onChange={handleChange}
                                 />
-
-                                {errors.yearsOfExperience && (
-                                    <label className={classes.error}>
-                                        {errors.yearsOfExperience}
-                                    </label>
-                                )}
                             </div>
 
                             <br />
@@ -442,23 +310,38 @@ function Register(props) {
                                 name="yearsOfExperience"
                                 placeholder="Years Of Experience"
                                 onChange={handleChange}
-                            />
-
-                            {errors.yearsOfExperience && (
-                                <label className={classes.error}>
-                                    {errors.yearsOfExperience}
-                                </label>
-                            )}
+                            />                           
                         </div>
                     )}
-                    <button className={classes.SubmitButton} type="submit">
-                        {" "}
-                        Sign up
-                    </button>
-                </form>
-            </div>
+
+                </div>        
+
+
+        
+
+                
+
+      
+
+           
+
+
+
+               {/* <label htmlFor="gender">Gender</label>
+                <div className="input-group-prepend px-0 mb-4">
+                    <select name="gender" id="gender" value={gender}
+                    className="custom-select text-capitalize"
+                    onChange={handleInput}>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+    </div>*/}
+
+                <button className="btn btn-info w-100" type="submit">Save</button>
+            </form>
         </div>
-    );
+    )
 }
 
-export default withRouter(Register);
+export default EditQualifications
