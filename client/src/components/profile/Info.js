@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import EditProfile from "./EditProfile";
+import EditQualifications from './EditQualifications';
 import { useDispatch, useSelector } from "react-redux";
 import classes from "./profile.scss";
 
 const Info = () => {
     const [userData, setUserData] = useState([]);
     const [onEdit, setOnEdit] = useState(false);
-
-    const [showFollowers, setShowFollowers] = useState(false);
-    const [showFollowing, setShowFollowing] = useState(false);
+    const [onEditQF, setOnEditQF] = useState(false);
 
     const user = useSelector(state => state.user);
     const { record } = user.userInfo;
-
+    
     return (
+        
         <>
             <div className="card" style={{width: '50rem'}}>
                 <div className="card-header">Turing</div>
@@ -41,11 +41,31 @@ const Info = () => {
                             </div>
                         </p>
                         </li>
-                        {record.position !== null && (<li className="list-group-item"><h4 className="card-title">Position</h4>
+                        {record.position !== undefined && (<li className="list-group-item"><h4 className="card-title">Position</h4>
                             <p className="card-text"> {record.position}</p></li> )}
-                            {record.company !== null && (    <li className="list-group-item"> <h4 className="card-title">Company</h4>
+                        {record.major !== undefined && (<li className="list-group-item"><h4 className="card-title">Major</h4>
+                            <p className="card-text"> {record.major}</p></li> )}
+                            {record.company !== undefined && (    <li className="list-group-item"> <h4 className="card-title">Company</h4>
                             <p className="card-text"> {record.company}</p></li> )}
                 </ul>
+                {
+                 <button style={{marginBottom: '20px'}}
+                   className="btn btn-outline-info"
+                    onClick={() => setOnEdit(true)}
+               >
+                     Edit Profile
+                </button>
+                }
+                {onEdit && <EditProfile setOnEdit={setOnEdit} />}
+                {
+                 <button style={{marginBottom: '20px'}}
+                   className="btn btn-outline-info"
+                    onClick={() => setOnEditQF(true)}
+               >
+                     Edit Qualifications
+                </button>
+                }
+                {onEditQF && <EditQualifications setOnEditQualifications={setOnEditQF} />}
             </div>
            
            
