@@ -40,17 +40,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
         "Scala",
         "Go"
     ];
-    const initialValues = {
-        major: "",
-        level: "",
-        yearsOfExperience:0,
-        qualifications: { programmingLanguages: [] }
-    };
+  
 
-
-    const [formValues, setFormValues] = useState(initialValues);
-
-     const [view, setView] = useState("notsw");
 
 
 
@@ -58,8 +49,33 @@ const EditQualifications = ({setOnEditQualifications}) => {
 
      const user = useSelector(state => state.user);
      const{record}=user.userInfo;
+     const majors=["BackEnd",
+     "FrontEnd",
+     "Fullstack",
+     "Testing",
+     "DevOps",
+     "Mobile-dev",
+     "Embedded",
+     "R&D"];
+     const [view, setView] = useState(majors.includes(record.major)?"sw":"notsw");
+
+  
+     const initialValues = {
+        major: record.major,
+        level: record.level,
+        yearsOfExperience:record.yearsOfExperience,
+        qualifications: record.qualifications,
+    };
+
+    const [formValues, setFormValues] = useState(initialValues);
+
+
+
     
+
+  
      console.log(formValues)
+
 
      const changeAvatar = (e) => {
     //     const file = e.target.files[0]
@@ -81,6 +97,7 @@ const EditQualifications = ({setOnEditQualifications}) => {
     };
 
     const handleChange = e => {
+    
         const { name, value } = e.target;
 
         if (name === "qualifications") {
@@ -121,7 +138,7 @@ const EditQualifications = ({setOnEditQualifications}) => {
             <div className="form-group">
 
                 <div className="input-group-prepend px-0 mb-4">
-                <select
+                <select defaultValue={view==="sw"?"software-engineer":formValues.major}
                         name="major"
                         onChange={handleView}
                         className="custom-select text-capitalize">
@@ -146,6 +163,7 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                             name="major"
                                             value="BackEnd"
                                             onChange={handleChange}
+                                            checked={formValues.major==='BackEnd'?true:false}
                                         />
                                         <label>BackEnd</label>
                                     </li>
@@ -155,6 +173,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                             name="major"
                                             value="FrontEnd"
                                             onChange={handleChange}
+                                            checked={formValues.major==='FrontEnd'?true:false}
+
                                         />
                                         <label>FrontEnd</label>
                                     </li>
@@ -164,6 +184,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                             name="major"
                                             value="Fullstack"
                                             onChange={handleChange}
+                                            checked={formValues.major==='Fullstack'?true:false}
+
                                         />
                                         <label>Fullstack</label>
                                     </li>
@@ -171,8 +193,10 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                         <input
                                             type="radio"
                                             name="major"
-                                            value="testing"
+                                            value="Testing"
                                             onChange={handleChange}
+                                            checked={formValues.major==='Testing'?true:false}
+
                                         />
                                         <label>Testing</label>
                                     </li>
@@ -182,6 +206,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                             name="major"
                                             value="DevOps"
                                             onChange={handleChange}
+                                            checked={formValues.major==='DevOps'?true:false}
+
                                         />
                                         <label>DevOps</label>
                                     </li>
@@ -189,8 +215,10 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                         <input
                                             type="radio"
                                             name="major"
-                                            value="mobile"
+                                            value="Mobile"
                                             onChange={handleChange}
+                                            checked={formValues.major==='Mobile'?true:false}
+
                                         />
                                         <label>Mobile dev</label>
                                     </li>
@@ -198,8 +226,10 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                         <input
                                             type="radio"
                                             name="major"
-                                            value="embedded"
+                                            value="Embedded"
                                             onChange={handleChange}
+                                            checked={formValues.major==='Embedded'?true:false}
+
                                         />
                                         <label>Embedded</label>
                                     </li>
@@ -209,6 +239,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                             name="major"
                                             value="R&D"
                                             onChange={handleChange}
+                                            checked={formValues.major==='R&D'?true:false}
+
                                         />
                                         <label>R&D</label>
                                     </li>
@@ -225,6 +257,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                             name="level"
                                             value="Intern"
                                             onChange={handleChange}
+                                            checked={formValues.level==='Intern'?true:false}
+
                                         />
                                         <label>Intern</label>
                                     </li>
@@ -234,6 +268,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                             name="level"
                                             value="Junior"
                                             onChange={handleChange}
+                                            checked={formValues.level==='Junior'?true:false}
+
                                         />
                                         <label>Junior</label>
                                     </li>
@@ -243,6 +279,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                             name="level"
                                             value="Mid-Level"
                                             onChange={handleChange}
+                                            checked={formValues.level==='Mid-Level'?true:false}
+
                                         />
                                         <label>Mid Level</label>
                                     </li>
@@ -252,6 +290,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                             name="level"
                                             value="Senior"
                                             onChange={handleChange}
+                                            checked={formValues.level==='Senior'?true:false}
+
                                         />
                                         <label>Senior</label>
                                     </li>
@@ -261,6 +301,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                             name="level"
                                             value="Staff-Engineer"
                                             onChange={handleChange}
+                                            checked={formValues.level==='Staff-Engineer'?true:false}
+
                                         />
                                         <label>Staff Engineer</label>
                                     </li>
@@ -274,6 +316,7 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                     name="yearsOfExperience"
                                     placeholder="Years Of Experience"
                                     onChange={handleChange}
+                                    defaultValue={formValues.yearsOfExperience}
                                 />
                             </div>
 
@@ -292,6 +335,8 @@ const EditQualifications = ({setOnEditQualifications}) => {
                                                     type="checkbox"
                                                     value={stack}
                                                     onChange={handleChange}
+                                                    checked={formValues.qualifications.programmingLanguages.includes(stack)?true:false}
+
                                                 />
                                                 <label key={stack}>
                                                     {stack}
