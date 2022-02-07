@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import EditProfile from './EditProfile'
 import { useDispatch, useSelector } from "react-redux";
-
+import EditQualifications from './EditQualifications';
 
 const Info = () => {
     
     const [userData, setUserData] = useState([])
     const [onEdit, setOnEdit] = useState(false)
+    const [onEditQualifications, setOnEditQualifications] = useState(false)
+
 
     const [showFollowers, setShowFollowers] = useState(false)
     const [showFollowing, setShowFollowing] = useState(false)
@@ -24,13 +26,19 @@ const Info = () => {
                             <div className="info_content_title">
                                 <h2>{record.firstName}</h2>
                                 {
-                                   
+                                   <div>
                                     <button className="btn btn-outline-info"
                                     onClick={() => setOnEdit(true)}>
                                         Edit Profile
                                     </button>
+                                    <br/>
                                     
-                                   
+                                     <button className="btn btn-outline-info"
+                                     onClick={() => setOnEditQualifications(true)}>
+                                         Edit Qualifications
+                                     </button>
+                                    
+                                   </div>
                                 }
                                 
                                 
@@ -57,6 +65,10 @@ const Info = () => {
                         {
                             onEdit && <EditProfile setOnEdit={setOnEdit} />
                         }
+                         {
+                            onEditQualifications && <EditQualifications setOnEditQualifications={setOnEditQualifications} />
+                        }
+
 
                       
                      
