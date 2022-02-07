@@ -237,18 +237,12 @@ function Register(props) {
                     <select
                         name="major"
                         className={classes.Select}
-                        onChange={handleView}
-                    >
+                        onChange={handleView}  >
                         <option>--Select major--</option>
-                        <option value="software-engineer">
-                            Software engineer
-                        </option>
-
+                        <option value="software-engineer">Software engineer</option>
                         <option value="doctor">Doctor</option>
                         <option value="Pharmacist">Pharmacist</option>
-                        <option value="graphic-designer">
-                            Graphic designer
-                        </option>
+                        <option value="graphic-designer">Graphic designer</option>
                         <option value="data-analyst">Data analyst</option>
                         <option value="teacher">Teacher</option>
                     </select>
