@@ -6,9 +6,6 @@ const Info = () => {
     const [userData, setUserData] = useState([]);
     const [onEdit, setOnEdit] = useState(false);
 
-    // const [showFollowers, setShowFollowers] = useState(false);
-    // const [showFollowing, setShowFollowing] = useState(false);
-
     const user = useSelector((state) => state.user);
     const { record } = user.userInfo;
 
@@ -28,22 +25,6 @@ const Info = () => {
                                 </button>
                             }
                         </div>
-
-                        <div className="follow_btn">
-                            <span
-                                className="mr-4"
-                                onClick={() => setShowFollowers(true)}
-                            >
-                                Followers
-                            </span>
-                            <span
-                                className="ml-4"
-                                onClick={() => setShowFollowing(true)}
-                            >
-                                Following
-                            </span>
-                        </div>
-
                         <h6>
                             {record.firstName}
                             {record.lastName}
@@ -56,21 +37,6 @@ const Info = () => {
                         </a>
                         <p>story</p>
                     </div>
-
-                    {/* <div className="follow_btn">
-                            <span
-                                className="mr-4"
-                                onClick={() => setShowFollowers(true)}
-                            >
-                                {user.followers.length} Followers
-                            </span>
-                            <span
-                                className="ml-4"
-                                onClick={() => setShowFollowing(true)}
-                            >
-                                {user.following.length} Following
-                            </span>
-                        </div> */}
                 </div>
             }
         </div>
