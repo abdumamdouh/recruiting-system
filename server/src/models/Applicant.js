@@ -102,6 +102,14 @@ Applicant.prototype.updatePublicApplicantData = function ( newUser ) {
     user.yearsOfExperience = newUser.yearsOfExperience
     user.qualifications = newUser.qualifications
     user.save
+    return {
+        email : user.email ,
+        firstName: user.firstName ,
+        lastName: user.lastName ,
+        major: user.major ,
+        yearsOfExperience: user.yearsOfExperience ,
+        qualifications: user.qualifications
+    }
 
 }
 

@@ -88,7 +88,14 @@ Recruiter.prototype.updatePublicRecruiterData = function ( newUser ) {
     user.lastName = newUser.lastName
     user.company = newUser.company
     user.position = newUser.position
-    user.save    
+    user.save 
+    return {
+        email: user.email ,
+        firstName: user.firstName ,
+        lastName: user.lastName ,
+        company: user.company ,
+        position: user.position 
+    }   
 }
 
 // Validate Recruiter by it's email and password
