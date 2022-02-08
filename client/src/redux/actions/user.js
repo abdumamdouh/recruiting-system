@@ -140,27 +140,30 @@ const logoutUserAction = () => {
 
 const updateApplicantAction = (userData)=>{
     return async (dispatch, getState) => {
+    
         try {
+           console.log(userData)
             dispatch({
                 type: UPDATE_APPLICANT_REQUEST,
                 loading: true,
             })
             const {userInfo} = getState().user
             console.log(userInfo.token)
-            const config = {
-                headers: {
-                  'Content-Type': 'application/json',
-                  authorization: `Bearer ${userInfo.token}`,
-                },
-              }
-              const {data} = await axios.put(
-                `${serverURL}/Applicant/me/update`,
-                {userData},
-                config
-              )
+            // const config = {
+            //     headers: {
+            //       'Content-Type': 'application/json',
+            //       authorization: `Bearer ${userInfo.token}`,
+            //     },
+            //   }
+            //   const {data} = await axios.put(
+            //     `${serverURL}/Applicant/me/update`,
+            //     userData,
+            //     config
+            //   )
             dispatch({
                 type: UPDATE_APPLICANT_SUCCESS,
-                payload:data
+               // payload:data           
+               payload:userData     
             })
         } catch (error) {
             dispatch({
