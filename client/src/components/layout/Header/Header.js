@@ -64,7 +64,7 @@ function Header() {
                             <Link to="/account">Account</Link>
                         </li>
                       )}
-                        {(user.hasOwnProperty("userInfo")&&!user.userInfo.hasOwnProperty("record") )&& (
+                        {((user.hasOwnProperty("userInfo")&&!user.userInfo.hasOwnProperty("record"))||!user.hasOwnProperty("userInfo") )&& (
                             <li>
                                 <Link to="/login">Login</Link>
                             </li>
