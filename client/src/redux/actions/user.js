@@ -9,7 +9,13 @@ import {
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
-    LOGOUT
+    LOGOUT,
+    UPDATE_APPLICANT_REQUEST,
+    UPDATE_APPLICANT_SUCCESS,
+    UPDATE_APPLICANT_FAIL,
+    UPDATE_RECRUITER_REQUEST,
+    UPDATE_RECRUITER_SUCCESS,
+    UPDATE_RECRUITER_FAIL
 } from "../types";
 
 const serverURL = "http://localhost:5000";
@@ -59,6 +65,10 @@ const registerRecruiterAction = (Recruiter, redirect, showError,showSuccessMessa
                 config
             );
             dispatch({ type: REGISTER_RECRUITER_SUCCESS, payload: data });
+
+            //TRYING LOCAL STORAGE 
+            //localStorage.setItem('userAuthData', JSON.stringify(data));
+
             showSuccessMessage()
             redirect();
         } catch (error) {
@@ -108,9 +118,89 @@ const logoutUserAction = () => {
     };
 };
 
+//logout with local storage
+// export const logoutUser = () => {
+//     return async dispatch => {
+//       localStorage.removeItem('userAuthData');
+//       try {
+//         dispatch({
+//           type: LOGOUT,
+//         });
+//       } catch (error) {}
+//     };
+//   };
+
+const updateApplicantAction = (userData)=>{
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: UPDATE_APPLICANT_REQUEST,
+                loading: true,
+            })
+            const {userInfo} = getState().user
+            console.log(userInfo.token)
+            const config = {
+                headers: {
+                  'Content-Type': 'application/json',
+                  authorization: `Bearer ${userInfo.token}`,
+                },
+              }
+              const {data} = await axios.put(
+                `${serverURL}/Applicant/me/update`,
+                {userData},
+                config
+              )
+            dispatch({
+                type: UPDATE_APPLICANT_SUCCESS,
+                payload:data
+            })
+        } catch (error) {
+            dispatch({
+                type: UPDATE_APPLICANT_FAIL,
+                payload: error.response && error.response.data
+            });
+        }
+    }
+
+}
+const updateRecruiterAction = (userData)=>{
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: UPDATE_RECRUITER_REQUEST,
+                loading: true,
+            })
+            const {userInfo} = getState().user
+            console.log(userInfo.token)
+            const config = {
+                headers: {
+                  'Content-Type': 'application/json',
+                  authorization: `Bearer ${userInfo.token}`,
+                },
+              }
+              const {data} = await axios.put(
+                `${serverURL}/Recruiter/me/update`,
+                {userData},
+                config
+              )
+            dispatch({
+                type: UPDATE_RECRUITER_SUCCESS,
+                payload:data
+            })
+        } catch (error) {
+            dispatch({
+                type: UPDATE_RECRUITER_FAIL,
+                payload: error.response && error.response.data
+            });
+        }
+    }
+
+}
 export {
     registerApplicantAction,
     registerRecruiterAction,
     loginUserAction,
-    logoutUserAction
+    logoutUserAction,
+    updateApplicantAction,
+    updateRecruiterAction
 };
