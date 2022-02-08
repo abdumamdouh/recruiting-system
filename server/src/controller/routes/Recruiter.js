@@ -32,7 +32,7 @@ router.get('/Recruiter/me' , recruiterAuth, async (req,res) => {
 
 // Update recruiter profile
 router.patch('/Recruiter/me/update' , recruiterAuth, async (req,res) => {
-    res.status(200).send(req.recruiter.updatePublicRecruiterData( req.body ))
+    res.status(200).send(await req.recruiter.updatePublicRecruiterData( req.body ))
 })
 
 module.exports = router

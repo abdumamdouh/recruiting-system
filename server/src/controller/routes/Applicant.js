@@ -29,7 +29,7 @@ router.get('/Applicant/me' , applicantAuth , async (req,res) => {
 
 // Update Applicant profile
 router.patch('/Applicant/me/update' , applicantAuth , async (req,res) => {
-    res.status(200).send(req.applicant.updatePublicApplicantData( req.body )) ;
+    res.status(200).send(await req.applicant.updatePublicApplicantData( req.body )) ;
 })
 
 
