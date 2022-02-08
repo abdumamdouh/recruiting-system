@@ -69,11 +69,12 @@ const userReducer = (state = {}, action) => {
        //UPDATE_APPLICANT reducers
        case UPDATE_APPLICANT_REQUEST:
        return {
-           loading: true
+           loading: true,
+           ...state
        };
    case UPDATE_APPLICANT_SUCCESS:
        return {
-           userInfo: action.payload
+           userInfo: {token:state.userInfo.token, record:action.payload}
        };
    case UPDATE_APPLICANT_FAIL:
        return {
