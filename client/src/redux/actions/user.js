@@ -149,21 +149,22 @@ const updateApplicantAction = (userData)=>{
             })
             const {userInfo} = getState().user
             console.log(userInfo.token)
-            // const config = {
-            //     headers: {
-            //       'Content-Type': 'application/json',
-            //       authorization: `Bearer ${userInfo.token}`,
-            //     },
-            //   }
-            //   const {data} = await axios.put(
-            //     `${serverURL}/Applicant/me/update`,
-            //     userData,
-            //     config
-            //   )
+            const rawResponse = await fetch(`${serverURL}/Applicant/me/update`, {
+                method: 'PATCH',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + userInfo.token
+                },
+                body: JSON.stringify(userData)
+              });
+        
+            const data = await rawResponse.json();
+        
             dispatch({
                 type: UPDATE_APPLICANT_SUCCESS,
-               // payload:data           
-               payload:userData     
+                payload:data           
+               //payload:userData     
             })
         } catch (error) {
             dispatch({
