@@ -78,6 +78,33 @@ Applicant.prototype.generateAuthToken = async function () {
     return token
 }
 
+// Getting public data of the applicant
+Applicant.prototype.getPublicApplicantData = function () {
+    const user = this 
+    return {
+        email : user.email ,
+        firstName: user.firstName ,
+        lastName: user.lastName ,
+        major: user.major ,
+        yearsOfExperience: user.yearsOfExperience ,
+        qualifications: user.qualifications
+    }
+}
+
+// Updating public data of the applicant
+Applicant.prototype.updatePublicApplicantData = function ( newUser ) {
+
+    const user = this 
+    //user.email = newUser.email
+    user.firstName = newUser.firstName
+    user.lastName = newUser.lastName
+    user.major = newUser.major
+    user.yearsOfExperience = newUser.yearsOfExperience
+    user.qualifications = newUser.qualifications
+    user.save
+
+}
+
 // Validate Applicant by it's email and password
 Applicant.findByCredentials = async (email,password) => {
     const applicant = await Applicant.findOne({ where: { email } })

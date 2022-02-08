@@ -9,6 +9,12 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  UPDATE_APPLICANT_REQUEST,
+  UPDATE_APPLICANT_SUCCESS,
+  UPDATE_APPLICANT_FAIL,
+  UPDATE_RECRUITER_REQUEST,
+  UPDATE_RECRUITER_SUCCESS,
+  UPDATE_RECRUITER_FAIL,
 } from "../types";
 
 const userReducer = (state = {}, action) => {
@@ -60,6 +66,36 @@ const userReducer = (state = {}, action) => {
       case LOGOUT:
       return {};
 
+       //UPDATE_APPLICANT reducers
+       case UPDATE_APPLICANT_REQUEST:
+       return {
+           loading: true,
+           ...state
+       };
+   case UPDATE_APPLICANT_SUCCESS:
+       return {
+           userInfo: {token:state.userInfo.token, record:action.payload}
+       };
+   case UPDATE_APPLICANT_FAIL:
+       return {
+           error: action.payload,
+           loading: false
+       };
+
+   //UPDATE RECRUITER reducers
+   case UPDATE_RECRUITER_REQUEST:
+       return {
+           loading: true
+       };
+   case UPDATE_RECRUITER_SUCCESS:
+       return {
+           userInfo: action.payload
+       };
+   case UPDATE_RECRUITER_FAIL:
+       return {
+           error: action.payload,
+           loading: false
+       };
     default:
       return state;
   }

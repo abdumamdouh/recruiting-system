@@ -2,7 +2,7 @@ const express = require('express')
 const Applicant = require('../../models/Applicant')
 const Recruiter = require('../../models/Recruiter')
 
-//const auth = require('../middleware/auth') 
+const recruiterAuth = require('../middleware/recruiterAuth') 
 
 
 const router = new express.Router()
@@ -25,5 +25,14 @@ router.post('/Recruiter/Sign-up' , async (req,res) =>{
     }
 })
 
+// Read recruiter profile
+router.get('/Recruiter/me' , recruiterAuth, async (req,res) => {
+    res.status(200).send(req.recruiter.getPublicRecruiterData())
+})
+
+// Update recruiter profile
+router.patch('/Recruiter/me/update' , recruiterAuth, async (req,res) => {
+    res.status(200).send(req.recruiter.updatePublicRecruiterData( req.body ))
+})
 
 module.exports = router
