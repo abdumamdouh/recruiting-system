@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import EditProfile from "./EditProfile";
-import EditQualifications from './EditQualifications';
+import EditQualifications from "./EditQualifications";
 import { useDispatch, useSelector } from "react-redux";
 import classes from "./profile.scss";
 
@@ -11,19 +11,24 @@ const Info = () => {
 
     const user = useSelector(state => state.user);
     const { record } = user.userInfo;
-    
+    // useEffect(() => {
+
+    //         setUserData(user)
+
+    // }, [user])
     return (
-        
         <>
-            <div className="card" style={{width: '50rem'}}>
+            <div className="card" style={{ width: "50rem", height: "90%" }}>
                 <div className="card-header">Turing</div>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item">    <h4 className="card-title">
+                <div className="list-group list-group-flush">
+                    <li className="list-group-item">
+                        {" "}
+                        <h4 className="card-title">
                             {record.firstName} {record.lastName}
                         </h4>
                         <h6 className="card-subtitle mb-2 text-muted">
                             {record.userName}
-                        </h6> 
+                        </h6>
                         <p className="card-text">
                             {" "}
                             <div>
@@ -40,45 +45,85 @@ const Info = () => {
                                 {record.email}
                             </div>
                         </p>
+                    </li>
+                </div>
+
+                {record.position !== undefined && (
+                    <li className="list-group-item">
+                        <h4 className="card-title">Position</h4>
+                        <p className="card-text"> {record.position}</p>
+                    </li>
+                )}
+
+                {record.major !== undefined && (
+                    <li className="list-group-item">
+                        <h4 className="card-title">Major</h4>
+                        <p className="card-text"> {record.major}</p>
+                    </li>
+                )}
+
+                <div className="list-group list-group-flush">
+                    {record.level !== undefined && (
+                        <li className="list-group-item">
+                            <h4 className="card-title">Level</h4>
+                            <p className="card-text"> {record.level}</p>
                         </li>
-                        {record.position !== undefined && (<li className="list-group-item"><h4 className="card-title">Position</h4>
-                            <p className="card-text"> {record.position}</p></li> )}
-                        {record.major !== undefined && (<li className="list-group-item"><h4 className="card-title">Major</h4>
-                            <p className="card-text"> {record.major}</p></li> )}
-                        {record.level !== undefined && (<li className="list-group-item"><h4 className="card-title">Level</h4>
-                            <p className="card-text"> {record.level}</p></li> )}
-                        {record.yearsOfExperience !== undefined && (<li className="list-group-item"><h4 className="card-title">Years of Experience</h4>
-                            <p className="card-text"> {record.yearsOfExperience}</p></li> )}
-                        {record.qualifications !== undefined && (<li className="list-group-item"><h4 className="card-title">Qualifications</h4>
-                            {record.qualifications.programmingLanguages.map(q => <p className="card-text"> {q}</p> )}
-                            </li> )}
-                            {record.company !== undefined && (    <li className="list-group-item"> <h4 className="card-title">Company</h4>
-                            <p className="card-text"> {record.company}</p></li> )}
-                </ul>
+                    )}
+                </div>
+
+                <div className="list-group list-group-flush">
+                    {record.yearsOfExperience !== undefined && (
+                        <li className="list-group-item">
+                            <h4 className="card-title">Years of Experience</h4>
+                            <p className="card-text">
+                                {" "}
+                                {record.yearsOfExperience}
+                            </p>
+                        </li>
+                    )}
+                </div>
+
+                {record.qualifications !== undefined && (
+                    <li className="list-group-item">
+                        <h4 className="card-title">Qualifications</h4>
+                        {record.qualifications.programmingLanguages.map(q => (
+                            <p className="card-text"> {q}</p>
+                        ))}
+                    </li>
+                )}
+
+                {record.company !== undefined && (
+                    <li className="list-group-item">
+                        {" "}
+                        <h4 className="card-title">Company</h4>
+                        <p className="card-text"> {record.company}</p>
+                    </li>
+                )}
+
                 {
-                 <button style={{marginBottom: '20px'}}
-                   className="btn btn-outline-info"
-                    onClick={() => setOnEdit(true)}
-               >
-                     Edit Profile
-                </button>
+                    <button
+                        style={{ marginBottom: "20px", marginTop: "20px" }}
+                        className="btn btn-outline-info inline"
+                        onClick={() => setOnEdit(true)}
+                    >
+                        Edit Profile
+                    </button>
                 }
                 {onEdit && <EditProfile setOnEdit={setOnEdit} />}
-                {record.position == undefined &&
-                 <button style={{marginBottom: '20px'}}
-                   className="btn btn-outline-info"
-                    onClick={() => setOnEditQF(true)}
-               >
-                     Edit Qualifications
-                </button>
-                }
-                { onEditQF && <EditQualifications setOnEditQualifications={setOnEditQF} />}
+                {record.position == undefined && (
+                    <button
+                        style={{ marginTop: "-5px", display: "inline-block" }}
+                        className="btn btn-outline-info inline"
+                        onClick={() => setOnEditQF(true)}
+                    >
+                        Edit Qualifications
+                    </button>
+                )}
+                {onEditQF && (
+                    <EditQualifications setOnEditQualifications={setOnEditQF} />
+                )}
             </div>
-           
-           
-        
         </>
-        
     );
 };
 
