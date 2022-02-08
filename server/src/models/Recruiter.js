@@ -81,20 +81,20 @@ Recruiter.prototype.getPublicRecruiterData = function () {
 }
 
 // Updating public data of the recruiter
-Recruiter.prototype.updatePublicRecruiterData = function ( newUser ) {
+Recruiter.prototype.updatePublicRecruiterData = async function ( newUser ) {
     const user = this 
     //user.email = newUser.email
-    user.firstName = newUser.firstName
-    user.lastName = newUser.lastName
-    user.company = newUser.company
-    user.position = newUser.position
-    user.save 
+    this.firstName = newUser.firstName
+    this.lastName = newUser.lastName
+    this.company = newUser.company
+    this.position = newUser.position
+    await this.save() 
     return {
-        email: user.email ,
-        firstName: user.firstName ,
-        lastName: user.lastName ,
-        company: user.company ,
-        position: user.position 
+        email: this.email ,
+        firstName: this.firstName ,
+        lastName: this.lastName ,
+        company: this.company ,
+        position: this.position 
     }   
 }
 

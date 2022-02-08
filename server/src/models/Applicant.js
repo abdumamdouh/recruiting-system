@@ -92,23 +92,22 @@ Applicant.prototype.getPublicApplicantData = function () {
 }
 
 // Updating public data of the applicant
-Applicant.prototype.updatePublicApplicantData = function ( newUser ) {
+Applicant.prototype.updatePublicApplicantData = async function ( newUser ) {
 
-    const user = this 
-    //user.email = newUser.email
-    user.firstName = newUser.firstName
-    user.lastName = newUser.lastName
-    user.major = newUser.major
-    user.yearsOfExperience = newUser.yearsOfExperience
-    user.qualifications = newUser.qualifications
-    user.save
+    //this.email = newUser.email
+    this.firstName = newUser.firstName
+    this.lastName = newUser.lastName
+    this.major = newUser.major
+    this.yearsOfExperience = newUser.yearsOfExperience
+    this.qualifications = newUser.qualifications
+    await this.save()
     return {
-        email : user.email ,
-        firstName: user.firstName ,
-        lastName: user.lastName ,
-        major: user.major ,
-        yearsOfExperience: user.yearsOfExperience ,
-        qualifications: user.qualifications
+        email : this.email ,
+        firstName: this.firstName ,
+        lastName: this.lastName ,
+        major: this.major ,
+        yearsOfExperience: this.yearsOfExperience ,
+        qualifications: this.qualifications
     }
 
 }
