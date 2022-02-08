@@ -102,10 +102,22 @@ const EditQualifications = ({setOnEditQualifications}) => {
         const { name, value } = e.target;
 
         if (name === "qualifications") {
-            const arr = formValues.qualifications.programmingLanguages;
-            arr.push(value);
-            setFormValues(formValues)
-            //setFormValues({...formValues,[formValues.qualifications.programmingLanguages]:arr})
+            
+            let arr = formValues.qualifications.programmingLanguages;
+            if(arr.includes(value))
+            {
+                arr= arr.filter(stack=> stack!==value)
+                setFormValues({...formValues,qualifications:{programmingLanguages:arr}})
+
+               
+            }
+            else
+            {
+            arr.push(value);}
+            setFormValues({...formValues,qualifications:{programmingLanguages:arr}})
+
+            //setFormValues(formValues)
+            //setFormValues({...formValues,qualifications:arr})
             //console.log(formValues.qualifications.programmingLanguages)
         } else {
             setFormValues({ ...formValues, [name]: value });
