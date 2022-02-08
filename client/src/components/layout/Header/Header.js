@@ -59,17 +59,17 @@ function Header() {
                             <Link to="/feed">Feed</Link>
                         </li>
                        
-                        {user.hasOwnProperty("userInfo") && (
+                        {(user.hasOwnProperty("userInfo")&&user.userInfo.hasOwnProperty("record") )&& (
                         <li>
                             <Link to="/account">Account</Link>
                         </li>
                       )}
-                        {!user.hasOwnProperty("userInfo") && (
+                        {((user.hasOwnProperty("userInfo")&&!user.userInfo.hasOwnProperty("record"))||!user.hasOwnProperty("userInfo") )&& (
                             <li>
                                 <Link to="/login">Login</Link>
                             </li>
                         )}
-                        {user.hasOwnProperty("userInfo") && (
+                        {(user.hasOwnProperty("userInfo")&&user.userInfo.hasOwnProperty("record") )&& (
                           <li>
                             <Link to="/login">
                                 <span onClick={handleLogOut}>Logout</span>

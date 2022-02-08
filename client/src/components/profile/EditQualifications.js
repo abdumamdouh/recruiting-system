@@ -1,11 +1,8 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { Alert } from '@mui/material';
-import classes from "./common.module.scss";
-import { registerApplicantAction } from "../../redux/actions/user";
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import classes from '../Forms/common.module.scss'
 
-function Register(props) {
+const EditQualifications = ({setOnEditQualifications}) => {
     const stacks = [
         "HTML5/CSS3",
         "NodeJs",
@@ -43,98 +40,56 @@ function Register(props) {
         "Scala",
         "Go"
     ];
-    const initialValues = {
-        firstName: "",
-        lastName: "",
-        userName: "",
-        email: "",
-        password: "",
-        major: "",
-        level: "",
-        qualifications: { programmingLanguages: [] }
+  
+
+
+
+
+     const dispatch = useDispatch()
+
+     const user = useSelector(state => state.user);
+     const{record}=user.userInfo;
+     const majors=["BackEnd",
+     "FrontEnd",
+     "Fullstack",
+     "Testing",
+     "DevOps",
+     "Mobile-dev",
+     "Embedded",
+     "R&D"];
+     const [view, setView] = useState(majors.includes(record.major)?"sw":"notsw");
+
+  
+     const initialValues = {
+        major: record.major,
+        level: record.level,
+        yearsOfExperience:record.yearsOfExperience,
+        qualifications: record.qualifications,
     };
-    const [formValues, setFormValues] = useState(initialValues);
-    const [programmingLanguages, setProgramminLanguages] = useState([]);
-    const [view, setView] = useState("notsw");
-    const [errors, setErrors] = useState({});
-    const [confirmpass, setconfirmpass] = useState("");
-
-    const [registrationError, setRegistrationError] = useState("");
-    const [showAlert,setShowAlert] = useState('');
-    const dispatch = useDispatch();
-    const user = useSelector(state => state.user);
-    // console.log(user)
-
-    const redirect = () => {
-        const fromObj = props.location.state || {
-            from: { pathname: "/" }
-        };
-
-        const path = fromObj.from.pathname;
-        props.history.push(path);
-    };
-
-    const showError = () => {
-        setRegistrationError("Email is already registered");
-    };
-    //To show success message
-    const showSuccessMessage = () => {
-        setShowAlert('f')
-    }
    
+
+    const [formValues, setFormValues] = useState(initialValues);
+
+
+
     
-    const validate = formValues => {
-        const error = {};
 
-        if (!formValues.firstName) error.firstName = "Firstname required";
+  
+     console.log(formValues)
 
-        if (!formValues.lastName) error.lastName = "Lastname required";
 
-        if (!formValues.userName) error.userName = "Username required";
+     const changeAvatar = (e) => {
+    //     const file = e.target.files[0]
 
-        if (!formValues.password) error.password = "Password required";
+    //     const err = checkImage(file)
+    //     if(err) return dispatch({
+    //         type: GLOBALTYPES.ALERT, payload: {error: err}
+    //     })
 
-        if (!formValues.email) error.email = "Email required";
-        else if (
-            !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-                formValues.email
-            )
-        ) {
-            error.email = "Invalid Email";
-        }
-        if (formValues.password !== confirmpass)
-            error.password2 = "Passwords do not match";
+    //     setAvatar(file)
+     }
 
-        if (!formValues.yearsOfExperience)
-            error.yearsOfExperience = "Years Of Experience required";
-
-        if (!formValues.major || formValues.major === "software-engineer")
-            error.major = "Major required";
-
-        if (view === "sw" && !formValues.level) error.level = "Level required";
-
-        setErrors(error);
-
-        return error;
-    };
-    const confirmPassword = e => {
-        setconfirmpass(e.target.value);
-    };
-
-    const handleChange = e => {
-        const { name, value } = e.target;
-
-        if (name === "qualifications") {
-            const arr = formValues.qualifications.programmingLanguages;
-            arr.push(value);
-            // setFormValues({...formValues,[name]:value})
-            //console.log(formValues.qualifications.programmingLanguages)
-        } else {
-            setFormValues({ ...formValues, [name]: value });
-        }
-    };
-
-    const handleView = e => {
+     const handleView = e => {
         if (e.target.value === "software-engineer") {
             setView("sw");
         } else setView("notsw");
@@ -142,104 +97,66 @@ function Register(props) {
         handleChange(e);
     };
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        const json = JSON.stringify(formValues);
-        const errors = validate(formValues);
-        if (Object.keys(errors).length === 0) {
-            console.log(json);
+    const handleChange = e => {
+    
+        const { name, value } = e.target;
+
+        if (name === "qualifications") {
             
-            dispatch(registerApplicantAction(formValues, redirect, showError, showSuccessMessage));
-            
+            let arr = formValues.qualifications.programmingLanguages;
+            if(arr.includes(value))
+            {
+                arr= arr.filter(stack=> stack!==value)
+                setFormValues({...formValues,qualifications:{programmingLanguages:arr}})
+
+               
+            }
+            else
+            {
+            arr.push(value);}
+            setFormValues({...formValues,qualifications:{programmingLanguages:arr}})
+
+            //setFormValues(formValues)
+            //setFormValues({...formValues,qualifications:arr})
+            //console.log(formValues.qualifications.programmingLanguages)
+        } else {
+            setFormValues({ ...formValues, [name]: value });
         }
     };
+    
+
+    const handleSubmit = e => {
+    //     e.preventDefault()
+    //     dispatch(updateProfileUser({userData, avatar, auth}))
+     }
 
     return (
-        <div className={classes.BoxContainer}>
-             {showAlert === 'f'&&<Alert severity="success">Registered successfully</Alert>}
-            <h3>Account information</h3>
-            <div className={classes.FormContainer}>
-                <form className={classes.FormContainer} onSubmit={handleSubmit}>
-                    <input
-                        className={classes.Input}
-                        name="firstName"
-                        placeholder="Firstname"
-                        onChange={handleChange}
-                    />
-                    {errors.firstName && (
-                        <label className={classes.error}>
-                            {errors.firstName}
-                        </label>
-                    )}
+        <div className="edit_profile">
+            {/* <button className="btn btn-danger btn_close"
+            onClick={() => setOnEditQualifications(false)}>
+                Close
+            </button> */}
+           
+            <form onSubmit={handleSubmit}>
+            <div className="info_avatar">
+                    
+                    <span>
+                        <i className="fas fa-camera" />
+                        <p>Change</p>
+                        <input type="file" name="file" id="file_up"
+                        accept="image/*" onChange={changeAvatar} />
+                    </span>
+                </div>
 
-                    <input
-                        className={classes.Input}
-                        name="lastName"
-                        placeholder="Lastname"
-                        onChange={handleChange}
-                    />
-                    {errors.lastName && (
-                        <label className={classes.error}>
-                            {errors.lastName}
-                        </label>
-                    )}
 
-                    <input
-                        className={classes.Input}
-                        name="userName"
-                        placeholder="Username"
-                        onChange={handleChange}
-                    />
-                    {errors.userName && (
-                        <label className={classes.error}>
-                            {errors.userName}
-                        </label>
-                    )}
+            <div className="form-group">
 
-                    <input
-                        className={classes.Input}
-                        name="email"
-                        placeholder="Email"
-                        onChange={handleChange}
-                    />
-                    {errors.email && (
-                        <label className={classes.error}>{errors.email}</label>
-                    )}
-                    {registrationError !== "" && (
-                        <label className={classes.error}>
-                            {registrationError}
-                        </label>
-                    )}
-
-                    <input
-                        className={classes.Input}
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        onChange={handleChange}
-                    />
-                    {errors.password && (
-                        <label className={classes.error}>
-                            {errors.password}
-                        </label>
-                    )}
-
-                    <input
-                        className={classes.Input}
-                        type="password"
-                        placeholder="Confirm password"
-                        onChange={confirmPassword}
-                    />
-                    {errors.password2 && (
-                        <label className={classes.error}>
-                            {errors.password2}
-                        </label>
-                    )}
-
-                    <select
+                <div className="input-group-prepend px-0 mb-4">
+                <select defaultValue={view==="sw"?"software-engineer":formValues.major}
                         name="major"
-                        className={classes.Select}
-                        onChange={handleView}  >
+                        onChange={handleView}
+                        className="custom-select text-capitalize">
+
                         <option>--Select major--</option>
                         <option value="software-engineer">Software engineer</option>
                         <option value="doctor">Doctor</option>
@@ -248,15 +165,11 @@ function Register(props) {
                         <option value="data-analyst">Data analyst</option>
                         <option value="teacher">Teacher</option>
                     </select>
-
-                    {errors.major && view === "notsw" && (
-                        <label className={classes.error}>{errors.major}</label>
-                    )}
-
-                    {view === "sw" ? (
+                </div>
+                {view === "sw" ? (
                         <div>
                             <div className={classes.Box}>
-                                <h3>You are more into </h3>
+                                <h4  >You are more into </h4>
                                 <ul className={classes.Ul}>
                                     <li className={classes.Li}>
                                         <input
@@ -264,6 +177,7 @@ function Register(props) {
                                             name="major"
                                             value="BackEnd"
                                             onChange={handleChange}
+                                            checked={formValues.major==='BackEnd'?true:false}
                                         />
                                         <label>BackEnd</label>
                                     </li>
@@ -273,6 +187,8 @@ function Register(props) {
                                             name="major"
                                             value="FrontEnd"
                                             onChange={handleChange}
+                                            checked={formValues.major==='FrontEnd'?true:false}
+
                                         />
                                         <label>FrontEnd</label>
                                     </li>
@@ -282,6 +198,8 @@ function Register(props) {
                                             name="major"
                                             value="Fullstack"
                                             onChange={handleChange}
+                                            checked={formValues.major==='Fullstack'?true:false}
+
                                         />
                                         <label>Fullstack</label>
                                     </li>
@@ -291,6 +209,8 @@ function Register(props) {
                                             name="major"
                                             value="Testing"
                                             onChange={handleChange}
+                                            checked={formValues.major==='Testing'?true:false}
+
                                         />
                                         <label>Testing</label>
                                     </li>
@@ -300,6 +220,8 @@ function Register(props) {
                                             name="major"
                                             value="DevOps"
                                             onChange={handleChange}
+                                            checked={formValues.major==='DevOps'?true:false}
+
                                         />
                                         <label>DevOps</label>
                                     </li>
@@ -309,6 +231,8 @@ function Register(props) {
                                             name="major"
                                             value="Mobile"
                                             onChange={handleChange}
+                                            checked={formValues.major==='Mobile'?true:false}
+
                                         />
                                         <label>Mobile dev</label>
                                     </li>
@@ -318,6 +242,8 @@ function Register(props) {
                                             name="major"
                                             value="Embedded"
                                             onChange={handleChange}
+                                            checked={formValues.major==='Embedded'?true:false}
+
                                         />
                                         <label>Embedded</label>
                                     </li>
@@ -327,20 +253,17 @@ function Register(props) {
                                             name="major"
                                             value="R&D"
                                             onChange={handleChange}
+                                            checked={formValues.major==='R&D'?true:false}
+
                                         />
                                         <label>R&D</label>
                                     </li>
-                                </ul>
-                                {errors.major && (
-                                    <label className={classes.error}>
-                                        {errors.major}
-                                    </label>
-                                )}
+                                    </ul>
                             </div>
-                            <br />
+                        
 
-                            <div className={classes.Box}>
-                                <h3>You consider yourself </h3>
+                        <div className={classes.Box}>
+                                <h4>You consider yourself </h4>
                                 <ul className={classes.Ul}>
                                     <li className={classes.Li}>
                                         <input
@@ -348,6 +271,8 @@ function Register(props) {
                                             name="level"
                                             value="Intern"
                                             onChange={handleChange}
+                                            checked={formValues.level==='Intern'?true:false}
+
                                         />
                                         <label>Intern</label>
                                     </li>
@@ -357,6 +282,8 @@ function Register(props) {
                                             name="level"
                                             value="Junior"
                                             onChange={handleChange}
+                                            checked={formValues.level==='Junior'?true:false}
+
                                         />
                                         <label>Junior</label>
                                     </li>
@@ -366,6 +293,8 @@ function Register(props) {
                                             name="level"
                                             value="Mid-Level"
                                             onChange={handleChange}
+                                            checked={formValues.level==='Mid-Level'?true:false}
+
                                         />
                                         <label>Mid Level</label>
                                     </li>
@@ -375,6 +304,8 @@ function Register(props) {
                                             name="level"
                                             value="Senior"
                                             onChange={handleChange}
+                                            checked={formValues.level==='Senior'?true:false}
+
                                         />
                                         <label>Senior</label>
                                     </li>
@@ -384,36 +315,28 @@ function Register(props) {
                                             name="level"
                                             value="Staff-Engineer"
                                             onChange={handleChange}
+                                            checked={formValues.level==='Staff-Engineer'?true:false}
+
                                         />
                                         <label>Staff Engineer</label>
                                     </li>
                                 </ul>
-                                {errors.level && (
-                                    <label className={classes.error}>
-                                        {errors.level}
-                                    </label>
-                                )}
                             </div>
                             <br />
                             <div className={classes.Box}>
-                                <h3>Years Of Experience</h3>
+                                <h4>Years Of Experience</h4>
                                 <input
                                     className={classes.Input}
                                     name="yearsOfExperience"
                                     placeholder="Years Of Experience"
                                     onChange={handleChange}
+                                    defaultValue={formValues.yearsOfExperience}
                                 />
-
-                                {errors.yearsOfExperience && (
-                                    <label className={classes.error}>
-                                        {errors.yearsOfExperience}
-                                    </label>
-                                )}
                             </div>
 
                             <br />
                             <div className={classes.Box}>
-                                <h3>Your Favourite stack</h3>
+                                <h4>Your Favourite stack</h4>
                                 <ul className={classes.Ul}>
                                     {stacks.map(stack => {
                                         return (
@@ -426,6 +349,8 @@ function Register(props) {
                                                     type="checkbox"
                                                     value={stack}
                                                     onChange={handleChange}
+                                                    checked={formValues.qualifications.programmingLanguages.includes(stack)?true:false}
+
                                                 />
                                                 <label key={stack}>
                                                     {stack}
@@ -444,23 +369,39 @@ function Register(props) {
                                 name="yearsOfExperience"
                                 placeholder="Years Of Experience"
                                 onChange={handleChange}
-                            />
-
-                            {errors.yearsOfExperience && (
-                                <label className={classes.error}>
-                                    {errors.yearsOfExperience}
-                                </label>
-                            )}
+                            />                           
                         </div>
                     )}
-                    <button className={classes.SubmitButton} type="submit">
-                        {" "}
-                        Sign up
-                    </button>
-                </form>
-            </div>
+
+                </div>        
+
+
+        
+
+                
+
+      
+
+           
+
+
+
+               {/* <label htmlFor="gender">Gender</label>
+                <div className="input-group-prepend px-0 mb-4">
+                    <select name="gender" id="gender" value={gender}
+                    className="custom-select text-capitalize"
+                    onChange={handleInput}>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+    </div>*/}
+
+                <button className="btn btn-info w-100" type="submit">Save</button>
+                <button style={{marginTop:"10px"}} className="btn btn-info w-100 btn-danger" type="submit"  onClick={() => setOnEditQualifications(false)}>Close</button>
+            </form>
         </div>
-    );
+    )
 }
 
-export default withRouter(Register);
+export default EditQualifications
