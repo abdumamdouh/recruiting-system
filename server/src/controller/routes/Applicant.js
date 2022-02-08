@@ -27,4 +27,10 @@ router.get('/Applicant/me' , applicantAuth , async (req,res) => {
     res.status(200).send(req.applicant.getPublicApplicantData()) ;
 })
 
+// Update Applicant profile
+router.patch('/Applicant/me/update' , applicantAuth , async (req,res) => {
+    res.status(200).send(req.applicant.updatePublicApplicantData( req.body )) ;
+})
+
+
 module.exports = router
