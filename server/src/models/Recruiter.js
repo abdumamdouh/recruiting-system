@@ -80,6 +80,17 @@ Recruiter.prototype.getPublicRecruiterData = function () {
     }
 }
 
+// Updating public data of the recruiter
+Recruiter.prototype.updatePublicRecruiterData = function ( newUser ) {
+    const user = this 
+    //user.email = newUser.email
+    user.firstName = newUser.firstName
+    user.lastName = newUser.lastName
+    user.company = newUser.company
+    user.position = newUser.position
+    user.save    
+}
+
 // Validate Recruiter by it's email and password
 Recruiter.findByCredentials = async (email,password) => {
     const recruiter = await Recruiter.findOne({ where: { email } })
