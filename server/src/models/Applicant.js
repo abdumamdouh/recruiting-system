@@ -26,7 +26,7 @@ const Applicant = db.define('Applicant',{
     },
     major: {
         type: Sequelize.STRING ,
-        allowNull: false
+        allowNull: true
     },
     userName:{
         type: Sequelize.STRING,
@@ -38,15 +38,15 @@ const Applicant = db.define('Applicant',{
     } ,
     yearsOfExperience: {
         type: Sequelize.INTEGER ,
-        allowNull: false
+        allowNull: true
     } ,
     level:{
         type: Sequelize.STRING ,
-        allowNull : false
+        allowNull : true
     } ,
     qualifications:{
         type: Sequelize.JSON,
-        allowNull: false
+        allowNull: true
     } ,
     tokens: {
         type: Sequelize.JSON
