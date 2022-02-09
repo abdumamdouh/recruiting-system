@@ -105,15 +105,6 @@ function Register(props) {
         if (formValues.password !== confirmpass)
             error.password2 = "Passwords do not match";
 
-        if (!formValues.yearsOfExperience)
-            error.yearsOfExperience = "Years Of Experience required";
-
-        if (!formValues.major || formValues.major === "software-engineer")
-            error.major = "Major required";
-
-        if (view === "sw" && !formValues.level) error.level = "Level required";
-
-        setErrors(error);
 
         return error;
     };
