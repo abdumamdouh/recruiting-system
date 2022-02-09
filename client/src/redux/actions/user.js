@@ -21,7 +21,12 @@ import {
 const serverURL = "http://localhost:5000";
 
 // register Applicant
-const registerApplicantAction = (Applicant, redirect, showError, showSuccessMessage) => {
+const registerApplicantAction = (
+    Applicant,
+    redirect,
+    showError,
+    showSuccessMessage
+) => {
     console.log(Applicant);
     return async dispatch => {
         try {
@@ -39,8 +44,8 @@ const registerApplicantAction = (Applicant, redirect, showError, showSuccessMess
             dispatch({ type: REGISTER_APPLICANT_SUCCESS, payload: data });
             showSuccessMessage();
             setTimeout(() => {
-                redirect()
-              }, 1000);
+                redirect();
+            }, 1000);
         } catch (error) {
             dispatch({
                 type: REGISTER_APPLICANT_FAIL,
@@ -52,7 +57,12 @@ const registerApplicantAction = (Applicant, redirect, showError, showSuccessMess
 };
 
 // register Recruiter
-const registerRecruiterAction = (Recruiter, redirect, showError,showSuccessMessage) => {
+const registerRecruiterAction = (
+    Recruiter,
+    redirect,
+    showError,
+    showSuccessMessage
+) => {
     return async dispatch => {
         try {
             dispatch({ type: REGISTER_RECRUITER_REQUEST });
@@ -68,14 +78,13 @@ const registerRecruiterAction = (Recruiter, redirect, showError,showSuccessMessa
             );
             dispatch({ type: REGISTER_RECRUITER_SUCCESS, payload: data });
 
-            //TRYING LOCAL STORAGE 
+            //TRYING LOCAL STORAGE
             //localStorage.setItem('userAuthData', JSON.stringify(data));
 
-            showSuccessMessage()
+            showSuccessMessage();
             setTimeout(() => {
-                redirect()
-              }, 1000);
-            
+                redirect();
+            }, 1000);
         } catch (error) {
             dispatch({
                 type: REGISTER_RECRUITER_FAIL,
@@ -86,7 +95,13 @@ const registerRecruiterAction = (Recruiter, redirect, showError,showSuccessMessa
     };
 };
 
-const loginUserAction = (email, password, redirect, showError,showSuccessMessage) => {
+const loginUserAction = (
+    email,
+    password,
+    redirect,
+    showError,
+    showSuccessMessage
+) => {
     return async dispatch => {
         try {
             dispatch({ type: LOGIN_REQUEST });
@@ -105,10 +120,10 @@ const loginUserAction = (email, password, redirect, showError,showSuccessMessage
                 config
             );
             dispatch({ type: LOGIN_SUCCESS, payload: data });
-            showSuccessMessage()
+            showSuccessMessage();
             setTimeout(() => {
-                redirect()
-              }, 1000);
+                redirect();
+            }, 1000);
         } catch (error) {
             dispatch({
                 type: LOGIN_FAIL,
@@ -138,9 +153,8 @@ const logoutUserAction = () => {
 //     };
 //   };
 
-const updateApplicantAction = (userData)=>{
+const updateApplicantAction = userData => {
     return async (dispatch, getState) => {
-    
         try {
           // console.log(userData)
             dispatch({
@@ -160,54 +174,56 @@ const updateApplicantAction = (userData)=>{
               });
         
             const data = await rawResponse.json();
-        
+
             dispatch({
                 type: UPDATE_APPLICANT_SUCCESS,
-                payload:data           
-               //payload:userData     
-            })
+                payload: data
+                //payload:userData
+            });
         } catch (error) {
             dispatch({
                 type: UPDATE_APPLICANT_FAIL,
                 payload: error.response && error.response.data
             });
         }
-    }
-
-}
-const updateRecruiterAction = (userData)=>{
+    };
+};
+const updateRecruiterAction = userData => {
     return async (dispatch, getState) => {
         try {
             dispatch({
                 type: UPDATE_RECRUITER_REQUEST,
-                loading: true,
-            })
-            const {userInfo} = getState().user
-            console.log(userInfo.token)
-            const config = {
-                headers: {
-                  'Content-Type': 'application/json',
-                  authorization: `Bearer ${userInfo.token}`,
-                },
-              }
-              const {data} = await axios.put(
+                loading: true
+            });
+            const { userInfo } = getState().user;
+            console.log(userInfo.token);
+            const rawResponse = await fetch(
                 `${serverURL}/Recruiter/me/update`,
-                {userData},
-                config
-              )
+                {
+                    method: "PATCH",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    },
+                    body: JSON.stringify(userData)
+                }
+            );
+
+            const data = await rawResponse.json();
+
             dispatch({
                 type: UPDATE_RECRUITER_SUCCESS,
-                payload:data
-            })
+                payload: data
+            });
         } catch (error) {
             dispatch({
                 type: UPDATE_RECRUITER_FAIL,
                 payload: error.response && error.response.data
             });
         }
-    }
-
-}
+    };
+};
 export {
     registerApplicantAction,
     registerRecruiterAction,
