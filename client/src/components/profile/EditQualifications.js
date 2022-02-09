@@ -371,7 +371,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                             </div>
                             <br />
                             <div className={classes.Box}>
-                                <h4>Years Of Experience</h4>
+                                <h4>Years of experience</h4>
                                 <input
                                     className={classes.Input}
                                     name="yearsOfExperience"
@@ -415,7 +415,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                         </div>
                     ) : (
                         <div className={classes.Box}>
-                            <h3>Years Of Experience</h3>
+                            <h4>Years Of Experience</h4>
                             <input
                                 className={classes.Input}
                                 name="yearsOfExperience"
