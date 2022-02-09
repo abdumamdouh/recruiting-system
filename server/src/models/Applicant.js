@@ -87,6 +87,7 @@ Applicant.prototype.getPublicApplicantData = function () {
         firstName: user.firstName ,
         lastName: user.lastName ,
         major: user.major ,
+        level:user.level,
         yearsOfExperience: user.yearsOfExperience ,
         qualifications: user.qualifications
     }
@@ -101,8 +102,10 @@ Applicant.prototype.updatePublicApplicantData = async function ( newUser ) {
     this.major = newUser.major
     this.yearsOfExperience = newUser.yearsOfExperience
     this.qualifications = newUser.qualifications
+    this.level=newUser.level
     await this.save()
     return {
+        level:this.level,
         email : this.email ,
         firstName: this.firstName ,
         lastName: this.lastName ,
