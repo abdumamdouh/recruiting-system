@@ -38,7 +38,8 @@ const Applicant = db.define('Applicant',{
     } ,
     yearsOfExperience: {
         type: Sequelize.INTEGER ,
-        allowNull: true
+        allowNull: true,
+        defaultValue:0
     } ,
     level:{
         type: Sequelize.STRING ,
