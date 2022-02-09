@@ -142,13 +142,13 @@ const updateApplicantAction = (userData)=>{
     return async (dispatch, getState) => {
     
         try {
-           console.log(userData)
+          // console.log(userData)
             dispatch({
                 type: UPDATE_APPLICANT_REQUEST,
                 loading: true,
             })
             const {userInfo} = getState().user
-            console.log(userInfo.token)
+            //console.log(userInfo.token)
             const rawResponse = await fetch(`${serverURL}/Applicant/me/update`, {
                 method: 'PATCH',
                 headers: {
