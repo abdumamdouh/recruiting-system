@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import EditProfile from "./EditProfile";
 import EditQualifications from "./EditQualifications";
 import { useDispatch, useSelector } from "react-redux";
+import { Stack } from "@material-ui/core";
 import classes from "./profile.scss";
 
 const Info = () => {
@@ -18,7 +19,7 @@ const Info = () => {
     // }, [user])
     return (
         <>
-            <div className="card" style={{ width: "50rem", height: "90%" }}>
+            <div className="card" style={{ width: "50rem", height: "80%" }}>
                 <div className="card-header">Turing</div>
                 <div className="list-group list-group-flush">
                     <li className="list-group-item">
@@ -62,33 +63,32 @@ const Info = () => {
                     </li>
                 )}
 
-                <div className="list-group list-group-flush">
-                    {record.level !== undefined && (
-                        <li className="list-group-item">
-                            <h4 className="card-title">Level</h4>
-                            <p className="card-text"> {record.level}</p>
-                        </li>
-                    )}
-                </div>
+                {record.level !== undefined && (
+                    <li className="list-group-item">
+                        <h4 className="card-title">Level</h4>
+                        <p className="card-text"> {record.level}</p>
+                    </li>
+                )}
 
-                <div className="list-group list-group-flush">
-                    {record.yearsOfExperience !== undefined && (
-                        <li className="list-group-item">
-                            <h4 className="card-title">Years of Experience</h4>
-                            <p className="card-text">
-                                {" "}
-                                {record.yearsOfExperience}
-                            </p>
-                        </li>
-                    )}
-                </div>
+                {record.yearsOfExperience !== undefined && (
+                    <li className="list-group-item">
+                        <h4 className="card-title">Years of Experience</h4>
+                        <p className="card-text"> {record.yearsOfExperience}</p>
+                    </li>
+                )}
 
                 {record.qualifications !== undefined && (
-                    <li className="list-group-item">
-                        <h4 className="card-title">Qualifications</h4>
+                    
+                    <li
+                        className="list-group-item"
+                        style={{ "border-bottom": "0px" }}
+                    >
+                        <h4 className="card-title" >Qualifications</h4>
                         {record.qualifications.programmingLanguages.map(q => (
-                            <p className="card-text"> {q}</p>
+                            <p className="card-text" > {q}</p>
+                            
                         ))}
+                        <br></br>
                     </li>
                 )}
 
@@ -101,16 +101,34 @@ const Info = () => {
                 )}
 
                 {
-                    <button
-                        style={{ marginBottom: "20px", marginTop: "20px" }}
-                        className="btn btn-outline-info inline"
-                        onClick={() => setOnEdit(true)}
+                    <li
+                        className="list-group-item"
+                        style={{ "border-bottom": "0px" }}
                     >
-                        Edit Profile
-                    </button>
+                        <button
+                            style={{ marginBottom: "10px", marginTop: "5px" }}
+                            className="btn btn-outline-info inline"
+                            onClick={() => setOnEdit(true)}
+                        >
+                            Edit Profile
+                        </button>
+                        {record.position == undefined && (
+                            <button
+                                style={{
+                                    display: "inline-block",
+                                    marginLeft: "10px"
+                                }}
+                                className="btn btn-outline-info inline"
+                                onClick={() => setOnEditQF(true)}
+                            >
+                                Edit Qualifications
+                            </button>
+                        )}
+                    </li>
                 }
                 {onEdit && <EditProfile setOnEdit={setOnEdit} />}
-                {record.position == undefined && (
+                {/* {record.position == undefined && (
+                    
                     <button
                         style={{ marginTop: "-5px", display: "inline-block" }}
                         className="btn btn-outline-info inline"
@@ -118,7 +136,7 @@ const Info = () => {
                     >
                         Edit Qualifications
                     </button>
-                )}
+                )} */}
                 {onEditQF && (
                     <EditQualifications setOnEditQualifications={setOnEditQF} />
                 )}

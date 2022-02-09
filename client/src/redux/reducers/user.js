@@ -89,7 +89,7 @@ const userReducer = (state = {}, action) => {
        };
    case UPDATE_RECRUITER_SUCCESS:
        return {
-           userInfo: action.payload
+        userInfo: {token:state.userInfo.token, record:action.payload}
        };
    case UPDATE_RECRUITER_FAIL:
        return {

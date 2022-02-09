@@ -45,6 +45,7 @@ const EditProfile = ({ setOnEdit }) => {
         };
         console.log(user);
        dispatch(updateApplicantAction(user))
+       setOnEdit(false)
     };
 
     return (

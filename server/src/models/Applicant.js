@@ -26,7 +26,7 @@ const Applicant = db.define('Applicant',{
     },
     major: {
         type: Sequelize.STRING ,
-        allowNull: false
+        allowNull: true
     },
     userName:{
         type: Sequelize.STRING,
@@ -38,15 +38,16 @@ const Applicant = db.define('Applicant',{
     } ,
     yearsOfExperience: {
         type: Sequelize.INTEGER ,
-        allowNull: false
+        allowNull: true,
+        defaultValue:0
     } ,
     level:{
         type: Sequelize.STRING ,
-        allowNull : false
+        allowNull : true
     } ,
     qualifications:{
         type: Sequelize.JSON,
-        allowNull: false
+        allowNull: true
     } ,
     tokens: {
         type: Sequelize.JSON
@@ -86,6 +87,7 @@ Applicant.prototype.getPublicApplicantData = function () {
         firstName: user.firstName ,
         lastName: user.lastName ,
         major: user.major ,
+        level:user.level,
         yearsOfExperience: user.yearsOfExperience ,
         qualifications: user.qualifications
     }
@@ -100,8 +102,10 @@ Applicant.prototype.updatePublicApplicantData = async function ( newUser ) {
     this.major = newUser.major
     this.yearsOfExperience = newUser.yearsOfExperience
     this.qualifications = newUser.qualifications
+    this.level=newUser.level
     await this.save()
     return {
+        level:this.level,
         email : this.email ,
         firstName: this.firstName ,
         lastName: this.lastName ,
