@@ -125,6 +125,8 @@ const EditQualifications = ({ setOnEditQualifications }) => {
         };
         //console.log(user);
         dispatch(updateApplicantAction(user))
+        setOnEditQualifications(false);
+
     };
     return (
         <div className="edit_profile">
