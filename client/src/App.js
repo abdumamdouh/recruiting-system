@@ -14,6 +14,8 @@ import Recruiter from "./pages/SignUpPage/Recruiter";
 import PageNotFound404 from "./pages/PageNotFound404";
 import Info from "./components/profile/Info";
 import CreateJob from './components/CreateJob/CreateJob'
+import Feed from "./components/Feed/FeedPage";
+
 // components
 import HelloWorld from "./components/HelloWorld";
 import Layout from "./components/layout/Layout";
@@ -63,6 +65,12 @@ const App = () => {
                         exact
                         path="/404"
                         component={PageNotFound404}
+                        name="PageNotFound404"
+                    />
+                      <Route
+                        exact
+                        path="/feed"
+                        component={Feed}
                         name="PageNotFound404"
                     />
 
