@@ -2,12 +2,22 @@
     height: 100px;
     margin: 10px;
   }
+
+
+  .list{
+      width: 50%;
+     padding: auto;
+     margin-top: auto; 
+     display: flex;
+     flex-direction: column;
+  }
   
   .job {
-    width: 800px;
+      
+    width: 100%;
     padding: 10px;
     display: flex;
-    margin: 0 auto;
+    margin: 10px auto;
     border: 1px solid #dad7d7;
     border-radius: 3px;
     cursor: pointer;
