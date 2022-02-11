@@ -21,10 +21,11 @@ const JobPost = () => {
                     <div>
                     Heliopolis, Cairo, Egypt
                     </div>
-                    
-                
+                    <div className={classes.time}>
+                      5 days ago</div>
+                    <div className={classes.employmentType}>
+                      Full Time</div>
                     <p>
-
                     this is a job
                     </p>
 
