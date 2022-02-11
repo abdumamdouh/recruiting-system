@@ -13,7 +13,9 @@ import Applicant from "./pages/SignUpPage/Applicant";
 import Recruiter from "./pages/SignUpPage/Recruiter";
 import PageNotFound404 from "./pages/PageNotFound404";
 import Info from "./components/profile/Info";
+import CreateJob from './components/CreateJob/CreateJob'
 import Feed from "./components/Feed/FeedPage";
+
 // components
 import HelloWorld from "./components/HelloWorld";
 import Layout from "./components/layout/Layout";
@@ -77,6 +79,12 @@ const App = () => {
                         path="/profile"
                         component={Info}
                         name="profile"
+                    />
+                    <Route
+                        exact
+                        path="/createjob"
+                        component={CreateJob}
+                        name="createJob"
                     />
 
                     <Redirect to="/404" />
