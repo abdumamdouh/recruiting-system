@@ -1,4 +1,5 @@
 import React from "react";
+import classes from "./Feed.module.scss"
 
 
 
@@ -7,21 +8,21 @@ import React from "react";
 const JobPost = () => {
 
     return(
-        <div className='job'>
+        <div className={classes.job}>
             <img
-            src={'./19152370.jpg'}
+            src={'./mentor.png'}
             alt='logo'
-            className='image'/>
-            <div className='job-info'>
+            className={classes.image}/>
+            <div className={classes.jobInfo}>
                 <div>
                     <span>job title</span>
+                    <br/>
+                    @ Mentor graphics
                     <div>
-                        time
+                    Heliopolis, Cairo, Egypt
                     </div>
                     
-                    <button>
-                            test
-                    </button>
+                
                     <p>
 
                     this is a job
@@ -29,7 +30,7 @@ const JobPost = () => {
 
                 </div>
                 
-                <div className='job-icons'>
+                <div className='jobIcons'>
                     
                     
 
