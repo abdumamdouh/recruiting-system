@@ -4,7 +4,7 @@ import { Formik, Form, Field } from "formik";
 import Rating from "@mui/material/Rating";
 import classes from "../Forms/common.module.scss";
 import { updateApplicantAction } from "../../redux/actions/user";
-const AddQualifications = ({ setOnAddQualifications, options }) => {
+const AddRequirements = ({ setOnAddQualifications, options }) => {
     const stacks = [
         "HTML5/CSS3",
         "NodeJs",
@@ -43,80 +43,30 @@ const AddQualifications = ({ setOnAddQualifications, options }) => {
         "Go"
     ];
 
-    const dispatch = useDispatch();
+    const [formValues, setFormValues] = useState([]);
 
-    let user = useSelector(state => state.user);
-    const { record } = user.userInfo;
-    const majors = [
-        "BackEnd",
-        "FrontEnd",
-        "Fullstack",
-        "Testing",
-        "DevOps",
-        "Mobile-dev",
-        "Embedded",
-        "R&D"
-    ];
-    const [view, setView] = useState(
-        majors.includes(record.major) ? "sw" : "notsw"
-    );
-
-    const initialValues = {
-        major: record.major,
-        level: record.level,
-        yearsOfExperience: record.yearsOfExperience,
-        qualifications: []
-    };
-
-    const [formValues, setFormValues] = useState(initialValues);
-
-    const handleView = e => {
-        if (e.target.value === "software-engineer") {
-            setView("sw");
-        } else setView("notsw");
-
-        handleChange(e);
-    };
+ 
 
     const handleChange = e => {
         const { name, value } = e.target;
-
-        if (name === "qualifications") {
-            let arr = formValues.qualifications.programmingLanguages;
+        let arr=formValues
             if (arr.includes(value)) {
-                arr = arr.filter(stack => stack !== value);
-                setFormValues({
-                    ...formValues,
-                    qualifications: { programmingLanguages: arr }
-                });
+                arr = formValues.filter(stack => stack !== value);
+                setFormValues(arr);
             } else {
                 arr.push(value);
-            }
-            setFormValues({
-                ...formValues,
-                qualifications: { programmingLanguages: arr }
-            });
+            
+            setFormValues(arr);
+        } 
 
-            //setFormValues(formValues)
-            //setFormValues({...formValues,qualifications:arr})
-            //console.log(formValues.qualifications.programmingLanguages)
-        } else {
-            setFormValues({ ...formValues, [name]: value });
-        }
+        console.log(formValues)
     };
 
     const handleSubmit = e => {
         e.preventDefault();
-        user = {
-            ...record,
-            major: formValues.major,
-            level: formValues.level,
-            yearsOfExperience: formValues.yearsOfExperience,
-            qualifications: formValues.qualifications
-        };
-        //console.log(user);
-        dispatch(updateApplicantAction(user));
-        setOnAddQualifications(false);
+       
+      
+        
     };
     return (
         <div className="edit_profile">
@@ -147,13 +97,7 @@ const AddQualifications = ({ setOnAddQualifications, options }) => {
                                                 type="checkbox"
                                                 value={stack}
                                                 onChange={handleChange}
-                                                checked={
-                                                    formValues.qualifications.includes(
-                                                        stack
-                                                    )
-                                                        ? true
-                                                        : false
-                                                }
+                                                
                                             />
                                             <label key={stack}>{stack}</label>
                                         </li>
@@ -194,4 +138,4 @@ const AddQualifications = ({ setOnAddQualifications, options }) => {
        
 };
 
-export default AddQualifications;
+export default AddRequirements;
