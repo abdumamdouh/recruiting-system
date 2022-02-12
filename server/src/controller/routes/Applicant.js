@@ -23,6 +23,7 @@ router.post('/Applicant/Sign-up' , async (req,res) =>{
     }
 })
 
+// get my profile data
 router.get('/Applicant/me' , applicantAuth , async (req,res) => {
     res.status(200).send(req.applicant.getPublicApplicantData()) ;
 })

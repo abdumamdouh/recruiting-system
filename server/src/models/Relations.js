@@ -5,15 +5,15 @@ const Job = require('./Job')
 const Requirment = require("./Requirment")
 
 
-// relation between requirment and job ( 1-->N )
+// relation between requirment and job (Has) ( 1-->N )
 Job.hasMany(Requirment, {
-    foreignKey: 'id'
+    foreignKey: 'JobId'
 });
 Requirment.belongsTo(Job);
 
-// relation between job and recruiter ( 1-->N )
+// relation between job and recruiter (Posts) ( 1-->N )
 Recruiter.hasMany(Job,{
-    foreignKey:'id'
+    foreignKey:'RecruiterId'
 })
 Job.belongsTo(Recruiter)
 
