@@ -6,8 +6,16 @@ const recruiterAuth = async (req, res, next) => {
         const token = req.header('Authorization').replace('Bearer ', '')
         const decoded = jwt.verify(token, '123456')
         const recruiter = await Recruiter.findOne({ where: { id:decoded._id } }) 
-        // await Applicant.findOne( { where:{id: decoded._id-48 /*, 'tokens.token': token*/}})
-        if( !recruiter ) {
+        const recruiterTokens = JSON.parse(recruiter.tokens)
+         
+        // checking if the recruiter has the token
+        let found = 0 ;
+        recruiterTokens.forEach(item => {
+            if (item.token === token){
+                found = 1 
+            }
+        });
+        if( !recruiter || !found) {
             throw new Error()
         }
         req.token = token
