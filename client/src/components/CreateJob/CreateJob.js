@@ -138,8 +138,13 @@ export default function CreateJob() {
     const [qualification, setQualification] = useState(false);
     var [stackOptions, setStackOptions] = useState(stack);
     const [addQualifications, setOnAddQualifications] = useState(false);
+
+
+    const [requirements,setRequirements]=useState([])
+
+
     const handleChange = e => {
-        console.log([...e]);
+       // console.log([...e]);
 
         //  console.log(stackOptions)
     };
@@ -152,6 +157,8 @@ export default function CreateJob() {
                         validationSchema={formValidation}
                         onSubmit={values => {
                             console.log(values);
+                            console.log(stackOptions)
+                           
                         }}
                     >
                         <Form>
@@ -290,7 +297,7 @@ export default function CreateJob() {
                         className="btn btn-outline-info inline"
                         onClick={() => setOnAddQualifications(true)}
                     >
-                        Add Qualifications
+                        Add Requirements
                     </button>
                         </Grid> 
                             </Grid>
@@ -299,8 +306,21 @@ export default function CreateJob() {
                 </div>
                 {addQualifications && (
                     <AddRequirements
-                     setOnAddQualifications={setOnAddQualifications} options={options}/>
+                     setOnAddQualifications={setOnAddQualifications} setRequirements={setRequirements}setStackOptions={setStackOptions}/>
                 )}
+                {
+                    requirements.map(req=>{
+                        return(
+                        <div>
+                            <label key={req}>{req}</label>
+                            <input
+                            key={req}
+                            type='number'/>
+                                 
+                        </div>)
+                    })
+                    
+                }
             </Container>
         </Grid>
     );
