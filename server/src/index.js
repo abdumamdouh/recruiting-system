@@ -16,6 +16,7 @@ const Relations = require('./models/Relations')
 const ApplicantRouter = require('./controller/routes/Applicant')
 const RecruiterRouter = require('./controller/routes/Recruiter')
 const GeneralRouter = require('./controller/routes/General')
+const JobRouter = require('./controller/routes/Job')
 
 const app = express();
 const PORT = 5000;
@@ -27,6 +28,7 @@ app.use(cors())
 app.use(ApplicantRouter)
 app.use(RecruiterRouter)
 app.use(GeneralRouter)
+app.use(JobRouter)
 
 // creating tables if not existed
 Applicant.sync()
