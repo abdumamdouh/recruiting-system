@@ -10,7 +10,7 @@ import "./CreateJob.scss";
 import TextFieldWrapper from "../Forms/TextFieldWrapper";
 import SelectWrapper from "../Forms/SelectWrapper";
 import ButtonWrapper from "../Forms/ButtonWrapper";
-import AddQualifications from "./AddQualifications";
+import AddRequirements from "./AddRequirements";
 const initalFormState = {
     title: "",
     description: "",
@@ -298,7 +298,8 @@ export default function CreateJob() {
                     </Formik>
                 </div>
                 {addQualifications && (
-                    <AddQualifications setOnAddQualifications={setOnAddQualifications} options={options}/>
+                    <AddRequirements
+                     setOnAddQualifications={setOnAddQualifications} options={options}/>
                 )}
             </Container>
         </Grid>
