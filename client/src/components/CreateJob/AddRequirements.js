@@ -4,7 +4,7 @@ import { Formik, Form, Field } from "formik";
 import Rating from "@mui/material/Rating";
 import classes from "../Forms/common.module.scss";
 import { updateApplicantAction } from "../../redux/actions/user";
-const AddRequirements = ({ setOnAddQualifications, options }) => {
+const AddRequirements = ({ setOnAddQualifications, setRequirements,setStackOptions  }) => {
     const stacks = [
         "HTML5/CSS3",
         "NodeJs",
@@ -52,20 +52,24 @@ const AddRequirements = ({ setOnAddQualifications, options }) => {
         let arr=formValues
             if (arr.includes(value)) {
                 arr = formValues.filter(stack => stack !== value);
-                setFormValues(arr);
+                setFormValues({arr});
             } else {
                 arr.push(value);
             
             setFormValues(arr);
         } 
 
-        console.log(formValues)
+        //console.log(formValues)
     };
 
     const handleSubmit = e => {
         e.preventDefault();
-       
-      
+        let returnedValue=[]
+        formValues.map(value=>returnedValue.push({[value]:0}))
+       // console.log(returnedValue)
+        setRequirements(formValues)
+        setStackOptions(returnedValue)
+        setOnAddQualifications(false)
         
     };
     return (
