@@ -65,7 +65,7 @@
   }
   
   
-  .tweet-icons {
+  .job-icons {
     display: flex;
     align-items: center;
   
@@ -76,7 +76,7 @@
     }
   }
   
-  .tweet-icon {
+  .job-icon {
     font-size: 27px;
     color: #697784;
   
@@ -110,11 +110,20 @@
 }
 
 .paginationActive a {
+
   color: white;
   background-color: #2b2eff;
 }
 
 .paginationDisabled a {
+  border: 1px solid grey;
   color: grey;
-  background-color: grey;
+  &:hover{
+    border: 1px solid grey;
+    color: grey;
+    background-color: white;
+    text-decoration: none;
+    cursor:default;
+  }
+ 
 }
