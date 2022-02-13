@@ -27,13 +27,13 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
 // more optimization on Auth
 
 router.post('/Feed',async (req,res) =>{
-    const Offset = req.body.offset
+    const pageNumber = req.body.pageNumber
     // const Limit = req.body.limit
     try{
             const result = await Job.findAndCountAll({
                 attributes: ['id','title', 'workPlaceType'
-                ,'employmentType','careerLevel'],
-                offset:Offset,
+                ,'employmentType','careerLevel','company','place','createdAt'],
+                offset:(pageNumber-1)*10,
                 limit:10
             })
             res.send({
@@ -47,7 +47,7 @@ router.post('/Feed',async (req,res) =>{
 
 // get all jobs posted by a certain recruiter
 router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
-    const Offset = req.body.offset
+    const pageNumber = req.body.pageNumber
     // const Limit = req.body.limit
     try{
         const result = await Job.findAndCountAll({
@@ -55,7 +55,7 @@ router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
             where : {
                 RecruiterId : req.recruiter.id
             },
-            offset:Offset,
+            offset:(pageNumber-1)*10,
             limit:10
             })
             res.send({
@@ -88,15 +88,6 @@ router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
 })
 
 
-// get all jobs recruiter's view
-// router.get('/jobs/recruiter', recruiterAuth, async (req,res) =>{
-//     try{
-//         const jobs = await Job.findAll()
-//         res.send(jobs)
-//     } catch (error) {
-//         res.status(400).send(error.message)
-//     }
-// }) 
 
 
 
