@@ -19,10 +19,7 @@ const initalFormState = {
     careerLevel: "",
     minYearsOfExperience: "",
     maxYearsOfExperience: "",
-    stack: [],
-    toggle: false,
-    checked: [],
-    simpleControlled: 0
+    stack: []
 };
 const formValidation = Yup.object().shape({
     title: Yup.string().required("Required"),
@@ -34,46 +31,9 @@ const useStyles = makeStyles(theme => ({
     formWrapper: {
         marginTop: theme.spacing(5),
         marginBottom: theme.spacing(8),
-        height: "70%"
+        alignItems: 'center'
     }
 }));
-const options = [
-    { value: "1", label: "HTML5/CSS3" },
-    { value: "2", label: "NodeJs" },
-    { value: "3", label: "MongoDB" },
-    { value: "4", label: "MySQL" }
-    // "PostgreSQL",
-    // "Python",
-    // "PHP",
-    // "DotNet",
-    // "Java",
-    // "C/C++",
-    // "Ruby-on-Rails",
-    // "Unity",
-    // "R",
-    // "JavaScript",
-    // "AngularJs",
-    // "Angular",
-    // "TypeScript",
-    // "ReactJs",
-    // "VueJs",
-    // "React-Native",
-    // "Kotlin",
-    // "Flutter",
-    // "Xamarin",
-    // "Ionic",
-    // "PhoneGap",
-    // "iOS",
-    // "Objective",
-    // "C",
-    // "Swift",
-    // "Android",
-    // "Docker",
-    // "Electron",
-    // "Rust",
-    // "Scala",
-    // "Go"
-];
 const workPlaceTypes = [
     {
         value: "OnSite",
@@ -132,44 +92,37 @@ const years = [
 ];
 
 export default function CreateJob() {
-    const [value, setValue] = React.useState(0);
-    var { stack } = initalFormState;
     const classes = useStyles();
     const [qualification, setQualification] = useState(false);
-    var [stackOptions, setStackOptions] = useState(stack);
+    var [stackOptions, setStackOptions] = useState([]);
     const [addQualifications, setOnAddQualifications] = useState(false);
-
-
-    const [requirements,setRequirements]=useState([])
-
-
-    const handleChange = e => {
-       // console.log([...e]);
-
-        //  console.log(stackOptions)
-    };
+    const [requirements, setRequirements] = useState([]);
     return (
-        <Grid container>
-            <Container maxWidth="md">
-                <div className={classes.formWrapper}>
+        <Grid container >
+            <Container maxWidth="md" fixed>
+                <div className='jobForm' style={{alignItems: 'center'}}>
                     <Formik
                         initialValues={{ ...initalFormState }}
                         validationSchema={formValidation}
                         onSubmit={values => {
+                            const middleIndex = Math.ceil(
+                                stackOptions.length / 2
+                            );
+                            const secondHalf = stackOptions
+                                .slice()
+                                .splice(-middleIndex);
+                            console.log("sn", secondHalf);
+                            values.stack = [...secondHalf];
                             console.log(values);
-                            console.log(stackOptions)
-                           
                         }}
                     >
                         <Form>
-                            <Grid container spacing={1}>
-                                {/* <Grid item xs={4}>
-                            <Typography>Your job post</Typography>
-                        </Grid> */}
-                                <Grid item xs={6}>
+                            <Grid container spacing={2}>
+                            <Grid item xs={12}>gjbbjjnnnnn</Grid>
+                                <Grid item xs={12}>
                                     <Typography>Job Title</Typography>
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={12}>
                                     <TextFieldWrapper
                                         name="title"
                                         label="title"
@@ -248,79 +201,74 @@ export default function CreateJob() {
                                         options={years}
                                     />
                                 </Grid>
-                                {/* <Grid items xs={4}>
-                                    <div id="checkbox-group">Checked</div>
-                                    <div
-                                        role="group"
-                                        aria-labelledby="checkbox-group"
+
+                                <Grid item xs={5}>
+                                    <button
+                                        type="button"
+                                        style={{
+                                            marginTop: "5px",
+                                            display: "inline-block"
+                                        }}
+                                        className="btn btn-outline-info inline"
+                                        onClick={() =>
+                                            setOnAddQualifications(true)
+                                        }
                                     >
-                                        {options.map(o => (
+                                        Add Requirements
+                                    </button>
+                                </Grid>
+                                <Grid item xs={12}>
+                              {requirements.length!==0 && <div>
+                               <p style={{fontWeight: 'bold'}}>Requirements & weights </p>
+                               <p>Enter weight for every requirement in numbers </p>
+                                
+                                <span style={{marginRight: '50px', marginBottom: '10px'}}>Req</span>
+                                <span>Weight</span>
+                               
+                                
+                                </div>
+                                }
+                                    {requirements.map((req, index) => {
+                                        return (
                                             <div>
-                                                <label>
-                                                    <Field
-                                                        type="checkbox"
-                                                        name="checked"
-                                                        value={o.label}
-                                                    />
-                                                    {o.label}
-                                                </label>
-                                                <Rating
-                                                    name={o.label}
-                                                    value={value}
-                                                    onChange={(
-                                                        event,
-                                                        newValue
-                                                    ) => {
-                                                        setValue(newValue);
+                                            
+                                                <label key={req}>{req}</label>
+                                                <input className= 'weight'
+                                                    key={req}
+                                                    value={requirements[req]}
+                                                    type="text"
+                                                    onChange={e => {
+                                                        setStackOptions(
+                                                            state => [
+                                                                ...state,
+                                                                {
+                                                                    [req]:e.target.value
+                                                                }
+                                                            ]
+                                                        );
+                                                        //console.log(stackOptions)
                                                     }}
                                                 />
-                                                <br />
                                             </div>
-                                        ))}
-                                    </div>
-                                </Grid> */}
-                                {/* <Grid item xs={4}>
-                            <Select isMulti
-                               // name= 'stacks'
-                                options={options}
-                                displayValue="label"
-                               onChange= {handleChange}
-                            />
-                        </Grid> */}
+                                        );
+                                    })}
 
+                                </Grid>
+                                
                                 <Grid item xs={5}>
                                     <ButtonWrapper>Submit Form</ButtonWrapper>
                                 </Grid>
-                                <Grid item xs={5}>
-                        <button
-                        style={{ marginTop: "-5px", display: "inline-block" }}
-                        className="btn btn-outline-info inline"
-                        onClick={() => setOnAddQualifications(true)}
-                    >
-                        Add Requirements
-                    </button>
-                        </Grid> 
                             </Grid>
                         </Form>
                     </Formik>
                 </div>
                 {addQualifications && (
                     <AddRequirements
-                     setOnAddQualifications={setOnAddQualifications} setRequirements={setRequirements}setStackOptions={setStackOptions}/>
+                        setOnAddQualifications={setOnAddQualifications}
+                        setRequirements={setRequirements}
+                        setStackOptions={setStackOptions}
+                    />
                 )}
-                {
-                    requirements.map(req=>{
-                        return(
-                        <div>
-                            <label key={req}>{req}</label>
-                            <input
-                            key={req}
-                            type='number'/>
-                                 
-                        </div>)
-                    })
-                    
-                }
             </Container>
         </Grid>
     );
