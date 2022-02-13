@@ -3,8 +3,10 @@ const Applicant = require('../../models/Applicant')
 const Recruiter = require('../../models/Recruiter')
 const Job = require('../../models/Job')
 
+// requiring applicant and recruiter authentication
 const recruiterAuth = require('../middleware/recruiterAuth') 
 const applicantAuth = require('../middleware/applicantAuth') 
+const RecOrApp = require('../middleware/RecOrApp')
 
 const router = new express.Router()
 
@@ -20,37 +22,38 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
     }
 })
 
-// get all jobs
-router.get('/jobs/applicant', applicantAuth, async (req,res) =>{
+// get all jobs Feed for applicants and recruiters 
+// todo --> pagination
+// more optimization on Auth
+
+router.get('/Feed', RecOrApp ,async (req,res) =>{
+    const Offset = req.body.offset
+    // const Limit = req.body.limit
     try{
-        const jobs = await Job.findAll()
-        res.send(jobs)
-    } catch (error) {
-        res.status(400).send(error.message)
-    }
-}) 
-router.get('/jobs/recruiter', recruiterAuth, async (req,res) =>{
-    try{
-        const jobs = await Job.findAll()
-        res.send(jobs)
+        if (req.applicant){
+            const result = await Job.findAndCountAll({
+                attributes: ['id','title', 'workPlaceType'
+                ,'employmentType','careerLevel'],
+                offset:Offset,
+                limit:10
+            })
+            res.send(result.rows)
+        } else if (req.recruiter){
+            const result = await Job.findAndCountAll({
+                attributes: ['id','title', 'workPlaceType','employmentType','careerLevel'],
+                where : {
+                    RecruiterId : req.recruiter.id
+                },
+                offset:Offset,
+                limit:10
+            })
+            res.send(result.rows)
+        }
     } catch (error) {
         res.status(400).send(error.message)
     }
 }) 
 
-// get all jobs by recruiter
-router.get('/jobs/recruiter/myJobs', recruiterAuth, async (req,res) =>{
-    try{
-        const jobs = await Job.findAll({
-            where : {
-                RecruiterId : req.recruiter.id
-            }
-        })
-        res.send(jobs)
-    } catch (error) {
-        res.status(400).send(error.message)
-    }
-}) 
 
 // edit a job by recruiter
 router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
@@ -71,5 +74,19 @@ router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
         res.status.send(error.message);
     }
 })
+
+
+// get all jobs recruiter's view
+// router.get('/jobs/recruiter', recruiterAuth, async (req,res) =>{
+//     try{
+//         const jobs = await Job.findAll()
+//         res.send(jobs)
+//     } catch (error) {
+//         res.status(400).send(error.message)
+//     }
+// }) 
+
+
+
 
 module.exports = router
