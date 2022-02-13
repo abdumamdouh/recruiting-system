@@ -2,10 +2,12 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
+import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 
@@ -52,7 +54,8 @@ export default function Job(props) {
                 <br />
 
                 <Typography color="black">
-                    {`${place} - ${workPlaceType}.`}{" "}
+                    <LocationOnOutlinedIcon />
+                    {` ${place} - ${workPlaceType}.`}{" "}
                     <Typography variant="caption" display="inline" color="gray">
                         {`${period} day ago. ${numOfApplicants} applicants`}
                     </Typography>
@@ -82,6 +85,16 @@ export default function Job(props) {
                         Save
                     </Button>
                 </div>
+
+                <Divider />
+
+                <Typography
+                    variant="body2"
+                    color="black"
+                    style={{ marginTop: "12px" }}
+                >
+                    {description}
+                </Typography>
             </Box>
         </Container>
     );
