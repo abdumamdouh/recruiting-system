@@ -39,12 +39,23 @@ export default function Job(props) {
                     marginTop: 5,
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center"
+                    alignItems: "left"
                 }}
             >
                 <Typography variant="h5" color="black">
                     {title}
                 </Typography>
+
+                <br />
+
+                <Typography color="black">
+                    {`${place} - ${workPlaceType}.`}{" "}
+                    <Typography variant="caption" display="inline" color="gray">
+                        {`${period} day ago. ${numOfApplicants} applicants`}
+                    </Typography>
+                </Typography>
+
+                <Typography color="black">hello</Typography>
 
                 {/* <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
                     Sign In
