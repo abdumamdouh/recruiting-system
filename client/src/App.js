@@ -65,10 +65,12 @@ const App = () => {
 
                     <Route
                         exact
-                        path="/profile"
-                        component={Info}
-                        name="profile"
+                        //TODO: replace job with dynamic route
+                        path="/feed/job"
+                        component={HelloWorld}
+                        name="job"
                     />
+
                     <Route
                         exact
                         path="/createjob"
