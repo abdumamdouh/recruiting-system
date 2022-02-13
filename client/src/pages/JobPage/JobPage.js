@@ -7,7 +7,7 @@ const jobObject = {
     workPlaceType: "Remote",
     place: "US",
     employmentType: "Full Time",
-    title: "Frontend Engineer",
+    title: "Mid-Level Front End UI Engineer",
     yearsOfExperience: 3,
     careerLevel: "junior",
     companyName: "Valeo",
