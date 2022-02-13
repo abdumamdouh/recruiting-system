@@ -52,7 +52,24 @@ router.get('/jobs/recruiter/myJobs', recruiterAuth, async (req,res) =>{
     }
 }) 
 
-
-
+// edit a job by recruiter
+router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
+    try {
+        const job = await Job.findOne({ 
+            where: { 
+                id: req.params.id,
+                RecruiterId: req.recruiter.id 
+            } 
+        });
+        if (!job) {
+            return res.status(404).send();
+        }
+        res.body.forEach(title => job[title] = req.body[title]);
+        await job.save();
+        res.send(job);
+    } catch (error) {
+        res.status.send(error.message);
+    }
+})
 
 module.exports = router
