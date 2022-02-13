@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
+import {useDispatch, useSelector} from 'react-redux'
 import * as Yup from "yup";
 import { Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import "./CreateJob.scss";
+import {createJobAction} from '../../redux/actions/jobs'
 import TextFieldWrapper from "../Forms/TextFieldWrapper";
 import SelectWrapper from "../Forms/SelectWrapper";
 import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -11,18 +13,19 @@ import AddRequirements from "./AddRequirements";
 const initalFormState = {
     title: "",
     description: "",
-    wpType: "",
-    empType: "",
+    workPlaceType: "",
+    employmentType: "",
     careerLevel: "",
-    minYearsOfExperience: "",
-    maxYearsOfExperience: "",
-    stack: []
+    yearsOfExperience: "",
+    //maxYearsOfExperience: "",
+    stack: [],
+    place: '',
 };
 const formValidation = Yup.object().shape({
     title: Yup.string().required("Required"),
     description: Yup.string().required("Required")
-    // wpType: Yup.string().required("Required"),
-    // empType: Yup.string().required("Required"),
+    // workPlaceType: Yup.string().required("Required"),
+    // employmentType: Yup.string().required("Required"),
 });
 const useStyles = makeStyles(theme => ({
     formWrapper: {
@@ -88,7 +91,16 @@ const years = [
     { value: "15", label: "15" }
 ];
 
-export default function CreateJob() {
+export default function CreateJob(props) {
+    const redirect = () => {
+        const fromObj = props.location.state || {
+            from: { pathname: "/Feed" }
+        };
+
+        const path = fromObj.from.pathname;
+        props.history.push(path);
+    };
+    const dispatch = useDispatch();
     const classes = useStyles();
     var [stackOptions, setStackOptions] = useState([]);
     const [addQualifications, setOnAddQualifications] = useState(false);
@@ -109,6 +121,7 @@ export default function CreateJob() {
                                 .splice(-middleIndex);
                             console.log("sn", secondHalf);
                             values.stack = [...secondHalf];
+                            dispatch(createJobAction(values, redirect))
                             console.log(values);
                         }}
                     >
@@ -122,6 +135,15 @@ export default function CreateJob() {
                                     <TextFieldWrapper
                                         name="title"
                                         label="title"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography>Place</Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextFieldWrapper
+                                        name="place"
+                                        label="place"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -142,7 +164,7 @@ export default function CreateJob() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <SelectWrapper
-                                        name="wpType"
+                                        name="workPlaceType"
                                         label="Workplace Type"
                                         options={workPlaceTypes}
                                     />
@@ -152,7 +174,7 @@ export default function CreateJob() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <SelectWrapper
-                                        name="empType"
+                                        name="employmentType"
                                         label="Employment Type"
                                         options={employmentTypes}
                                     />
@@ -172,8 +194,8 @@ export default function CreateJob() {
                                 </Grid>
                                 <Grid item xs={4}>
                                     <SelectWrapper
-                                        name="minYearsOfExperience"
-                                        label="Min Years Of Experience"
+                                        name="yearsOfExperience"
+                                        label=" Years Of Experience"
                                         options={years}
                                     />
                                 </Grid>

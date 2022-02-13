@@ -1,38 +1,70 @@
-import {GET_JOBS_REQUEST,GET_JOBS_SUCCESS,GET_JOBS_FAIL} from '../types/index'
-const getJobsAction = (
-    Recruiter,
-    redirect,
-    showError,
-    showSuccessMessage
-) => {
+import {
+    GET_JOBS_REQUEST,
+    GET_JOBS_SUCCESS,
+    GET_JOBS_FAIL,
+    CREATE_JOB_REQUEST,
+    CREATE_JOB_SUCCESS,
+    CREATE_JOB_FAIL,
+} from "../types/index";
+import axios from "axios";
+const serverURL = "http://localhost:5000";
+export const getJobsAction = pageNumber => {
     return async dispatch => {
         try {
             dispatch({ type: GET_JOBS_REQUEST });
+
             const config = {
                 headers: {
                     "Content-Type": "application/json"
                 }
             };
+
             const { data } = await axios.post(
-                `${serverURL}/Recruiter/Sign-up`,
-                Recruiter,
+                `${serverURL}/Feed`,
+                {
+                    pageNumber: pageNumber
+                },
                 config
             );
-            dispatch({ type: REGISTER_RECRUITER_SUCCESS, payload: data });
 
-            //TRYING LOCAL STORAGE
-            //localStorage.setItem('userAuthData', JSON.stringify(data));
-
-            showSuccessMessage();
-            setTimeout(() => {
-                redirect();
-            }, 1000);
+            dispatch({ type: GET_JOBS_SUCCESS, payload: data });
         } catch (error) {
             dispatch({
-                type: REGISTER_RECRUITER_FAIL,
+                type: GET_JOBS_FAIL,
                 payload: error.response && error.response.data
             });
-            showError();
         }
     };
-}
+};
+export const createJobAction = (userData, redirect) => {
+            return async (dispatch, getState) => {
+                try {
+                    dispatch({
+                        type: CREATE_JOB_REQUEST,
+                        loading: true
+                    });
+                    const { userInfo } = getState().user;
+                    console.log(userInfo.token);
+                    const rawResponse = await fetch(
+                        `${serverURL}/CreateJob`,
+                        {
+                            method: "POST",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json",
+                                Authorization: "Bearer " + userInfo.token
+                            },
+                            body: JSON.stringify(userData)
+                        }
+                    );
+
+            dispatch({ type: CREATE_JOB_SUCCESS, payload: 'Job created Successfully' });
+            redirect()
+        } catch (error) {
+            dispatch({
+                type: CREATE_JOB_FAIL,
+                payload: error.response && error.response.data
+            });
+        }
+    };
+};
