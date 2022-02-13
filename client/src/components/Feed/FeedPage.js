@@ -21,6 +21,8 @@ const Feed = () => {
     }
     const changePage = ({selected})=>{
         setPageNumber(selected+1);
+    }
+
     return(
         
             <div className={classes.list}>{
