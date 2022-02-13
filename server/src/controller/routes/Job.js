@@ -47,7 +47,7 @@ router.get('/Feed', RecOrApp ,async (req,res) =>{
                 offset:Offset,
                 limit:10
             })
-            res.send(jobs)
+            res.send(result.rows)
         }
     } catch (error) {
         res.status(400).send(error.message)
