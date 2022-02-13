@@ -10,6 +10,7 @@ import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
+import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 
 export default function Job(props) {
     //pull out the props
@@ -35,13 +36,14 @@ export default function Job(props) {
         <Container
             component="main"
             maxWidth="sm"
-            style={{ border: "2px solid" }}
+            style={{ border: "1px solid", borderRadius: "15px" }}
         >
             <CssBaseline />
 
             <Box
                 sx={{
                     marginTop: 5,
+                    marginBottom: 5,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "left"
@@ -69,6 +71,11 @@ export default function Job(props) {
                     <BadgeOutlinedIcon /> {`${employees} employees`}
                 </Typography>
 
+                <Typography variant="body1" color="black">
+                    <BeenhereOutlinedIcon />{" "}
+                    {`${careerLevel} - ${yearsOfExperience} years of experience.`}
+                </Typography>
+
                 <div>
                     <Button
                         variant="contained"
@@ -91,9 +98,47 @@ export default function Job(props) {
                 <Typography
                     variant="body2"
                     color="black"
-                    style={{ marginTop: "12px" }}
+                    style={{ margin: "12px 0" }}
                 >
                     {description}
+                </Typography>
+
+                <Divider />
+
+                <Typography
+                    variant="h6"
+                    color="black"
+                    style={{ margin: "12px 0" }}
+                >
+                    About the company
+                </Typography>
+
+                <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <Avatar
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR5QewxO_MYJMK1FLzbbudKZTxqZZsQM2v1QwCicQ62AgkoDFKpwelam5I6ckltAlgrIU&usqp=CAU"
+                            sx={{ width: 75, height: 75 }}
+                            style={{ marginRight: 8 }}
+                            alt="logo"
+                        />
+                        <Typography variant="body1" color="black">
+                            {companyName}
+                        </Typography>
+                    </div>
+
+                    <Button
+                        variant="contained"
+                        onClick={() => console.log("hello")}
+                        sx={{ mt: 3, mb: 2, ml: 1 }}
+                    >
+                        Follow
+                    </Button>
+                </div>
+
+                <Typography variant="body1" color="black">
+                    {companyDescription}
                 </Typography>
             </Box>
         </Container>

@@ -9,11 +9,11 @@ const jobObject = {
     place: "US",
     employmentType: "Full Time",
     title: "Mid-Level Front End UI Engineer",
-    yearsOfExperience: 3,
-    careerLevel: "junior",
+    yearsOfExperience: 2,
+    careerLevel: "Junior",
     companyName: "Valeo",
     companyDescription:
-        "Purpose Jobs is the #1 startup community in the Midwest/n/n We connect top talent with purpose-driven startups based on values, experience and culture contribution.",
+        "Valeo is the #1 startup community in the Midwest. We connect top talent with purpose-driven startups based on values, experience and culture contribution.",
     numOfApplicants: 75,
     period: 3,
     employees: 29
