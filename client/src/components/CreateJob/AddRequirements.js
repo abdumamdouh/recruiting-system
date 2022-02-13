@@ -1,9 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Formik, Form, Field } from "formik";
-import Rating from "@mui/material/Rating";
+import React, { useState } from "react";
 import classes from "../Forms/common.module.scss";
-import { updateApplicantAction } from "../../redux/actions/user";
 const AddRequirements = ({ setOnAddQualifications, setRequirements,setStackOptions  }) => {
     const stacks = [
         "HTML5/CSS3",

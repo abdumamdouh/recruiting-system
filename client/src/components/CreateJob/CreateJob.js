@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Rating from "@mui/material/Rating";
-import { useField, useFormikContext } from "formik";
-import Select from "react-select";
 import "./CreateJob.scss";
 import TextFieldWrapper from "../Forms/TextFieldWrapper";
 import SelectWrapper from "../Forms/SelectWrapper";
@@ -93,7 +90,6 @@ const years = [
 
 export default function CreateJob() {
     const classes = useStyles();
-    const [qualification, setQualification] = useState(false);
     var [stackOptions, setStackOptions] = useState([]);
     const [addQualifications, setOnAddQualifications] = useState(false);
     const [requirements, setRequirements] = useState([]);

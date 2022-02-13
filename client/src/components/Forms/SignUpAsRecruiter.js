@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Alert } from '@mui/material';
 
 import classes from "./common.module.scss";
@@ -23,8 +23,6 @@ const RegisterAsRecruiter = props => {
     const dispatch = useDispatch();
     const [registrationError, setRegistrationError] = useState("");
     const [showAlert,setShowAlert] = useState('');
-    const user = useSelector(state => state.user);
-
     const redirect = () => {
         const fromObj = props.location.state || {
             from: { pathname: "/" }
@@ -100,7 +98,7 @@ const RegisterAsRecruiter = props => {
 
     return (
         <div className={classes.BoxContainer}>
-         {showAlert == 'f'&&<Alert severity="success">Registered successfully</Alert>}
+         {showAlert === 'f'&&<Alert severity="success">Registered successfully</Alert>}
             <h3>Account information</h3>
             <form className={classes.FormContainer}>
                 <input
