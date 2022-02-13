@@ -14,7 +14,8 @@ const jobObject = {
     companyDescription:
         "Purpose Jobs is the #1 startup community in the Midwest/n/n We connect top talent with purpose-driven startups based on values, experience and culture contribution.",
     numOfApplicants: 75,
-    period: 3
+    period: 3,
+    employees: 29
 };
 
 export default function JobPage() {

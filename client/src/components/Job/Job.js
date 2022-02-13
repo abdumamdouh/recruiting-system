@@ -1,11 +1,12 @@
 import React from "react";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import WorkIcon from "@mui/icons-material/Work";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
+import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 
 export default function Job(props) {
     //pull out the props
@@ -20,7 +21,8 @@ export default function Job(props) {
         companyDescription,
         numOfApplicants,
         period,
-        place
+        place,
+        employees
     } = props.job;
 
     //TODO: Applicant or Recruiter booleans
@@ -55,9 +57,15 @@ export default function Job(props) {
                     </Typography>
                 </Typography>
 
-                <Typography color="black">hello</Typography>
+                <Typography variant="body1" color="black">
+                    <WorkOutlineOutlinedIcon /> {employmentType}
+                </Typography>
 
-                {/* <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+                <Typography variant="body1" color="black">
+                    <BadgeOutlinedIcon /> {`${employees} employees`}
+                </Typography>
+
+                {/* <Button variant="contained" sx={{ mt: 3, mb: 2 }}>
                     Sign In
                 </Button> */}
             </Box>
