@@ -1,6 +1,16 @@
 .jobForm{
-    padding:0;
-    margin:0;
-    align-content: unset;
-align-items: unset;
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    bottom: 40px;
+    right: 30px;
+    width:  50%;    ;
+    height: 70%;
+    padding: 30px 20px;
+   margin-left: 400px;
+   margin-right: 50px;
+}
+
+.weight{
+    margin-left: 20px;
 }
