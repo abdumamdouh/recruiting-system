@@ -19,7 +19,8 @@ export default function Job(props) {
         companyName,
         companyDescription,
         numOfApplicants,
-        period
+        period,
+        place
     } = props;
 
     return (

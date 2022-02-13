@@ -4,7 +4,8 @@ import Job from "../../components/Job/Job";
 //TODO: replace the jobObject with the data from BE
 const jobObject = {
     description: "Frontend Engineer",
-    workPlaceType: "United States (Remote)",
+    workPlaceType: "Remote",
+    place: "US",
     employmentType: "Full Time",
     title: "Frontend Engineer",
     yearsOfExperience: 3,
