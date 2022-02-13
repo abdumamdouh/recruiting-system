@@ -5,8 +5,9 @@ import classes from "./Feed.module.scss"
 
 
 
-const JobPost = () => {
-
+const JobPost = ({job}) => {
+    
+    console.log(job)
     return(
         <div className={classes.job}>
             <img
@@ -15,7 +16,7 @@ const JobPost = () => {
             className={classes.image}/>
             <div className={classes.jobInfo}>
                 <div>
-                    <span>job title</span>
+                    <span>{job.title}</span>
                     <br/>
                     @ Mentor graphics
                     <div>
@@ -24,9 +25,9 @@ const JobPost = () => {
                     <div className={classes.time}>
                       5 days ago</div>
                     <div className={classes.employmentType}>
-                      Full Time</div>
-                    <p>
-                    this is a job
+                      {job.employmentType}</div>
+                    <p> 
+                    {job.careerLevel}
                     </p>
 
                 </div>
