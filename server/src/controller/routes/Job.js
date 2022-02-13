@@ -26,45 +26,45 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
 // todo --> pagination
 // more optimization on Auth
 
-router.get('/Feed', RecOrApp ,async (req,res) =>{
+router.get('/Feed',async (req,res) =>{
     const Offset = req.body.offset
     // const Limit = req.body.limit
     try{
-        if (req.applicant){
             const result = await Job.findAndCountAll({
                 attributes: ['id','title', 'workPlaceType'
                 ,'employmentType','careerLevel'],
                 offset:Offset,
                 limit:10
             })
-            res.send(result.rows)
-        } else if (req.recruiter){
-            const result = await Job.findAndCountAll({
-                attributes: ['id','title', 'workPlaceType','employmentType','careerLevel'],
-                where : {
-                    RecruiterId : req.recruiter.id
-                },
-                offset:Offset,
-                limit:10
+            res.send({
+                Jobs:result.rows,
+                Count:result.count
             })
-            res.send(result.rows)
-        }
-    } catch (error) {
+        } catch (error) {
         res.status(400).send(error.message)
     }
 }) 
 
-
-// get all jobs recruiter's view
-// router.get('/jobs/recruiter', recruiterAuth, async (req,res) =>{
-//     try{
-//         const jobs = await Job.findAll()
-//         res.send(jobs)
-//     } catch (error) {
-//         res.status(400).send(error.message)
-//     }
-// }) 
-
-
+// get all jobs posted by a certain recruiter
+router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
+    const Offset = req.body.offset
+    // const Limit = req.body.limit
+    try{
+        const result = await Job.findAndCountAll({
+            attributes: ['id','title', 'workPlaceType','employmentType','careerLevel'],
+            where : {
+                RecruiterId : req.recruiter.id
+            },
+            offset:Offset,
+            limit:10
+            })
+            res.send({
+                Jobs:result.rows,
+                Count:result.count
+            })
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+})
 
 module.exports = router
