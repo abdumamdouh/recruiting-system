@@ -21,7 +21,7 @@ const Job = db.define('Job',{
         type: Sequelize.STRING ,
         allowNull: false
     },
-    employment_type:{
+    employmentType:{
         type: Sequelize.STRING ,
         allowNull: false
     },
@@ -38,5 +38,6 @@ const Job = db.define('Job',{
         allowNull: false
     }
 });
+
 
 module.exports = Job ;
