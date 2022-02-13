@@ -1,6 +1,7 @@
 const express = require('express')
 const Applicant = require('../../models/Applicant')
 const Recruiter = require('../../models/Recruiter')
+const multer = require('multer') 
 
 const recruiterAuth = require('../middleware/recruiterAuth') 
 
@@ -18,7 +19,10 @@ router.post('/Recruiter/Sign-up' , async (req,res) =>{
         } else {
             const record = await Recruiter.create( recruiter )
             const token = await record.generateAuthToken()
-            res.status(200).send({token,message:"Registered Successfully."})   
+            res.status(200).send({token,
+                type:"Recruiter",
+                name:`${recruiter.firstName} ${recruiter.lastName}.`
+            })   
         }
     } catch (error) {
         res.status(400).send(error.message)
