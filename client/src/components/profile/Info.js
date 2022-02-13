@@ -76,7 +76,7 @@ const Info = props => {
                 {record.qualifications !== undefined && (
                     <li
                         className="list-group-item"
-                        style={{ "border-bottom": "0px" }}
+                        style={{ "borderBottom": "0px" }}
                     >
                         <h4 className="card-title">Qualifications</h4>
                         {record.qualifications.programmingLanguages.map(q => (
