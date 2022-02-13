@@ -20,7 +20,7 @@ export default function JobPage() {
     return (
         <>
             {/* TODO: add prop for applicant or recuriter and add coditional rendering */}
-            <Job />
+            <Job job={jobObject} />
         </>
     );
 }

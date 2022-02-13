@@ -7,7 +7,21 @@ import WorkIcon from "@mui/icons-material/Work";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-export default function Job() {
+export default function Job(props) {
+    //pull out the props
+    const {
+        description,
+        workPlaceType,
+        employmentType,
+        title,
+        yearsOfExperience,
+        careerLevel,
+        companyName,
+        companyDescription,
+        numOfApplicants,
+        period
+    } = props;
+
     return (
         <Container
             component="main"
