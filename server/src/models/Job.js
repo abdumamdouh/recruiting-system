@@ -47,7 +47,7 @@ Job.prototype.getJobData = async function () {
     const jobData =  {
         description: job.description ,
         workPlaceType: job.workPlaceType ,
-        employment_type: job.employment_type ,
+        employmentType: job.employmentType ,
         title: job.title ,
         yearsOfExperience: job.yearsOfExperience,
         careerLevel: job.careerLevel ,
