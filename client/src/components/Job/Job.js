@@ -7,6 +7,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
+import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 
 export default function Job(props) {
     //pull out the props
@@ -65,9 +66,22 @@ export default function Job(props) {
                     <BadgeOutlinedIcon /> {`${employees} employees`}
                 </Typography>
 
-                {/* <Button variant="contained" sx={{ mt: 3, mb: 2 }}>
-                    Sign In
-                </Button> */}
+                <div>
+                    <Button
+                        variant="contained"
+                        endIcon={<ReplyAllOutlinedIcon />}
+                        sx={{ mt: 3, mb: 2 }}
+                    >
+                        Apply
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={() => console.log("hello")}
+                        sx={{ mt: 3, mb: 2, ml: 1 }}
+                    >
+                        Save
+                    </Button>
+                </div>
             </Box>
         </Container>
     );
