@@ -15,6 +15,7 @@ import PageNotFound404 from "./pages/PageNotFound404";
 import Info from "./components/profile/Info";
 import CreateJob from "./components/CreateJob/CreateJob";
 import Feed from "./components/Feed/FeedPage";
+import JobPage from "./pages/JobPage/JobPage";
 
 // components
 import HelloWorld from "./components/HelloWorld";
@@ -67,7 +68,7 @@ const App = () => {
                         exact
                         //TODO: replace job with dynamic route
                         path="/feed/job"
-                        component={HelloWorld}
+                        component={JobPage}
                         name="job"
                     />
 
