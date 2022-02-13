@@ -31,7 +31,7 @@ export const getJobsAction = pageNumber => {
         } catch (error) {
             dispatch({
                 type: GET_JOBS_FAIL,
-                payload: error.response && error.response.data
+                payload: error
             });
         }
     };

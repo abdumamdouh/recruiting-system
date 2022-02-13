@@ -32,7 +32,7 @@ router.post('/Feed',async (req,res) =>{
     try{
             const result = await Job.findAndCountAll({
                 attributes: ['id','title', 'workPlaceType'
-                ,'employmentType','careerLevel','company','place','createdAt'],
+                ,'employmentType','careerLevel','createdAt'],
                 offset:(pageNumber-1)*10,
                 limit:10
             })

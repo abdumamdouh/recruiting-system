@@ -9,11 +9,13 @@ import {getJobsAction} from '../../redux/actions/jobs'
 const Feed = () => {
     let job =[]
     const dispatch = useDispatch();
-    const jobs = useSelector(state=> state.jobs)
-    job = job.concat(jobs)
-    console.log('ds',job)
-    console.log(jobs)
-    console.log(typeof(jobs))
+    const Jobs = useSelector(state=> state.jobs.Jobs)
+    const {Count} = useSelector(state=>state.jobs)
+    console.log('cc',Count)
+    job = job.concat(Jobs)
+    // console.log('ds',job)
+    // console.log(Jobs)
+    // console.log(typeof(Jobs))
     useEffect(() => {
         dispatch(getJobsAction(1))
       }, []);
@@ -43,7 +45,7 @@ const Feed = () => {
                         <ReactPaginate
                         previousLabel={"Previous"}
                         nextLabel={"Next"}
-                        pageCount={6}
+                        pageCount={Math.ceil(Count/10)}
                         onPageChange={changePage}
                         containerClassName={classes.paginationBttns}
                         previousLinkClassName={classes.previousBttn}

@@ -14,6 +14,7 @@ function Header() {
         height: undefined
     });
     const user = useSelector(state => state.user);
+    console.log(user);
     const dispatch = useDispatch();
     useEffect(() => {
         const handleResize = () => {
@@ -59,17 +60,18 @@ function Header() {
                             <Link to="/feed">Feed</Link>
                         </li>
                        
-                        {(user.hasOwnProperty("userInfo")&&user.userInfo.hasOwnProperty("record") )&& (
+                        {(user.hasOwnProperty("userInfo")&&user.userInfo.hasOwnProperty("name") )&& (
                         <li>
                             <Link to="/account">Account</Link>
                         </li>
                       )}
-                        {((user.hasOwnProperty("userInfo")&&!user.userInfo.hasOwnProperty("record"))||!user.hasOwnProperty("userInfo") )&& (
+                     
+                        {((user.hasOwnProperty("userInfo")&&!user.userInfo.hasOwnProperty("name"))||!user.hasOwnProperty("userInfo") )&& (
                             <li>
                                 <Link to="/login">Login</Link>
                             </li>
                         )}
-                        {(user.hasOwnProperty("userInfo")&&user.userInfo.hasOwnProperty("record") )&& (
+                        {(user.hasOwnProperty("userInfo")&&user.userInfo.hasOwnProperty("name") )&& (
                           <li>
                             <Link to="/login">
                                 <span onClick={handleLogOut}>Logout</span>
