@@ -36,6 +36,14 @@ const Job = db.define('Job',{
     careerLevel:{
         type: Sequelize.STRING ,
         allowNull: false
+    },
+    company:{
+        type: Sequelize.STRING ,
+        allowNull: false
+    },
+    place:{
+        type: Sequelize.STRING ,
+        allowNull: false
     }
 });
 

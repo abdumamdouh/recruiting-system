@@ -38,7 +38,7 @@ const Recruiter = db.define('Recruiter',{
     },
     company: {
         type: Sequelize.STRING,
-
+        allowNull: false
     },
     tokens: {
         type: Sequelize.JSON
