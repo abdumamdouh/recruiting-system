@@ -24,16 +24,18 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
 
 // get all jobs Feed for applicants and recruiters 
 // todo --> pagination
-// jobs exact data
 // more optimization on Auth
 
 router.get('/Feed', RecOrApp ,async (req,res) =>{
     try{
         if (req.applicant){
-            const jobs = await Job.findAll()
+            const jobs = await Job.findAll({
+                attributes: ['id','title', 'workPlaceType','employmentType','careerLevel']
+            })
             res.send(jobs)
         } else if (req.recruiter){
             const jobs = await Job.findAll({
+                attributes: ['id','title', 'workPlaceType','employmentType','careerLevel'],
                 where : {
                     RecruiterId : req.recruiter.id
                 }
