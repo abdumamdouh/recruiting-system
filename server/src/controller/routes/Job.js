@@ -27,18 +27,25 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
 // more optimization on Auth
 
 router.get('/Feed', RecOrApp ,async (req,res) =>{
+    const Offset = req.body.offset
+    // const Limit = req.body.limit
     try{
         if (req.applicant){
-            const jobs = await Job.findAll({
-                attributes: ['id','title', 'workPlaceType','employmentType','careerLevel']
+            const result = await Job.findAndCountAll({
+                attributes: ['id','title', 'workPlaceType'
+                ,'employmentType','careerLevel'],
+                offset:Offset,
+                limit:10
             })
-            res.send(jobs)
+            res.send(result.rows)
         } else if (req.recruiter){
-            const jobs = await Job.findAll({
+            const result = await Job.findAndCountAll({
                 attributes: ['id','title', 'workPlaceType','employmentType','careerLevel'],
                 where : {
                     RecruiterId : req.recruiter.id
-                }
+                },
+                offset:Offset,
+                limit:10
             })
             res.send(jobs)
         }
