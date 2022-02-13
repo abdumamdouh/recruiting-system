@@ -1,9 +1,8 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Alert } from "@mui/material";
-import Button from "../Button/Button";
 import classes from "./common.module.scss";
 import { loginUserAction } from "../../redux/actions/user";
 function LoginForm(props) {
@@ -13,7 +12,6 @@ function LoginForm(props) {
     const [apiError, setApiError] = useState("");
     const [showAlert, setShowAlert] = useState("");
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user);
     const validate = (email, password) => {
         const error = {};
         if (!password) error.password = "Password is required";
@@ -52,7 +50,7 @@ function LoginForm(props) {
     };
     return (
         <div className={classes.BoxContainer}>
-        {showAlert == 'f'&&<Alert severity="success"> You logged in successfully </Alert>}
+        {showAlert === 'f'&&<Alert severity="success"> You logged in successfully </Alert>}
             <form onSubmit={handleLoginForm}>
                 <input
                     type="email"
