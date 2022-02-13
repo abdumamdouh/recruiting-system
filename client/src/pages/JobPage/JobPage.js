@@ -4,9 +4,10 @@ import Job from "../../components/Job/Job";
 //TODO: replace the jobObject with the data from BE
 const jobObject = {
     description: "Frontend Engineer",
-    workPlaceType: "United States (Remote)",
+    workPlaceType: "Remote",
+    place: "US",
     employmentType: "Full Time",
-    title: "Frontend Engineer",
+    title: "Mid-Level Front End UI Engineer",
     yearsOfExperience: 3,
     careerLevel: "junior",
     companyName: "Valeo",
@@ -20,7 +21,7 @@ export default function JobPage() {
     return (
         <>
             {/* TODO: add prop for applicant or recuriter and add coditional rendering */}
-            <Job />
+            <Job job={jobObject} />
         </>
     );
 }
