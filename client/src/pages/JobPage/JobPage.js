@@ -3,12 +3,17 @@ import Job from "../../components/Job/Job";
 
 //TODO: replace the jobObject with the data from BE
 const jobObject = {
-    description: "Backend Engineer",
-    workPlaceType: "On Site",
+    description: "Frontend Engineer",
+    workPlaceType: "United States (Remote)",
     employmentType: "Full Time",
-    title: "Engineer",
+    title: "Frontend Engineer",
     yearsOfExperience: 3,
-    careerLevel: "junior"
+    careerLevel: "junior",
+    companyName: "Valeo",
+    companyDescription:
+        "Purpose Jobs is the #1 startup community in the Midwest/n/n We connect top talent with purpose-driven startups based on values, experience and culture contribution.",
+    numOfApplicants: 75,
+    period: 3
 };
 
 export default function JobPage() {
