@@ -96,11 +96,11 @@ router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
         if (!job) {
             return res.status(404).send();
         }
-        res.body.forEach(title => job[title] = req.body[title]);
+        Object.keys(req.body).forEach(title => job[title] = req.body[title]);
         await job.save();
         res.send(job);
     } catch (error) {
-        res.status.send(error.message);
+        res.status(400).send(error.message);
     }
 })
 
