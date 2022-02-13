@@ -1,48 +1,11 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Alert } from '@mui/material';
 import classes from "./common.module.scss";
 import { registerApplicantAction } from "../../redux/actions/user";
 
 function Register(props) {
-    const stacks = [
-        "HTML5/CSS3",
-        "NodeJs",
-        "MongoDB",
-        "MySQL",
-        "PostgreSQL",
-        "Python",
-        "PHP",
-        "DotNet",
-        "Java",
-        "C/C++",
-        "Ruby-on-Rails",
-        "Unity",
-        "R",
-        "JavaScript",
-        "AngularJs",
-        "Angular",
-        "TypeScript",
-        "ReactJs",
-        "VueJs",
-        "React-Native",
-        "Kotlin",
-        "Flutter",
-        "Xamarin",
-        "Ionic",
-        "PhoneGap",
-        "iOS",
-        "Objective",
-        "C",
-        "Swift",
-        "Android",
-        "Docker",
-        "Electron",
-        "Rust",
-        "Scala",
-        "Go"
-    ];
     const initialValues = {
         firstName: "",
         lastName: "",
@@ -54,14 +17,12 @@ function Register(props) {
         qualifications: { programmingLanguages: [] }
     };
     const [formValues, setFormValues] = useState(initialValues);
-    const [errors, setErrors] = useState({});
+    const [errors] = useState({});
     const [confirmpass, setconfirmpass] = useState("");
 
     const [registrationError, setRegistrationError] = useState("");
     const [showAlert,setShowAlert] = useState('');
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user);
-    // console.log(user)
 
     const redirect = () => {
         const fromObj = props.location.state || {
