@@ -26,7 +26,7 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
 // todo --> pagination
 // more optimization on Auth
 
-router.get('/Feed',async (req,res) =>{
+router.post('/Feed',async (req,res) =>{
     const Offset = req.body.offset
     // const Limit = req.body.limit
     try{
