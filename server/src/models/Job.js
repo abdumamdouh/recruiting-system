@@ -22,7 +22,7 @@ const Job = db.define('Job',{
         type: Sequelize.STRING ,
         allowNull: false
     },
-    employment_type:{
+    employmentType:{
         type: Sequelize.STRING ,
         allowNull: false
     },

@@ -24,21 +24,30 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
 
 // get all jobs Feed for applicants and recruiters 
 // todo --> pagination
-// jobs exact data
 // more optimization on Auth
 
-router.get('/Feed', RecOrApp, async (req,res) =>{
+router.get('/Feed', RecOrApp ,async (req,res) =>{
+    const Offset = req.body.offset
+    // const Limit = req.body.limit
     try{
         if (req.applicant){
-            const jobs = await Job.findAll()
-            res.send(jobs)
+            const result = await Job.findAndCountAll({
+                attributes: ['id','title', 'workPlaceType'
+                ,'employmentType','careerLevel'],
+                offset:Offset,
+                limit:10
+            })
+            res.send(result.rows)
         } else if (req.recruiter){
-            const jobs = await Job.findAll({
+            const result = await Job.findAndCountAll({
+                attributes: ['id','title', 'workPlaceType','employmentType','careerLevel'],
                 where : {
                     RecruiterId : req.recruiter.id
-                }
+                },
+                offset:Offset,
+                limit:10
             })
-            res.send(jobs)
+            res.send(result.rows)
         }
     } catch (error) {
         res.status(400).send(error.message)
@@ -75,6 +84,27 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
 
 
 
+// edit a job by recruiter
+router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
+    try {
+        const job = await Job.findOne({ 
+            where: { 
+                id: req.params.id,
+                RecruiterId: req.recruiter.id 
+            } 
+        });
+        if (!job) {
+            return res.status(404).send();
+        }
+        res.body.forEach(title => job[title] = req.body[title]);
+        await job.save();
+        res.send(job);
+    } catch (error) {
+        res.status.send(error.message);
+    }
+})
+
+
 // get all jobs recruiter's view
 // router.get('/jobs/recruiter', recruiterAuth, async (req,res) =>{
 //     try{
@@ -84,6 +114,7 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
 //         res.status(400).send(error.message)
 //     }
 // }) 
+
 
 
 
