@@ -27,7 +27,7 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
 // jobs exact data
 // more optimization on Auth
 
-router.get('/Feed', RecOrApp ,async (req,res) =>{
+router.get('/Feed', RecOrApp, async (req,res) =>{
     try{
         if (req.applicant){
             const jobs = await Job.findAll()
@@ -44,6 +44,35 @@ router.get('/Feed', RecOrApp ,async (req,res) =>{
         res.status(400).send(error.message)
     }
 }) 
+
+router.get('/jobs/:id', RecOrApp, async (req,res) =>{
+    try{
+        if (req.applicant){
+            const job = await Job.findById(req.params.id)
+            const jobData = await job.getJobData()
+            res.send(jobData)
+        } else if (req.recruiter){
+            const job = await Job.findOne({
+                where : {
+                    id: id,
+                    RecruiterId : req.recruiter.id,
+                }
+            })
+
+            if(job) {
+                jobStats = await job.getJobStats() 
+                res.send(jobStats)
+            }
+            else {
+                throw new Error("You are not authorized to view this job")
+            }
+        }
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+}) 
+
+
 
 
 // get all jobs recruiter's view
