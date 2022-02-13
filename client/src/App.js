@@ -18,7 +18,6 @@ import Feed from "./components/Feed/FeedPage";
 import JobPage from "./pages/JobPage/JobPage";
 
 // components
-import HelloWorld from "./components/HelloWorld";
 import Layout from "./components/layout/Layout";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";

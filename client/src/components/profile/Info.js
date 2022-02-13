@@ -1,26 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import EditProfile from "./EditProfile";
 import EditQualifications from "./EditQualifications";
-import { useDispatch, useSelector } from "react-redux";
-import {useHistory} from 'react-router-dom'
-import { Stack } from "@material-ui/core";
-import classes from "./profile.scss";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
-const Info = (props) => {
-    const [userData, setUserData] = useState([]);
+const Info = props => {
     const [onEdit, setOnEdit] = useState(false);
     const [onEditQF, setOnEditQF] = useState(false);
     const user = useSelector(state => state.user);
     const { record } = user.userInfo;
     const history = useHistory();
-    // useEffect(() => {
-
-    //         setUserData(user)
-
-    // }, [user])
-    const changeRoute = ()=>{
-        history.push(`/createjob`)
-    }
+    const changeRoute = () => {
+        history.push(`/createjob`);
+    };
     return (
         <>
             <div className="card" style={{ width: "50rem", height: "80%" }}>
@@ -82,15 +74,13 @@ const Info = (props) => {
                 )}
 
                 {record.qualifications !== undefined && (
-                    
                     <li
                         className="list-group-item"
                         style={{ "border-bottom": "0px" }}
                     >
-                        <h4 className="card-title" >Qualifications</h4>
+                        <h4 className="card-title">Qualifications</h4>
                         {record.qualifications.programmingLanguages.map(q => (
-                            <p className="card-text" > {q}</p>
-                            
+                            <p className="card-text"> {q}</p>
                         ))}
                         <br></br>
                     </li>
@@ -116,7 +106,7 @@ const Info = (props) => {
                         >
                             Edit Profile
                         </button>
-                        {record.position == undefined && (
+                        {record.position === undefined && (
                             <button
                                 style={{
                                     display: "inline-block",
@@ -128,7 +118,7 @@ const Info = (props) => {
                                 Edit Qualifications
                             </button>
                         )}
-                        {record.yearsOfExperience == undefined && (
+                        {record.yearsOfExperience === undefined && (
                             <button
                                 style={{
                                     display: "inline-block",
