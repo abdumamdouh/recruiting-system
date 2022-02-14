@@ -14,6 +14,7 @@ const router = new express.Router()
 router.post('/CreateJob', recruiterAuth, async (req,res) => {
     const job = req.body 
     job.RecruiterId = req.recruiter.id
+    job.company=req.recruiter.company
     try {
         const post = await Job.create(job )
         res.status(200).send("Job Posted successfuly.")
