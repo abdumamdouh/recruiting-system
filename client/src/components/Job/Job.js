@@ -98,7 +98,23 @@ export default function Job(props) {
                             </Button>
                         </>
                     ) : (
-                        <></>
+                        <>
+                            <Button
+                                variant="contained"
+                                onClick={() => console.log("hello")}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                            >
+                                Edit
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="error"
+                                onClick={() => console.log("hello")}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                            >
+                                Delete
+                            </Button>
+                        </>
                     )}
                 </div>
 
