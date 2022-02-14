@@ -1,7 +1,6 @@
 const express = require('express')
 const Applicant = require('../../models/Applicant')
 const Recruiter = require('../../models/Recruiter')
-//const multer = require('multer') 
 
 const recruiterAuth = require('../middleware/recruiterAuth') 
 
