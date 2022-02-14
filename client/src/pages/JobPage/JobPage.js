@@ -22,18 +22,23 @@ const jobObject = {
 };
 
 export default function JobPage() {
-    //state
-    const state = useSelector((state) => state);
-    const { jobs } = state;
-    console.log(state);
-
     //router param
     const { ID } = useParams();
-    console.log(ID);
+    // console.log(ID);
+
+    //state
+    const state = useSelector((state) => state);
+    const { Jobs } = state.jobs;
+
+    // filter the jobs array based on the id of the job
+    // eslint-disable-next-line eqeqeq
+    const job = Jobs.filter((job) => job.id == ID);
+    console.log(state);
+    console.log(job);
 
     return (
         <>
-            <Job job={jobObject} />
+            {job.length === 0 ? <h1>404 - Not Found</h1> : <Job job={job[0]} />}
         </>
     );
 }
