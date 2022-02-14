@@ -3,7 +3,7 @@ import Job from "../../components/Job/Job";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-//TODO: replace the jobObject with the data from BE
+//plain js for testing
 const jobObject = {
     description:
         "We're looking for a Mid-Level Front End UI Engineer to join a company in the Purpose Jobs network. Purpose Jobs is a recruiting marketplace connecting top talent with purpose-driven companies. We are focused on the Midwest startup & tech ecosystem.",
@@ -21,6 +21,17 @@ const jobObject = {
     employees: 29
 };
 
+//ex from the object from the state
+
+const jobb = {
+    careerLevel: "Mid-Level",
+    createdAt: "2022-02-14T13:37:34.000Z",
+    employmentType: "fullTime",
+    id: 1,
+    title: "Mid-Level Front End UI Engineer",
+    workPlaceType: "Remote"
+};
+
 export default function JobPage() {
     //router param
     const { ID } = useParams();
@@ -34,7 +45,7 @@ export default function JobPage() {
     // eslint-disable-next-line eqeqeq
     const job = Jobs.filter((job) => job.id == ID);
     console.log(state);
-    console.log(job);
+    console.log(job[0]);
 
     return (
         <>

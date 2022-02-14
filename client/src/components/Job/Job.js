@@ -34,7 +34,7 @@ export default function Job(props) {
     //type of user
     const state = useSelector((state) => state);
     const { type } = state.user.userInfo;
-    console.log(type);
+    // console.log(type);
     return (
         <Container
             component="main"
