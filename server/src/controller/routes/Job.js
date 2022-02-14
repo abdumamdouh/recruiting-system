@@ -41,9 +41,7 @@ router.post('/Feed',async (req,res) =>{
                     required: true
                    }],
                 attributes: ['id','title', 'workPlaceType'
-
                 ,'employmentType','careerLevel','place','createdAt'],
-
                 offset:(pageNumber-1)*10,
                 limit:10
             })
@@ -61,21 +59,34 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
     try{
         if (req.applicant){
             const job = await Job.findOne({
+                include: [{
+                    model: Recruiter,
+                    attributes:['company'],
+                    // INNER JOIN
+                    required: true
+                }],
                 where: {
                     id: req.params.id
                 }
             })
-            const jobData = await job.getJobData()
+            const jobData = await job.getJobData("Applicant")
             res.send(jobData)
         } else if (req.recruiter){
             const job = await Job.findOne({
+                include: [{
+                    model: Recruiter,
+                    attributes:['company'],
+                    // INNER JOIN
+                    required: true
+                }],
                 where : {
                     id: req.params.id,
                     RecruiterId : req.recruiter.id,
                 }
             })
             if(job) {
-                jobStats = await job.getJobStats() 
+                jobStats = await job.getJobData("Recruiter")
+                // console.log(jobStats)
                 res.send(jobStats)
             }
             else {
@@ -86,8 +97,6 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
         res.status(400).send(error.message)
     }
 }) 
-
-
 
 // get all jobs posted by a certain recruiter
 router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
@@ -116,7 +125,6 @@ router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
         res.status(400).send(error.message)
     }
 })
-
 
 
 // edit a job by recruiter
