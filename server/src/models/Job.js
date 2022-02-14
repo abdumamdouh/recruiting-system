@@ -87,4 +87,16 @@ Job.prototype.getJobStats = async function () {
     return applicants_applied
 }
 
+Job.prototype.addRequirments = async function(requirments) {
+    await requirments.forEach( async (requirment) => {
+        const requirmentName = Object.keys(requirment)[0]
+        const requirmentWeight = Object.values(requirment)[0]
+        await Requirment.create({
+            name: requirmentName,
+            weight: requirmentWeight,
+            JobId: this.id
+        })
+    });
+}
+
 module.exports = Job ;
