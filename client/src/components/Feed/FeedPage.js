@@ -11,12 +11,11 @@ const Feed = () => {
 
   useEffect(() => {
     dispatch(getJobsAction(1))
-  }, []);
-    let job =[]
+  }, [dispatch]);
+    
     const Jobs = useSelector(state=> state.jobs.Jobs)
     const {Count} = useSelector(state=>state.jobs)
     //console.log('cc',Count)
-    job = job.concat(Jobs)
    // const Count = 0;
 
 
@@ -34,11 +33,12 @@ const Feed = () => {
         setPageNumber(selected+1);
        dispatch(getJobsAction(selected+1))
     }
-
+    if (Jobs!==undefined){
     return(
-        
+          
             <div className={classes.list}>{
-                        job.map(job=>(
+              
+                        Jobs.map(job=>(
             <JobPost job={job}/>
                         ))
                         }
@@ -56,10 +56,21 @@ const Feed = () => {
                     
 
             </div>
+
+                      
+                      
                  
        
-       
+                        
     )
+    
+  }
+  else return(
+    <div>
+      loading.....
+    </div>
+  )
+
 
 }
 
