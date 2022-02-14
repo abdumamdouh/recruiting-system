@@ -30,7 +30,7 @@ router.post('/Recruiter/Sign-up' , async (req,res) =>{
 })
 
 // Read recruiter profile
-router.get('/Recruiter/me' , recruiterAuth, async (req,res) => {
+router.post('/Recruiter/me' , recruiterAuth, async (req,res) => {
     res.status(200).send(req.recruiter.getPublicRecruiterData())
 })
 
