@@ -44,7 +44,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
     const dispatch = useDispatch();
 
     let user = useSelector(state => state.user);
-    const { record } = user.userInfo;
+    const { userInfo } = user;
     const majors = [
         "BackEnd",
         "FrontEnd",
@@ -56,14 +56,14 @@ const EditQualifications = ({ setOnEditQualifications }) => {
         "R&D"
     ];
     const [view, setView] = useState(
-        majors.includes(record.major) ? "sw" : "notsw"
+        majors.includes(userInfo.major) ? "sw" : "notsw"
     );
 
     const initialValues = {
-        major: record.major,
-        level: record.level,
-        yearsOfExperience: record.yearsOfExperience,
-        qualifications: record.qualifications
+        major: userInfo.major,
+        level: userInfo.level,
+        yearsOfExperience: userInfo.yearsOfExperience,
+        qualifications: userInfo.qualifications
     };
 
     const [formValues, setFormValues] = useState(initialValues);
@@ -117,7 +117,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
     const handleSubmit = e => {
         e.preventDefault();
         user = {
-            ...record,
+            ...userInfo,
             major: formValues.major,
             level: formValues.level,
             yearsOfExperience: formValues.yearsOfExperience,

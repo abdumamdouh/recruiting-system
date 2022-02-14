@@ -2,6 +2,7 @@ const express = require('express')
 const Applicant = require('../../models/Applicant')
 const Recruiter = require('../../models/Recruiter')
 
+
 const applicantAuth = require('../middleware/applicantAuth') 
 
 const router = new express.Router()
@@ -27,7 +28,7 @@ router.post('/Applicant/Sign-up' , async (req,res) =>{
 })
 
 // get my profile data
-router.get('/Applicant/me' , applicantAuth , async (req,res) => {
+router.post('/Applicant/me' , applicantAuth , async (req,res) => {
     res.status(200).send(req.applicant.getPublicApplicantData()) ;
 })
 

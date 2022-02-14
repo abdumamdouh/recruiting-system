@@ -15,6 +15,7 @@ const router = new express.Router()
 router.post('/CreateJob', recruiterAuth, async (req,res) => {
     const job = req.body 
     job.RecruiterId = req.recruiter.id
+    job.company=req.recruiter.company
     try {
         const newJob = await Job.create( job )
         await newJob.addRequirments(job.stack)
@@ -39,8 +40,8 @@ router.post('/Feed',async (req,res) =>{
                     // INNER JOIN
                     required: true
                    }],
-                attributes: ['id','title', 'workPlaceType',
-                'employmentType','careerLevel','place','createdAt'],
+                attributes: ['id','title', 'workPlaceType'
+                ,'employmentType','careerLevel','place','createdAt'],
                 offset:(pageNumber-1)*10,
                 limit:10
             })

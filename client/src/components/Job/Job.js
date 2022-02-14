@@ -11,6 +11,7 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
+import { useSelector } from "react-redux";
 
 export default function Job(props) {
     //pull out the props
@@ -21,7 +22,7 @@ export default function Job(props) {
         title,
         yearsOfExperience,
         careerLevel,
-        companyName,
+        Recruiter,
         companyDescription,
         numOfApplicants,
         period,
@@ -29,9 +30,11 @@ export default function Job(props) {
         employees
     } = props.job;
 
-    //TODO: Applicant or Recruiter booleans
-    // const {} = props:
-
+    //Applicant or Recruiter
+    //type of user
+    const state = useSelector((state) => state);
+    const { type } = state.user.userInfo;
+    // console.log(type);
     return (
         <Container
             component="main"
@@ -59,7 +62,7 @@ export default function Job(props) {
                     <LocationOnOutlinedIcon />
                     {` ${place} - ${workPlaceType}.`}{" "}
                     <Typography variant="caption" display="inline" color="gray">
-                        {`${period} day ago. ${numOfApplicants} applicants`}
+                        {`${period} day ago. 16 applicants`}
                     </Typography>
                 </Typography>
 
@@ -77,20 +80,42 @@ export default function Job(props) {
                 </Typography>
 
                 <div>
-                    <Button
-                        variant="contained"
-                        endIcon={<ReplyAllOutlinedIcon />}
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Apply
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        onClick={() => console.log("hello")}
-                        sx={{ mt: 3, mb: 2, ml: 1 }}
-                    >
-                        Save
-                    </Button>
+                    {type === "Applicant" ? (
+                        <>
+                            <Button
+                                variant="contained"
+                                endIcon={<ReplyAllOutlinedIcon />}
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Apply
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                onClick={() => console.log("hello")}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                            >
+                                Save
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button
+                                variant="contained"
+                                onClick={() => console.log("hello")}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                            >
+                                Edit
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="error"
+                                onClick={() => console.log("hello")}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                            >
+                                Delete
+                            </Button>
+                        </>
+                    )}
                 </div>
 
                 <Divider />
@@ -124,7 +149,7 @@ export default function Job(props) {
                             alt="logo"
                         />
                         <Typography variant="body1" color="black">
-                            {companyName}
+                            {Recruiter.company}
                         </Typography>
                     </div>
 

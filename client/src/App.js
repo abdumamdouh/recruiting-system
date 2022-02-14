@@ -27,12 +27,7 @@ const App = () => {
         <Router>
             <Layout>
                 <Switch>
-                    <ProtectedRoute
-                        exact
-                        path="/"
-                        component={HomePage}
-                        name="/"
-                    />
+                    <Route exact path="/" component={HomePage} name="/" />
 
                     <Route
                         exact
@@ -61,9 +56,15 @@ const App = () => {
                         name="Info"
                     />
 
-                    <Route exact path="/feed" component={Feed} name="Feed" />
+                    <ProtectedRoute
+                        exact
+                        path="/feed"
+                        component={Feed}
+                        name="Feed"
+                    />
 
-                    <Route
+                    {/* demo */}
+                    <ProtectedRoute
                         exact
                         //TODO: replace job with dynamic route
                         path="/feed/job"
@@ -71,7 +72,14 @@ const App = () => {
                         name="job"
                     />
 
-                    <Route
+                    <ProtectedRoute
+                        exact
+                        path="/feed/job/:ID"
+                        component={JobPage}
+                        name="job"
+                    />
+
+                    <ProtectedRoute
                         exact
                         path="/createjob"
                         component={CreateJob}

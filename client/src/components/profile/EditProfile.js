@@ -13,7 +13,7 @@ const EditProfile = ({ setOnEdit }) => {
     // const [avatar, setAvatar] = useState('')
 
     let { user } = useSelector(state => state);
-    let { record } = user.userInfo;
+    let { userInfo } = user;
     const dispatch = useDispatch();
 
     // useEffect(() => {
@@ -37,7 +37,7 @@ const EditProfile = ({ setOnEdit }) => {
     const handleSubmit = e => {
         e.preventDefault();
         user = {
-            ...record,
+            ...userInfo,
             firstName: userData.firstName,
             lastName: userData.lastName,
             userName: userData.userName
