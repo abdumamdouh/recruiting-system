@@ -33,8 +33,14 @@ router.post('/Feed',async (req,res) =>{
     // const Limit = req.body.limit
     try{
             const result = await Job.findAndCountAll({
+                include: [{
+                    model: Recruiter,
+                    attributes:['company'],
+                    // INNER JOIN
+                    required: true
+                   }],
                 attributes: ['id','title', 'workPlaceType'
-                ,'employmentType','careerLevel','company','place','createdAt'],
+                ,'employmentType','careerLevel','place','createdAt'],
                 offset:(pageNumber-1)*10,
                 limit:10
             })
@@ -86,6 +92,12 @@ router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
     // const Limit = req.body.limit
     try{
         const result = await Job.findAndCountAll({
+            include: [{
+                model: Recruiter,
+                attributes:['company'],
+                // INNER JOIN
+                required: true
+               }],
             attributes: ['id','title', 'workPlaceType','employmentType','careerLevel'],
             where : {
                 RecruiterId : req.recruiter.id
