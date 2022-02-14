@@ -7,6 +7,7 @@ const Job = require('../../models/Job')
 const recruiterAuth = require('../middleware/recruiterAuth') 
 const applicantAuth = require('../middleware/applicantAuth') 
 const RecOrApp = require('../middleware/RecOrApp')
+const ApplyFor = require('../../models/ApplyFor')
 
 const router = new express.Router()
 
@@ -46,20 +47,24 @@ router.post('/Feed',async (req,res) =>{
     }
 }) 
 
+// Get job info for the applicant and job stats for the recruiter
 router.get('/jobs/:id', RecOrApp, async (req,res) =>{
     try{
         if (req.applicant){
-            const job = await Job.findById(req.params.id)
+            const job = await Job.findOne({
+                where: {
+                    id: req.params.id
+                }
+            })
             const jobData = await job.getJobData()
             res.send(jobData)
         } else if (req.recruiter){
             const job = await Job.findOne({
                 where : {
-                    id: id,
+                    id: req.params.id,
                     RecruiterId : req.recruiter.id,
                 }
             })
-
             if(job) {
                 jobStats = await job.getJobStats() 
                 res.send(jobStats)
@@ -97,6 +102,8 @@ router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
     }
 })
 
+
+
 // edit a job by recruiter
 router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
     try {
@@ -116,6 +123,23 @@ router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
         res.status(400).send(error.message);
     }
 })
+
+// Apply for a job
+router.post('/jobs/applyFor/:id', applicantAuth, async (req,res) =>{
+
+    const job = {
+        JobId: req.params.id,
+        ApplicantId: req.applicant.id,
+        status: req.body.status
+    }
+
+    try{
+            const jobApply = await ApplyFor.create(job)
+            res.send("Applied for the job successfully")
+        } catch (error) {
+        res.status(400).send(error.message)
+    }
+}) 
 
 
 
