@@ -61,9 +61,7 @@ Job.prototype.getJobData = async function () {
         careerLevel: job.careerLevel ,
     }
     const requirments = await Requirment.findAll({
-        attributes: {
-            exclude: ['id', 'weight']
-        },
+        attributes: ['name', 'weight'],
         where: {
             JobId : job.id 
         }
@@ -77,8 +75,6 @@ Job.prototype.getJobData = async function () {
 
 Job.prototype.getJobStats = async function () {
     const job = this 
-
-
     applicants_applied = await ApplyFor.findAll({
         where: {
             JobId: job.id
