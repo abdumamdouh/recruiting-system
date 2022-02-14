@@ -7,23 +7,20 @@ const db = require('../db/db')
 const Job = require('./Job')
 const Applicant = require('./Applicant')
 
-
 const ApplyFor = db.define('ApplyFor',{
     JobId: {
         type: Sequelize.INTEGER,
         references: {
-            model: Job, 
+            model: 'Jobs', 
             key: 'id'
-        },
-        primaryKey: true
+        }
     },
     ApplicantId: {
         type: Sequelize.INTEGER,
         references: {
-            model: Applicant, 
+            model: 'Applicants', 
             key: 'id'
-        },
-        primaryKey: true
+        }
     },
     status: {
         type: Sequelize.STRING,
