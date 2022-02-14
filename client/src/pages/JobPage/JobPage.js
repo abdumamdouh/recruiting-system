@@ -23,14 +23,14 @@ const jobObject = {
 
 //ex from the object from the state
 
-const jobb = {
-    careerLevel: "Mid-Level",
-    createdAt: "2022-02-14T13:37:34.000Z",
-    employmentType: "fullTime",
-    id: 1,
-    title: "Mid-Level Front End UI Engineer",
-    workPlaceType: "Remote"
-};
+// const jobb = {
+//     careerLevel: "Mid-Level",
+//     createdAt: "2022-02-14T13:37:34.000Z",
+//     employmentType: "fullTime",
+//     id: 1,
+//     title: "Mid-Level Front End UI Engineer",
+//     workPlaceType: "Remote"
+// };
 
 export default function JobPage() {
     //router param
@@ -44,8 +44,8 @@ export default function JobPage() {
     // filter the jobs array based on the id of the job
     // eslint-disable-next-line eqeqeq
     const job = Jobs.filter((job) => job.id == ID);
-    console.log(state);
-    console.log(job[0]);
+    // console.log(state);
+    // console.log(job[0]);
 
     return (
         <>
