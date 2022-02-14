@@ -6,6 +6,7 @@ import JobPost from "./JobPost";
 import classes from "./Feed.module.scss";
 import ReactPaginate from "react-paginate";
 import { getJobsAction } from "../../redux/actions/jobs";
+import { Link } from "react-router-dom";
 
 const Feed = () => {
     const dispatch = useDispatch();
@@ -14,8 +15,8 @@ const Feed = () => {
         dispatch(getJobsAction(1));
     }, [dispatch]);
 
-    const Jobs = useSelector(state => state.jobs.Jobs);
-    const { Count } = useSelector(state => state.jobs);
+    const Jobs = useSelector((state) => state.jobs.Jobs);
+    const { Count } = useSelector((state) => state.jobs);
     //console.log('cc',Count)
     // const Count = 0;
 
@@ -31,8 +32,10 @@ const Feed = () => {
     if (Jobs !== undefined) {
         return (
             <div className={classes.list}>
-                {Jobs.map(job => (
-                    <JobPost job={job} />
+                {Jobs.map((job) => (
+                    <Link to={`/feed/job/${job.id}`}>
+                        <JobPost job={job} />
+                    </Link>
                 ))}
                 <br />
                 <ReactPaginate

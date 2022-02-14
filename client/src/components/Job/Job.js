@@ -22,7 +22,7 @@ export default function Job(props) {
         title,
         yearsOfExperience,
         careerLevel,
-        companyName,
+        Recruiter,
         companyDescription,
         numOfApplicants,
         period,
@@ -149,7 +149,7 @@ export default function Job(props) {
                             alt="logo"
                         />
                         <Typography variant="body1" color="black">
-                            {companyName}
+                            {Recruiter.company}
                         </Typography>
                     </div>
 
