@@ -11,6 +11,7 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
+import { useSelector } from "react-redux";
 
 export default function Job(props) {
     //pull out the props
@@ -29,9 +30,11 @@ export default function Job(props) {
         employees
     } = props.job;
 
-    //TODO: Applicant or Recruiter booleans
-    // const {} = props:
-
+    //Applicant or Recruiter
+    //type of user
+    const state = useSelector((state) => state);
+    const { type } = state.user.userInfo;
+    console.log(type);
     return (
         <Container
             component="main"
