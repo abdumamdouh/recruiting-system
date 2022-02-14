@@ -11,7 +11,7 @@ const JobPost = ({job}) => {
     }
     //console.log(job)
     return(
-        <div className={classes.job} onClick ={ handleRedirect}>
+        <div className={classes.job} onClick={handleRedirect}>
             <img
             src={'./mentor.png'}
             alt='logo'
