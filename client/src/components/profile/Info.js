@@ -37,13 +37,13 @@ const Info = props => {
                 <div className="list-group list-group-flush">
                     <li className="list-group-item">
                         {" "}
-                        <h4 className="card-title">
+                        <h4 className="card-title" style={{'color': '#001233'}}>
                             {userInfo.firstName} {userInfo.lastName}
                         </h4>
                         <h6 className="card-subtitle mb-2 text-muted">
                             {userInfo.userName}
                         </h6>
-                        <p className="card-text">
+                        <p className="text-muted">
                             {" "}
                             <div>
                                 <svg
@@ -56,7 +56,7 @@ const Info = props => {
                                 >
                                     <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z" />
                                 </svg>{" "}
-                                {userInfo.email}
+                               <span className="card-subtitle mb-2 text-muted"> {userInfo.email} </span>
                             </div>
                         </p>
                     </li>
@@ -64,29 +64,29 @@ const Info = props => {
 
                 {userInfo.position !== undefined && (
                     <li className="list-group-item">
-                        <h4 className="card-title">Position</h4>
-                        <p className="card-text"> {userInfo.position}</p>
+                        <h4 className="card-title" style={{'color': '#001233'}}>Position</h4>
+                        <p className="card-text" style={{'color': '#33415c'}}> {userInfo.position}</p>
                     </li>
                 )}
 
                 {userInfo.major !== undefined && (
                     <li className="list-group-item">
-                        <h4 className="card-title">Major</h4>
-                        <p className="card-text"> {userInfo.major}</p>
+                        <h4 className="card-title" style={{'color': '#001233'}}>Major</h4>
+                        <p className="card-text" style={{'color': '#33415c'}}> {userInfo.major}</p>
                     </li>
                 )}
 
                 {userInfo.level !== undefined && (
                     <li className="list-group-item">
-                        <h4 className="card-title">Level</h4>
-                        <p className="card-text"> {userInfo.level}</p>
+                        <h4 className="card-title" style={{'color': '#001233'}}>Level</h4>
+                        <p className="card-text" style={{'color': '#33415c'}}> {userInfo.level}</p>
                     </li>
                 )}
 
                 {userInfo.yearsOfExperience !== undefined && (
                     <li className="list-group-item">
                         <h4 className="card-title">Years of Experience</h4>
-                        <p className="card-text"> {userInfo.yearsOfExperience}</p>
+                        <p className="card-text" style={{'color': '#33415c'}}> {userInfo.yearsOfExperience}</p>
                     </li>
                 )}
 
@@ -97,17 +97,17 @@ const Info = props => {
                     >
                         <h4 className="card-title">Qualifications</h4>
                         {userInfo.qualifications.programmingLanguages.map(q => (
-                            <p className="card-text"> {q}</p>
+                            <p className="card-text" style={{'color': '#33415c'}}> {q}</p>
                         ))}
                         <br></br>
                     </li>
                 )}
 
                 {userInfo.company !== undefined && (
-                    <li className="list-group-item">
+                    <li className="list-group-item" style={{'borderBottom': '0px'}}>
                         {" "}
-                        <h4 className="card-title">Company</h4>
-                        <p className="card-text"> {userInfo.company}</p>
+                        <h4 className="card-title" style={{'color': '#001233'}}>Company</h4>
+                        <p className="card-text" style={{'color': '#33415c'}}> {userInfo.company}</p>
                     </li>
                 )}
 
@@ -117,8 +117,9 @@ const Info = props => {
                         style={{ "border-bottom": "0px" }}
                     >
                         <button
-                            style={{ marginBottom: "10px", marginTop: "5px" }}
-                            className="btn btn-outline-info inline"
+                            style={{ marginBottom: "10px", marginTop: "5px", "color": "#023e7d",
+                                    'border': '1px solid'}}
+                            className="btn  inline"
                             onClick={() => setOnEdit(true)}
                         >
                             Edit Profile
@@ -127,9 +128,11 @@ const Info = props => {
                             <button
                                 style={{
                                     display: "inline-block",
-                                    marginLeft: "10px"
+                                    marginLeft: "10px", 
+                                    "color": "#023e7d",
+                                    'border': '1px solid'
                                 }}
-                                className="btn btn-outline-info inline"
+                                className="btn  inline"
                                 onClick={() => setOnEditQF(true)}
                             >
                                 Edit Qualifications
@@ -139,9 +142,11 @@ const Info = props => {
                             <button
                                 style={{
                                     display: "inline-block",
-                                    marginLeft: "10px"
+                                    marginLeft: "10px",
+                                    "color": "#023e7d",
+                                    'border': '1px solid'
                                 }}
-                                className="btn btn-outline-info inline"
+                                className="btn inline"
                                 onClick={changeRoute}
                             >
                                 Create job post
