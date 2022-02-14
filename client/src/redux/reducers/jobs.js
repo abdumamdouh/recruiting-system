@@ -28,7 +28,7 @@ const jobReducer = (state = {}, action) => {
                 loading: true
             };
         case CREATE_JOB_SUCCESS:
-            return action.payload;
+            return state;
 
         case CREATE_JOB_FAIL:
             return {
