@@ -80,36 +80,26 @@ export default function Job(props) {
                 </Typography>
 
                 <div>
-                    <Button
-                        variant="contained"
-                        endIcon={<ReplyAllOutlinedIcon />}
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Apply
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        onClick={() => console.log("hello")}
-                        sx={{ mt: 3, mb: 2, ml: 1 }}
-                    >
-                        Save
-                    </Button>
-
-                    <Button
-                        variant="contained"
-                        onClick={() => console.log("hello")}
-                        sx={{ mt: 3, mb: 2, ml: 1 }}
-                    >
-                        Edit
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => console.log("hello")}
-                        sx={{ mt: 3, mb: 2, ml: 1 }}
-                    >
-                        Delete
-                    </Button>
+                    {type === "Applicant" ? (
+                        <>
+                            <Button
+                                variant="contained"
+                                endIcon={<ReplyAllOutlinedIcon />}
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Apply
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                onClick={() => console.log("hello")}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                            >
+                                Save
+                            </Button>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                 </div>
 
                 <Divider />
