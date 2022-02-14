@@ -15,7 +15,8 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
     const job = req.body 
     job.RecruiterId = req.recruiter.id
     try {
-        const post = await Job.create(job )
+        const newJob = await Job.create( job )
+        await newJob.addRequirments(job.stack)
         res.status(200).send("Job Posted successfuly.")
     } catch (error) {
         res.status(400).send(error.message)
@@ -45,7 +46,6 @@ router.post('/Feed',async (req,res) =>{
     }
 }) 
 
-<<<<<<< HEAD
 router.get('/jobs/:id', RecOrApp, async (req,res) =>{
     try{
         if (req.applicant){
@@ -75,7 +75,6 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
 
 
 
-=======
 // get all jobs posted by a certain recruiter
 router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
     const pageNumber = req.body.pageNumber
@@ -97,7 +96,6 @@ router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
         res.status(400).send(error.message)
     }
 })
->>>>>>> 54b228e334862589059728fe6e10f56981bfb844
 
 // edit a job by recruiter
 router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
