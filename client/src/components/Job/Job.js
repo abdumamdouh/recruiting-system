@@ -62,7 +62,7 @@ export default function Job(props) {
                     <LocationOnOutlinedIcon />
                     {` ${place} - ${workPlaceType}.`}{" "}
                     <Typography variant="caption" display="inline" color="gray">
-                        {`${period} day ago. ${numOfApplicants} applicants`}
+                        {`${period} day ago. 16 applicants`}
                     </Typography>
                 </Typography>
 
