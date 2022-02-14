@@ -7,20 +7,21 @@ import {getJobsAction} from '../../redux/actions/jobs'
 
 
 const Feed = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getJobsAction(1))
+  }, []);
     let job =[]
-    const dispatch = useDispatch();
     const Jobs = useSelector(state=> state.jobs.Jobs)
     const {Count} = useSelector(state=>state.jobs)
-    console.log('cc',Count)
+    //console.log('cc',Count)
     job = job.concat(Jobs)
-    // console.log('ds',job)
-    // console.log(Jobs)
-    // console.log(typeof(Jobs))
-    useEffect(() => {
-        dispatch(getJobsAction(1))
-      }, []);
-    const array = [1,2,3,4,5.6,7,8,9,10]
-      console.log(typeof(array))
+   // const Count = 0;
+
+
+    
+
     const[pageNumber,setPageNumber]=useState(1)
 
 
