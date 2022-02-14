@@ -27,12 +27,7 @@ const App = () => {
         <Router>
             <Layout>
                 <Switch>
-                    <ProtectedRoute
-                        exact
-                        path="/"
-                        component={HomePage}
-                        name="/"
-                    />
+                    <Route exact path="/" component={HomePage} name="/" />
 
                     <Route
                         exact
