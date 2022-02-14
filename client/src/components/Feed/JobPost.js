@@ -7,7 +7,7 @@ import classes from "./Feed.module.scss"
 
 const JobPost = ({job}) => {
     
-    console.log(job)
+    //console.log(job)
     return(
         <div className={classes.job}>
             <img

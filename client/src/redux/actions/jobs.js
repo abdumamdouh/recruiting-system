@@ -8,7 +8,7 @@ import {
 } from "../types/index";
 import axios from "axios";
 const serverURL = "http://localhost:5000";
-export const getJobsAction = pageNumber => {
+export const getJobsAction = (pageNumber) => {
     return async dispatch => {
         try {
             dispatch({ type: GET_JOBS_REQUEST });
@@ -28,6 +28,7 @@ export const getJobsAction = pageNumber => {
             );
 
             dispatch({ type: GET_JOBS_SUCCESS, payload: data });
+            
         } catch (error) {
             dispatch({
                 type: GET_JOBS_FAIL,
