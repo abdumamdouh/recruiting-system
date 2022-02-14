@@ -15,7 +15,7 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
     const job = req.body 
     job.RecruiterId = req.recruiter.id
     try {
-        const post = await Job.create(job )
+        const post = await Job.create(job)
         res.status(200).send("Job Posted successfuly.")
     } catch (error) {
         res.status(400).send(error.message)
@@ -31,8 +31,14 @@ router.post('/Feed',async (req,res) =>{
     // const Limit = req.body.limit
     try{
             const result = await Job.findAndCountAll({
+                include: [{
+                    model: Recruiter,
+                    attributes:['company'],
+                    // INNER JOIN
+                    required: true
+                   }],
                 attributes: ['id','title', 'workPlaceType'
-                ,'employmentType','careerLevel','company','place','createdAt'],
+                ,'employmentType','careerLevel','place','createdAt'],
                 offset:(pageNumber-1)*10,
                 limit:10
             })
@@ -51,6 +57,12 @@ router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
     // const Limit = req.body.limit
     try{
         const result = await Job.findAndCountAll({
+            include: [{
+                model: Recruiter,
+                attributes:['company'],
+                // INNER JOIN
+                required: true
+               }],
             attributes: ['id','title', 'workPlaceType','employmentType','careerLevel'],
             where : {
                 RecruiterId : req.recruiter.id
