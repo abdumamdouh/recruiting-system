@@ -94,6 +94,14 @@ export default function Job(props) {
                     >
                         Save
                     </Button>
+
+                    <Button
+                        variant="contained"
+                        onClick={() => console.log("hello")}
+                        sx={{ mt: 3, mb: 2, ml: 1 }}
+                    >
+                        Edit
+                    </Button>
                 </div>
 
                 <Divider />
