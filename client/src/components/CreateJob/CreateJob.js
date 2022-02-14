@@ -212,13 +212,7 @@ export default function CreateJob(props) {
                                         to
                                     </p>{" "}
                                 </Grid>
-                                <Grid item xs={4}>
-                                    <SelectWrapper
-                                        name="maxYearsOfExperience"
-                                        label="Max Years Of Experience"
-                                        options={years}
-                                    />
-                                </Grid>
+                                
 
                                 <Grid item xs={5}>
                                     <button
