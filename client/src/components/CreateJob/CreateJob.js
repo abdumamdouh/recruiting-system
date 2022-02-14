@@ -108,7 +108,7 @@ export default function CreateJob(props) {
     const [requirements, setRequirements] = useState([]);
     return (
         <Grid container>
-            <Container maxWidth="md" fixed>
+            <Container maxWidth="md" fluid={true}>
                 <div className="jobForm" style={{ alignItems: "center" }}>
                     <Formik
                         initialValues={{ ...initalFormState }}
@@ -122,17 +122,17 @@ export default function CreateJob(props) {
                                 .splice(-middleIndex);
                             console.log("sn", secondHalf);
                             values.stack = [...secondHalf];
-                         dispatch(createJobAction(values, redirect));
+                            dispatch(createJobAction(values, redirect));
                             console.log(values);
                         }}
                     >
                         <Form>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                   {/* <p style={{'color': '#ffff'}}> gjbbjjnnnnn</p> */}
+                                    {/* <p style={{'color': '#ffff'}}> gjbbjjnnnnn</p> */}
                                 </Grid>
                                 <Grid item xs={12}>
-                                   {/* <p style={{'color': '#ffff'}}> gjbbjjnnnnn</p> */}
+                                    {/* <p style={{'color': '#ffff'}}> gjbbjjnnnnn</p> */}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography>Job Title</Typography>
@@ -143,7 +143,7 @@ export default function CreateJob(props) {
                                         label="title"
                                     />
                                 </Grid>
-                               
+
                                 <Grid item xs={12}>
                                     <Typography>Job Description</Typography>
                                 </Grid>
@@ -199,7 +199,7 @@ export default function CreateJob(props) {
                                 <Grid item xs={12}>
                                     <Typography>Years Of Experience</Typography>
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={12}>
                                     <SelectWrapper
                                         name="yearsOfExperience"
                                         label=" Years Of Experience"
@@ -212,9 +212,11 @@ export default function CreateJob(props) {
                                         type="button"
                                         style={{
                                             marginTop: "5px",
-                                            display: "inline-block"
+                                            display: "inline-block",
+                                            "color": "#023e7d",
+                                            'border': '1px solid'
                                         }}
-                                        className="btn btn-outline-info inline"
+                                        className="btn btn-outline inline"
                                         onClick={() =>
                                             setOnAddQualifications(true)
                                         }
@@ -225,31 +227,28 @@ export default function CreateJob(props) {
                                 <Grid item xs={12}>
                                     {requirements.length !== 0 && (
                                         <div>
-                                            <p style={{ fontWeight: "bold" }}>
+                                            <p style={{ fontWeight: "bold",  'color':'#001845' }}>
                                                 Requirements & weights{" "}
                                             </p>
-                                            <p>
+                                            <p style={{  'color': '#002855'}}>
                                                 Enter weight for every
                                                 requirement in numbers{" "}
                                             </p>
-
-                                            <span
-                                                style={{
-                                                    marginRight: "50px",
-                                                    marginBottom: "10px"
-                                                }}
-                                            >
-                                                Req
-                                            </span>
-                                            <span>Weight</span>
                                         </div>
                                     )}
                                     {requirements.map((req, index) => {
                                         return (
                                             <div className="form-outline">
-                                                <label className="form-label" for="typeText" key={req}>{req}</label>
+                                                <label
+                                                    className="form-label"
+                                                    for="typeText"
+                                                    key={req}
+                                                >
+                                                    {req}
+                                                </label>
                                                 <input
-                                                id="typeText" className="form-control" 
+                                                    id="typeText"
+                                                    className="form-control"
                                                     //className="weight"
                                                     key={req}
                                                     value={requirements[req]}
@@ -274,8 +273,9 @@ export default function CreateJob(props) {
                                 </Grid>
 
                                 <Grid item xs={5}>
-                                    <ButtonWrapper>Submit Form</ButtonWrapper>
+                                    <ButtonWrapper style={{'marginTop':'20px' }}>Submit Form</ButtonWrapper>
                                 </Grid>
+                                <Grid item xs={12}></Grid>
                             </Grid>
                         </Form>
                     </Formik>
