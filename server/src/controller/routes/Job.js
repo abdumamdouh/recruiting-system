@@ -7,6 +7,7 @@ const Job = require('../../models/Job')
 const recruiterAuth = require('../middleware/recruiterAuth') 
 const applicantAuth = require('../middleware/applicantAuth') 
 const RecOrApp = require('../middleware/RecOrApp')
+const ApplyFor = require('../../models/ApplyFor')
 
 const router = new express.Router()
 
@@ -15,7 +16,8 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
     const job = req.body 
     job.RecruiterId = req.recruiter.id
     try {
-        const post = await Job.create(job)
+        const newJob = await Job.create( job )
+        await newJob.addRequirments(job.stack)
         res.status(200).send("Job Posted successfuly.")
     } catch (error) {
         res.status(400).send(error.message)
@@ -51,6 +53,39 @@ router.post('/Feed',async (req,res) =>{
     }
 }) 
 
+// Get job info for the applicant and job stats for the recruiter
+router.get('/jobs/:id', RecOrApp, async (req,res) =>{
+    try{
+        if (req.applicant){
+            const job = await Job.findOne({
+                where: {
+                    id: req.params.id
+                }
+            })
+            const jobData = await job.getJobData()
+            res.send(jobData)
+        } else if (req.recruiter){
+            const job = await Job.findOne({
+                where : {
+                    id: req.params.id,
+                    RecruiterId : req.recruiter.id,
+                }
+            })
+            if(job) {
+                jobStats = await job.getJobStats() 
+                res.send(jobStats)
+            }
+            else {
+                throw new Error("You are not authorized to view this job")
+            }
+        }
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+}) 
+
+
+
 // get all jobs posted by a certain recruiter
 router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
     const pageNumber = req.body.pageNumber
@@ -79,6 +114,8 @@ router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
     }
 })
 
+
+
 // edit a job by recruiter
 router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
     try {
@@ -91,13 +128,30 @@ router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
         if (!job) {
             return res.status(404).send();
         }
-        res.body.forEach(title => job[title] = req.body[title]);
+        Object.keys(req.body).forEach(title => job[title] = req.body[title]);
         await job.save();
         res.send(job);
     } catch (error) {
-        res.status.send(error.message);
+        res.status(400).send(error.message);
     }
 })
+
+// Apply for a job
+router.post('/jobs/applyFor/:id', applicantAuth, async (req,res) =>{
+
+    const job = {
+        JobId: req.params.id,
+        ApplicantId: req.applicant.id,
+        status: req.body.status
+    }
+
+    try{
+            const jobApply = await ApplyFor.create(job)
+            res.send("Applied for the job successfully")
+        } catch (error) {
+        res.status(400).send(error.message)
+    }
+}) 
 
 
 
