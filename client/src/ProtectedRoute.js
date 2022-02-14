@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ component: Component, exact, path }) => {
     const { userInfo } = useSelector((state) => state.user);
-    console.log(userInfo);
+    // console.log(userInfo);
 
     return (
         <Route
