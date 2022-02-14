@@ -68,10 +68,18 @@ const App = () => {
                         name="Feed"
                     />
 
+                    {/* demo */}
                     <ProtectedRoute
                         exact
                         //TODO: replace job with dynamic route
                         path="/feed/job"
+                        component={JobPage}
+                        name="job"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/feed/job/:ID"
                         component={JobPage}
                         name="job"
                     />
