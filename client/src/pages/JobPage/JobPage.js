@@ -1,6 +1,7 @@
 import React from "react";
 import Job from "../../components/Job/Job";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 //TODO: replace the jobObject with the data from BE
 const jobObject = {
@@ -21,11 +22,17 @@ const jobObject = {
 };
 
 export default function JobPage() {
-    let state = useSelector((state) => state);
+    //state
+    const state = useSelector((state) => state);
+    const { jobs } = state;
     console.log(state);
+
+    //router param
+    const { ID } = useParams();
+    console.log(ID);
+
     return (
         <>
-            {/* TODO: add prop for applicant or recuriter and add coditional rendering */}
             <Job job={jobObject} />
         </>
     );
