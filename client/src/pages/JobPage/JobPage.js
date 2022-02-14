@@ -1,5 +1,6 @@
 import React from "react";
 import Job from "../../components/Job/Job";
+import { useSelector, useDispatch } from "react-redux";
 
 //TODO: replace the jobObject with the data from BE
 const jobObject = {
@@ -20,6 +21,8 @@ const jobObject = {
 };
 
 export default function JobPage() {
+    let state = useSelector((state) => state);
+    console.log(state);
     return (
         <>
             {/* TODO: add prop for applicant or recuriter and add coditional rendering */}
