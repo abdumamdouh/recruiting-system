@@ -12,7 +12,7 @@ const ApplyFor = db.define('ApplyFor',{
     JobId: {
         type: Sequelize.INTEGER,
         references: {
-            model: Job, 
+            model: 'Jobs', 
             key: 'id'
         },
         primaryKey: true
@@ -20,7 +20,7 @@ const ApplyFor = db.define('ApplyFor',{
     ApplicantId: {
         type: Sequelize.INTEGER,
         references: {
-            model: Applicant, 
+            model: 'Applicants', 
             key: 'id'
         },
         primaryKey: true
