@@ -35,12 +35,11 @@ export default function Job(props) {
         title,
         yearsOfExperience,
         careerLevel,
-        Recruiter,
         companyDescription,
-        numOfApplicants,
         period,
         place,
-        employees
+        employees,
+        company
     } = props.job;
 
     //handle state of modal in case of Recruiter
@@ -213,7 +212,7 @@ export default function Job(props) {
                             alt="logo"
                         />
                         <Typography variant="body1" color="black">
-                            {Recruiter.company}
+                            {company}
                         </Typography>
                     </div>
 
