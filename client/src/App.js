@@ -36,14 +36,14 @@ const App = () => {
                         name="login"
                     />
 
-                    <ProtectedRoute
+                    <Route
                         exact
                         path="/signup-applicant"
                         component={Applicant}
                         name="Applicant"
                     />
 
-                    <ProtectedRoute
+                    <Route
                         exact
                         path="/signup-recruiter"
                         component={Recruiter}
