@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Job from "../../components/Job/Job";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -33,23 +34,55 @@ const jobObject = {
 // };
 
 export default function JobPage() {
+    const [job, setJob] = useState();
+
     //router param
     const { ID } = useParams();
     // console.log(ID);
 
     //state
     const state = useSelector((state) => state);
-    const { Jobs } = state.jobs;
+    // const { Jobs } = state.jobs;
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const rawResponse = await fetch(
+                    `http://localhost:5000/jobs/${ID}`,
+                    {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + state.user.userInfo.token
+                        }
+                    }
+                );
+                const data = await rawResponse.json();
+                console.log(data);
+                setJob(data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+
+        fetchData();
+    }, [ID]);
 
     // filter the jobs array based on the id of the job
     // eslint-disable-next-line eqeqeq
-    const job = Jobs.filter((job) => job.id == ID);
+    // const job = Jobs.filter((job) => job.id == ID);
     // console.log(state);
     // console.log(job[0]);
 
     return (
         <>
-            {job.length === 0 ? <h1>404 - Not Found</h1> : <Job job={job[0]} />}
+            {!job ? (
+                <h1>404 - Not Found</h1>
+            ) : (
+                <Job job={job} />
+                // <h1>hello</h1>
+            )}
         </>
     );
 }
