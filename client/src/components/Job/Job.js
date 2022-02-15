@@ -1,4 +1,5 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
@@ -218,6 +219,27 @@ export default function Job(props) {
                 >
                     {description}
                 </Typography>
+
+                <Divider />
+
+                <Typography
+                    variant="h6"
+                    color="black"
+                    style={{ margin: "12px 0" }}
+                >
+                    Requirments
+                </Typography>
+
+                {props.job.requirments.map((r, i) => (
+                    <Typography
+                        key={uuidv4()}
+                        variant="body1"
+                        color="black"
+                        style={{ marginBottom: "7px" }}
+                    >
+                        {`- ${r.name}, weight ${r.weight}`}
+                    </Typography>
+                ))}
 
                 <Divider />
 
