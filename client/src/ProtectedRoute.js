@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ component: Component, exact, path }) => {
     const { userInfo } = useSelector((state) => state.user);
+    // console.log(userInfo);
 
     return (
         <Route
@@ -14,7 +15,7 @@ const ProtectedRoute = ({ component: Component, exact, path }) => {
                 //TODO: test the condition with the server
                 // true or fasle for testing and development
                 // userInfo is the condition
-                true ? (
+                userInfo ? (
                     <Component {...props} />
                 ) : (
                     <Redirect

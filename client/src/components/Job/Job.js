@@ -4,6 +4,7 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
@@ -11,6 +12,19 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
+import { useSelector } from "react-redux";
+
+const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 50,
+    p: 4
+};
 
 export default function Job(props) {
     //pull out the props
@@ -21,16 +35,27 @@ export default function Job(props) {
         title,
         yearsOfExperience,
         careerLevel,
-        companyName,
         companyDescription,
-        numOfApplicants,
         period,
         place,
-        employees
+        employees,
+        company
     } = props.job;
 
-    //TODO: Applicant or Recruiter booleans
-    // const {} = props:
+    //handle state of modal in case of Recruiter
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    //Applicant or Recruiter
+    //type of user
+    const state = useSelector((state) => state);
+    const { type } = state.user.userInfo;
+    // console.log(type);
+
+    const handleApply = () => {
+        console.log("apply");
+    };
 
     return (
         <Container
@@ -39,7 +64,30 @@ export default function Job(props) {
             style={{ border: "1px solid", borderRadius: "15px" }}
         >
             <CssBaseline />
-
+            {/* applicants info in case of Recruiter */}
+            {type === "Recruiter" ? (
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={modalStyle}>
+                        <Typography
+                            id="modal-modal-title"
+                            variant="h6"
+                            component="h2"
+                            color="black"
+                        >
+                            Applicants
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Duis mollis, est non commodo luctus, nisi erat
+                            porttitor ligula.
+                        </Typography>
+                    </Box>
+                </Modal>
+            ) : null}
             <Box
                 sx={{
                     marginTop: 5,
@@ -59,8 +107,17 @@ export default function Job(props) {
                     <LocationOnOutlinedIcon />
                     {` ${place} - ${workPlaceType}.`}{" "}
                     <Typography variant="caption" display="inline" color="gray">
-                        {`${period} day ago. ${numOfApplicants} applicants`}
+                        {`${period} day ago.`}
                     </Typography>
+                    {type === "Recruiter" ? (
+                        <Typography
+                            variant="caption"
+                            display="inline"
+                            color="gray"
+                        >
+                            {`16 applicants`}
+                        </Typography>
+                    ) : null}
                 </Typography>
 
                 <Typography variant="body1" color="black">
@@ -77,20 +134,51 @@ export default function Job(props) {
                 </Typography>
 
                 <div>
-                    <Button
-                        variant="contained"
-                        endIcon={<ReplyAllOutlinedIcon />}
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Apply
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        onClick={() => console.log("hello")}
-                        sx={{ mt: 3, mb: 2, ml: 1 }}
-                    >
-                        Save
-                    </Button>
+                    {type === "Applicant" ? (
+                        <>
+                            <Button
+                                variant="contained"
+                                endIcon={<ReplyAllOutlinedIcon />}
+                                sx={{ mt: 3, mb: 2 }}
+                                onClick={handleApply}
+                            >
+                                Apply
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                onClick={() => console.log("hello")}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                            >
+                                Save
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button
+                                variant="contained"
+                                onClick={handleOpen}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                                color="success"
+                            >
+                                Show Applicants
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={() => console.log("hello")}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                            >
+                                Edit
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="error"
+                                onClick={() => console.log("hello")}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                            >
+                                Delete
+                            </Button>
+                        </>
+                    )}
                 </div>
 
                 <Divider />
@@ -124,7 +212,7 @@ export default function Job(props) {
                             alt="logo"
                         />
                         <Typography variant="body1" color="black">
-                            {companyName}
+                            {company}
                         </Typography>
                     </div>
 

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import classes from "../Forms/common.module.scss";
 const AddRequirements = ({ setOnAddQualifications, setRequirements,setStackOptions  }) => {
     const stacks = [
+        "English",
+        "German",
+        "French",
         "HTML5/CSS3",
         "NodeJs",
         "MongoDB",
@@ -77,8 +80,8 @@ const AddRequirements = ({ setOnAddQualifications, setRequirements,setStackOptio
 
                         <br />
                         <div className={classes.Box}>
-                            <h4 style={{ margin: "10px" }}>
-                                Your Favourite stack
+                            <h4 style={{ margin: "10px", 'color':'#001845' }}>
+                                 Requirements
                             </h4>
                             <ul
                                 style={{ margin: "10px" }}
@@ -99,7 +102,7 @@ const AddRequirements = ({ setOnAddQualifications, setRequirements,setStackOptio
                                                 onChange={handleChange}
                                                 
                                             />
-                                            <label key={stack}>{stack}</label>
+                                            <label style={{'color': '#023E7D'}} key={stack}>{stack}</label>
                                         </li>
                                     );
                                 })}

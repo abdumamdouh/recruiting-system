@@ -11,10 +11,12 @@ const jobReducer = (state = {}, action) => {
     switch (action.type) {
         case GET_JOBS_REQUEST:
             return {
-                loading: true
+                loading: true,
+                ...state
             };
         case GET_JOBS_SUCCESS:
-            return action.payload;
+            console.log( 'redux',action.payload)
+            return  action.payload;
 
         case GET_JOBS_FAIL:
             return {
@@ -26,7 +28,7 @@ const jobReducer = (state = {}, action) => {
                 loading: true
             };
         case CREATE_JOB_SUCCESS:
-            return action.payload;
+            return state;
 
         case CREATE_JOB_FAIL:
             return {

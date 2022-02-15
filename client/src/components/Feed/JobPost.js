@@ -1,15 +1,17 @@
 import React from "react";
 import classes from "./Feed.module.scss"
-
-
-
-
+import {NavLink, useHistory} from 'react-router-dom'
+import Button from "@mui/material/Button";
 
 const JobPost = ({job}) => {
-    
-    console.log(job)
+    const history = useHistory()
+
+    const handleRedirect = ()=>{
+        history.push(`/feed/job/${job.id}`);
+    }
+    //console.log(job)
     return(
-        <div className={classes.job}>
+        <div className={classes.job} onClick={handleRedirect}>
             <img
             src={'./mentor.png'}
             alt='logo'
@@ -29,7 +31,7 @@ const JobPost = ({job}) => {
                     <p> 
                     {job.careerLevel}
                     </p>
-
+                    <Button variant='contained' onClick={handleRedirect}>View Job</Button>
                 </div>
                 
                 <div className='jobIcons'>
@@ -43,7 +45,6 @@ const JobPost = ({job}) => {
                 
 
             </div>
-
 
         </div>
 

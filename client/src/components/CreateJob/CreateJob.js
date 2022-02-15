@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import "./CreateJob.scss";
-import {createJobAction} from '../../redux/actions/jobs'
+import { createJobAction } from "../../redux/actions/jobs";
 import TextFieldWrapper from "../Forms/TextFieldWrapper";
 import SelectWrapper from "../Forms/SelectWrapper";
 import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -19,7 +19,8 @@ const initalFormState = {
     yearsOfExperience: "",
     //maxYearsOfExperience: "",
     stack: [],
-    place: '',
+    place: "",
+    company: ""
 };
 const formValidation = Yup.object().shape({
     title: Yup.string().required("Required"),
@@ -31,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     formWrapper: {
         marginTop: theme.spacing(5),
         marginBottom: theme.spacing(8),
-        alignItems: 'center'
+        alignItems: "center"
     }
 }));
 const workPlaceTypes = [
@@ -106,9 +107,9 @@ export default function CreateJob(props) {
     const [addQualifications, setOnAddQualifications] = useState(false);
     const [requirements, setRequirements] = useState([]);
     return (
-        <Grid container >
-            <Container maxWidth="md" fixed>
-                <div className='jobForm' style={{alignItems: 'center'}}>
+        <Grid container>
+            <Container maxWidth="md" fluid={true}>
+                <div className="jobForm" style={{ alignItems: "center" }}>
                     <Formik
                         initialValues={{ ...initalFormState }}
                         validationSchema={formValidation}
@@ -121,13 +122,18 @@ export default function CreateJob(props) {
                                 .splice(-middleIndex);
                             console.log("sn", secondHalf);
                             values.stack = [...secondHalf];
-                            dispatch(createJobAction(values, redirect))
+                            dispatch(createJobAction(values, redirect));
                             console.log(values);
                         }}
                     >
                         <Form>
                             <Grid container spacing={2}>
-                            <Grid item xs={12}>gjbbjjnnnnn</Grid>
+                                <Grid item xs={12}>
+                                    {/* <p style={{'color': '#ffff'}}> gjbbjjnnnnn</p> */}
+                                </Grid>
+                                <Grid item xs={12}>
+                                    {/* <p style={{'color': '#ffff'}}> gjbbjjnnnnn</p> */}
+                                </Grid>
                                 <Grid item xs={12}>
                                     <Typography>Job Title</Typography>
                                 </Grid>
@@ -137,15 +143,7 @@ export default function CreateJob(props) {
                                         label="title"
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Typography>Place</Typography>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextFieldWrapper
-                                        name="place"
-                                        label="place"
-                                    />
-                                </Grid>
+
                                 <Grid item xs={12}>
                                     <Typography>Job Description</Typography>
                                 </Grid>
@@ -157,6 +155,15 @@ export default function CreateJob(props) {
                                         multiline
                                         rows={4}
                                         defaultValue="Default Value"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography>Place</Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextFieldWrapper
+                                        name="place"
+                                        label="place"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -192,7 +199,7 @@ export default function CreateJob(props) {
                                 <Grid item xs={12}>
                                     <Typography>Years Of Experience</Typography>
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={12}>
                                     <SelectWrapper
                                         name="yearsOfExperience"
                                         label=" Years Of Experience"
@@ -200,34 +207,16 @@ export default function CreateJob(props) {
                                     />
                                 </Grid>
 
-                                <Grid item xs={1}>
-                                    {" "}
-                                    <p
-                                        style={{
-                                            fontSize: "25px",
-                                            textAlign: "center"
-                                        }}
-                                    >
-                                        {" "}
-                                        to
-                                    </p>{" "}
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <SelectWrapper
-                                        name="maxYearsOfExperience"
-                                        label="Max Years Of Experience"
-                                        options={years}
-                                    />
-                                </Grid>
-
-                                <Grid item xs={5}>
+                                <Grid item xs={12}>
                                     <button
                                         type="button"
                                         style={{
                                             marginTop: "5px",
-                                            display: "inline-block"
+                                            display: "inline-block",
+                                            "color": "#023e7d",
+                                            'border': '1px solid'
                                         }}
-                                        className="btn btn-outline-info inline"
+                                        className="btn btn-outline inline"
                                         onClick={() =>
                                             setOnAddQualifications(true)
                                         }
@@ -236,22 +225,31 @@ export default function CreateJob(props) {
                                     </button>
                                 </Grid>
                                 <Grid item xs={12}>
-                              {requirements.length!==0 && <div>
-                               <p style={{fontWeight: 'bold'}}>Requirements & weights </p>
-                               <p>Enter weight for every requirement in numbers </p>
-                                
-                                <span style={{marginRight: '50px', marginBottom: '10px'}}>Req</span>
-                                <span>Weight</span>
-                               
-                                
-                                </div>
-                                }
+                                    {requirements.length !== 0 && (
+                                        <div>
+                                            <p style={{ fontWeight: "bold",  'color':'#001845' }}>
+                                                Requirements & weights{" "}
+                                            </p>
+                                            <p style={{  'color': '#002855'}}>
+                                                Enter weight for every
+                                                requirement in numbers{" "}
+                                            </p>
+                                        </div>
+                                    )}
                                     {requirements.map((req, index) => {
                                         return (
-                                            <div>
-                                            
-                                                <label key={req}>{req}</label>
-                                                <input className= 'weight'
+                                            <div className="form-outline">
+                                                <label
+                                                    className="form-label"
+                                                    for="typeText"
+                                                    key={req}
+                                                >
+                                                    {req}
+                                                </label>
+                                                <input
+                                                    id="typeText"
+                                                    className="form-control"
+                                                    //className="weight"
                                                     key={req}
                                                     value={requirements[req]}
                                                     type="text"
@@ -260,7 +258,9 @@ export default function CreateJob(props) {
                                                             state => [
                                                                 ...state,
                                                                 {
-                                                                    [req]:e.target.value
+                                                                    [req]:
+                                                                        e.target
+                                                                            .value
                                                                 }
                                                             ]
                                                         );
@@ -270,12 +270,12 @@ export default function CreateJob(props) {
                                             </div>
                                         );
                                     })}
+                                </Grid>
 
-                                </Grid>
-                                
                                 <Grid item xs={5}>
-                                    <ButtonWrapper>Submit Form</ButtonWrapper>
+                                    <ButtonWrapper style={{'marginTop':'20px' }}>Submit Form</ButtonWrapper>
                                 </Grid>
+                                <Grid item xs={12}></Grid>
                             </Grid>
                         </Form>
                     </Formik>
