@@ -108,8 +108,17 @@ export default function Job(props) {
                     <LocationOnOutlinedIcon />
                     {` ${place} - ${workPlaceType}.`}{" "}
                     <Typography variant="caption" display="inline" color="gray">
-                        {`${period} day ago. 16 applicants`}
+                        {`${period} day ago.`}
                     </Typography>
+                    {type === "Recruiter" ? (
+                        <Typography
+                            variant="caption"
+                            display="inline"
+                            color="gray"
+                        >
+                            {`16 applicants`}
+                        </Typography>
+                    ) : null}
                 </Typography>
 
                 <Typography variant="body1" color="black">
