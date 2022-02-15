@@ -13,18 +13,22 @@ const ApplyFor = db.define('ApplyFor',{
         references: {
             model: 'Jobs', 
             key: 'id'
-        }
+        },
+        primaryKey: true
     },
     ApplicantId: {
         type: Sequelize.INTEGER,
         references: {
             model: 'Applicants', 
             key: 'id'
-        }
+        },
+        primaryKey: true
+
     },
     status: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        defaultValue: "pending"
     }
 });
 

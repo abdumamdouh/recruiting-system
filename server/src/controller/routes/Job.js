@@ -55,7 +55,7 @@ router.post('/Feed',async (req,res) =>{
 }) 
 
 // Get job info for the applicant and job stats for the recruiter
-router.post('/jobs/:id', RecOrApp, async (req,res) =>{
+router.get('/jobs/:id', RecOrApp, async (req,res) =>{
     try{
         if (req.applicant){
             const job = await Job.findOne({
@@ -153,12 +153,18 @@ router.post('/jobs/applyFor/:id', applicantAuth, async (req,res) =>{
     const job = {
         JobId: req.params.id,
         ApplicantId: req.applicant.id,
-        status: req.body.status
     }
 
     try{
-            const jobApply = await ApplyFor.create(job)
-            res.send("Applied for the job successfully")
+            const applicant = await ApplyFor.findOne({
+                where: job
+            })
+            if( applicant ) {
+                throw new Error("This Applicant already applied for the job")
+            } else { 
+                const jobApply = await ApplyFor.create(job)
+                res.send("Applied for the job successfully")
+            }
         } catch (error) {
         res.status(400).send(error.message)
     }
