@@ -101,10 +101,18 @@ export default function Job(props) {
                         >
                             Applicants
                         </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Duis mollis, est non commodo luctus, nisi erat
-                            porttitor ligula.
-                        </Typography>
+                        {/* map through the applicants */}
+                        {props.job.applicants.map((applicant) => (
+                            <div key={applicant.id}>
+                                <Typography
+                                    id="modal-modal-description"
+                                    sx={{ mt: 2 }}
+                                >
+                                    Applicant {applicant.ApplicantId}
+                                </Typography>
+                                <Divider />
+                            </div>
+                        ))}
                     </Box>
                 </Modal>
             ) : null}
