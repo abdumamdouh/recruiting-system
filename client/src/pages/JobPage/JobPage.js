@@ -78,7 +78,7 @@ export default function JobPage() {
     return (
         <>
             {!job ? (
-                <h1>404 - Not Found</h1>
+                <h1>loading</h1>
             ) : (
                 <Job job={job} id={ID} />
                 // <h1>hello</h1>
