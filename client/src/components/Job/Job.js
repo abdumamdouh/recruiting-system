@@ -53,8 +53,28 @@ export default function Job(props) {
     const { type } = state.user.userInfo;
     // console.log(type);
 
-    const handleApply = () => {
+    const handleApply = async () => {
         console.log("apply");
+        console.log(props.id);
+        console.log(state.user.userInfo.token);
+
+        try {
+            const rawResponse = await fetch(
+                `http://localhost:5000/jobs/applyFor/${props.id}`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + state.user.userInfo.token
+                    }
+                }
+            );
+            const data = await rawResponse.json();
+            console.log(data);
+        } catch (error) {
+            console.log(error.message);
+        }
     };
 
     return (
@@ -81,10 +101,18 @@ export default function Job(props) {
                         >
                             Applicants
                         </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                            Duis mollis, est non commodo luctus, nisi erat
-                            porttitor ligula.
-                        </Typography>
+                        {/* map through the applicants */}
+                        {props.job.applicants.map((applicant) => (
+                            <div key={applicant.id}>
+                                <Typography
+                                    id="modal-modal-description"
+                                    sx={{ mt: 2 }}
+                                >
+                                    Applicant {applicant.ApplicantId}
+                                </Typography>
+                                <Divider />
+                            </div>
+                        ))}
                     </Box>
                 </Modal>
             ) : null}
