@@ -50,7 +50,7 @@ export default function JobPage() {
                 const rawResponse = await fetch(
                     `http://localhost:5000/jobs/${ID}`,
                     {
-                        method: "POST",
+                        method: "GET",
                         headers: {
                             Accept: "application/json",
                             "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export default function JobPage() {
             {!job ? (
                 <h1>404 - Not Found</h1>
             ) : (
-                <Job job={job} />
+                <Job job={job} id={ID} />
                 // <h1>hello</h1>
             )}
         </>
