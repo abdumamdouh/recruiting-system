@@ -141,8 +141,9 @@ export default function Job(props) {
                         <>
                             <Button
                                 variant="contained"
-                                onClick={() => console.log("hello")}
+                                onClick={handleOpen}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
+                                color="success"
                             >
                                 Show Applicants
                             </Button>
