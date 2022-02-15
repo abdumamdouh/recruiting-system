@@ -22,7 +22,7 @@ const modalStyle = {
     width: 400,
     bgcolor: "background.paper",
     border: "2px solid #000",
-    boxShadow: 24,
+    boxShadow: 50,
     p: 4
 };
 
@@ -53,6 +53,11 @@ export default function Job(props) {
     const state = useSelector((state) => state);
     const { type } = state.user.userInfo;
     // console.log(type);
+
+    const handleApply = () => {
+        console.log("apply");
+    };
+
     return (
         <Container
             component="main"
@@ -73,8 +78,9 @@ export default function Job(props) {
                             id="modal-modal-title"
                             variant="h6"
                             component="h2"
+                            color="black"
                         >
-                            Text in a modal
+                            Applicants
                         </Typography>
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                             Duis mollis, est non commodo luctus, nisi erat
@@ -126,6 +132,7 @@ export default function Job(props) {
                                 variant="contained"
                                 endIcon={<ReplyAllOutlinedIcon />}
                                 sx={{ mt: 3, mb: 2 }}
+                                onClick={handleApply}
                             >
                                 Apply
                             </Button>
