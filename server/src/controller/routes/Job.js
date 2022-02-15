@@ -55,7 +55,7 @@ router.post('/Feed',async (req,res) =>{
 }) 
 
 // Get job info for the applicant and job stats for the recruiter
-router.get('/jobs/:id', RecOrApp, async (req,res) =>{
+router.post('/jobs/:id', RecOrApp, async (req,res) =>{
     try{
         if (req.applicant){
             const job = await Job.findOne({
