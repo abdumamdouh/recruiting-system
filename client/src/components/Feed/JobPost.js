@@ -20,9 +20,9 @@ const JobPost = ({job}) => {
                 <div>
                     <span>{job.title}</span>
                     <br/>
-                    @ Mentor graphics
+                    {job.Recruiter.company}
                     <div>
-                    Heliopolis, Cairo, Egypt
+                    {job.place}
                     </div>
                     <div className={classes.time}>
                       5 days ago</div>
