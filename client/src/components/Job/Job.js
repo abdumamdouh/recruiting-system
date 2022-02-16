@@ -144,7 +144,7 @@ export default function Job(props) {
                             display="inline"
                             color="gray"
                         >
-                            {`16 applicants`}
+                            {`${props.job.applicants.length} applicants`}
                         </Typography>
                     ) : null}
                 </Typography>
