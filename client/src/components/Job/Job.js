@@ -230,7 +230,7 @@ export default function Job(props) {
                     Requirments
                 </Typography>
 
-                {props.job.requirments.map((r, i) => (
+                {type === "Recruiter" &&props.job.requirments.map((r, i) => (
                     <Typography
                         key={uuidv4()}
                         variant="body1"
@@ -238,6 +238,16 @@ export default function Job(props) {
                         style={{ marginBottom: "7px" }}
                     >
                         {`- ${r.name}, weight ${r.weight}`}
+                    </Typography>
+                ))}
+                {type === "Applicant" &&props.job.requirments.map((r, i) => (
+                    <Typography
+                        key={uuidv4()}
+                        variant="body1"
+                        color="black"
+                        style={{ marginBottom: "7px" }}
+                    >
+                        {`- ${r.name}`}
                     </Typography>
                 ))}
 
