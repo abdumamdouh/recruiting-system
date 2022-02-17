@@ -10,9 +10,7 @@ const router = new express.Router();
 router.post("/Login", async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    try {
-
-        const record =
+    try {        const record =
             (await Recruiter.findByCredentials(email, password)) ||
             (await Applicant.findByCredentials(email, password));
         if (record) {
@@ -39,7 +37,7 @@ router.post("/Login", async (req, res) => {
         else {
             throw new Error('Email or password is incorrect.')
 
-        }
+        }}
     } catch (error) {
         res.status(400).send(error.message);
     }

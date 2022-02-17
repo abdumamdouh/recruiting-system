@@ -3,6 +3,9 @@ import { Formik, Form } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { Container, Grid, Typography } from "@material-ui/core";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import { FormControl, InputLabel } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import "./CreateJob.scss";
 import { createJobAction } from "../../redux/actions/jobs";
@@ -228,11 +231,7 @@ export default function CreateJob(props) {
                                     {requirements.length !== 0 && (
                                         <div>
                                             <p style={{ fontWeight: "bold",  'color':'#001845' }}>
-                                                Requirements & weights{" "}
-                                            </p>
-                                            <p style={{  'color': '#002855'}}>
-                                                Enter weight for every
-                                                requirement in numbers{" "}
+                                                Requirements & Desired level for every requirement{" "}
                                             </p>
                                         </div>
                                     )}
@@ -246,7 +245,7 @@ export default function CreateJob(props) {
                                                 >
                                                     {req}
                                                 </label>
-                                                <input
+                                                {/* <input
                                                     id="typeText"
                                                     className="form-control"
                                                     //className="weight"
@@ -266,7 +265,43 @@ export default function CreateJob(props) {
                                                         );
                                                         //console.log(stackOptions)
                                                     }}
-                                                />
+                                                /> */}
+                                                <br />
+                                                <FormControl style={{minWidth: 240}}>
+                                                <InputLabel id="test-select-label">Requirement Level</InputLabel>
+                                                    <Select
+                                                        // labelId="demo-simple-select-label"
+                                                        // id="demo-simple-select"
+                                                        key={req}
+                                                        value={requirements[req]}
+                                                        label="aaaaaaa"
+                                                        onChange={e => {
+                                                            setStackOptions(state => [
+                                                                ...state,
+                                                                {
+                                                                    [req]:
+                                                                        e.target
+                                                                            .value
+                                                                }
+                                                            ]);
+                                                           // console.log(skills);
+                                                        }}
+                                                    >
+                                                        <MenuItem value={1}>
+                                                            Beginner
+                                                        </MenuItem>
+                                                        <MenuItem value={2}>
+                                                            Experienced
+                                                        </MenuItem>
+                                                        <MenuItem value={3}>
+                                                            Advanced
+                                                        </MenuItem>
+                                                        <MenuItem value={4}>
+                                                            Expert
+                                                        </MenuItem>
+                                                    </Select>
+                                                    </FormControl>
+                                               
                                             </div>
                                         );
                                     })}
