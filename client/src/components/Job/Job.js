@@ -55,10 +55,11 @@ export default function Job(props) {
     // console.log(type);
 
     const handleApply = async () => {
-        console.log("apply");
-        console.log(props.id);
-        console.log(state.user.userInfo.token);
-
+        // console.log("apply");
+        // console.log(props.id);
+        // console.log(state.user.userInfo.token);
+        alert("Applied Successfully!");
+        
         try {
             const rawResponse = await fetch(
                 `http://localhost:5000/jobs/applyFor/${props.id}`,

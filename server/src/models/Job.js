@@ -46,77 +46,58 @@ const Job = db.define('Job',{
 });
 
 // return job main informaton and its requirments
+// deprecated replaced by SQL JOINS
 
-Job.prototype.getJobData = async function (type) {
-    const job = this 
-    const jobData =  {
-        description: job.description ,
-        workPlaceType: job.workPlaceType ,
-        employmentType: job.employmentType ,
-        title: job.title ,
-        yearsOfExperience: job.yearsOfExperience,
-        careerLevel: job.careerLevel ,
-        company: job.Recruiter.dataValues.company,
-        place:job.place
-    }
-    const requirments = await Requirment.findAll({
-        attributes: ['name', 'weight'],
-        where: {
-            JobId : job.id 
-        }
-    })
-
-    jobData.requirments = requirments
-    if (type === 'Applicant'){
-        return jobData
-    } else if (type === 'Recruiter'){
-        result = await ApplyFor.findAndCountAll({
-            where: {
-                JobId: job.id
-            }
-        })
-        const applicants = result.rows
-        jobData.applicants = applicants
-        jobData.ApplicantsCount = result.count
-        return jobData 
-    }
-}
-
-// Job.prototype.getJobStats = async function () {
+// Job.prototype.getJobData = async function (type) {
 //     const job = this 
-//     const jobStats = {
+//     const jobData =  {
 //         description: job.description ,
 //         workPlaceType: job.workPlaceType ,
 //         employmentType: job.employmentType ,
 //         title: job.title ,
 //         yearsOfExperience: job.yearsOfExperience,
 //         careerLevel: job.careerLevel ,
-//         // company: job.Recruiter.dataValues.company,
+//         company: job.Recruiter.dataValues.company,
 //         place:job.place
 //     }
-//     result = await ApplyFor.findAndCountAll({
+//     const requirments = await Requirment.findAll({
+//         attributes: ['name', 'weight'],
 //         where: {
-//             JobId: job.id
+//             JobId : job.id 
 //         }
 //     })
-//     const applicants = result.rows
-    
-//     jobStats.applicants = applicants
-//     jobStats.ApplicantsCount = result.count
-//     return jobStats 
 
-    // bug to be fixed
-    // const applicants = []; 
-    // await applicantIds.forEach( async (item) => {
-    //     const x = await Applicant.findOne({
-    //         attributes:['userName'],
-    //         where: {
-    //             id:item.dataValues.id
-    //         }
-    //     })
-    //     result.applicants = JSON.parse(JSON.stringify(x))
-    // })
+//     jobData.requirments = requirments
+//     if (type === 'Applicant'){
+//         return jobData
+//     } else if (type === 'Recruiter'){
+//         result = await ApplyFor.findAndCountAll({
+//             where: {
+//                 JobId: job.id
+//             }
+//         })
+//         const records = result.rows
+//         jobData.applicants = []
+//         jobData.ApplicantsCount = result.count
+        
+//         for (let i = 0 ; i < records.length ; i++){
+//             item = records[i]
+//             const x = await Applicant.findOne({
+//                 attributes:['id','firstName','lastName'],
+//                 where: {
+//                     id:item.dataValues.ApplicantId
+//                 }
+//             })
+//             const applicant = {
+//                 id : x.id ,
+//                 Name:`${x.firstName} ${x.lastName}`
+//             }
+//             jobData.applicants.push(JSON.parse(JSON.stringify(applicant)))
+//         }
+//         return  jobData 
+//     }
 // }
+
 
 Job.prototype.addRequirments = async function(requirments) {
     await requirments.forEach( async (requirment) => {
