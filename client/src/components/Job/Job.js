@@ -237,7 +237,10 @@ export default function Job(props) {
                         color="black"
                         style={{ marginBottom: "7px" }}
                     >
-                        {`- ${r.name}, weight ${r.weight}`}
+                        {r.weight=== 1 && `- ${r.name}, Beginner` }
+                        {r.weight=== 2 && `- ${r.name}, Experienced` }
+                        {r.weight=== 3 && `- ${r.name}, Advanced` }
+                        {r.weight=== 3 && `- ${r.name}, Expert` }
                     </Typography>
                 ))}
                 {type === "Applicant" &&props.job.requirments.map((r, i) => (
