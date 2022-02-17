@@ -2,12 +2,15 @@ const express = require('express')
 const Applicant = require('../../models/Applicant')
 const Recruiter = require('../../models/Recruiter')
 const Job = require('../../models/Job')
+const Requirment = require('../../models/Requirment')
+const ApplyFor = require('../../models/ApplyFor')
+const Sequelize = require('sequelize')
+const db = require('../../db/db')
 
 // requiring applicant and recruiter authentication
 const recruiterAuth = require('../middleware/recruiterAuth') 
 const applicantAuth = require('../middleware/applicantAuth') 
 const RecOrApp = require('../middleware/RecOrApp')
-const ApplyFor = require('../../models/ApplyFor')
 
 const router = new express.Router()
 
@@ -64,18 +67,27 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
                     attributes:['company'],
                     // INNER JOIN
                     required: true
+                },{
+                    model: Requirment,
+                    attributes:['name'],
+                    // INNER JOIN
+                    required: true
                 }],
                 where: {
                     id: req.params.id
                 }
             })
-            const jobData = await job.getJobData("Applicant")
-            res.send(jobData)
+            res.send(job)
         } else if (req.recruiter){
             const job = await Job.findOne({
                 include: [{
                     model: Recruiter,
                     attributes:['company'],
+                    // INNER JOIN
+                    required: true
+                },{
+                    model: Requirment,
+                    attributes:['name','weight'],
                     // INNER JOIN
                     required: true
                 }],
@@ -85,9 +97,12 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
                 }
             })
             if(job) {
-                jobStats = await job.getJobData("Recruiter")
-                // console.log(jobStats)
-                res.send(jobStats)
+                // get applicants(Names,IDs) applied for that job
+                const [results, metadata] = await db.query("SELECT A.userName,A.id FROM ApplyFors AS AF INNER JOIN Applicants AS A ON AF.ApplicantId = A.id WHERE AF.JobId=?",{
+                    replacements: [job.id]
+                });
+                job.dataValues.applicants = results
+                res.send(job)
             }
             else {
                 throw new Error("You are not authorized to view this job")
