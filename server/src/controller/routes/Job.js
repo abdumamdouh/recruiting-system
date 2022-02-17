@@ -7,6 +7,7 @@ const Job = require('../../models/Job')
 const recruiterAuth = require('../middleware/recruiterAuth') 
 const applicantAuth = require('../middleware/applicantAuth') 
 const RecOrApp = require('../middleware/RecOrApp')
+const ApplyFor = require('../../models/ApplyFor')
 
 const router = new express.Router()
 
@@ -14,8 +15,10 @@ const router = new express.Router()
 router.post('/CreateJob', recruiterAuth, async (req,res) => {
     const job = req.body 
     job.RecruiterId = req.recruiter.id
+    job.company=req.recruiter.company
     try {
-        const post = await Job.create(job )
+        const newJob = await Job.create( job )
+        await newJob.addRequirments(job.stack)
         res.status(200).send("Job Posted successfuly.")
     } catch (error) {
         res.status(400).send(error.message)
@@ -26,33 +29,102 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
 // todo --> pagination
 // more optimization on Auth
 
-router.get('/Feed', RecOrApp ,async (req,res) =>{
-    const Offset = req.body.offset
+router.post('/Feed',async (req,res) =>{
+    const pageNumber = req.body.pageNumber
     // const Limit = req.body.limit
     try{
-        if (req.applicant){
             const result = await Job.findAndCountAll({
+                include: [{
+                    model: Recruiter,
+                    attributes:['company'],
+                    // INNER JOIN
+                    required: true
+                   }],
                 attributes: ['id','title', 'workPlaceType'
-                ,'employmentType','careerLevel'],
-                offset:Offset,
+                ,'employmentType','careerLevel','place','createdAt'],
+                offset:(pageNumber-1)*10,
                 limit:10
             })
-            res.send(result.rows)
+            res.send({
+                Jobs:result.rows,
+                Count:result.count
+            })
+        } catch (error) {
+        res.status(400).send(error.message)
+    }
+}) 
+
+// Get job info for the applicant and job stats for the recruiter
+router.get('/jobs/:id', RecOrApp, async (req,res) =>{
+    try{
+        if (req.applicant){
+            const job = await Job.findOne({
+                include: [{
+                    model: Recruiter,
+                    attributes:['company'],
+                    // INNER JOIN
+                    required: true
+                }],
+                where: {
+                    id: req.params.id
+                }
+            })
+            const jobData = await job.getJobData("Applicant")
+            res.send(jobData)
         } else if (req.recruiter){
-            const result = await Job.findAndCountAll({
-                attributes: ['id','title', 'workPlaceType','employmentType','careerLevel'],
+            const job = await Job.findOne({
+                include: [{
+                    model: Recruiter,
+                    attributes:['company'],
+                    // INNER JOIN
+                    required: true
+                }],
                 where : {
-                    RecruiterId : req.recruiter.id
-                },
-                offset:Offset,
-                limit:10
+                    id: req.params.id,
+                    RecruiterId : req.recruiter.id,
+                }
             })
-            res.send(result.rows)
+            if(job) {
+                jobStats = await job.getJobData("Recruiter")
+                // console.log(jobStats)
+                res.send(jobStats)
+            }
+            else {
+                throw new Error("You are not authorized to view this job")
+            }
         }
     } catch (error) {
         res.status(400).send(error.message)
     }
 }) 
+
+// get all jobs posted by a certain recruiter
+router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
+    const pageNumber = req.body.pageNumber
+    // const Limit = req.body.limit
+    try{
+        const result = await Job.findAndCountAll({
+            include: [{
+                model: Recruiter,
+                attributes:['company'],
+                // INNER JOIN
+                required: true
+               }],
+            attributes: ['id','title', 'workPlaceType','employmentType','careerLevel'],
+            where : {
+                RecruiterId : req.recruiter.id
+            },
+            offset:(pageNumber-1)*10,
+            limit:10
+            })
+            res.send({
+                Jobs:result.rows,
+                Count:result.count
+            })
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+})
 
 
 // edit a job by recruiter
@@ -67,24 +139,38 @@ router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
         if (!job) {
             return res.status(404).send();
         }
-        res.body.forEach(title => job[title] = req.body[title]);
+        Object.keys(req.body).forEach(title => job[title] = req.body[title]);
         await job.save();
         res.send(job);
     } catch (error) {
-        res.status.send(error.message);
+        res.status(400).send(error.message);
     }
 })
 
+// Apply for a job
+router.post('/jobs/applyFor/:id', applicantAuth, async (req,res) =>{
 
-// get all jobs recruiter's view
-// router.get('/jobs/recruiter', recruiterAuth, async (req,res) =>{
-//     try{
-//         const jobs = await Job.findAll()
-//         res.send(jobs)
-//     } catch (error) {
-//         res.status(400).send(error.message)
-//     }
-// }) 
+    const job = {
+        JobId: req.params.id,
+        ApplicantId: req.applicant.id,
+    }
+
+    try{
+            const applicant = await ApplyFor.findOne({
+                where: job
+            })
+            if( applicant ) {
+                throw new Error("This Applicant already applied for the job")
+            } else { 
+                const jobApply = await ApplyFor.create(job)
+                res.send("Applied for the job successfully")
+            }
+        } catch (error) {
+        res.status(400).send(error.message)
+    }
+}) 
+
+
 
 
 

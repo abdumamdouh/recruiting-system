@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateApplicantAction } from "../../redux/actions/user";
 const EditProfile = ({ setOnEdit }) => {
@@ -13,7 +13,7 @@ const EditProfile = ({ setOnEdit }) => {
     // const [avatar, setAvatar] = useState('')
 
     let { user } = useSelector(state => state);
-    let { record } = user.userInfo;
+    let { userInfo } = user;
     const dispatch = useDispatch();
 
     // useEffect(() => {
@@ -37,15 +37,14 @@ const EditProfile = ({ setOnEdit }) => {
     const handleSubmit = e => {
         e.preventDefault();
         user = {
-            ...record,
+            ...userInfo,
             firstName: userData.firstName,
             lastName: userData.lastName,
-            userName: userData.userName,
-            
+            userName: userData.userName
         };
         console.log(user);
-       dispatch(updateApplicantAction(user))
-       setOnEdit(false)
+        dispatch(updateApplicantAction(user));
+        setOnEdit(false);
     };
 
     return (

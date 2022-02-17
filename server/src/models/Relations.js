@@ -7,13 +7,15 @@ const Requirment = require("./Requirment")
 
 // relation between requirment and job (Has) ( 1-->N )
 Job.hasMany(Requirment, {
-    foreignKey: 'JobId'
+    foreignKey: 'JobId',
+    onDelete: 'cascade'
 });
 Requirment.belongsTo(Job);
 
 // relation between job and recruiter (Posts) ( 1-->N )
 Recruiter.hasMany(Job,{
-    foreignKey:'RecruiterId'
+    foreignKey:'RecruiterId',
+    onDelete: 'cascade'
 })
 Job.belongsTo(Recruiter)
 

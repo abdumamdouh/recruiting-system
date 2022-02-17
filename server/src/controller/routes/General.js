@@ -11,6 +11,7 @@ router.post("/Login", async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     try {
+
         const record =
             (await Recruiter.findByCredentials(email, password)) ||
             (await Applicant.findByCredentials(email, password));
@@ -19,6 +20,25 @@ router.post("/Login", async (req, res) => {
             res.status(200).send({ token, record });
         } else {
             throw new Error("Email or password is incorrect.");
+
+        const recruiter = await Recruiter.findByCredentials(email,password)
+        const applicant = await Applicant.findByCredentials(email,password)
+        if (recruiter){
+            const token = await recruiter.generateAuthToken() 
+            res.status(200).send({token,
+                type:"Recruiter",
+                name:`${recruiter.firstName} ${recruiter.lastName}.`
+            })
+        } else if (applicant){
+            const token = await applicant.generateAuthToken() 
+            res.status(200).send({token,
+                type:"Applicant",
+                name:`${applicant.firstName} ${applicant.lastName}.`
+            })
+        } 
+        else {
+            throw new Error('Email or password is incorrect.')
+
         }
     } catch (error) {
         res.status(400).send(error.message);

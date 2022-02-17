@@ -2,6 +2,7 @@ const express = require('express')
 const Applicant = require('../../models/Applicant')
 const Recruiter = require('../../models/Recruiter')
 
+
 const applicantAuth = require('../middleware/applicantAuth') 
 
 const router = new express.Router()
@@ -16,7 +17,10 @@ router.post('/Applicant/Sign-up' , async (req,res) =>{
         } else {
             const record = await Applicant.create( applicant )
             const token = await record.generateAuthToken()
-            res.status(200).send({token,message:"Registered Successfully."})   
+            res.status(200).send({token,
+                type:"Applicant",
+                name:`${applicant.firstName} ${applicant.lastName}.`
+            })   
         }
     } catch (error) {
         res.status(400).send(error.message)
@@ -24,7 +28,7 @@ router.post('/Applicant/Sign-up' , async (req,res) =>{
 })
 
 // get my profile data
-router.get('/Applicant/me' , applicantAuth , async (req,res) => {
+router.post('/Applicant/me' , applicantAuth , async (req,res) => {
     res.status(200).send(req.applicant.getPublicApplicantData()) ;
 })
 

@@ -18,7 +18,10 @@ router.post('/Recruiter/Sign-up' , async (req,res) =>{
         } else {
             const record = await Recruiter.create( recruiter )
             const token = await record.generateAuthToken()
-            res.status(200).send({token,message:"Registered Successfully."})   
+            res.status(200).send({token,
+                type:"Recruiter",
+                name:`${recruiter.firstName} ${recruiter.lastName}.`
+            })   
         }
     } catch (error) {
         res.status(400).send(error.message)
@@ -26,7 +29,7 @@ router.post('/Recruiter/Sign-up' , async (req,res) =>{
 })
 
 // Read recruiter profile
-router.get('/Recruiter/me' , recruiterAuth, async (req,res) => {
+router.post('/Recruiter/me' , recruiterAuth, async (req,res) => {
     res.status(200).send(req.recruiter.getPublicRecruiterData())
 })
 

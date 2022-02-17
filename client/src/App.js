@@ -13,11 +13,11 @@ import Applicant from "./pages/SignUpPage/Applicant";
 import Recruiter from "./pages/SignUpPage/Recruiter";
 import PageNotFound404 from "./pages/PageNotFound404";
 import Info from "./components/profile/Info";
-import CreateJob from './components/CreateJob/CreateJob'
+import CreateJob from "./components/CreateJob/CreateJob";
 import Feed from "./components/Feed/FeedPage";
+import JobPage from "./pages/JobPage/JobPage";
 
 // components
-import HelloWorld from "./components/HelloWorld";
 import Layout from "./components/layout/Layout";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";
@@ -27,12 +27,7 @@ const App = () => {
         <Router>
             <Layout>
                 <Switch>
-                    <ProtectedRoute
-                        exact
-                        path="/"
-                        component={HomePage}
-                        name="/"
-                    />
+                    <Route exact path="/" component={HomePage} name="/" />
 
                     <Route
                         exact
@@ -41,14 +36,14 @@ const App = () => {
                         name="login"
                     />
 
-                    <ProtectedRoute
+                    <Route
                         exact
                         path="/signup-applicant"
                         component={Applicant}
                         name="Applicant"
                     />
 
-                    <ProtectedRoute
+                    <Route
                         exact
                         path="/signup-recruiter"
                         component={Recruiter}
@@ -61,30 +56,41 @@ const App = () => {
                         name="Info"
                     />
 
+                    <ProtectedRoute
+                        exact
+                        path="/feed"
+                        component={Feed}
+                        name="Feed"
+                    />
+
+                    {/* demo */}
+                    <ProtectedRoute
+                        exact
+                        //TODO: replace job with dynamic route
+                        path="/feed/job"
+                        component={JobPage}
+                        name="job"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/feed/job/:ID"
+                        component={JobPage}
+                        name="job"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/createjob"
+                        component={CreateJob}
+                        name="createJob"
+                    />
+
                     <Route
                         exact
                         path="/404"
                         component={PageNotFound404}
                         name="PageNotFound404"
-                    />
-                      <Route
-                        exact
-                        path="/feed"
-                        component={Feed}
-                        name="PageNotFound404"
-                    />
-
-                    <Route
-                        exact
-                        path="/profile"
-                        component={Info}
-                        name="profile"
-                    />
-                    <Route
-                        exact
-                        path="/createjob"
-                        component={CreateJob}
-                        name="createJob"
                     />
 
                     <Redirect to="/404" />

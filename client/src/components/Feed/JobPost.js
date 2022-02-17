@@ -1,34 +1,37 @@
 import React from "react";
 import classes from "./Feed.module.scss"
+import {NavLink, useHistory} from 'react-router-dom'
+import Button from "@mui/material/Button";
 
+const JobPost = ({job}) => {
+    const history = useHistory()
 
-
-
-
-const JobPost = () => {
-
+    const handleRedirect = ()=>{
+        history.push(`/feed/job/${job.id}`);
+    }
+    //console.log(job)
     return(
-        <div className={classes.job}>
+        <div className={classes.job} onClick={handleRedirect}>
             <img
             src={'./mentor.png'}
             alt='logo'
             className={classes.image}/>
             <div className={classes.jobInfo}>
                 <div>
-                    <span>job title</span>
+                    <span>{job.title}</span>
                     <br/>
-                    @ Mentor graphics
+                    {job.Recruiter.company}
                     <div>
-                    Heliopolis, Cairo, Egypt
+                    {job.place}
                     </div>
                     <div className={classes.time}>
                       5 days ago</div>
                     <div className={classes.employmentType}>
-                      Full Time</div>
-                    <p>
-                    this is a job
+                      {job.employmentType}</div>
+                    <p> 
+                    {job.careerLevel}
                     </p>
-
+                    <Button variant='contained' onClick={handleRedirect}>View Job</Button>
                 </div>
                 
                 <div className='jobIcons'>
@@ -42,7 +45,6 @@ const JobPost = () => {
                 
 
             </div>
-
 
         </div>
 

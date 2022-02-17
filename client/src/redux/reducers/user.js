@@ -15,6 +15,9 @@ import {
   UPDATE_RECRUITER_REQUEST,
   UPDATE_RECRUITER_SUCCESS,
   UPDATE_RECRUITER_FAIL,
+  GET_PROFILE_FAIL,
+  GET_PROFILE_REQUEST,
+  GET_PROFILE_SUCCESS
 } from "../types";
 
 const userReducer = (state = {}, action) => {
@@ -66,6 +69,32 @@ const userReducer = (state = {}, action) => {
       case LOGOUT:
       return {};
 
+      //GET APPLICANT PROFILE
+      case GET_PROFILE_REQUEST:
+          return {
+          loading: true,
+          ...state,
+         
+      };
+       case GET_PROFILE_SUCCESS:
+         const user= {
+          userInfo:{...action.payload  
+          }}
+      return {
+        userInfo:{...action.payload,
+          token:state.userInfo.token,
+          type:state.userInfo.type
+           
+         }
+      
+      };
+    case GET_PROFILE_FAIL:
+        return {
+            error: action.payload,
+            loading: false
+        };
+
+
        //UPDATE_APPLICANT reducers
        case UPDATE_APPLICANT_REQUEST:
        return {
@@ -74,7 +103,11 @@ const userReducer = (state = {}, action) => {
        };
    case UPDATE_APPLICANT_SUCCESS:
        return {
-           userInfo: {token:state.userInfo.token, record:action.payload}
+        userInfo:{...action.payload,
+          token:state.userInfo.token,
+          type:state.userInfo.type
+           
+         }
        };
    case UPDATE_APPLICANT_FAIL:
        return {

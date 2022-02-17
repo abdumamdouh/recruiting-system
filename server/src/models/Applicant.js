@@ -95,7 +95,7 @@ Applicant.prototype.getPublicApplicantData = function () {
 
 // Updating public data of the applicant
 Applicant.prototype.updatePublicApplicantData = async function ( newUser ) {
-
+    
     //this.email = newUser.email
     this.firstName = newUser.firstName
     this.lastName = newUser.lastName

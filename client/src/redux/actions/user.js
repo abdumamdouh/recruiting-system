@@ -15,7 +15,10 @@ import {
     UPDATE_APPLICANT_FAIL,
     UPDATE_RECRUITER_REQUEST,
     UPDATE_RECRUITER_SUCCESS,
-    UPDATE_RECRUITER_FAIL
+    UPDATE_RECRUITER_FAIL,
+    GET_PROFILE_REQUEST,
+    GET_PROFILE_SUCCESS,
+    GET_PROFILE_FAIL
 } from "../types";
 
 const serverURL = "http://localhost:5000";
@@ -134,6 +137,91 @@ const loginUserAction = (
     };
 };
 
+
+
+//GET PROFILE
+
+
+const getApplicantProfileAction = userData => {
+    return async (dispatch, getState) => {
+        try {
+          // console.log(userData)
+            dispatch({
+                type: GET_PROFILE_REQUEST,
+                loading: true,
+            })
+            const {userInfo} = getState().user
+            //console.log(userInfo.token)
+            const rawResponse = await fetch(`${serverURL}/Applicant/me`, {
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + userInfo.token
+                },
+                body: JSON.stringify(userData)
+              });
+        
+            const data = await rawResponse.json();
+
+            dispatch({
+                type: GET_PROFILE_SUCCESS,
+                payload: data
+                //payload:userData
+            });
+        } catch (error) {
+            dispatch({
+                type: GET_PROFILE_FAIL,
+                payload: error.response && error.response.data
+            });
+        }
+    };
+};
+
+
+
+
+
+
+//recruiter 
+
+
+const getRecruiterProfileAction = userData => {
+    return async (dispatch, getState) => {
+        try {
+          // console.log(userData)
+            dispatch({
+                type: GET_PROFILE_REQUEST,
+                loading: true,
+            })
+            const {userInfo} = getState().user
+            //console.log(userInfo.token)
+            const rawResponse = await fetch(`${serverURL}/Recruiter/me`, {
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + userInfo.token
+                },
+                body: JSON.stringify(userData)
+              });
+        
+            const data = await rawResponse.json();
+
+            dispatch({
+                type: GET_PROFILE_SUCCESS,
+                payload: data
+                //payload:userData
+            });
+        } catch (error) {
+            dispatch({
+                type: GET_PROFILE_FAIL,
+                payload: error.response && error.response.data
+            });
+        }
+    };
+};
+
 //Log out
 const logoutUserAction = () => {
     return {
@@ -230,5 +318,9 @@ export {
     loginUserAction,
     logoutUserAction,
     updateApplicantAction,
-    updateRecruiterAction
+    updateRecruiterAction,
+    getApplicantProfileAction,
+    getRecruiterProfileAction
+    
+    
 };
