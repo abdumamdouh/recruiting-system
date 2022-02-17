@@ -55,10 +55,11 @@ export default function Job(props) {
     // console.log(type);
 
     const handleApply = async () => {
-        console.log("apply");
-        console.log(props.id);
-        console.log(state.user.userInfo.token);
-
+        // console.log("apply");
+        // console.log(props.id);
+        // console.log(state.user.userInfo.token);
+        alert("Applied Successfully!");
+        
         try {
             const rawResponse = await fetch(
                 `http://localhost:5000/jobs/applyFor/${props.id}`,
@@ -144,7 +145,7 @@ export default function Job(props) {
                             display="inline"
                             color="gray"
                         >
-                            {`16 applicants`}
+                            {`${props.job.applicants.length} applicants`}
                         </Typography>
                     ) : null}
                 </Typography>
@@ -230,7 +231,7 @@ export default function Job(props) {
                     Requirments
                 </Typography>
 
-                {props.job.requirments.map((r, i) => (
+                {type === "Recruiter" &&props.job.requirments.map((r, i) => (
                     <Typography
                         key={uuidv4()}
                         variant="body1"
@@ -238,6 +239,16 @@ export default function Job(props) {
                         style={{ marginBottom: "7px" }}
                     >
                         {`- ${r.name}, weight ${r.weight}`}
+                    </Typography>
+                ))}
+                {type === "Applicant" &&props.job.requirments.map((r, i) => (
+                    <Typography
+                        key={uuidv4()}
+                        variant="body1"
+                        color="black"
+                        style={{ marginBottom: "7px" }}
+                    >
+                        {`- ${r.name}`}
                     </Typography>
                 ))}
 
