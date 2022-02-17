@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import classes from "../Forms/common.module.scss";
 import { updateApplicantAction } from "../../redux/actions/user";
+import { FormControl } from "@mui/material";
 const EditQualifications = ({ setOnEditQualifications }) => {
     const stacks = [
         "HTML5/CSS3",
@@ -58,16 +61,18 @@ const EditQualifications = ({ setOnEditQualifications }) => {
     const [view, setView] = useState(
         majors.includes(userInfo.major) ? "sw" : "notsw"
     );
-
+    const [skills, setSkills] = useState([]);
+    const [skillLevels, setSkillLevels] = useState(false);
     const initialValues = {
         major: userInfo.major,
         level: userInfo.level,
         yearsOfExperience: userInfo.yearsOfExperience,
-        qualifications: userInfo.qualifications
+        // qualifications: userInfo.qualifications,
+        skills: []
     };
 
     const [formValues, setFormValues] = useState(initialValues);
-
+    const [checkedArr, setCheckedArr] =useState([])
     //console.log(formValues);
 
     const changeAvatar = e => {
@@ -86,24 +91,29 @@ const EditQualifications = ({ setOnEditQualifications }) => {
 
         handleChange(e);
     };
-
+   
     const handleChange = e => {
         const { name, value } = e.target;
 
-        if (name === "qualifications") {
-            let arr = formValues.qualifications.programmingLanguages;
+        if (name === "qualifications" || name === "skills") {
+            let arr = formValues.skills;
             if (arr.includes(value)) {
                 arr = arr.filter(stack => stack !== value);
+                setSkills({ arr });
+                console.log(skills);
                 setFormValues({
                     ...formValues,
-                    qualifications: { programmingLanguages: arr }
+                    // qualifications: { programmingLanguages: arr },
+                    skills: skills
                 });
             } else {
                 arr.push(value);
             }
+            setSkills(arr);
             setFormValues({
                 ...formValues,
-                qualifications: { programmingLanguages: arr }
+                // qualifications: { programmingLanguages: arr },
+                skills: skills
             });
 
             //setFormValues(formValues)
@@ -116,17 +126,27 @@ const EditQualifications = ({ setOnEditQualifications }) => {
 
     const handleSubmit = e => {
         e.preventDefault();
+        setSkills(formValues.skills);
+        let returnedValue = [];
+        skills.map(value => returnedValue.push({ [value]: 0 }));
+        console.log(returnedValue);
+        setSkills(returnedValue);
+        console.log("sssss", skills);
+        const middleIndex = Math.ceil(skills.length / 2);
+        const secondHalf = skills.slice().splice(-middleIndex);
+        console.log("sn", secondHalf);
+        setSkills([...secondHalf]);
         user = {
             ...userInfo,
             major: formValues.major,
             level: formValues.level,
             yearsOfExperience: formValues.yearsOfExperience,
-            qualifications: formValues.qualifications
+            // qualifications: formValues.qualifications,
+            skills: secondHalf
         };
-        //console.log(user);
-        dispatch(updateApplicantAction(user))
+        console.log(user);
+        // dispatch(updateApplicantAction(user))
         setOnEditQualifications(false);
-
     };
     return (
         <div className="edit_profile">
@@ -178,11 +198,16 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                     {view === "sw" ? (
                         <div>
                             <div className={classes.Box}>
-                                <h4 style={{'margin': "10px"}}>You are more into </h4>
-                                <ul style={{'margin': "10px"}} className={classes.Ul}>
+                                <h4 style={{ margin: "10px" }}>
+                                    You are more into{" "}
+                                </h4>
+                                <ul
+                                    style={{ margin: "10px" }}
+                                    className={classes.Ul}
+                                >
                                     <li className={classes.Li}>
                                         <input
-                                        style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="major"
                                             value="BackEnd"
@@ -197,7 +222,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                            style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="major"
                                             value="FrontEnd"
@@ -212,7 +237,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                            style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="major"
                                             value="Fullstack"
@@ -227,7 +252,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                            style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="major"
                                             value="Testing"
@@ -242,7 +267,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                        style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="major"
                                             value="DevOps"
@@ -257,7 +282,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                        style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="major"
                                             value="Mobile"
@@ -272,7 +297,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                            style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="major"
                                             value="Embedded"
@@ -287,7 +312,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                        style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="major"
                                             value="R&D"
@@ -304,11 +329,16 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                             </div>
 
                             <div className={classes.Box}>
-                                <h4 style={{'margin': "10px"}}>You consider yourself </h4>
-                                <ul style={{'margin': "10px"}} className={classes.Ul}>
-                                    <li className={classes.Li} >
+                                <h4 style={{ margin: "10px" }}>
+                                    You consider yourself{" "}
+                                </h4>
+                                <ul
+                                    style={{ margin: "10px" }}
+                                    className={classes.Ul}
+                                >
+                                    <li className={classes.Li}>
                                         <input
-                                        style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="level"
                                             value="Intern"
@@ -323,7 +353,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                        style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="level"
                                             value="Junior"
@@ -338,7 +368,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                            style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="level"
                                             value="Mid-Level"
@@ -353,7 +383,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                            style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="level"
                                             value="Senior"
@@ -368,7 +398,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                                     </li>
                                     <li className={classes.Li}>
                                         <input
-                                        style={{'marginRight': "5px"}}
+                                            style={{ marginRight: "5px" }}
                                             type="radio"
                                             name="level"
                                             value="Staff-Engineer"
@@ -386,9 +416,11 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                             </div>
                             <br />
                             <div className={classes.Box}>
-                                <h4 style={{'margin': "10px"}}>Years Of Experience</h4>
+                                <h4 style={{ margin: "10px" }}>
+                                    Years Of Experience
+                                </h4>
                                 <input
-                                style={{'marginRight': "5px"}}
+                                    style={{ marginRight: "5px" }}
                                     className={classes.Input}
                                     name="yearsOfExperience"
                                     placeholder="Years Of Experience"
@@ -399,31 +431,76 @@ const EditQualifications = ({ setOnEditQualifications }) => {
 
                             <br />
                             <div className={classes.Box}>
-                                <h4 style={{'margin': "10px"}}>Your Favourite stack</h4>
-                                <ul style={{'margin': "10px"}}  className={classes.Ul}>
-                                    {stacks.map(stack => {
+                                <h4 style={{ margin: "10px" }}>
+                                    Your Favourite stack
+                                </h4>
+                                <ul
+                                    style={{ margin: "10px" }}
+                                    className={classes.Ul}
+                                >
+                                    {stacks.map((stack, index) => {
                                         return (
-                                            <li style={{'marginRight': "5px"}}
+                                         
+                                            <li
+                                                style={{ marginRight: "5px" }}
                                                 className={classes.Li}
-                                                key={stack}
+                                                key={index}
                                             >
                                                 <input
-                                                style={{'marginRight': "7px"}}
-                                                    name="qualifications"
+                                                    style={{
+                                                        marginRight: "7px"
+                                                    }}
+                                                    name="skills"
                                                     type="checkbox"
                                                     value={stack}
                                                     onChange={handleChange}
-                                                    checked={
-                                                        formValues.qualifications.programmingLanguages.includes(
-                                                            stack
-                                                        )
-                                                            ? true
-                                                            : false
-                                                    }
+                                                    // checked={
+                                                    //     formValues.qualifications.programmingLanguages.includes(
+                                                    //         stack
+                                                    //     )
+                                                    //         ? true
+                                                    //         : false
+                                                    // 
                                                 />
-                                                <label key={stack}>
+                                                <label key={index}>
                                                     {stack}
                                                 </label>
+                                              <br />
+                                                {skillLevels && (
+                                                    <FormControl style={{minWidth: 120}}>
+                                                    <Select
+                                                        labelId="demo-simple-select-label"
+                                                        id="demo-simple-select"
+                                                        key={index}
+                                                        value={stacks[stack]}
+                                                        label="stack"
+                                                        onChange={e => {
+                                                            setSkills(state => [
+                                                                ...state,
+                                                                {
+                                                                    [stack]:
+                                                                        e.target
+                                                                            .value
+                                                                }
+                                                            ]);
+                                                            console.log(skills);
+                                                        }}
+                                                    >
+                                                        <MenuItem value={1}>
+                                                            Beginner
+                                                        </MenuItem>
+                                                        <MenuItem value={2}>
+                                                            Experienced
+                                                        </MenuItem>
+                                                        <MenuItem value={3}>
+                                                            Advanced
+                                                        </MenuItem>
+                                                        <MenuItem value={4}>
+                                                            Expert
+                                                        </MenuItem>
+                                                    </Select>
+                                                    </FormControl>
+                                                )}
                                             </li>
                                         );
                                     })}
@@ -434,7 +511,6 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                         <div className={classes.Box}>
                             <h4>Years Of Experience</h4>
                             <input
-                                
                                 className={classes.Input}
                                 name="yearsOfExperience"
                                 placeholder="Years Of Experience"
@@ -444,18 +520,21 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                     )}
                 </div>
 
-                {/* <label htmlFor="gender">Gender</label>
-                <div className="input-group-prepend px-0 mb-4">
-                    <select name="gender" id="gender" value={gender}
-                    className="custom-select text-capitalize"
-                    onChange={handleInput}>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                    </select>
-    </div>*/}
 
-                <button className="btn btn-info w-100" type="submit">
+                {view === "sw" && (
+                    <button
+                        className="btn btn-info w-100"
+                        type="button"
+                        onClick={() => setSkillLevels(true)}
+                    >
+                       Add your Level at each skill
+                    </button>
+                )}
+                <button
+                    style={{ marginTop: "10px" }}
+                    className="btn btn-info w-100"
+                    type="submit"
+                >
                     Save
                 </button>
                 <button
