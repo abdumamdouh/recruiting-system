@@ -55,10 +55,11 @@ export default function Job(props) {
     // console.log(type);
 
     const handleApply = async () => {
-        console.log("apply");
-        console.log(props.id);
-        console.log(state.user.userInfo.token);
-
+        // console.log("apply");
+        // console.log(props.id);
+        // console.log(state.user.userInfo.token);
+        alert("Applied Successfully!");
+        
         try {
             const rawResponse = await fetch(
                 `http://localhost:5000/jobs/applyFor/${props.id}`,
@@ -237,7 +238,10 @@ export default function Job(props) {
                         color="black"
                         style={{ marginBottom: "7px" }}
                     >
-                        {`- ${r.name}, weight ${r.weight}`}
+                        {r.weight=== 1 && `- ${r.name}, Beginner` }
+                        {r.weight=== 2 && `- ${r.name}, Experienced` }
+                        {r.weight=== 3 && `- ${r.name}, Advanced` }
+                        {r.weight=== 3 && `- ${r.name}, Expert` }
                     </Typography>
                 ))}
                 {type === "Applicant" &&props.job.requirments.map((r, i) => (
