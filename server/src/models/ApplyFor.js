@@ -14,7 +14,8 @@ const ApplyFor = db.define('ApplyFor',{
             model: 'Jobs', 
             key: 'id'
         },
-        primaryKey: true
+        primaryKey: true,
+        onDelete: 'cascade'
     },
     ApplicantId: {
         type: Sequelize.INTEGER,
@@ -22,8 +23,8 @@ const ApplyFor = db.define('ApplyFor',{
             model: 'Applicants', 
             key: 'id'
         },
-        primaryKey: true
-
+        primaryKey: true,
+        onDelete: 'cascade'
     },
     status: {
         type: Sequelize.STRING,

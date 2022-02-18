@@ -103,7 +103,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                 console.log(skills);
                 setFormValues({
                     ...formValues,
-                    qualifications: { programmingLanguages: skills },
+                    qualifications:   skills ,
                     // skills: skills
                 });
             } else {
@@ -112,7 +112,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
             setSkills(arr);
             setFormValues({
                 ...formValues,
-                qualifications: { programmingLanguages: skills },
+                qualifications:  skills ,
                 // skills: skills
             });
 
