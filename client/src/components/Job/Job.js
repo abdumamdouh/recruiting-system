@@ -84,7 +84,7 @@ export default function Job(props) {
         // console.log(props.id);
         // console.log(state.user.userInfo.token);
 
-        // alert("Deleted Successfully!");
+        alert("Deleted Successfully!");
         
         try {
             const rawResponse = await fetch(
