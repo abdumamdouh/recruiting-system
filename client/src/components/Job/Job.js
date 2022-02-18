@@ -79,6 +79,33 @@ export default function Job(props) {
         }
     };
 
+    const handleDelete = async () => {
+        // console.log("delete");
+        // console.log(props.id);
+        // console.log(state.user.userInfo.token);
+
+        alert("Deleted Successfully!");
+        
+        try {
+            const rawResponse = await fetch(
+                `http://localhost:5000/DeleteJob/${props.id}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + state.user.userInfo.token
+                    }
+                }
+            );
+            const data = await rawResponse.json();
+            console.log(data);
+        } catch (error) {
+            console.log(error.message);
+        }
+
+    };
+
     return (
         <Container
             component="main"
@@ -202,7 +229,7 @@ export default function Job(props) {
                             <Button
                                 variant="contained"
                                 color="error"
-                                onClick={() => console.log("hello")}
+                                onClick={handleDelete}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                             >
                                 Delete
@@ -253,7 +280,7 @@ export default function Job(props) {
                     >
                         {`- ${r.name}`}
                     </Typography>
-                ))}
+                ))} */}
 
                 <Divider />
 
