@@ -103,8 +103,8 @@ const EditQualifications = ({ setOnEditQualifications }) => {
                 console.log(skills);
                 setFormValues({
                     ...formValues,
-                    // qualifications: { programmingLanguages: arr },
-                    skills: skills
+                    qualifications: { programmingLanguages: skills },
+                    // skills: skills
                 });
             } else {
                 arr.push(value);
@@ -112,8 +112,8 @@ const EditQualifications = ({ setOnEditQualifications }) => {
             setSkills(arr);
             setFormValues({
                 ...formValues,
-                // qualifications: { programmingLanguages: arr },
-                skills: skills
+                qualifications: { programmingLanguages: skills },
+                // skills: skills
             });
 
             //setFormValues(formValues)
@@ -141,11 +141,11 @@ const EditQualifications = ({ setOnEditQualifications }) => {
             major: formValues.major,
             level: formValues.level,
             yearsOfExperience: formValues.yearsOfExperience,
-            // qualifications: formValues.qualifications,
-            skills: secondHalf
+            qualifications: secondHalf,
+            // skills: secondHalf
         };
         console.log(user);
-        // dispatch(updateApplicantAction(user))
+        dispatch(updateApplicantAction(user))
         setOnEditQualifications(false);
     };
     return (
