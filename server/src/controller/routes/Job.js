@@ -163,7 +163,7 @@ router.patch('/jobs/:id', recruiterAuth, async (req, res) => {
 })
 
 // Apply for a job
-router.post('/jobs/applyFor/:id', applicantAuth, async (req,res) =>{
+router.post('/jobs/applyFor/:id', applicantAuth , async (req,res) =>{
 
     const job = {
         JobId: req.params.id,
@@ -185,7 +185,21 @@ router.post('/jobs/applyFor/:id', applicantAuth, async (req,res) =>{
     }
 }) 
 
-
+// Delete a job 
+router.delete('/DeleteJob/:id' , recruiterAuth , async (req,res) =>{
+    const JobId = req.params.id 
+    try {
+        const job = await Job.findByPk(JobId)
+        if (job){
+            job.destroy()
+            res.send("Job deleted successfully.")
+        } else {
+            throw new Error('Could not delete that job')
+        }
+    } catch (error) {
+        res.status(404).send(error.message)
+    }
+})
 
 
 
