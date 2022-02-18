@@ -4,6 +4,7 @@ import EditQualifications from "./EditQualifications";
 import { useSelector,useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getApplicantProfileAction,getRecruiterProfileAction } from "../../redux/actions/user";
+import './info.scss'
 
 const Info = props => {
 
@@ -85,19 +86,32 @@ const Info = props => {
 
                 {userInfo.yearsOfExperience !== undefined && (
                     <li className="list-group-item">
-                        <h4 className="card-title">Years of Experience</h4>
+                        <h4 className="card-title" style={{'color': '#001233'}}>Years of Experience</h4>
                         <p className="card-text" style={{'color': '#33415c'}}> {userInfo.yearsOfExperience}</p>
                     </li>
                 )}
 
-                {userInfo.qualifications !== undefined && (
+                {userInfo.type === 'Applicant' && (
                     <li
                         className="list-group-item"
                         style={{ "borderBottom": "0px" }}
                     >
-                        <h4 className="card-title">Qualifications</h4>
-                        {userInfo.qualifications.programmingLanguages.map(q => (
-                            <p className="card-text" style={{'color': '#33415c'}}> {q}</p>
+                        <h4 className="card-title" style={{'color': '#001233'}}>Qualifications</h4>
+                        <div className= "row">
+                           <div class="column">  <h6 className="md" > Skill</h6> </div> 
+                           <div class="column"> <h6 className="md">Level</h6> 
+                            </div>
+                            </div>
+                        { userInfo.qualifications.map(q => (
+                           <div className= "row">
+                           <div class="column">  <span className="card-text" style={{'color': '#33415c'}}> {Object.keys(q)}</span> </div> 
+                           <div class="column"> 
+                            {Object.values(q)==1 && <span className="card-text" style={{'color': '#33415c'}}> Beginner</span>}
+                            {Object.values(q)==2 && <span className="card-text" style={{'color': '#33415c'}}> Experienced</span>}
+                            {Object.values(q)==3 && <span className="card-text" style={{'color': '#33415c'}}> Advanced</span>}
+                            {Object.values(q)==4 && <span className="card-text" style={{'color': '#33415c'}}> Expert</span>}
+                            </div>
+                            </div>
                         ))}
                         <br></br>
                     </li>

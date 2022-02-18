@@ -10,6 +10,7 @@ const router = new express.Router();
 router.post("/Login", async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
+
     try {        const record =
             (await Recruiter.findByCredentials(email, password)) ||
             (await Applicant.findByCredentials(email, password));
@@ -55,6 +56,19 @@ router.post("/logout", RecOrApp, async (req, res) => {
         user.tokens = JSON.stringify(tokens);
         await user.save();
         res.send();
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+// get profile by id
+router.get("/profile/:id", RecOrApp, async (req, res) => {
+    try {
+        const user = req.recruiter ? Recruiter : Applicant;
+        const profile = await user.findByPk(req.params.id);
+        if (!profile) {
+            return res.status(404).send();
+        }
+        res.send(profile);
     } catch (error) {
         res.status(500).send(error.message);
     }
