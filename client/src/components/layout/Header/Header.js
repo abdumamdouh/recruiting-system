@@ -38,7 +38,7 @@ function Header() {
     };
     
     const handleLogOut = async () => {
-        console.log("Log Out");
+        // console.log("Log Out");
 
         try {
             const rawResponse = await fetch(
@@ -59,7 +59,7 @@ function Header() {
         }
 
         dispatch(logoutUserAction());
-        console.log(user);
+        // console.log(user);
     };
 
     return (
