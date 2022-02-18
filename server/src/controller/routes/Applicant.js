@@ -4,6 +4,8 @@ const Recruiter = require('../../models/Recruiter')
 
 
 const applicantAuth = require('../middleware/applicantAuth') 
+const RecOrApp = require('../middleware/RecOrApp')
+const recruiterAuth = require('../middleware/recruiterAuth')
 
 const router = new express.Router()
 
@@ -37,5 +39,17 @@ router.patch('/Applicant/me/update' , applicantAuth , async (req,res) => {
     res.status(200).send(await req.applicant.updatePublicApplicantData( req.body )) ;
 })
 
+// get profile by id
+router.get("/profile/:id", recruiterAuth, async (req, res) => {
+    try {
+        const applicant = await Applicant.findByPk(req.params.id);
+        if (!applicant) {
+            return res.status(404).send();
+        }
+        res.send(applicant);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
 
 module.exports = router
