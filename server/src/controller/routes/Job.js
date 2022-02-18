@@ -114,7 +114,7 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
 }) 
 
 // get all jobs posted by a certain recruiter
-router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
+router.post('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
     const pageNumber = req.body.pageNumber
     // const Limit = req.body.limit
     try{
@@ -136,6 +136,22 @@ router.get('/recruiter/myjobs', recruiterAuth, async (req,res) =>{
                 Jobs:result.rows,
                 Count:result.count
             })
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+})
+
+// get all jobs applicant applied for
+router.post('/applicant/myjobs', applicantAuth, async (req,res) =>{
+    const pageNumber = req.body.pageNumber
+    const applicantId = req.applicant.id
+
+    try{
+        const jobs = await db.query('SELECT J.id,J.description,J.workPlaceType,J.employmentType,J.title,J.yearsOfExperience,J.careerLevel,J.place,AF.createdAt,AF.status FROM Jobs AS J INNER JOIN ApplyFors AS AF ON J.id = AF.JobId WHERE AF.ApplicantId=? LIMIT ?,10',{
+            replacements: [applicantId,pageNumber-1]
+        })
+        // console.log(jobs)
+        res.send(jobs)
     } catch (error) {
         res.status(400).send(error.message)
     }
