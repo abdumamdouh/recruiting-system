@@ -46,13 +46,22 @@ router.patch("/Applicant/me/update", applicantAuth, async (req, res) => {
 // get profile by id
 router.get("/profile/:id", recruiterAuth, async (req, res) => {
     try {
-        let applicant = await Applicant.findByPk(req.params.id);
+        const applicant = await Applicant.findByPk(req.params.id, {
+            attributes: [
+                "email",
+                "firstName",
+                "lastName",
+                "major",
+                "userName",
+                "yearsOfExperience",
+                "level",
+                "qualifications"
+            ]
+        });
         if (!applicant) {
             return res.status(404).send();
         }
-        applicant = { ...applicant };
-        delete applicant.dataValues.tokens;
-        res.send(applicant.dataValues);
+        res.send(applicant);
     } catch (error) {
         res.status(500).send(error.message);
     }
