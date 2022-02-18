@@ -91,7 +91,8 @@ const Info = props => {
                     </li>
                 )}
 
-                {userInfo.type === 'Applicant' && (
+                {userInfo.type === 'Applicant' && 
+                (
                     <li
                         className="list-group-item"
                         style={{ "borderBottom": "0px" }}
@@ -102,7 +103,7 @@ const Info = props => {
                            <div class="column"> <h6 className="md">Level</h6> 
                             </div>
                             </div>
-                        { userInfo.qualifications.map(q => (
+                            {/* {userInfo.qualifications!==undefined &&userInfo.qualifications.map(q => (
                            <div className= "row">
                            <div class="column">  <span className="card-text" style={{'color': '#33415c'}}> {Object.keys(q)}</span> </div> 
                            <div class="column"> 
@@ -112,7 +113,7 @@ const Info = props => {
                             {Object.values(q)==4 && <span className="card-text" style={{'color': '#33415c'}}> Expert</span>}
                             </div>
                             </div>
-                        ))}
+                        ))} */}
                         <br></br>
                     </li>
                 )}
