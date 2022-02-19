@@ -11,6 +11,7 @@ const db = require('../../db/db')
 const recruiterAuth = require('../middleware/recruiterAuth') 
 const applicantAuth = require('../middleware/applicantAuth') 
 const RecOrApp = require('../middleware/RecOrApp')
+const { where } = require('sequelize')
 
 const router = new express.Router()
 
@@ -101,7 +102,37 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
                 const [results, metadata] = await db.query("SELECT A.userName,A.id FROM ApplyFors AS AF INNER JOIN Applicants AS A ON AF.ApplicantId = A.id WHERE AF.JobId=?",{
                     replacements: [job.id]
                 });
+
+                // calculate the score of each applicant and append it to each applicant
+                for (let index = 0; index < results.length; index++ ){
+                    const a = results[index];
+                                        let aScore = 0
+                    const applicantA = await Applicant.findOne({
+                        where : {
+                            id : a.id
+                        }
+                    })
+                    
+                    for (let index = 0; index < applicantA.qualifications.length; index++) {
+                        const qualification = applicantA.qualifications[index];
+                        const requirmentObj = await job.Requirments.find( (req) => {
+                            return req.name == Object.keys(qualification)
+                        })
+
+                        if(requirmentObj){
+                            aScore = aScore + requirmentObj.weight * Object.values(qualification)[0] 
+                        }
+                    }                    
+                    results[index].score = aScore
+                }
+
+                // sort the applicants by the score
+                results.sort( (a,b) => {
+                    return b.score - a.score
+                })
+                console.log(results)
                 job.dataValues.applicants = results
+
                 res.send(job)
             }
             else {
