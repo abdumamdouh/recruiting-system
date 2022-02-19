@@ -8,13 +8,14 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import { useSelector } from "react-redux";
-
+import './job.scss'
 const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -40,26 +41,33 @@ export default function Job(props) {
         period,
         place,
         employees,
-        company
+        // company,
+        Recruiter,
+        applicants
     } = props.job;
 
     //handle state of modal in case of Recruiter
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
+    const [show, setShow] = React.useState(false);
+    const showCandidates = () => setShow(true);
+    const close = () => setShow(false);
+    //handle candidates' number
+    const [number, setNumber] = React.useState(0)
     //Applicant or Recruiter
     //type of user
-    const state = useSelector((state) => state);
+    const state = useSelector(state => state);
     const { type } = state.user.userInfo;
     // console.log(type);
-
+    const noOfApplicants =  type==='Recruiter'? applicants.length: null;
+     const copyApplicants = type==='Recruiter'?[...applicants]:null
     const handleApply = async () => {
         // console.log("apply");
         // console.log(props.id);
         // console.log(state.user.userInfo.token);
         alert("Applied Successfully!");
-        
+
         try {
             const rawResponse = await fetch(
                 `http://localhost:5000/jobs/applyFor/${props.id}`,
@@ -85,7 +93,7 @@ export default function Job(props) {
         // console.log(state.user.userInfo.token);
 
         alert("Deleted Successfully!");
-        
+
         try {
             const rawResponse = await fetch(
                 `http://localhost:5000/DeleteJob/${props.id}`,
@@ -103,7 +111,6 @@ export default function Job(props) {
         } catch (error) {
             console.log(error.message);
         }
-
     };
 
     return (
@@ -114,6 +121,44 @@ export default function Job(props) {
         >
             <CssBaseline />
             {/* applicants info in case of Recruiter */}
+            {type === "Recruiter" ? (
+              
+                <Modal
+                    open={show}
+                    onClose={close}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={modalStyle}>
+                        <Typography
+                            id="modal-modal-title"
+                            variant="h6"
+                            component="h2"
+                            color="black"
+                        >
+                            Candidates
+                        </Typography>
+                      <p style={{color: 'white'}}>  { copyApplicants.length= number} </p>
+                        <div className="row">
+                            <div className="col">Name</div>
+                            <div className="col">Score</div>
+                        </div>
+                        {/* map through the applicants */}
+                     
+                        {  
+                            copyApplicants.map(applicant => (
+                                <>
+                                <div className="row" key={applicant.id}>
+                            <div className="col"> {applicant.userName}</div>
+                            <div className="col">{applicant.score}</div>
+                            
+                        </div>
+                          <Divider />
+                          </>
+                        ))}
+                    </Box>
+                </Modal>
+            ) : null}
             {type === "Recruiter" ? (
                 <Modal
                     open={open}
@@ -131,13 +176,13 @@ export default function Job(props) {
                             Applicants
                         </Typography>
                         {/* map through the applicants */}
-                        {props.job.applicants.map((applicant) => (
+                        {applicants.map(applicant => (
                             <div key={applicant.id}>
                                 <Typography
                                     id="modal-modal-description"
                                     sx={{ mt: 2 }}
                                 >
-                                    Applicant {applicant.ApplicantId}
+                                    {applicant.userName}
                                 </Typography>
                                 <Divider />
                             </div>
@@ -172,7 +217,7 @@ export default function Job(props) {
                             display="inline"
                             color="gray"
                         >
-                            {`${props.job.applicants.length} applicants`}
+                            {`${applicants.length} applicants`}
                         </Typography>
                     ) : null}
                 </Typography>
@@ -258,33 +303,35 @@ export default function Job(props) {
                     Requirments
                 </Typography>
 
-                {type === "Recruiter" &&props.job.Requirments.map((r, i) => (
-                    <Typography
-                        key={uuidv4()}
-                        variant="body1"
-                        color="black"
-                        style={{ marginBottom: "7px" }}
-                    >
-                        {r.weight=== 1 && `- ${r.name}, Beginner` }
-                        {r.weight=== 2 && `- ${r.name}, Experienced` }
-                        {r.weight=== 3 && `- ${r.name}, Advanced` }
-                        {r.weight=== 3 && `- ${r.name}, Expert` }
-                    </Typography>
-                ))}
-                {type === "Applicant" &&props.job.Requirments.map((r, i) => (
-                    <Typography
-                        key={uuidv4()}
-                        variant="body1"
-                        color="black"
-                        style={{ marginBottom: "7px" }}
-                    >
-                        {`- ${r.name}`}
-                    </Typography>
-                ))} */}
+                {type === "Recruiter" &&
+                    props.job.Requirments.map((r, i) => (
+                        <Typography
+                            key={uuidv4()}
+                            variant="body1"
+                            color="black"
+                            style={{ marginBottom: "7px" }}
+                        >
+                            {r.weight === 1 && `- ${r.name}, Beginner`}
+                            {r.weight === 2 && `- ${r.name}, Experienced`}
+                            {r.weight === 3 && `- ${r.name}, Advanced`}
+                            {r.weight === 3 && `- ${r.name}, Expert`}
+                        </Typography>
+                    ))}
+                {type === "Applicant" &&
+                    props.job.Requirments.map((r, i) => (
+                        <Typography
+                            key={uuidv4()}
+                            variant="body1"
+                            color="black"
+                            style={{ marginBottom: "7px" }}
+                        >
+                            {`- ${r.name}`}
+                        </Typography>
+                    ))}
 
                 <Divider />
 
-                <Typography
+                {/* <Typography
                     variant="h6"
                     color="black"
                     style={{ margin: "12px 0" }}
@@ -303,7 +350,7 @@ export default function Job(props) {
                             alt="logo"
                         />
                         <Typography variant="body1" color="black">
-                            {company}
+                            {Recruiter.company}
                         </Typography>
                     </div>
 
@@ -318,7 +365,43 @@ export default function Job(props) {
 
                 <Typography variant="body1" color="black">
                     {companyDescription}
-                </Typography>
+                </Typography> */}
+                {type === "Recruiter" && (
+                    <div>
+                        <Divider />
+                        <Typography variant="h6" color="black">
+                            Screening results
+                        </Typography>
+                        <div className= "row">
+                        <div className= "column left"> 
+                        <Typography variant="h8" color="black">
+                             Number of candidates
+                        </Typography>
+                        </div>
+                        <div className= "column right"><TextField
+                            type="number"
+                            InputProps={{
+                                inputProps: {
+                                    max: noOfApplicants,
+                                    min: 0
+                                }
+                            }}
+                            label="candidates"
+                            size="md"
+                            value={number} onChange={(e) => {setNumber(e.target.value)                           
+                            }} 
+                        /></div>
+                        </div>
+                        <Button
+                            variant="contained"
+                            onClick={showCandidates}
+                            sx={{ mt: 3, mb: 2, ml: 1 }}
+                            color="success"
+                        >
+                            Show Candidates
+                        </Button>
+                    </div>
+                )}
             </Box>
         </Container>
     );
