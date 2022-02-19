@@ -103,57 +103,7 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
                     replacements: [job.id]
                 });
 
-                // results.sort( async (a, b) => {
-                //     let aScore = 0
-                //     let bScore = 0
-                //     const applicantA = await Applicant.findOne({
-                //         where : {
-                //             id : a.id
-                //         }
-                //     })
-                    
-                //     const applicantB = await Applicant.findOne({
-                //         where : {
-                //             id : b.id
-                //         }
-                //     })
-
-
-                //     for (let index = 0; index < applicantA.qualifications.length; index++) {
-                //         const qualification = applicantA.qualifications[index];
-                //         const requirmentObj = await job.Requirments.find( (req) => {
-                //             //console.log(req)
-                //             return req.name == Object.keys(qualification)
-                //         })
-
-                //         if(requirmentObj){
-                //             aScore = aScore + requirmentObj.weight * Object.values(qualification)[0] 
-                //         }
-                //     }                    
-
-                //     for (let index = 0; index < applicantB.qualifications.length; index++) {
-                //         const qualification = applicantB.qualifications[index];
-                //         const requirmentObj = await job.Requirments.find( (req) => {
-                //             //console.log(req)
-                //             return req.name == Object.keys(qualification)
-                //         })
-
-                //         if(requirmentObj){
-                //             bScore = bScore + requirmentObj.weight *  Object.values(qualification)[0]
-                //         }
-                //     }        
-                //     if( bScore < aScore){
-                //         return -1
-                //     }
-                //     else if( aScore > bScore){
-
-                //         return 1
-                //     }
-                //     else{
-                //         return 0
-                //     }
-
-                // })
+                // calculate the score of each applicant and append it to each applicant
                 for (let index = 0; index < results.length; index++ ){
                     const a = results[index];
                                         let aScore = 0
@@ -166,7 +116,6 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
                     for (let index = 0; index < applicantA.qualifications.length; index++) {
                         const qualification = applicantA.qualifications[index];
                         const requirmentObj = await job.Requirments.find( (req) => {
-                            //console.log(req)
                             return req.name == Object.keys(qualification)
                         })
 
@@ -176,30 +125,12 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
                     }                    
                     results[index].score = aScore
                 }
-                // results.forEach( async(a,index, array) => {
-                //     let aScore = 0
-                //     const applicantA = await Applicant.findOne({
-                //         where : {
-                //             id : a.id
-                //         }
-                //     })
-                    
-                //     for (let index = 0; index < applicantA.qualifications.length; index++) {
-                //         const qualification = applicantA.qualifications[index];
-                //         const requirmentObj = await job.Requirments.find( (req) => {
-                //             //console.log(req)
-                //             return req.name == Object.keys(qualification)
-                //         })
 
-                //         if(requirmentObj){
-                //             aScore = aScore + requirmentObj.weight * Object.values(qualification)[0] 
-                //         }
-                //     }                    
-                //     results[index].score = aScore
-                // })
+                // sort the applicants by the score
                 results.sort( (a,b) => {
                     return b.score - a.score
                 })
+                console.log(results)
                 job.dataValues.applicants = results
 
                 res.send(job)
