@@ -30,9 +30,6 @@ router.post('/CreateJob', recruiterAuth, async (req,res) => {
 })
 
 // get all jobs Feed for applicants and recruiters 
-// todo --> pagination
-// more optimization on Auth
-
 router.post('/Feed',async (req,res) =>{
     const pageNumber = req.body.pageNumber
     // const Limit = req.body.limit
@@ -106,7 +103,7 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
                 // calculate the score of each applicant and append it to each applicant
                 for (let index = 0; index < results.length; index++ ){
                     const a = results[index];
-                                        let aScore = 0
+                    let aScore = 0
                     const applicantA = await Applicant.findOne({
                         where : {
                             id : a.id
@@ -130,7 +127,7 @@ router.get('/jobs/:id', RecOrApp, async (req,res) =>{
                 results.sort( (a,b) => {
                     return b.score - a.score
                 })
-                console.log(results)
+                // console.log(results)
                 job.dataValues.applicants = results
 
                 res.send(job)
@@ -225,7 +222,7 @@ router.post('/jobs/applyFor/:id', applicantAuth , async (req,res) =>{
                 throw new Error("This Applicant already applied for the job")
             } else { 
                 const jobApply = await ApplyFor.create(job)
-                res.send("Applied for the job successfully")
+                res.send({message:"Applied for the job successfully"})
             }
         } catch (error) {
         res.status(400).send(error.message)
@@ -239,7 +236,7 @@ router.delete('/DeleteJob/:id' , recruiterAuth , async (req,res) =>{
         const job = await Job.findByPk(JobId)
         if (job){
             job.destroy()
-            res.send("Job deleted successfully.")
+            res.send({message:"Job deleted successfully."})
         } else {
             throw new Error('Could not delete that job')
         }
