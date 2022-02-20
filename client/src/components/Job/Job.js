@@ -86,7 +86,7 @@ export default function Job(props) {
                     }
                 }
             );
-            const data = await rawResponse.json();
+            const data = await rawResponse;
             console.log(data);
         } catch (error) {
             console.log(error.message);
