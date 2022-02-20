@@ -16,7 +16,7 @@ import Info from "./components/profile/Info";
 import CreateJob from "./components/CreateJob/CreateJob";
 import Feed from "./components/Feed/FeedPage";
 import JobPage from "./pages/JobPage/JobPage";
-
+import ApplicantPage from './pages/ApplicantPage/ApplicantPage'
 // components
 import Layout from "./components/layout/Layout";
 // protected route
@@ -77,6 +77,12 @@ const App = () => {
                         path="/feed/job/:ID"
                         component={JobPage}
                         name="job"
+                    />
+                    <ProtectedRoute
+                        exact
+                        path="/applicant/:ID"
+                        component={ApplicantPage}
+                        name="applicant"
                     />
 
                     <ProtectedRoute

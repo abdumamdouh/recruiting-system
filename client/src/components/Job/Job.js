@@ -15,6 +15,7 @@ import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import { useSelector } from "react-redux";
+import { useHistory} from 'react-router-dom'
 import './job.scss'
 const modalStyle = {
     position: "absolute",
@@ -29,6 +30,11 @@ const modalStyle = {
 };
 
 export default function Job(props) {
+    const history = useHistory()
+
+    const handleRedirect = (id)=>{
+        history.push(`/applicant/${id}`);
+    }
     //pull out the props
     const {
         description,
@@ -138,9 +144,9 @@ export default function Job(props) {
                         >
                             Candidates
                         </Typography>
-                      <p style={{color: 'white'}}>  { copyApplicants.length= number} </p>
+                      <p style={{color: 'white'}}>  { copyApplicants.length= number}  </p>
                         <div className="row">
-                            <div className="col">Name</div>
+                            <div className="col" >Name</div>
                             <div className="col">Score</div>
                         </div>
                         {/* map through the applicants */}
@@ -149,7 +155,7 @@ export default function Job(props) {
                             copyApplicants.map(applicant => (
                                 <>
                                 <div className="row" key={applicant.id}>
-                            <div className="col"> {applicant.userName}</div>
+                            <div className="col" onClick={()=>handleRedirect(applicant.id)}> <a href="#" style={{color:"black"}}>{applicant.userName}</a></div>
                             <div className="col">{applicant.score}</div>
                             
                         </div>
