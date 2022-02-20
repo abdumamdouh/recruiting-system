@@ -41,7 +41,7 @@ router.post("/logout", RecOrApp, async (req, res) => {
         tokens = tokens.filter((token) => token.token !== req.token);
         user.tokens = JSON.stringify(tokens);
         await user.save();
-        res.send({message:"Logged out successfully"});
+        res.send("Logged out successfully");
     } catch (error) {
         res.status(500).send(error.message);
     }
