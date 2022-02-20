@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import classes from "../Forms/common.module.scss";
 import { updateApplicantAction } from "../../redux/actions/user";
 import { FormControl } from "@mui/material";
-const EditQualifications = ({ setOnEditQualifications }) => {
+const EditQualifications = ({ setOnEditQualifications,setQual }) => {
     const stacks = [
         "HTML5/CSS3",
         "NodeJs",
@@ -136,6 +136,7 @@ const EditQualifications = ({ setOnEditQualifications }) => {
         const secondHalf = skills.slice().splice(-middleIndex);
         console.log("sn", secondHalf);
         setSkills([...secondHalf]);
+        setQual([...secondHalf])
         user = {
             ...userInfo,
             major: formValues.major,

@@ -23,6 +23,7 @@ const Info = props => {
 
     const [onEdit, setOnEdit] = useState(false);
     const [onEditQF, setOnEditQF] = useState(false);
+    const [qual,setQual] = useState([]);
     const {userInfo} = useSelector(state => state.user);
     const history = useHistory();
     const changeRoute = () => {
@@ -91,7 +92,7 @@ const Info = props => {
                     </li>
                 )}
 
-                {userInfo.type === 'Applicant' && 
+                {(userInfo.type === 'Applicant' && qual.length!==0)&&
                 (
                     <li
                         className="list-group-item"
@@ -103,7 +104,7 @@ const Info = props => {
                            <div class="column"> <h6 className="md">Level</h6> 
                             </div>
                             </div>
-                            {/* {userInfo.qualifications!==undefined &&userInfo.qualifications.map(q => (
+                            {qual.length!==0 &&qual.map(q => (
                            <div className= "row">
                            <div class="column">  <span className="card-text" style={{'color': '#33415c'}}> {Object.keys(q)}</span> </div> 
                            <div class="column"> 
@@ -113,7 +114,7 @@ const Info = props => {
                             {Object.values(q)==4 && <span className="card-text" style={{'color': '#33415c'}}> Expert</span>}
                             </div>
                             </div>
-                        ))} */}
+                        ))}
                         <br></br>
                     </li>
                 )}
@@ -181,7 +182,7 @@ const Info = props => {
                     </button>
                 )} */}
                 {onEditQF && (
-                    <EditQualifications setOnEditQualifications={setOnEditQF} />
+                    <EditQualifications setOnEditQualifications={setOnEditQF} setQual={setQual}/>
                 )}
             </div>
         </>
