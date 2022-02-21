@@ -16,7 +16,7 @@ import Info from "./components/profile/Info";
 import CreateJob from "./components/CreateJob/CreateJob";
 import Feed from "./components/Feed/FeedPage";
 import JobPage from "./pages/JobPage/JobPage";
-import ApplicantPage from './pages/ApplicantPage/ApplicantPage'
+import ApplicantPage from "./pages/ApplicantPage/ApplicantPage";
 // components
 import Layout from "./components/layout/Layout";
 // protected route
@@ -61,15 +61,6 @@ const App = () => {
                         path="/feed"
                         component={Feed}
                         name="Feed"
-                    />
-
-                    {/* demo */}
-                    <ProtectedRoute
-                        exact
-                        //TODO: replace job with dynamic route
-                        path="/feed/job"
-                        component={JobPage}
-                        name="job"
                     />
 
                     <ProtectedRoute
