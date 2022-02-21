@@ -61,6 +61,7 @@ export default function CustomiseHiringPage() {
                             endIcon={<QuestionMarkIcon />}
                             style={{ marginRight: "15px" }}
                             color="primary"
+                            onClick={() => console.log("clicked")}
                         >
                             MCQ
                         </Button>
@@ -86,6 +87,7 @@ export default function CustomiseHiringPage() {
                             endIcon={<TaskIcon />}
                             style={{ marginRight: "15px" }}
                             color="primary"
+                            onClick={() => console.log("clicked")}
                         >
                             Task
                         </Button>
@@ -111,6 +113,7 @@ export default function CustomiseHiringPage() {
                             endIcon={<BugReportIcon />}
                             style={{ marginRight: "15px" }}
                             color="primary"
+                            onClick={() => console.log("clicked")}
                         >
                             coding
                         </Button>
