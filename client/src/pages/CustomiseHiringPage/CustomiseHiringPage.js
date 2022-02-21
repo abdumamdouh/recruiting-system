@@ -3,6 +3,11 @@ import React from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import CssBaseline from "@mui/material/CssBaseline";
 
 export default function CustomiseHiringPage() {
@@ -26,8 +31,21 @@ export default function CustomiseHiringPage() {
                     }}
                 >
                     <Typography variant="h5" color="black">
-                        Customise Your Hiring Pipeline
+                        Customise Your Hiring Pipeline For This Job
                     </Typography>
+
+                    <Divider style={{ margin: "20px 0" }} />
+
+                    <Typography
+                        variant="subtitle1"
+                        gutterBottom
+                        component="div"
+                    >
+                        you can customise your hiring pipeline by one of the
+                        three options or more than one
+                    </Typography>
+
+                    <Divider style={{ margin: "20px 0" }} />
                 </Box>
             </Container>
         </>
