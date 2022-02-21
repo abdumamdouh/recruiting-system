@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import TaskIcon from "@mui/icons-material/Task";
+import BugReportIcon from "@mui/icons-material/BugReport";
 
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -94,6 +95,31 @@ export default function CustomiseHiringPage() {
                             component="div"
                         >
                             you can request a special task.
+                        </Typography>
+                    </div>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginBottom: "20px"
+                        }}
+                    >
+                        <Button
+                            variant="outlined"
+                            endIcon={<BugReportIcon />}
+                            style={{ marginRight: "15px" }}
+                            color="primary"
+                        >
+                            Task
+                        </Button>
+                        <Typography
+                            variant="subtitle1"
+                            gutterBottom
+                            component="div"
+                        >
+                            you can customise a coding problem.
                         </Typography>
                     </div>
                 </Box>
