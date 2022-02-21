@@ -87,7 +87,7 @@ const App = () => {
 
                     <ProtectedRoute
                         exact
-                        path="/customiseHiring"
+                        path="/customiseHiring/:ID"
                         component={CustomiseHiringPage}
                         name="customiseHiringPipeline"
                     />
