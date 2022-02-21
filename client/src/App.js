@@ -16,9 +16,11 @@ import Info from "./components/profile/Info";
 import CreateJob from "./components/CreateJob/CreateJob";
 import Feed from "./components/Feed/FeedPage";
 import JobPage from "./pages/JobPage/JobPage";
-import ApplicantPage from './pages/ApplicantPage/ApplicantPage'
+import ApplicantPage from "./pages/ApplicantPage/ApplicantPage";
+import CustomiseHiringPage from "./pages/CustomiseHiringPage/CustomiseHiringPage";
 // components
 import Layout from "./components/layout/Layout";
+// import HelloWorld from "./components/HelloWorld";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -63,15 +65,6 @@ const App = () => {
                         name="Feed"
                     />
 
-                    {/* demo */}
-                    <ProtectedRoute
-                        exact
-                        //TODO: replace job with dynamic route
-                        path="/feed/job"
-                        component={JobPage}
-                        name="job"
-                    />
-
                     <ProtectedRoute
                         exact
                         path="/feed/job/:ID"
@@ -90,6 +83,13 @@ const App = () => {
                         path="/createjob"
                         component={CreateJob}
                         name="createJob"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/customiseHiring/:ID"
+                        component={CustomiseHiringPage}
+                        name="customiseHiringPipeline"
                     />
 
                     <Route

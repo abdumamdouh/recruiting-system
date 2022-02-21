@@ -15,8 +15,8 @@ import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import { useSelector } from "react-redux";
-import { useHistory} from 'react-router-dom'
-import './job.scss'
+import { useHistory } from "react-router-dom";
+import "./job.scss";
 const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -30,11 +30,8 @@ const modalStyle = {
 };
 
 export default function Job(props) {
-    const history = useHistory()
+    const history = useHistory();
 
-    const handleRedirect = (id)=>{
-        history.push(`/applicant/${id}`);
-    }
     //pull out the props
     const {
         description,
@@ -60,14 +57,15 @@ export default function Job(props) {
     const showCandidates = () => setShow(true);
     const close = () => setShow(false);
     //handle candidates' number
-    const [number, setNumber] = React.useState(0)
+    const [number, setNumber] = React.useState(0);
     //Applicant or Recruiter
     //type of user
-    const state = useSelector(state => state);
+    const state = useSelector((state) => state);
     const { type } = state.user.userInfo;
     // console.log(type);
-    const noOfApplicants =  type==='Recruiter'? applicants.length: null;
-     const copyApplicants = type==='Recruiter'?[...applicants]:null
+    const noOfApplicants = type === "Recruiter" ? applicants.length : null;
+    const copyApplicants = type === "Recruiter" ? [...applicants] : null;
+
     const handleApply = async () => {
         // console.log("apply");
         // console.log(props.id);
@@ -119,16 +117,25 @@ export default function Job(props) {
         }
     };
 
+    const handleApplicantRedirect = (id) => {
+        history.push(`/applicant/${id}`);
+    };
+
+    const handleCustomise = () => {
+        // console.log("hello");
+        history.push(`/customiseHiring/${props.id}`);
+    };
+
     return (
         <Container
             component="main"
             maxWidth="sm"
             style={{ border: "1px solid", borderRadius: "15px" }}
+            sx={{ overflow: "auto" }}
         >
             <CssBaseline />
             {/* applicants info in case of Recruiter */}
             {type === "Recruiter" ? (
-              
                 <Modal
                     open={show}
                     onClose={close}
@@ -144,23 +151,36 @@ export default function Job(props) {
                         >
                             Candidates
                         </Typography>
-                      <p style={{color: 'white'}}>  { copyApplicants.length= number}  </p>
+                        <p style={{ color: "white" }}>
+                            {" "}
+                            {(copyApplicants.length = number)}{" "}
+                        </p>
                         <div className="row">
-                            <div className="col" >Name</div>
+                            <div className="col">Name</div>
                             <div className="col">Score</div>
                         </div>
                         {/* map through the applicants */}
-                     
-                        {  
-                            copyApplicants.map(applicant => (
-                                <>
+
+                        {copyApplicants.map((applicant) => (
+                            <>
                                 <div className="row" key={applicant.id}>
-                            <div className="col" onClick={()=>handleRedirect(applicant.id)}> <a href="#" style={{color:"black"}}>{applicant.userName}</a></div>
-                            <div className="col">{applicant.score}</div>
-                            
-                        </div>
-                          <Divider />
-                          </>
+                                    <div
+                                        className="col"
+                                        onClick={() =>
+                                            handleApplicantRedirect(
+                                                applicant.id
+                                            )
+                                        }
+                                    >
+                                        {" "}
+                                        <a href="#" style={{ color: "black" }}>
+                                            {applicant.userName}
+                                        </a>
+                                    </div>
+                                    <div className="col">{applicant.score}</div>
+                                </div>
+                                <Divider />
+                            </>
                         ))}
                     </Box>
                 </Modal>
@@ -182,7 +202,7 @@ export default function Job(props) {
                             Applicants
                         </Typography>
                         {/* map through the applicants */}
-                        {applicants.map(applicant => (
+                        {applicants.map((applicant) => (
                             <div key={applicant.id}>
                                 <Typography
                                     id="modal-modal-description"
@@ -267,13 +287,24 @@ export default function Job(props) {
                                 onClick={handleOpen}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                                 color="success"
+                                size="small"
                             >
-                                Show Applicants
+                                Applicants
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={handleCustomise}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                                color="success"
+                                size="small"
+                            >
+                                customise hiring pipeline
                             </Button>
                             <Button
                                 variant="contained"
                                 onClick={() => console.log("hello")}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
+                                size="small"
                             >
                                 Edit
                             </Button>
@@ -282,6 +313,7 @@ export default function Job(props) {
                                 color="error"
                                 onClick={handleDelete}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
+                                size="small"
                             >
                                 Delete
                             </Button>
@@ -378,31 +410,36 @@ export default function Job(props) {
                         <Typography variant="h6" color="black">
                             Screening results
                         </Typography>
-                        <div className= "row">
-                        <div className= "column left"> 
-                        <Typography variant="h8" color="black">
-                             Number of candidates
-                        </Typography>
-                        </div>
-                        <div className= "column right"><TextField
-                            type="number"
-                            InputProps={{
-                                inputProps: {
-                                    max: noOfApplicants,
-                                    min: 0
-                                }
-                            }}
-                            label="candidates"
-                            size="md"
-                            value={number} onChange={(e) => {setNumber(e.target.value)                           
-                            }} 
-                        /></div>
+                        <div className="row">
+                            <div className="column left">
+                                <Typography variant="h8" color="black">
+                                    Number of candidates
+                                </Typography>
+                            </div>
+                            <div className="column right">
+                                <TextField
+                                    type="number"
+                                    InputProps={{
+                                        inputProps: {
+                                            max: noOfApplicants,
+                                            min: 0
+                                        }
+                                    }}
+                                    label="candidates"
+                                    size="md"
+                                    value={number}
+                                    onChange={(e) => {
+                                        setNumber(e.target.value);
+                                    }}
+                                />
+                            </div>
                         </div>
                         <Button
                             variant="contained"
                             onClick={showCandidates}
                             sx={{ mt: 3, mb: 2, ml: 1 }}
                             color="success"
+                            size="small"
                         >
                             Show Candidates
                         </Button>
