@@ -7,6 +7,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import TaskIcon from "@mui/icons-material/Task";
 
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -68,6 +69,31 @@ export default function CustomiseHiringPage() {
                             component="div"
                         >
                             you can make a custom MCQ test.
+                        </Typography>
+                    </div>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            margin: "20px 0"
+                        }}
+                    >
+                        <Button
+                            variant="outlined"
+                            endIcon={<TaskIcon />}
+                            style={{ marginRight: "15px" }}
+                            color="primary"
+                        >
+                            Task
+                        </Button>
+                        <Typography
+                            variant="subtitle1"
+                            gutterBottom
+                            component="div"
+                        >
+                            you can request a special task.
                         </Typography>
                     </div>
                 </Box>
