@@ -124,6 +124,7 @@ export default function Job(props) {
             component="main"
             maxWidth="sm"
             style={{ border: "1px solid", borderRadius: "15px" }}
+            sx={{ overflow: 'auto' }}
         >
             <CssBaseline />
             {/* applicants info in case of Recruiter */}
@@ -267,13 +268,24 @@ export default function Job(props) {
                                 onClick={handleOpen}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                                 color="success"
+                                size="small"
                             >
-                                Show Applicants
+                                Applicants
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={handleOpen}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                                color="success"
+                                size="small"
+                            >
+                                customise hiring pipeline
                             </Button>
                             <Button
                                 variant="contained"
                                 onClick={() => console.log("hello")}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
+                                size="small"
                             >
                                 Edit
                             </Button>
@@ -282,6 +294,7 @@ export default function Job(props) {
                                 color="error"
                                 onClick={handleDelete}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
+                                size="small"
                             >
                                 Delete
                             </Button>
@@ -403,6 +416,7 @@ export default function Job(props) {
                             onClick={showCandidates}
                             sx={{ mt: 3, mb: 2, ml: 1 }}
                             color="success"
+                            size="small"
                         >
                             Show Candidates
                         </Button>
