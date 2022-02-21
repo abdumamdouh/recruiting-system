@@ -112,7 +112,7 @@ export default function CustomiseHiringPage() {
                             style={{ marginRight: "15px" }}
                             color="primary"
                         >
-                            Task
+                            coding
                         </Button>
                         <Typography
                             variant="subtitle1"
