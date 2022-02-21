@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 
-import DeleteIcon from "@mui/icons-material/Delete";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -42,10 +42,34 @@ export default function CustomiseHiringPage() {
                         component="div"
                     >
                         you can customise your hiring pipeline by one of the
-                        three options or more than one
+                        three options or more than one.
                     </Typography>
 
                     <Divider style={{ margin: "20px 0" }} />
+
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center"
+                        }}
+                    >
+                        <Button
+                            variant="outlined"
+                            endIcon={<QuestionMarkIcon />}
+                            style={{ marginRight: "15px" }}
+                            color="primary"
+                        >
+                            MCQ
+                        </Button>
+                        <Typography
+                            variant="subtitle1"
+                            gutterBottom
+                            component="div"
+                        >
+                            you can make a custom MCQ test.
+                        </Typography>
+                    </div>
                 </Box>
             </Container>
         </>
