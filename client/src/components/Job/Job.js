@@ -32,9 +32,6 @@ const modalStyle = {
 export default function Job(props) {
     const history = useHistory();
 
-    const handleRedirect = (id) => {
-        history.push(`/applicant/${id}`);
-    };
     //pull out the props
     const {
         description,
@@ -68,6 +65,7 @@ export default function Job(props) {
     // console.log(type);
     const noOfApplicants = type === "Recruiter" ? applicants.length : null;
     const copyApplicants = type === "Recruiter" ? [...applicants] : null;
+
     const handleApply = async () => {
         // console.log("apply");
         // console.log(props.id);
@@ -119,6 +117,10 @@ export default function Job(props) {
         }
     };
 
+    const handleApplicantRedirect = (id) => {
+        history.push(`/applicant/${id}`);
+    };
+
     const handleCustomise = () => {
         // console.log("hello");
         history.push(`/customiseHiring`);
@@ -165,7 +167,9 @@ export default function Job(props) {
                                     <div
                                         className="col"
                                         onClick={() =>
-                                            handleRedirect(applicant.id)
+                                            handleApplicantRedirect(
+                                                applicant.id
+                                            )
                                         }
                                     >
                                         {" "}
