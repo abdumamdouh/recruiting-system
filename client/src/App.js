@@ -19,6 +19,7 @@ import JobPage from "./pages/JobPage/JobPage";
 import ApplicantPage from "./pages/ApplicantPage/ApplicantPage";
 // components
 import Layout from "./components/layout/Layout";
+import HelloWorld from "./components/HelloWorld";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -81,6 +82,13 @@ const App = () => {
                         path="/createjob"
                         component={CreateJob}
                         name="createJob"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/customiseHiring"
+                        component={HelloWorld}
+                        name="customiseHiringPipeline"
                     />
 
                     <Route
