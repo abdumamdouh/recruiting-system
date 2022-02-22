@@ -450,7 +450,7 @@ export default function Job(props) {
                         >
                             Show Candidates
                         </Button>
-                        {onEdit && <EditJob setOnEdit={setOnEdit} />}
+                        {onEdit && <EditJob setOnEdit={setOnEdit} job={props.job} />}
 
                     </div>
                 )}
