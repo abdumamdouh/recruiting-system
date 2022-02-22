@@ -20,7 +20,6 @@ const initalFormState = {
     employmentType: "",
     careerLevel: "",
     yearsOfExperience: "",
-    //maxYearsOfExperience: "",
     stack: [],
     place: "",
     company: ""
