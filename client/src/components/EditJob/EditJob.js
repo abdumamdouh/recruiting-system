@@ -29,21 +29,12 @@ const EditJob = ({ setOnEdit }) => {
     };
 
     const handleInput = e => {
-        const { name, value } = e.target;
-        setUserData({ ...userData, [name]: value });
+
     };
 
     const handleSubmit = e => {
         e.preventDefault();
-        user = {
-            ...userInfo,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            userName: userData.userName
-        };
-        console.log(user);
-        dispatch(updateApplicantAction(user));
-        setOnEdit(false);
+       
     };
 
     return (
