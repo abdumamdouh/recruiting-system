@@ -7,23 +7,17 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FormControl, InputLabel } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
-import "./CreateJob.scss";
+import "../CreateJob/CreateJob.scss";
 import { createJobAction } from "../../redux/actions/jobs";
 import TextFieldWrapper from "../Forms/TextFieldWrapper";
 import SelectWrapper from "../Forms/SelectWrapper";
 import ButtonWrapper from "../Forms/ButtonWrapper";
-import AddRequirements from "./AddRequirements";
-const initalFormState = {
-    title: "",
-    description: "",
-    workPlaceType: "",
-    employmentType: "",
-    careerLevel: "",
-    yearsOfExperience: "",
-    stack: [],
-    place: "",
-    company: ""
-};
+import EditRequirements from "./EditRequirements";
+import {editJobAction} from "../../redux/actions/jobs"
+
+
+
+
 const formValidation = Yup.object().shape({
     title: Yup.string().required("Required"),
     description: Yup.string().required("Required")
@@ -94,21 +88,84 @@ const years = [
     { value: "15", label: "15" }
 ];
 
-export default function CreateJob(props) {
-    const redirect = () => {
-        const fromObj = props.location.state || {
-            from: { pathname: "/Feed" }
-        };
 
-        const path = fromObj.from.pathname;
-        props.history.push(path);
+
+
+
+
+const EditJob = ({setOnEdit,job}) => {
+
+    console.log(job)
+
+    const {
+        id,
+        description,
+        workPlaceType,
+        employmentType,
+        title,
+        yearsOfExperience,
+        careerLevel,
+        companyDescription,
+        period,
+        place,
+        employees,
+        // company,
+        Recruiter,
+        applicants,
+        Requirments
+    } =job
+
+    const initalFormState = {
+        id:id,
+        title:title,
+        description: description,
+        workPlaceType: workPlaceType,
+        employmentType: employmentType,
+        careerLevel: careerLevel,
+        yearsOfExperience: yearsOfExperience,
+        stack: [],
+        place: place,
+        company: ""
     };
+
+
+
+
+    const restoreView =()=>{
+        setOnEdit(false);
+    }
+
+// from createJob logic
+
+
+const classes = useStyles();
+var [stackOptions, setStackOptions] = useState([]);
+const [editQualifications, setOnEditQualifications] = useState(false);
+const [requirements, setRequirements] = useState([]);
+
+
+//End
+
+
     const dispatch = useDispatch();
-    const classes = useStyles();
-    var [stackOptions, setStackOptions] = useState([]);
-    const [addQualifications, setOnAddQualifications] = useState(false);
-    const [requirements, setRequirements] = useState([]);
+
+    // useEffect(() => {
+    //     setUserData(user)
+    // }, [user])
+
+  
+    const handleInput = e => {
+
+    };
+
+    const handleSubmit = e => {
+        e.preventDefault();
+       
+    };
+
     return (
+        <div className="edit_profile">
+              
         <Grid container>
             <Container maxWidth="md" fluid={true}>
                 <div className="jobForm" style={{ alignItems: "center" }}>
@@ -124,7 +181,8 @@ export default function CreateJob(props) {
                                 .splice(-middleIndex);
                             console.log("sn", secondHalf);
                             values.stack = [...secondHalf];
-                            dispatch(createJobAction(values, redirect));
+                            
+                            dispatch(editJobAction(values));
                             console.log(values);
                         }}
                     >
@@ -143,6 +201,7 @@ export default function CreateJob(props) {
                                     <TextFieldWrapper
                                         name="title"
                                         label="title"
+                                        
                                     />
                                 </Grid>
 
@@ -220,7 +279,7 @@ export default function CreateJob(props) {
                                         }}
                                         className="btn btn-outline inline"
                                         onClick={() =>
-                                            setOnAddQualifications(true)
+                                            setOnEditQualifications(true)
                                         }
                                     >
                                         Add Requirements
@@ -309,19 +368,36 @@ export default function CreateJob(props) {
                                 <Grid item xs={5}>
                                     <ButtonWrapper style={{'marginTop':'20px' }}>Submit Form</ButtonWrapper>
                                 </Grid>
-                                <Grid item xs={12}></Grid>
+                                <Grid item xs={12}>
+                                <button
+                                 style={{ marginTop: "10px" }}
+                                className="btn btn-info w-100 btn-danger"
+                                type="submit"
+                                onClick={restoreView}
+                                >
+                                Close
+                            </button>
+                                </Grid>
                             </Grid>
                         </Form>
                     </Formik>
                 </div>
-                {addQualifications && (
-                    <AddRequirements
-                        setOnAddQualifications={setOnAddQualifications}
+                {editQualifications && (
+                    <EditRequirements
+                        setOnEditQualifications={setOnEditQualifications}
                         setRequirements={setRequirements}
                         setStackOptions={setStackOptions}
                     />
                 )}
+               
             </Container>
+           
         </Grid>
+
+     </div>
     );
-}
+               
+ 
+};
+
+export default EditJob;
