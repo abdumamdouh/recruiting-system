@@ -1,4 +1,5 @@
 const express = require("express");
+const _ = require("lodash");
 const Applicant = require("../../models/Applicant");
 const Recruiter = require("../../models/Recruiter");
 const Job = require("../../models/Job");
@@ -247,9 +248,15 @@ router.patch("/jobs/:id", recruiterAuth, async (req, res) => {
             weight: Object.values(requirment)[0],
             JobId: job.id
         }));
+        console.log(requirements);
         await job.save();
         Requirment.bulkCreate(requirements);
-        res.send({ job, requirements });
+        _.set(
+            job.dataValues,
+            "stack",
+            requirements.map((requirement) => _.omit(requirement, ["JobId"]))
+        );
+        res.send(job);
     } catch (error) {
         res.status(400).send(error.message);
     }
