@@ -85,9 +85,9 @@ export const editJobAction = (job) => {
             const { userInfo } = getState().user;
             console.log(userInfo.token);
             const rawResponse = await fetch(
-                `${serverURL}/CreateJob`,
+                `${serverURL}/jobs/${job.id}`,
                 {
-                    method: "POST",
+                    method: "PATCH",
                     headers: {
                         Accept: "application/json",
                         "Content-Type": "application/json",
@@ -97,11 +97,11 @@ export const editJobAction = (job) => {
                 }
             );
 
-    dispatch({ type: CREATE_JOB_SUCCESS, payload: 'Job created Successfully' });
+    dispatch({ type: EDIT_JOB_SUCCESS, payload: 'Job edited Successfully' });
    
 } catch (error) {
     dispatch({
-        type: CREATE_JOB_FAIL,
+        type: EDIT_JOB_FAIL,
         payload: error.response && error.response.data
     });
 }

@@ -13,6 +13,7 @@ import TextFieldWrapper from "../Forms/TextFieldWrapper";
 import SelectWrapper from "../Forms/SelectWrapper";
 import ButtonWrapper from "../Forms/ButtonWrapper";
 import EditRequirements from "./EditRequirements";
+import {editJobAction} from "../../redux/actions/jobs"
 
 
 
@@ -97,6 +98,7 @@ const EditJob = ({setOnEdit,job}) => {
     console.log(job)
 
     const {
+        id,
         description,
         workPlaceType,
         employmentType,
@@ -114,6 +116,7 @@ const EditJob = ({setOnEdit,job}) => {
     } =job
 
     const initalFormState = {
+        id:id,
         title:title,
         description: description,
         workPlaceType: workPlaceType,
@@ -178,7 +181,8 @@ const [requirements, setRequirements] = useState([]);
                                 .splice(-middleIndex);
                             console.log("sn", secondHalf);
                             values.stack = [...secondHalf];
-                            //dispatch(createJobAction(values, redirect));
+                            
+                            dispatch(editJobAction(values));
                             console.log(values);
                         }}
                     >
