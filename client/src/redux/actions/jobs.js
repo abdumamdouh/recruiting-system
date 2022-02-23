@@ -5,6 +5,9 @@ import {
     CREATE_JOB_REQUEST,
     CREATE_JOB_SUCCESS,
     CREATE_JOB_FAIL,
+    EDIT_JOB_REQUEST,
+    EDIT_JOB_SUCCESS,
+    EDIT_JOB_FAIL
 } from "../types/index";
 import axios from "axios";
 const serverURL = "http://localhost:5000";
@@ -68,4 +71,39 @@ export const createJobAction = (userData, redirect) => {
             });
         }
     };
+};
+
+
+//edit 
+export const editJobAction = (job) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: EDIT_JOB_REQUEST,
+                loading: true
+            });
+            const { userInfo } = getState().user;
+            console.log(userInfo.token);
+            const rawResponse = await fetch(
+                `${serverURL}/jobs/${job.id}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    },
+                    body: JSON.stringify(job)
+                }
+            );
+
+    dispatch({ type: EDIT_JOB_SUCCESS, payload: 'Job edited Successfully' });
+   
+} catch (error) {
+    dispatch({
+        type: EDIT_JOB_FAIL,
+        payload: error.response && error.response.data
+    });
+}
+};
 };
