@@ -248,7 +248,6 @@ router.patch("/jobs/:id", recruiterAuth, async (req, res) => {
             weight: Object.values(requirment)[0],
             JobId: job.id
         }));
-        console.log(requirements);
         await job.save();
         Requirment.bulkCreate(requirements);
         _.set(
