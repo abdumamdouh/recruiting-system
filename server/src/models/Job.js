@@ -1,46 +1,46 @@
-const Sequelize = require('sequelize')
-const validator = require('validator')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const db = require('../db/db')
-const Requirment = require('./Requirment')
-const ApplyFor = require('./ApplyFor')
-const Applicant = require('./Applicant')
+const Sequelize = require("sequelize");
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const db = require("../db/db");
+const Requirment = require("./Requirment");
+const ApplyFor = require("./ApplyFor");
+const Applicant = require("./Applicant");
 
-const Job = db.define('Job',{
-    id:{
+const Job = db.define("Job", {
+    id: {
         type: Sequelize.INTEGER,
-        primaryKey: true ,
-        autoIncrement:true ,
+        primaryKey: true,
+        autoIncrement: true,
         allowNull: false
     },
-    description:{
+    description: {
         type: Sequelize.TEXT,
-        allowNull: false ,
+        allowNull: false,
         unique: false
     },
-    workPlaceType:{
-        type: Sequelize.STRING ,
+    workPlaceType: {
+        type: Sequelize.STRING,
         allowNull: false
     },
-    employmentType:{
-        type: Sequelize.STRING ,
+    employmentType: {
+        type: Sequelize.STRING,
         allowNull: false
     },
     title: {
-        type: Sequelize.STRING ,
+        type: Sequelize.STRING,
         allowNull: false
     },
     yearsOfExperience: {
-        type: Sequelize.INTEGER ,
+        type: Sequelize.INTEGER,
         allowNull: false
     },
-    careerLevel:{
-        type: Sequelize.STRING ,
+    careerLevel: {
+        type: Sequelize.STRING,
         allowNull: false
     },
-    place:{
-        type: Sequelize.STRING ,
+    place: {
+        type: Sequelize.STRING,
         allowNull: false
     }
 });
@@ -49,7 +49,7 @@ const Job = db.define('Job',{
 // deprecated replaced by SQL JOINS
 
 // Job.prototype.getJobData = async function (type) {
-//     const job = this 
+//     const job = this
 //     const jobData =  {
 //         description: job.description ,
 //         workPlaceType: job.workPlaceType ,
@@ -63,7 +63,7 @@ const Job = db.define('Job',{
 //     const requirments = await Requirment.findAll({
 //         attributes: ['name', 'weight'],
 //         where: {
-//             JobId : job.id 
+//             JobId : job.id
 //         }
 //     })
 
@@ -79,7 +79,7 @@ const Job = db.define('Job',{
 //         const records = result.rows
 //         jobData.applicants = []
 //         jobData.ApplicantsCount = result.count
-        
+
 //         for (let i = 0 ; i < records.length ; i++){
 //             item = records[i]
 //             const x = await Applicant.findOne({
@@ -94,21 +94,20 @@ const Job = db.define('Job',{
 //             }
 //             jobData.applicants.push(JSON.parse(JSON.stringify(applicant)))
 //         }
-//         return  jobData 
+//         return  jobData
 //     }
 // }
 
-
-Job.prototype.addRequirments = async function(requirments) {
-    await requirments.forEach( async (requirment) => {
-        const requirmentName = Object.keys(requirment)[0]
-        const requirmentWeight = Object.values(requirment)[0]
+Job.prototype.addRequirments = async function (requirments) {
+    await requirments.forEach(async (requirment) => {
+        const requirmentName = Object.keys(requirment)[0];
+        const requirmentWeight = Object.values(requirment)[0];
         await Requirment.create({
             name: requirmentName,
             weight: requirmentWeight,
             JobId: this.id
-        })
+        });
     });
-}
+};
 
-module.exports = Job ;
+module.exports = Job;
