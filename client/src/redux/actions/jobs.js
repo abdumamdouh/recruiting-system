@@ -5,6 +5,9 @@ import {
     CREATE_JOB_REQUEST,
     CREATE_JOB_SUCCESS,
     CREATE_JOB_FAIL,
+    EDIT_JOB_REQUEST,
+    EDIT_JOB_SUCCESS,
+    EDIT_JOB_FAIL
 } from "../types/index";
 import axios from "axios";
 const serverURL = "http://localhost:5000";
