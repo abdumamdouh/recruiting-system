@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -16,7 +16,6 @@ import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import EditJob from "../EditJob/EditJob";
 import "./job.scss";
 const modalStyle = {
     position: "absolute",
@@ -32,11 +31,6 @@ const modalStyle = {
 
 export default function Job(props) {
     const history = useHistory();
-
-
-    //for EditJob
-    const [onEdit, setOnEdit] = useState(false);
-
 
     //pull out the props
     const {
@@ -308,10 +302,9 @@ export default function Job(props) {
                             </Button>
                             <Button
                                 variant="contained"
-                                onClick={() => setOnEdit(true)}
+                                onClick={() => console.log("hello")}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                                 size="small"
-                                
                             >
                                 Edit
                             </Button>
@@ -450,8 +443,6 @@ export default function Job(props) {
                         >
                             Show Candidates
                         </Button>
-                        {onEdit && <EditJob setOnEdit={setOnEdit} job={props.job} />}
-
                     </div>
                 )}
             </Box>
