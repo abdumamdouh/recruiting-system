@@ -5,6 +5,9 @@ import {
     CREATE_JOB_REQUEST,
     CREATE_JOB_SUCCESS,
     CREATE_JOB_FAIL,
+    GET_JOB_BY_ID_REQUEST,
+    GET_JOB_BY_ID_SUCCESS,
+    GET_JOB_BY_ID_FAIL,
     EDIT_JOB_REQUEST,
     EDIT_JOB_SUCCESS,
     EDIT_JOB_FAIL
@@ -73,7 +76,38 @@ export const createJobAction = (userData, redirect) => {
     };
 };
 
-
+//get job by id
+export const getJobByIdAction = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: GET_JOB_BY_ID_REQUEST,
+                loading: true
+            });
+            const { userInfo } = getState().user;
+            console.log(userInfo.token);
+            const rawResponse = await fetch(
+                `${serverURL}/jobs/${id}`,
+                {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    }
+                }
+            );
+            const data = await rawResponse.json();        
+    dispatch({ type: GET_JOB_BY_ID_SUCCESS, payload: data });
+   
+} catch (error) {
+    dispatch({
+        type: GET_JOB_BY_ID_FAIL,
+        payload: error.response && error.response.data
+    });
+}
+};
+}
 //edit 
 export const editJobAction = (job) => {
     return async (dispatch, getState) => {
@@ -96,8 +130,8 @@ export const editJobAction = (job) => {
                     body: JSON.stringify(job)
                 }
             );
-
-    dispatch({ type: EDIT_JOB_SUCCESS, payload: 'Job edited Successfully' });
+            const data = await rawResponse.json(); 
+    dispatch({ type: EDIT_JOB_SUCCESS, payload: data});
    
 } catch (error) {
     dispatch({
