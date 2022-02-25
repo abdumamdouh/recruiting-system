@@ -16,7 +16,6 @@ import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import EditJob from "../EditJob/EditJob";
 import "./job.scss";
 const modalStyle = {
     position: "absolute",
@@ -64,7 +63,7 @@ export default function Job(props) {
     const [number, setNumber] = React.useState(0);
     //Applicant or Recruiter
     //type of user
-    const state = useSelector(state => state);
+    const state = useSelector((state) => state);
     const { type } = state.user.userInfo;
     // console.log(type);
     const noOfApplicants = type === "Recruiter" ? applicants.length : null;
@@ -121,7 +120,7 @@ export default function Job(props) {
         }
     };
 
-    const handleApplicantRedirect = id => {
+    const handleApplicantRedirect = (id) => {
         history.push(`/applicant/${id}`);
     };
 
@@ -157,7 +156,11 @@ export default function Job(props) {
                         </Typography>
                         <p style={{ color: "white" }}>
                             {" "}
-                            {(copyApplicants.length = Math.ceil(applicants.length/2))}{" "}
+                            {
+                                (copyApplicants.length = Math.ceil(
+                                    applicants.length / 2
+                                ))
+                            }{" "}
                         </p>
                         <div className="row">
                             <div className="col">Name</div>
@@ -165,7 +168,7 @@ export default function Job(props) {
                         </div>
                         {/* map through the applicants */}
 
-                        {copyApplicants.map(applicant => (
+                        {copyApplicants.map((applicant) => (
                             <>
                                 <div className="row" key={applicant.id}>
                                     <div
@@ -206,7 +209,7 @@ export default function Job(props) {
                             Applicants
                         </Typography>
                         {/* map through the applicants */}
-                        {applicants.map(applicant => (
+                        {applicants.map((applicant) => (
                             <div key={applicant.id}>
                                 <Typography
                                     id="modal-modal-description"
@@ -229,11 +232,10 @@ export default function Job(props) {
                     alignItems: "left"
                 }}
             >
-                
-                <Typography  color="black" variant="h6">
+                <Typography color="black" variant="h6">
                     {title}
                 </Typography>
-                
+
                 <br />
 
                 <Typography color="black">
@@ -303,7 +305,7 @@ export default function Job(props) {
                             </Button>
                             <Button
                                 variant="contained"
-                                onClick={() => setOnEdit(true)}
+                                onClick={() => console.log("hello")}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                                 size="small"
                             >
