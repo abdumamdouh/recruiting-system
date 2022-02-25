@@ -16,6 +16,7 @@ import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import EditJob from "../EditJob/EditJob"
 import "./job.scss";
 const modalStyle = {
     position: "absolute",
@@ -308,8 +309,10 @@ export default function Job(props) {
                                 onClick={() => console.log("hello")}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                                 size="small"
+                                onClick={()=>setOnEdit(true)}
                             >
                                 Edit
+                               
                             </Button>
                             <Button
                                 variant="contained"
@@ -355,7 +358,21 @@ export default function Job(props) {
                             {r.weight === 1 && `- ${r.name}, Beginner`}
                             {r.weight === 2 && `- ${r.name}, Experienced`}
                             {r.weight === 3 && `- ${r.name}, Advanced`}
-                            {r.weight === 3 && `- ${r.name}, Expert`}
+                            {r.weight === 4 && `- ${r.name}, Expert`}
+                        </Typography>
+                    ))}
+                {(type === "Recruiter" &&  props.job.stack!==undefined)&&
+                    props.job.stack.map((r, i) => (
+                        <Typography
+                            key={uuidv4()}
+                            variant="body1"
+                            color="black"
+                            style={{ marginBottom: "7px" }}
+                        >
+                            {r.weight === 1 && `- ${r.name}, Beginner`}
+                            {r.weight === 2 && `- ${r.name}, Experienced`}
+                            {r.weight === 3 && `- ${r.name}, Advanced`}
+                            {r.weight === 4 && `- ${r.name}, Expert`}
                         </Typography>
                     ))}
                 {(type === "Applicant" &&   props.job.Requirments!==undefined)&&
