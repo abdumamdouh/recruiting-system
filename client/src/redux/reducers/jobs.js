@@ -4,10 +4,13 @@ import {
     GET_JOBS_FAIL,
     CREATE_JOB_REQUEST,
     CREATE_JOB_SUCCESS,
-    CREATE_JOB_FAIL
+    CREATE_JOB_FAIL,
+    GET_JOB_BY_ID_REQUEST,
+    GET_JOB_BY_ID_SUCCESS,
+    GET_JOB_BY_ID_FAIL,
 } from "../types/index";
 
-const jobReducer = (state = {}, action) => {
+const jobsReducer = (state = {}, action) => {
     switch (action.type) {
         case GET_JOBS_REQUEST:
             return {
@@ -35,8 +38,22 @@ const jobReducer = (state = {}, action) => {
                 error: action.payload,
                 loading: false
             };
+        // //get job by id
+        // case GET_JOB_BY_ID_REQUEST:
+        //     return {
+        //         loading: true,
+        //         ...state
+        //     };
+        // case GET_JOB_BY_ID_SUCCESS:
+        //     return  action.payload;
+
+        // case GET_JOB_BY_ID_FAIL:
+        //     return {
+        //         error: action.payload,
+        //         loading: false
+        //     };    
         default:
             return state;
     }
 };
-export default jobReducer;
+export default jobsReducer;
