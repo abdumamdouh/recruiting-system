@@ -40,6 +40,7 @@ Recruiter.sync();
 Job.sync();
 Requirment.sync();
 ApplyFor.sync();
+CodingProblemBank.sync();
 
 // iniallizing server on port 5000
 app.listen(PORT, () => {
