@@ -10,9 +10,9 @@ export default function AddExam() {
         const arr = [];
         data.map(d => arr.push(d.data));
         let obj = arr.map((a, index) => ({
-            question: a.question,
-            options: [a.option1, a.option2, a.option3, a.option4],
-            answer: a.answer
+            question: a[0],
+            options: [a[1], a[2], a[3], a[4]],
+            answer: a[5]
         }));
         console.log("arr", obj);
     };
@@ -35,7 +35,7 @@ export default function AddExam() {
                 onError={handleOnError}
                 addRemoveButton
                 config={{
-                    header: true
+                    header: false
                 }}
                 onRemoveFile={handleOnRemoveFile}
             >
