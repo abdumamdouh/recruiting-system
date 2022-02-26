@@ -103,8 +103,8 @@
     cursor: pointer;
 
     &:hover {
-      color: white;
-      background-color: #2b2eff;
+      //color: white;
+      background-color: #bcbdf3;
     }
   }
 }
@@ -112,8 +112,9 @@
 .paginationActive a {
 
   color: white;
-  background-color: #2b2eff;
+  background-color: #bcbdf3;
 }
+
 
 .paginationDisabled a {
   border: 1px solid grey;

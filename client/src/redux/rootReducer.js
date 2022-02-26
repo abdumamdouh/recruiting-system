@@ -3,7 +3,8 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import userReducer from "./reducers/user";
-import jobReducer from "./reducers/jobs";
+import jobsReducer from "./reducers/jobs";
+import jobReducer from "./reducers/job";
 // import productsReducer from "./reducers/products";
 // import sidebarReducer from "./reducers/sideBar";
 
@@ -15,7 +16,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   user: userReducer,
-  jobs: jobReducer
+  jobs: jobsReducer,
+  job: jobReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);
