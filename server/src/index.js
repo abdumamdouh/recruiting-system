@@ -8,6 +8,7 @@ const Recruiter = require("./models/Recruiter");
 const Job = require("./models/Job");
 const Requirment = require("./models/Requirment");
 const ApplyFor = require("./models/ApplyFor");
+const CodingProblemBank = require("./models/CodingProblemBank");
 
 //requiring db relations
 const Relations = require("./models/Relations");
@@ -18,6 +19,7 @@ const RecruiterRouter = require("./controller/routes/Recruiter");
 const GeneralRouter = require("./controller/routes/General");
 const JobRouter = require("./controller/routes/Job");
 const MCQRouter = require("./controller/routes/MCQ");
+
 
 const app = express();
 const PORT = 5000;
