@@ -7,17 +7,21 @@ export default function AddExam() {
         console.log("---------------------------");
         console.log(data);
         console.log("---------------------------");
-        const arr = [];
+        let arr = [];
         data.map(d => arr.push(d.data));
+        const array= [...arr]
+        const length =array[0].length
+        arr= arr.slice(0,arr.length-1)
         let obj = arr.map((a, index) => ({
             question: a[0],
-            options: [a[1], a[2], a[3], a[4]],
-            answer: a[5]
+            options: a.slice(1,length-1),
+            answer: a[length-1]
         }));
+      
         console.log("arr", obj);
     };
 
-    const handleOnError = (err, file, inputElem, reason) => {
+    const handleOnError = (err) => {
         console.log(err);
     };
 
@@ -29,7 +33,7 @@ export default function AddExam() {
 
     return (
         <div className="Exam">
-            <h5>Click and Drag Upload</h5>
+            <h4 style={{color: 'black', 'marginBottom': '20px'}}>Click and Drag Upload</h4>
             <CSVReader
                 onDrop={handleOnDrop}
                 onError={handleOnError}
