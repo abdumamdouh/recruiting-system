@@ -8,17 +8,20 @@ const CodingProblemBank = db.define('CodingProblemBank',{
         primaryKey:true,
         autoIncrement:true,
         allowNull:false
-
     },
     description:{
         type:Sequelize.STRING,
         allowNull:false
     },
-    timeConstraints:{
-        type:Sequelize.STRING,
+    timeConstraint:{
+        type:Sequelize.INTEGER,
     },
-    memoryConstraints:{
+    memoryConstraint:{
+        type:Sequelize.INTEGER,
+    },
+    name:{
         type:Sequelize.STRING,
+        allowNull:false
     }
 });
 
