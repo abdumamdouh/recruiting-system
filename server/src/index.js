@@ -20,11 +20,13 @@ const RecruiterRouter = require("./controller/routes/Recruiter");
 const GeneralRouter = require("./controller/routes/General");
 const JobRouter = require("./controller/routes/Job");
 const MCQRouter = require("./controller/routes/MCQ");
+const CodingProblemRouter = require("./controller/routes/CodingProblem")
 
-
+// construcing express app on port 5000
 const app = express();
 const PORT = 5000;
 
+// transfer JSON between client and server
 app.use(express.json());
 app.use(cors());
 
@@ -34,6 +36,8 @@ app.use(RecruiterRouter);
 app.use(GeneralRouter);
 app.use(JobRouter);
 app.use(MCQRouter);
+app.use(CodingProblemRouter);
+
 
 // creating tables if not existed
 Applicant.sync();
