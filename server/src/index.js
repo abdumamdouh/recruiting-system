@@ -9,6 +9,7 @@ const Job = require("./models/Job");
 const Requirment = require("./models/Requirment");
 const ApplyFor = require("./models/ApplyFor");
 const CodingProblemBank = require("./models/CodingProblemBank");
+const TestCases = require("./models/TestCases")
 
 //requiring db relations
 const Relations = require("./models/Relations");
@@ -41,6 +42,7 @@ Job.sync();
 Requirment.sync();
 ApplyFor.sync();
 CodingProblemBank.sync();
+TestCases.sync();
 
 // iniallizing server on port 5000
 app.listen(PORT, () => {
