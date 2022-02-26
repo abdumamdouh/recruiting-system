@@ -21,3 +21,8 @@ const CodingProblemBank = db.define('CodingProblemBank',{
         type:Sequelize.STRING,
     }
 });
+
+
+
+
+module.exports = CodingProblemBank
