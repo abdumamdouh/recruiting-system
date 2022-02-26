@@ -15,7 +15,7 @@ const TestCases = db.define('TestCases',{
         type:Sequelize.INTEGER,
         allowNull:false,
         references: {
-            model: 'CodingProblemBank', 
+            model: 'CodingProblemBanks', 
             key: 'id'
         },
     },
