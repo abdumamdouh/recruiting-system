@@ -18,6 +18,7 @@ import Feed from "./components/Feed/FeedPage";
 import JobPage from "./pages/JobPage/JobPage";
 import ApplicantPage from "./pages/ApplicantPage/ApplicantPage";
 import CustomiseHiringPage from "./pages/CustomiseHiringPage/CustomiseHiringPage";
+import AddExam from './components/MCQExam/AddExam';
 // components
 import Layout from "./components/layout/Layout";
 // import HelloWorld from "./components/HelloWorld";
@@ -91,7 +92,13 @@ const App = () => {
                         component={CustomiseHiringPage}
                         name="customiseHiringPipeline"
                     />
-
+                    {/* recruiter add exam */}
+                    <ProtectedRoute
+                        exact
+                        path="/addExam"
+                        component={AddExam}
+                        name="createJob"
+                    />
                     <Route
                         exact
                         path="/404"
