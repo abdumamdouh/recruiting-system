@@ -10,6 +10,7 @@ const MCQQuestion = require("./MCQQuestion");
 
 // relation between requirment and job (Has) ( 1-->N )
 Job.hasMany(Requirment, {
+    //
     // as: "stack",
     foreignKey: "JobId",
     onDelete: "CASCADE",

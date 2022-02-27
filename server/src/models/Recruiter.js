@@ -42,6 +42,10 @@ const Recruiter = db.define('Recruiter',{
     },
     tokens: {
         type: Sequelize.JSON
+    },
+    avatar: {
+        type: Sequelize.BLOB('long'),
+        allowNull: true
     }
 }, {
     hooks: {
@@ -64,10 +68,10 @@ Recruiter.prototype.generateAuthToken = async function () {
     tokens = tokens.concat({token})
     this.tokens = JSON.stringify(tokens)
     await this.save()
-
+    
     return token
 }
- 
+
 // Getting public data of the recruiter
 Recruiter.prototype.getPublicRecruiterData = function () {
     const user = this 
@@ -78,6 +82,11 @@ Recruiter.prototype.getPublicRecruiterData = function () {
         company: user.company ,
         position: user.position 
     }
+}
+
+Recruiter.prototype.saveAvatar = async function(avatar) {
+    this.avatar = avatar
+    await this.save()
 }
 
 // Updating public data of the recruiter
@@ -110,5 +119,6 @@ Recruiter.findByCredentials = async (email,password) => {
     } 
     return recruiter
 }
+
 
 module.exports = Recruiter ;

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Job from "../../components/Job/Job";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import {getJobByIdAction} from '../../redux/actions/jobs'
 //plain js for testing
 const jobObject = {
     description:
@@ -34,8 +35,8 @@ const jobObject = {
 // };
 
 export default function JobPage() {
-    const [job, setJob] = useState();
-
+    // const [job, setJob] = useState();
+    const job = useSelector(state => state.job)
     //router param
     const { ID } = useParams();
     // console.log(ID);
@@ -44,30 +45,35 @@ export default function JobPage() {
     const state = useSelector((state) => state);
     // const { Jobs } = state.jobs;
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const rawResponse = await fetch(
-                    `http://localhost:5000/jobs/${ID}`,
-                    {
-                        method: "GET",
-                        headers: {
-                            Accept: "application/json",
-                            "Content-Type": "application/json",
-                            Authorization: "Bearer " + state.user.userInfo.token
-                        }
-                    }
-                );
-                const data = await rawResponse.json();
-                console.log(data);
-                setJob(data);
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         try {
+    //             const rawResponse = await fetch(
+    //                 `http://localhost:5000/jobs/${ID}`,
+    //                 {
+    //                     method: "GET",
+    //                     headers: {
+    //                         Accept: "application/json",
+    //                         "Content-Type": "application/json",
+    //                         Authorization: "Bearer " + state.user.userInfo.token
+    //                     }
+    //                 }
+    //             );
+    //             const data = await rawResponse.json();
+    //             console.log(data);
+    //             setJob(data);
+    //         } catch (error) {
+    //             console.log(error.message);
+    //         }
+    //     }
 
-        fetchData();
-    }, [ID]);
+    //     fetchData();
+    // }, [ID]);
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getJobByIdAction(ID));
+    }, [dispatch]);
 
     // filter the jobs array based on the id of the job
     // eslint-disable-next-line eqeqeq
@@ -77,7 +83,13 @@ export default function JobPage() {
 
     return (
         <>
-            {!job ? (
+            {/* {!job ? (
+                <h1>loading</h1>
+            ) : (
+                <Job job={job} id={ID} />
+                // <h1>hello</h1>
+            )} */}
+            {Object.keys(job).length === 0 && job.constructor === Object ? (
                 <h1>loading</h1>
             ) : (
                 <Job job={job} id={ID} />
