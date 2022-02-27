@@ -43,7 +43,7 @@ router.post("/Feed", async (req, res) => {
             include: [
                 {
                     model: Recruiter,
-                    attributes: ["company"],
+                    attributes: ["company","avatar"],
                     // INNER JOIN
                     required: true
                 }
@@ -77,7 +77,7 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                 include: [
                     {
                         model: Recruiter,
-                        attributes: ["company"],
+                        attributes: ["company","avatar"],
                         // INNER JOIN
                         required: true
                     },
@@ -98,7 +98,7 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                 include: [
                     {
                         model: Recruiter,
-                        attributes: ["company"],
+                        attributes: ["company","avatar"],
                         // INNER JOIN
                         required: true
                     },
@@ -181,7 +181,7 @@ router.post("/recruiter/myjobs", recruiterAuth, async (req, res) => {
             include: [
                 {
                     model: Recruiter,
-                    attributes: ["company"],
+                    attributes: ["company","avatar"],
                     // INNER JOIN
                     required: true
                 }
