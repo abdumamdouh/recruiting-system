@@ -16,6 +16,7 @@ const applicantAuth = require("../middleware/applicantAuth");
 const RecOrApp = require("../middleware/RecOrApp");
 const { where } = require("sequelize");
 const { object } = require("joi");
+const { includes } = require("lodash");
 
 const router = new express.Router();
 
@@ -26,14 +27,28 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         let questions = req.body.questions.map(
             ({ options: choices, ...rest }) => ({ choices, ...rest })
         );
-        // console.log(questions);
         const mcq = await MCQ.create({ topic });
         await mcq.addJob(jobId);
         questions = await Question.bulkCreate(questions);
         await mcq.addQuestion(questions);
         res.status(201).send("The file is uploaded successfully");
     } catch (error) {
-        res.status(503).send(error.message);
+        res.status(400).send(error.message);
+    }
+});
+router.get("/getMCQ", applicantAuth, async (req, res) => {
+    try {
+        const mcq = await MCQ.findByPk(req.body.jobId, {
+            include: {
+                model: Question,
+                attributes: ["id", "question", "choices"],
+                through: { attributes: [] }
+            },
+            attributes: ["id", "topic"]
+        });
+        res.status(200).send(mcq);
+    } catch (error) {
+        res.status(500).send(error.message);
     }
 });
 

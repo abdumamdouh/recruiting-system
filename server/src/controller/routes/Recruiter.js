@@ -55,14 +55,18 @@ const upload = multer({
 // Update recruiter's avatar
 router.post('/Recruiter/me/avatar', recruiterAuth, upload.single('avatar'), async (req, res) => {
     await req.recruiter.saveAvatar(req.file.buffer)
-    res.send("Updated successfully")
+    console.log(req.file.buffer)
+    res.send('Updated successfully')
 }, (error, req, res, next) => {
     res.status(400).send({ error: error.message })
 })
 
 // Get recruiter's avatar
 router.get('/Recruiter/me/avatar', recruiterAuth, async (req, res) => {
-    res.send(req.recruiter.avatar)
+    res.set({
+        'Content-Type':'image/jpg',
+    })
+    res.send(req.recruiter.avatar.toString('base64'))
 }, (error, req, res, next) => {
     res.status(400).send({ error: error.message })
 })
