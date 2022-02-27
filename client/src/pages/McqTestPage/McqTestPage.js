@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 import Typography from "@mui/material/Typography";
@@ -98,6 +99,11 @@ const McqTestPage = (props) => {
     margin = MCQ.questions.length > 35 ? 75 : margin;
 
     const stackMargin = `${margin * MCQ.questions.length}px`;
+
+    const handleMcqChange = (event, id) => {
+        console.log(event.target.value);
+        console.log(id);
+    };
     return (
         <Container
             component="main"
@@ -145,6 +151,9 @@ const McqTestPage = (props) => {
                                 display: "flex",
                                 justifyContent: "space-around"
                             }}
+                            onChange={(event) =>
+                                handleMcqChange(event, question.id)
+                            }
                         >
                             {question.choices.map((choice) => (
                                 <FormControlLabel
