@@ -87,8 +87,10 @@ const McqTestPage = (props) => {
                     marginBottom: 5,
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "left"
+                    alignItems: "left",
+                    overflow: "auto"
                 }}
+                component="div"
             >
                 <Typography
                     color="black"
@@ -100,10 +102,10 @@ const McqTestPage = (props) => {
 
                 <Divider style={{ margin: "20px 0" }} />
 
-                {MCQ.questions.map((question) => (
+                {MCQ.questions.map((question, index) => (
                     <FormControl>
                         <FormLabel id="demo-row-radio-buttons-group-label">
-                            Gender
+                            {`${index + 1} -`} Gender
                         </FormLabel>
                         <RadioGroup
                             row
@@ -129,11 +131,11 @@ const McqTestPage = (props) => {
                                 control={<Radio />}
                                 label="Other"
                             />
-                            <FormControlLabel
+                            {/* <FormControlLabel
                                 value="gay"
                                 control={<Radio />}
                                 label="Gay"
-                            />
+                            /> */}
                         </RadioGroup>
                     </FormControl>
                 ))}
