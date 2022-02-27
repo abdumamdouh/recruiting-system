@@ -53,3 +53,7 @@ export const EDIT_JOB_REQUEST = 'EDIT_JOB_REQUEST'
 export const EDIT_JOB_SUCCESS = 'EDIT_JOB_SUCCESS'
 export const EDIT_JOB_FAIL = 'EDIT_JOB_FAIL'
 
+//Recruiter create exam
+export const CREATE_EXAM_REQUEST = 'CREATE_EXAM_REQUEST'
+export const CREATE_EXAM_SUCCESS = 'CREATE_EXAM_SUCCESS'
+export const CREATE_EXAM_FAIL = 'CREATE_EXAM_FAIL'

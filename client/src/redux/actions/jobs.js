@@ -54,6 +54,7 @@ export const createJobAction = (userData, redirect) => {
                     });
                     const { userInfo } = getState().user;
                     console.log(userInfo.token);
+                    console.log(userData)
                     const rawResponse = await fetch(
                         `${serverURL}/CreateJob`,
                         {
