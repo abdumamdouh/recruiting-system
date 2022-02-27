@@ -103,6 +103,7 @@ const McqTestPage = (props) => {
         const getQuestion = async () => {
             console.log(userInfo.token);
             try {
+                //TODO: check API call to fetch
                 const response = await fetch(
                     `http://localhost:5000/getMCQ/${ID}`,
                     {
@@ -140,6 +141,7 @@ const McqTestPage = (props) => {
     const handleSubmit = () => {
         console.log("alo");
         alert("submitted successfully!");
+        //TODO: API Call to submit
         setMcqTaken(true);
     };
     return (
