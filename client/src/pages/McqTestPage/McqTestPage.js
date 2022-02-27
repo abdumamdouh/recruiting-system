@@ -7,6 +7,11 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 const MCQ = {
     jobId: 1,
@@ -92,6 +97,46 @@ const McqTestPage = (props) => {
                 >
                     {MCQ.topic}
                 </Typography>
+
+                <Divider style={{ margin: "20px 0" }} />
+
+                {MCQ.questions.map((question) => (
+                    <FormControl>
+                        <FormLabel id="demo-row-radio-buttons-group-label">
+                            Gender
+                        </FormLabel>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-around"
+                            }}
+                        >
+                            <FormControlLabel
+                                value="female"
+                                control={<Radio />}
+                                label="Female"
+                            />
+                            <FormControlLabel
+                                value="male"
+                                control={<Radio />}
+                                label="Male"
+                            />
+                            <FormControlLabel
+                                value="other"
+                                control={<Radio />}
+                                label="Other"
+                            />
+                            <FormControlLabel
+                                value="gay"
+                                control={<Radio />}
+                                label="Gay"
+                            />
+                        </RadioGroup>
+                    </FormControl>
+                ))}
             </Box>
         </Container>
     );
