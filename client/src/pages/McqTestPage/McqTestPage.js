@@ -104,6 +104,11 @@ const McqTestPage = (props) => {
         McqAnswers = { ...McqAnswers, [id]: event.target.value };
         console.log(McqAnswers);
     };
+
+    const handleSubmit = () => {
+        console.log("alo");
+        alert("submitted successfully!");
+    };
     return (
         <Container
             component="main"
@@ -166,6 +171,13 @@ const McqTestPage = (props) => {
                         </RadioGroup>
                     </FormControl>
                 ))}
+                <Button
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    onClick={handleSubmit}
+                >
+                    Submit
+                </Button>
             </Box>
         </Container>
     );
