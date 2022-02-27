@@ -66,6 +66,26 @@ const MCQ = {
                 "aloooooooooo"
             ],
             id: 7
+        },
+        {
+            question: "to be or not to be",
+            choices: ["be", "not to be", "be be", "el7"],
+            id: 3
+        },
+        {
+            question: "1+1",
+            choices: ["2", "11", "'2'", "3"],
+            id: 4
+        },
+        {
+            question: "arza3",
+            choices: ["arza3", "arza3", "arza3", "arza3"],
+            id: 5
+        },
+        {
+            question: "el7",
+            choices: ["el7", "el7", "el7", "el7"],
+            id: 6
         }
     ]
 };
@@ -73,11 +93,21 @@ const MCQ = {
 const McqTestPage = (props) => {
     //ID of the job
     const { ID } = useParams();
+    let margin = MCQ.questions.length > 17 ? 55 : 40;
+    margin = MCQ.questions.length > 25 ? 65 : margin;
+    margin = MCQ.questions.length > 35 ? 75 : margin;
+
+    const stackMargin = `${margin * MCQ.questions.length}px`;
     return (
         <Container
             component="main"
             maxWidth="md"
-            style={{ border: "1px solid", borderRadius: "15px" }}
+            style={{
+                border: "1px solid",
+                borderRadius: "15px",
+                marginTop: stackMargin,
+                overflowY: "none"
+            }}
             sx={{ overflow: "auto" }}
         >
             <CssBaseline />
@@ -131,11 +161,11 @@ const McqTestPage = (props) => {
                                 control={<Radio />}
                                 label="Other"
                             />
-                            {/* <FormControlLabel
+                            <FormControlLabel
                                 value="gay"
                                 control={<Radio />}
                                 label="Gay"
-                            /> */}
+                            />
                         </RadioGroup>
                     </FormControl>
                 ))}
