@@ -9,8 +9,11 @@ const CodingProblemBank = db.define('CodingProblemBank',{
         autoIncrement:true,
         allowNull:false
     },
+    recruiterId:{
+        type:Sequelize.INTEGER
+    },
     description:{
-        type:Sequelize.STRING,
+        type:Sequelize.STRING(5000),
         allowNull:false
     },
     timeConstraint:{
@@ -22,10 +25,12 @@ const CodingProblemBank = db.define('CodingProblemBank',{
     name:{
         type:Sequelize.STRING,
         allowNull:false
+    },
+    private:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false
     }
 });
-
-
 
 
 module.exports = CodingProblemBank
