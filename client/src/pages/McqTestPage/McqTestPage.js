@@ -139,7 +139,7 @@ const McqTestPage = (props) => {
                 <Divider style={{ margin: "20px 0" }} />
 
                 {MCQ.questions.map((question, index) => (
-                    <FormControl>
+                    <FormControl key={index}>
                         <FormLabel id="demo-row-radio-buttons-group-label">
                             {`${index + 1} - ${question.question}`}
                         </FormLabel>
@@ -155,8 +155,9 @@ const McqTestPage = (props) => {
                                 handleMcqChange(event, question.id)
                             }
                         >
-                            {question.choices.map((choice) => (
+                            {question.choices.map((choice, index) => (
                                 <FormControlLabel
+                                    key={index}
                                     value={choice}
                                     control={<Radio />}
                                     label={choice}
