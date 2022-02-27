@@ -16,7 +16,7 @@ import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import EditJob from "../EditJob/EditJob"
+import EditJob from "../EditJob/EditJob";
 import "./job.scss";
 const modalStyle = {
     position: "absolute",
@@ -49,8 +49,7 @@ export default function Job(props) {
         place,
         employees,
         // company,
-        Recruiter,
-        
+        Recruiter
     } = props.job;
 
     //handle state of modal in case of Recruiter
@@ -67,8 +66,11 @@ export default function Job(props) {
     const state = useSelector((state) => state);
     const { type } = state.user.userInfo;
     // console.log(type);
-    
-    const copyApplicants = (type === "Recruiter"&& props.job.applicants!== undefined) ? [...props.job.applicants] : null;
+
+    const copyApplicants =
+        type === "Recruiter" && props.job.applicants !== undefined
+            ? [...props.job.applicants]
+            : null;
 
     const handleApply = async () => {
         // console.log("apply");
@@ -130,6 +132,11 @@ export default function Job(props) {
         history.push(`/customiseHiring/${props.id}`);
     };
 
+    const handleMCQ = () => {
+        // console.log("hello");
+        history.push(`/job/exam/${props.job.id}`);
+    };
+
     return (
         <Container
             component="main"
@@ -139,7 +146,7 @@ export default function Job(props) {
         >
             <CssBaseline />
             {/* applicants info in case of Recruiter */}
-            {(type === "Recruiter"&& props.job.applicants!== undefined )? (
+            {type === "Recruiter" && props.job.applicants !== undefined ? (
                 <Modal
                     open={show}
                     onClose={close}
@@ -157,9 +164,11 @@ export default function Job(props) {
                         </Typography>
                         <p style={{ color: "white" }}>
                             {" "}
-
-                            {(copyApplicants.length = Math.ceil(props.job.applicants.length/2))}{" "}
-
+                            {
+                                (copyApplicants.length = Math.ceil(
+                                    props.job.applicants.length / 2
+                                ))
+                            }{" "}
                         </p>
                         <div className="row">
                             <div className="col">Name</div>
@@ -209,18 +218,18 @@ export default function Job(props) {
                         </Typography>
                         {/* map through the applicants */}
 
-                        { props.job.applicants!== undefined && props.job.applicants.map(applicant => (
-
-                            <div key={applicant.id}>
-                                <Typography
-                                    id="modal-modal-description"
-                                    sx={{ mt: 2 }}
-                                >
-                                    {applicant.userName}
-                                </Typography>
-                                <Divider />
-                            </div>
-                        ))}
+                        {props.job.applicants !== undefined &&
+                            props.job.applicants.map((applicant) => (
+                                <div key={applicant.id}>
+                                    <Typography
+                                        id="modal-modal-description"
+                                        sx={{ mt: 2 }}
+                                    >
+                                        {applicant.userName}
+                                    </Typography>
+                                    <Divider />
+                                </div>
+                            ))}
                     </Box>
                 </Modal>
             ) : null}
@@ -245,7 +254,8 @@ export default function Job(props) {
                     <Typography variant="caption" display="inline" color="gray">
                         {`${period} day ago.`}
                     </Typography>
-                    {(type === "Recruiter" && props.job.applicants!== undefined) ? (
+                    {type === "Recruiter" &&
+                    props.job.applicants !== undefined ? (
                         <Typography
                             variant="caption"
                             display="inline"
@@ -283,6 +293,14 @@ export default function Job(props) {
                             >
                                 Save
                             </Button>
+                            <Button
+                                variant="contained"
+                                onClick={handleMCQ}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                                color="secondary"
+                            >
+                                Take MCQ exam
+                            </Button>
                         </>
                     ) : (
                         <>
@@ -309,10 +327,9 @@ export default function Job(props) {
                                 onClick={() => console.log("hello")}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                                 size="small"
-                                onClick={()=>setOnEdit(true)}
+                                onClick={() => setOnEdit(true)}
                             >
                                 Edit
-                               
                             </Button>
                             <Button
                                 variant="contained"
@@ -347,7 +364,8 @@ export default function Job(props) {
                     Requirments
                 </Typography>
 
-                {(type === "Recruiter" &&  props.job.Requirments!==undefined)&&
+                {type === "Recruiter" &&
+                    props.job.Requirments !== undefined &&
                     props.job.Requirments.map((r, i) => (
                         <Typography
                             key={uuidv4()}
@@ -361,7 +379,8 @@ export default function Job(props) {
                             {r.weight === 4 && `- ${r.name}, Expert`}
                         </Typography>
                     ))}
-                {(type === "Recruiter" &&  props.job.stack!==undefined)&&
+                {type === "Recruiter" &&
+                    props.job.stack !== undefined &&
                     props.job.stack.map((r, i) => (
                         <Typography
                             key={uuidv4()}
@@ -375,7 +394,8 @@ export default function Job(props) {
                             {r.weight === 4 && `- ${r.name}, Expert`}
                         </Typography>
                     ))}
-                {(type === "Applicant" &&   props.job.Requirments!==undefined)&&
+                {type === "Applicant" &&
+                    props.job.Requirments !== undefined &&
                     props.job.Requirments.map((r, i) => (
                         <Typography
                             key={uuidv4()}
