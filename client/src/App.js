@@ -19,9 +19,10 @@ import JobPage from "./pages/JobPage/JobPage";
 import ApplicantPage from "./pages/ApplicantPage/ApplicantPage";
 import CustomiseHiringPage from "./pages/CustomiseHiringPage/CustomiseHiringPage";
 import AddExam from "./components/MCQExam/AddExam";
+import McqTestPage from "./pages/McqTestPage/McqTestPage";
 // components
 import Layout from "./components/layout/Layout";
-import HelloWorld from "./components/HelloWorld";
+// import HelloWorld from "./components/HelloWorld";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -106,7 +107,7 @@ const App = () => {
                     <ProtectedRoute
                         exact
                         path="/job/exam/:ID"
-                        component={HelloWorld}
+                        component={McqTestPage}
                         name="McqTest"
                     />
 
