@@ -13,6 +13,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { useState } from "react";
+import { useEffect } from "react";
 
 const MCQ = {
     jobId: 1,
@@ -93,6 +94,15 @@ const MCQ = {
 
 const McqTestPage = (props) => {
     const [McqTaken, setMcqTaken] = useState(false);
+    const [questions, setQuestions] = useState([]);
+
+    useEffect(() => {
+        const getQuestion = async () => {
+            console.log("hello");
+        };
+        getQuestion();
+    }, []);
+
     let McqAnswers = {};
     //ID of the job
     const { ID } = useParams();
