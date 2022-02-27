@@ -36,9 +36,9 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         res.status(400).send(error.message);
     }
 });
-router.get("/getMCQ", applicantAuth, async (req, res) => {
+router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
-        const mcq = await MCQ.findByPk(req.body.jobId, {
+        const mcq = await MCQ.findByPk(req.params.id, {
             include: {
                 model: Question,
                 attributes: ["id", "question", "choices"],
