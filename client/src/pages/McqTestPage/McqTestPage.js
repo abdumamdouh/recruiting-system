@@ -135,7 +135,7 @@ const McqTestPage = (props) => {
                 {MCQ.questions.map((question, index) => (
                     <FormControl>
                         <FormLabel id="demo-row-radio-buttons-group-label">
-                            {`${index + 1} -`} Gender
+                            {`${index + 1} - ${question.question}`}
                         </FormLabel>
                         <RadioGroup
                             row
@@ -146,26 +146,13 @@ const McqTestPage = (props) => {
                                 justifyContent: "space-around"
                             }}
                         >
-                            <FormControlLabel
-                                value="female"
-                                control={<Radio />}
-                                label="Female"
-                            />
-                            <FormControlLabel
-                                value="male"
-                                control={<Radio />}
-                                label="Male"
-                            />
-                            <FormControlLabel
-                                value="other"
-                                control={<Radio />}
-                                label="Other"
-                            />
-                            <FormControlLabel
-                                value="gay"
-                                control={<Radio />}
-                                label="Gay"
-                            />
+                            {question.choices.map((choice) => (
+                                <FormControlLabel
+                                    value={choice}
+                                    control={<Radio />}
+                                    label={choice}
+                                />
+                            ))}
                         </RadioGroup>
                     </FormControl>
                 ))}
