@@ -5,8 +5,7 @@ import storage from "redux-persist/lib/storage";
 import userReducer from "./reducers/user";
 import jobsReducer from "./reducers/jobs";
 import jobReducer from "./reducers/job";
-// import productsReducer from "./reducers/products";
-// import sidebarReducer from "./reducers/sideBar";
+import examReducer from './reducers/exam'
 
 const persistConfig = {
   key: "root",
@@ -18,6 +17,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   jobs: jobsReducer,
   job: jobReducer,
+  exam:examReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);
