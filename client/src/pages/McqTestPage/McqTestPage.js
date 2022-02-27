@@ -14,6 +14,7 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const MCQ = {
     jobId: 1,
@@ -94,11 +95,30 @@ const MCQ = {
 
 const McqTestPage = (props) => {
     const [McqTaken, setMcqTaken] = useState(false);
-    const [questions, setQuestions] = useState([]);
+    const [Mcq, setMcq] = useState([]);
+
+    const { userInfo } = useSelector((state) => state.user);
 
     useEffect(() => {
         const getQuestion = async () => {
-            console.log("hello");
+            console.log(userInfo.token);
+            try {
+                const response = await fetch(
+                    `http://localhost:5000/getMCQ/${ID}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + userInfo.token
+                        }
+                    }
+                );
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.log(error);
+            }
         };
         getQuestion();
     }, []);
