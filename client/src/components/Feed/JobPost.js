@@ -15,11 +15,11 @@ const JobPost = ({job}) => {
                 'http://localhost:5000/Recruiter/me/avatar',
                 {
                     method: "GET",
-                    // headers: {
-                    //     // Accept: "application/json",
-                    //     // "Content-Type": "data:image/jpeg;base64",
-                    //     Authorization: "Bearer " + state.user.userInfo.token
-                    // }
+                    headers: {
+                        // Accept: "application/json",
+                        // "Content-Type": "data:image/jpeg;base64",
+                        Authorization: "Bearer " + state.user.userInfo.token
+                    }
                 }
             );
             const data = await rawResponse.blob();
