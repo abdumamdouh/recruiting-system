@@ -11,7 +11,7 @@ const MCQ = db.define("MCQ", {
     topic: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
+        unique: false
     }
 });
 

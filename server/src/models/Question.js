@@ -9,12 +9,12 @@ const Question = db.define("Question", {
         allowNull: false
     },
     question: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         allowNull: false,
         unique: false
     },
     answer: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         allowNull: false,
         unique: false
     },

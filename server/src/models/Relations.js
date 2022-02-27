@@ -25,10 +25,3 @@ Recruiter.hasMany(Job, {
     onDelete: "cascade"
 });
 Job.belongsTo(Recruiter);
-
-// relation between job and MCQ ( M-->N )
-Job.belongsToMany(MCQ, { through: JobMCQ });
-MCQ.belongsToMany(Job, { through: JobMCQ });
-// relation between MCQ nad question ( M-->N )
-MCQ.belongsToMany(Question, { through: MCQQuestion });
-Question.belongsToMany(MCQ, { through: MCQQuestion });
