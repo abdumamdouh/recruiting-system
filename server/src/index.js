@@ -8,6 +8,10 @@ const Recruiter = require("./models/Recruiter");
 const Job = require("./models/Job");
 const Requirment = require("./models/Requirment");
 const ApplyFor = require("./models/ApplyFor");
+const MCQ = require("./models/MCQ");
+const Question = require("./models/Question");
+const JobMCQ = require("./models/JobMCQ");
+const MCQQuestion = require("./models/MCQQuestion");
 
 //requiring db relations
 const Relations = require("./models/Relations");
@@ -38,6 +42,10 @@ Recruiter.sync();
 Job.sync();
 Requirment.sync();
 ApplyFor.sync();
+MCQ.sync();
+Question.sync();
+JobMCQ.sync();
+MCQQuestion.sync();
 
 // iniallizing server on port 5000
 app.listen(PORT, () => {
