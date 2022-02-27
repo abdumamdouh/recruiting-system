@@ -10,6 +10,7 @@ const Requirment = require("./models/Requirment");
 const ApplyFor = require("./models/ApplyFor");
 const CodingProblemBank = require("./models/CodingProblemBank");
 const TestCases = require("./models/TestCases")
+const ActiveCodingProblem = require("./models/ActiveCodingProbelms");
 
 //requiring db relations
 const Relations = require("./models/Relations");
@@ -20,7 +21,7 @@ const RecruiterRouter = require("./controller/routes/Recruiter");
 const GeneralRouter = require("./controller/routes/General");
 const JobRouter = require("./controller/routes/Job");
 const MCQRouter = require("./controller/routes/MCQ");
-const CodingProblemRouter = require("./controller/routes/CodingProblem")
+const CodingProblemRouter = require("./controller/routes/CodingProblem");
 
 // construcing express app on port 5000
 const app = express();
@@ -38,7 +39,6 @@ app.use(JobRouter);
 app.use(MCQRouter);
 app.use(CodingProblemRouter);
 
-
 // creating tables if not existed
 Applicant.sync();
 Recruiter.sync();
@@ -47,6 +47,7 @@ Requirment.sync();
 ApplyFor.sync();
 CodingProblemBank.sync();
 TestCases.sync();
+ActiveCodingProblem.sync();
 
 // iniallizing server on port 5000
 app.listen(PORT, () => {
