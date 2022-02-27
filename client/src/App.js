@@ -18,10 +18,10 @@ import Feed from "./components/Feed/FeedPage";
 import JobPage from "./pages/JobPage/JobPage";
 import ApplicantPage from "./pages/ApplicantPage/ApplicantPage";
 import CustomiseHiringPage from "./pages/CustomiseHiringPage/CustomiseHiringPage";
-import AddExam from './components/MCQExam/AddExam';
+import AddExam from "./components/MCQExam/AddExam";
 // components
 import Layout from "./components/layout/Layout";
-// import HelloWorld from "./components/HelloWorld";
+import HelloWorld from "./components/HelloWorld";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -72,6 +72,7 @@ const App = () => {
                         component={JobPage}
                         name="job"
                     />
+
                     <ProtectedRoute
                         exact
                         path="/applicant/:ID"
@@ -92,6 +93,7 @@ const App = () => {
                         component={CustomiseHiringPage}
                         name="customiseHiringPipeline"
                     />
+
                     {/* recruiter add exam */}
                     <ProtectedRoute
                         exact
@@ -99,6 +101,15 @@ const App = () => {
                         component={AddExam}
                         name="createJob"
                     />
+
+                    {/* Applicant can take MCQ exam */}
+                    <ProtectedRoute
+                        exact
+                        path="/job/exam/:ID"
+                        component={HelloWorld}
+                        name="McqTest"
+                    />
+
                     <Route
                         exact
                         path="/404"
