@@ -12,6 +12,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import { useState } from "react";
 
 const MCQ = {
     jobId: 1,
@@ -91,6 +92,7 @@ const MCQ = {
 };
 
 const McqTestPage = (props) => {
+    const [McqTaken, setMcqTaken] = useState(false);
     let McqAnswers = {};
     //ID of the job
     const { ID } = useParams();
@@ -108,78 +110,85 @@ const McqTestPage = (props) => {
     const handleSubmit = () => {
         console.log("alo");
         alert("submitted successfully!");
+        setMcqTaken(true);
     };
     return (
-        <Container
-            component="main"
-            maxWidth="md"
-            style={{
-                border: "1px solid",
-                borderRadius: "15px",
-                marginTop: stackMargin,
-                overflowY: "none"
-            }}
-            sx={{ overflow: "auto" }}
-        >
-            <CssBaseline />
-            <Box
-                sx={{
-                    marginTop: 5,
-                    marginBottom: 5,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "left",
-                    overflow: "auto"
-                }}
-                component="div"
-            >
-                <Typography
-                    color="black"
-                    variant="h5"
-                    style={{ textAlign: "center" }}
+        <>
+            {McqTaken ? (
+                <h1>you have already take the MCQ exam before</h1>
+            ) : (
+                <Container
+                    component="main"
+                    maxWidth="md"
+                    style={{
+                        border: "1px solid",
+                        borderRadius: "15px",
+                        marginTop: stackMargin,
+                        overflowY: "none"
+                    }}
+                    sx={{ overflow: "auto" }}
                 >
-                    {MCQ.topic}
-                </Typography>
-
-                <Divider style={{ margin: "20px 0" }} />
-
-                {MCQ.questions.map((question, index) => (
-                    <FormControl key={index}>
-                        <FormLabel id="demo-row-radio-buttons-group-label">
-                            {`${index + 1} - ${question.question}`}
-                        </FormLabel>
-                        <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-around"
-                            }}
-                            onChange={(event) =>
-                                handleMcqChange(event, question.id)
-                            }
+                    <CssBaseline />
+                    <Box
+                        sx={{
+                            marginTop: 5,
+                            marginBottom: 5,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "left",
+                            overflow: "auto"
+                        }}
+                        component="div"
+                    >
+                        <Typography
+                            color="black"
+                            variant="h5"
+                            style={{ textAlign: "center" }}
                         >
-                            {question.choices.map((choice, index) => (
-                                <FormControlLabel
-                                    key={index}
-                                    value={choice}
-                                    control={<Radio />}
-                                    label={choice}
-                                />
-                            ))}
-                        </RadioGroup>
-                    </FormControl>
-                ))}
-                <Button
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    onClick={handleSubmit}
-                >
-                    Submit
-                </Button>
-            </Box>
-        </Container>
+                            {MCQ.topic}
+                        </Typography>
+
+                        <Divider style={{ margin: "20px 0" }} />
+
+                        {MCQ.questions.map((question, index) => (
+                            <FormControl key={index}>
+                                <FormLabel id="demo-row-radio-buttons-group-label">
+                                    {`${index + 1} - ${question.question}`}
+                                </FormLabel>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "space-around"
+                                    }}
+                                    onChange={(event) =>
+                                        handleMcqChange(event, question.id)
+                                    }
+                                >
+                                    {question.choices.map((choice, index) => (
+                                        <FormControlLabel
+                                            key={index}
+                                            value={choice}
+                                            control={<Radio />}
+                                            label={choice}
+                                        />
+                                    ))}
+                                </RadioGroup>
+                            </FormControl>
+                        ))}
+                        <Button
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </Button>
+                    </Box>
+                </Container>
+            )}
+        </>
     );
 };
 
