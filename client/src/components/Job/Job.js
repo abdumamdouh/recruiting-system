@@ -132,6 +132,11 @@ export default function Job(props) {
         history.push(`/customiseHiring/${props.id}`);
     };
 
+    const handleMCQ = () => {
+        // console.log("hello");
+        history.push(`/job/exam/${props.job.id}`);
+    };
+
     return (
         <Container
             component="main"
@@ -290,7 +295,7 @@ export default function Job(props) {
                             </Button>
                             <Button
                                 variant="contained"
-                                onClick={() => console.log("hello")}
+                                onClick={handleMCQ}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                                 color="secondary"
                             >
