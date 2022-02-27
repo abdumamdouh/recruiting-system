@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 import Typography from "@mui/material/Typography";
@@ -92,6 +91,7 @@ const MCQ = {
 };
 
 const McqTestPage = (props) => {
+    let McqAnswers = {};
     //ID of the job
     const { ID } = useParams();
     let margin = MCQ.questions.length > 17 ? 55 : 40;
@@ -101,8 +101,8 @@ const McqTestPage = (props) => {
     const stackMargin = `${margin * MCQ.questions.length}px`;
 
     const handleMcqChange = (event, id) => {
-        console.log(event.target.value);
-        console.log(id);
+        McqAnswers = { ...McqAnswers, [id]: event.target.value };
+        console.log(McqAnswers);
     };
     return (
         <Container
