@@ -1,12 +1,13 @@
 import "./AddExam.scss";
 import { CSVReader } from 'react-papaparse';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField'
 import {useState} from 'react';
 import {createExamAction} from '../../redux/actions/exam'
 import { useDispatch, useSelector } from "react-redux";
 export default function AddExam() {
-//    const [topic,seTopic]=useState('')
+const [topic,setTopic]=useState('')
 const dispatch = useDispatch();
-const topic="yyyyyyyyyyyyyyyyy"
 const jobId= useSelector(state=>state.job.id)
 console.log(jobId)
     const handleOnDrop = data => {
@@ -43,6 +44,17 @@ console.log(jobId)
 
     return (
         <div className="Exam">
+        <Box
+      component="form"
+      sx={{
+        '& > :not(style)': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <TextField id="outlined-basic" label="Exam topic" variant="outlined" onChange={(e)=>setTopic(e.target.value)}/>
+      
+    </Box>
             <h4 style={{color: 'black', 'marginBottom': '20px'}}>Click and Drag Upload</h4>
             <CSVReader
                 onDrop={handleOnDrop}
