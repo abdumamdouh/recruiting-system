@@ -38,8 +38,7 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
 });
 router.get("/getMCQ", applicantAuth, async (req, res) => {
     try {
-        const mcq = await MCQ.findAll({
-            where: { id: req.body.jobId },
+        const mcq = await MCQ.findByPk(req.body.jobId, {
             include: {
                 model: Question,
                 attributes: ["id", "question", "choices"],
