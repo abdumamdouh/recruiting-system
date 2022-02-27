@@ -15,7 +15,7 @@ const Job = db.define("Job", {
         allowNull: false
     },
     description: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(5000),
         allowNull: false,
         unique: false
     },
