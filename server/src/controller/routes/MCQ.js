@@ -75,20 +75,18 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             attributes: []
         });
         questions = JSON.parse(JSON.stringify(questions));
-        const modifiedQuestions = questions.map((question) => ({
-            [Object.values(question)[0]]: Object.values(question)[1]
-        }));
-        // console.log(modifiedQuestions);
-        let result = 0;
-        // console.log(req.body.answers);
-        for (let answer of req.body.answers) {
-            if (
-                modifiedQuestions[Object.keys(answer)[0]] ===
-                req.body.answers[Object.keys(answer)[0]]
-            ) {
-                result++;
-            }
-        }
+        const answers = questions.reduce(
+            (acc, cur) => ({
+                ...acc,
+                [cur.id]: cur.answer
+            }),
+            {}
+        );
+        const result = Object.keys(req.body.McqAnswers).reduce(
+            (mark, key) =>
+                req.body.McqAnswers[key] === answers[key] ? ++mark : mark,
+            0
+        );
         res.status(202).send(result.toString());
     } catch (error) {
         res.status(400).send(error.message);
