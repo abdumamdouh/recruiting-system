@@ -1,6 +1,8 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
+// import "react-notifications/lib/notifications.css";
+// import Notification from "../../components/Notification";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
@@ -467,6 +469,7 @@ const McqTestPage = (props) => {
                         >
                             Submit
                         </Button>
+                        {/* <Notification /> */}
                     </Box>
                 </Container>
             )}
