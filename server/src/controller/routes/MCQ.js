@@ -24,13 +24,18 @@ const router = new express.Router();
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
         const { jobId, topic } = req.body;
-        let questions = req.body.questions.map(
-            ({ options: choices, ...rest }) => ({ choices, ...rest })
-        );
         const mcq = await MCQ.create({ topic });
         await mcq.addJob(jobId);
-        questions = await Question.bulkCreate(questions);
-        await mcq.addQuestion(questions);
+        let questions = req.body.questions.map(
+            ({ options: choices, ...rest }) => ({
+                choices,
+                ...rest,
+                MCQId: mcq.id
+            })
+        );
+        await Question.bulkCreate(questions);
+        // console.log(questions);
+        // await mcq.addQuestion(questions);
         res.status(201).send("The file is uploaded successfully");
     } catch (error) {
         res.status(400).send(error.message);
@@ -44,8 +49,8 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
             include: {
                 model: Question,
                 as: "questions",
-                attributes: ["id", "question", "choices"],
-                through: { attributes: [] }
+                attributes: ["id", "question", "choices"]
+                // through: { attributes: [] }
             },
             attributes: ["id", "topic"]
         });
@@ -69,8 +74,8 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             include: {
                 model: Question,
                 as: "questions",
-                attributes: ["id", "answer"],
-                through: { attributes: [] }
+                attributes: ["id", "answer"]
+                // through: { attributes: [] }
             },
             attributes: []
         });
@@ -82,6 +87,7 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             }),
             {}
         );
+        console.log(answers);
         const result = Object.keys(req.body.McqAnswers).reduce(
             (mark, key) =>
                 req.body.McqAnswers[key] === answers[key] ? ++mark : mark,
