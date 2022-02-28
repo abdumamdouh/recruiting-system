@@ -5,6 +5,8 @@ const ActiveCodingProblem = require("../../models/ActiveCodingProbelms")
 
 const recruiterAuth = require('../middleware/recruiterAuth') 
 const applicantAuth = require('../middleware/applicantAuth')
+const { Op } = require('@sequelize/core');
+
 
 // YYYY-MM-DD HH:MI:SS
 const router = new express.Router();
@@ -74,6 +76,50 @@ router.get("*/getCodingProblem" , applicantAuth , async (req,res) => {
 // body must contain job_id , codingProblem_id
 // this route will also analyze the applicant's solution 
 // and coding problem stats table will be updated accordingly 
+
+
+
+
+//get all coding problems for recruiter to choose from them:
+
+
+
+router.post("/codingProblems",recruiterAuth, async (req, res) => {
+    const pageNumber = req.body.pageNumber;
+    // const Limit = req.body.limit
+    try {
+        const result = await CodingProblemBank.findAndCountAll({
+            attributes: [
+                "id",
+                "description",
+                "timeConstraint",
+                "memoryConstraint",
+                "name",
+                "private",
+
+            ],
+            where:{
+                [Op.or]: [
+                    { private: 0 },
+                    { recruiterId: req.recruiter.id }
+                  ]
+            },
+            offset: (pageNumber - 1) * 10,
+            limit: 10
+        });
+        res.send({
+            codingProblems: result.rows,  
+        });
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+
+
+
+
+
 router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
 
 })
