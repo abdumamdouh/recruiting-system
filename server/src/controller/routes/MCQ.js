@@ -38,14 +38,22 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
 });
 router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
-        const mcq = await MCQ.findByPk(req.params.id, {
+        let mcq = await MCQ.findByPk(req.params.id, {
             include: {
                 model: Question,
+                as: "questions",
                 attributes: ["id", "question", "choices"],
                 through: { attributes: [] }
             },
             attributes: ["id", "topic"]
         });
+        mcq = JSON.parse(JSON.stringify(mcq));
+        mcq.questions = _.shuffle(mcq.questions);
+        // console.log(mcq.questions);
+        mcq.questions.forEach((question) => {
+            question.choices = _.shuffle(question.choices);
+        });
+        // console.log(mcq.questions);
         res.status(200).send(mcq);
     } catch (error) {
         res.status(500).send(error.message);
