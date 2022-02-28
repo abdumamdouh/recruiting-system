@@ -26,10 +26,10 @@ export default function AddExam() {
         console.log(data);
         console.log("---------------------------");
         let arr = [];
-        data.map(d => arr.push(d.data));
+        data.filter(d=>d.data.length!==1).map(d => arr.push(d.data));
         const array = [...arr];
         const length = array[0].length;
-        arr = arr.slice(0, arr.length - 1);
+      // arr = arr.slice(0, arr.length - 1);
         let questions = arr.map((a, index) => ({
             question: a[0],
             options: a.slice(1, length - 1),
