@@ -402,7 +402,8 @@ const McqTestPage = (props) => {
         alert("submitted successfully!");
         //TODO: API Call to submit
         try {
-            const rawResponse = await fetch(`http://localhost:5000/`, {
+            console.log(McqAnswers);
+            const rawResponse = await fetch(`http://localhost:5000/submit/1`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -411,7 +412,8 @@ const McqTestPage = (props) => {
                 },
                 body: JSON.stringify(McqAnswers)
             });
-            const data = await rawResponse.json();
+            const data = await rawResponse;
+            console.log(data);
         } catch (error) {
             console.log(error);
         }
