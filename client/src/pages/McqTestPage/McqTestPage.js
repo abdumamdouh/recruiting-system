@@ -18,7 +18,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-const MCQ = {
+let MCQQ = {
     jobId: 1,
     topic: "ana ba7b rouby",
     questions: [
@@ -370,7 +370,12 @@ const McqTestPage = (props) => {
                 );
                 const data = await response.json();
                 //TODO: check taken flag and update the state based on it
+                console.log("alo");
                 console.log(data);
+                console.log(data.questions);
+                setMcq(data);
+                // MCQ = data;
+                setMcqTaken(false);
             } catch (error) {
                 console.log(error);
             }
@@ -381,11 +386,11 @@ const McqTestPage = (props) => {
     let McqAnswers = {};
     //ID of the job
     const { ID } = useParams();
-    let margin = MCQ.questions.length > 17 ? 55 * 4 : 40 * 5;
-    margin = MCQ.questions.length > 25 ? 65 * 3.4 : margin;
-    margin = MCQ.questions.length > 35 ? 75 * 3 : margin;
+    let margin = Mcq.questions?.length > 17 ? 55 * 4 : 40 * 5;
+    margin = Mcq.questions?.length > 25 ? 65 * 3.4 : margin;
+    margin = Mcq.questions?.length > 35 ? 75 * 3 : margin;
 
-    const stackMargin = `${margin * MCQ.questions.length}px`;
+    const stackMargin = `${margin * Mcq.questions?.length}px`;
 
     const handleMcqChange = (event, id) => {
         McqAnswers = { ...McqAnswers, [id]: event.target.value };
@@ -407,7 +412,6 @@ const McqTestPage = (props) => {
                 body: JSON.stringify(McqAnswers)
             });
             const data = await rawResponse.json();
-            console.log(data);
         } catch (error) {
             console.log(error);
         }
@@ -446,39 +450,42 @@ const McqTestPage = (props) => {
                             variant="h5"
                             style={{ textAlign: "center" }}
                         >
-                            {MCQ.topic}
+                            {Mcq.topic}
                         </Typography>
 
                         <Divider style={{ margin: "20px 0" }} />
-
-                        {MCQ.questions.map((question, index) => (
-                            <FormControl key={index}>
-                                <FormLabel id="demo-row-radio-buttons-group-label">
-                                    {`${index + 1} - ${question.question}`}
-                                </FormLabel>
-                                <RadioGroup
-                                    column
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="row-radio-buttons-group"
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-around"
-                                    }}
-                                    onChange={(event) =>
-                                        handleMcqChange(event, question.id)
-                                    }
-                                >
-                                    {question.choices.map((choice, index) => (
-                                        <FormControlLabel
-                                            key={index}
-                                            value={choice}
-                                            control={<Radio />}
-                                            label={choice}
-                                        />
-                                    ))}
-                                </RadioGroup>
-                            </FormControl>
-                        ))}
+                        {/* {JSON.stringify(Mcq)} */}
+                        {Mcq.questions &&
+                            Mcq.questions.map((question, index) => (
+                                <FormControl key={index}>
+                                    <FormLabel id="demo-row-radio-buttons-group-label">
+                                        {`${index + 1} - ${question.question}`}
+                                    </FormLabel>
+                                    <RadioGroup
+                                        column
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-around"
+                                        }}
+                                        onChange={(event) =>
+                                            handleMcqChange(event, question.id)
+                                        }
+                                    >
+                                        {question.choices.map(
+                                            (choice, index) => (
+                                                <FormControlLabel
+                                                    key={index}
+                                                    value={choice}
+                                                    control={<Radio />}
+                                                    label={choice}
+                                                />
+                                            )
+                                        )}
+                                    </RadioGroup>
+                                </FormControl>
+                            ))}
                         <Button
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
