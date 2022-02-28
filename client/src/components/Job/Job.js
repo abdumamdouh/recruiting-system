@@ -17,6 +17,7 @@ import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import EditJob from "../EditJob/EditJob";
+import Message from "../modal/Message";
 import "./job.scss";
 const modalStyle = {
     position: "absolute",
@@ -35,7 +36,8 @@ export default function Job(props) {
 
     //for EditJob
     const [onEdit, setOnEdit] = useState(false);
-
+    //pop up message state
+    const [modalOpen, setModalOpen] = useState(false);
     //pull out the props
     const {
         description,
@@ -76,8 +78,7 @@ export default function Job(props) {
         // console.log("apply");
         // console.log(props.id);
         // console.log(state.user.userInfo.token);
-        alert("Applied Successfully!");
-
+        //alert("Applied Successfully!");
         try {
             const rawResponse = await fetch(
                 `http://localhost:5000/jobs/applyFor/${props.id}`,
@@ -91,6 +92,10 @@ export default function Job(props) {
                 }
             );
             const data = await rawResponse;
+
+          if(data.status===200){
+              setModalOpen(true)
+          }
             console.log(data);
         } catch (error) {
             console.log(error.message);
@@ -145,6 +150,8 @@ export default function Job(props) {
             sx={{ overflow: "auto" }}
         >
             <CssBaseline />
+
+      {modalOpen && <Message setOpenModal={setModalOpen} />}
             {/* applicants info in case of Recruiter */}
             {type === "Recruiter" && props.job.applicants !== undefined ? (
                 <Modal
@@ -172,11 +179,11 @@ export default function Job(props) {
                         </p>
                         <div className="row">
                             <div className="col">Name</div>
-                            <div className="col">Score</div>
+                            <div className="col">Result</div>
                         </div>
                         {/* map through the applicants */}
 
-                        {copyApplicants.map((applicant) => (
+                        {copyApplicants.filter(applicant=>applicant.score!==0).map((applicant) => (
                             <>
                                 <div className="row" key={applicant.id}>
                                     <div
@@ -192,7 +199,7 @@ export default function Job(props) {
                                             {applicant.userName}
                                         </a>
                                     </div>
-                                    <div className="col">{applicant.score}</div>
+                                    <div className="col">{applicant.score}%</div>
                                 </div>
                                 <Divider />
                             </>

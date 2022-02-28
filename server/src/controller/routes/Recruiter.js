@@ -63,10 +63,7 @@ router.post('/Recruiter/me/avatar', recruiterAuth, upload.single('avatar'), asyn
 
 // Get recruiter's avatar
 router.get('/Recruiter/me/avatar', recruiterAuth, async (req, res) => {
-    res.set({
-        'Content-Type':'image/jpg',
-    })
-    res.send(req.recruiter.avatar.toString('base64'))
+    res.send(req.recruiter.avatar)
 }, (error, req, res, next) => {
     res.status(400).send({ error: error.message })
 })

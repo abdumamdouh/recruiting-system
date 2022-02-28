@@ -43,7 +43,7 @@ router.post("/Feed", async (req, res) => {
             include: [
                 {
                     model: Recruiter,
-                    attributes: ["company"],
+                    attributes: ["company","avatar"],
                     // INNER JOIN
                     required: true
                 }
@@ -77,7 +77,7 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                 include: [
                     {
                         model: Recruiter,
-                        attributes: ["company"],
+                        attributes: ["company","avatar"],
                         // INNER JOIN
                         required: true
                     },
@@ -98,7 +98,7 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                 include: [
                     {
                         model: Recruiter,
-                        attributes: ["company"],
+                        attributes: ["company","avatar"],
                         // INNER JOIN
                         required: true
                     },
@@ -122,6 +122,12 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                         replacements: [job.id]
                     }
                 );
+
+                let maxScore = 0;
+
+                job.Requirments.forEach( requirement => {
+                    maxScore = maxScore + requirement.weight * 4;
+                })
 
                 // calculate the score of each applicant and append it to each applicant
                 for (let index = 0; index < results.length; index++) {
@@ -152,7 +158,8 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                                     Object.values(qualification)[0];
                         }
                     }
-                    results[index].score = aScore;
+                    results[index].score = Math.ceil(aScore / maxScore * 100);
+
                 }
 
                 // sort the applicants by the score
@@ -181,7 +188,7 @@ router.post("/recruiter/myjobs", recruiterAuth, async (req, res) => {
             include: [
                 {
                     model: Recruiter,
-                    attributes: ["company"],
+                    attributes: ["company","avatar"],
                     // INNER JOIN
                     required: true
                 }

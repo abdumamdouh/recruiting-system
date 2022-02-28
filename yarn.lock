@@ -123,6 +123,11 @@
   "resolved" "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz"
   "version" "2.0.1"
 
+"react-notification-popup@^0.1.2":
+  "integrity" "sha512-wFErfQv7kfcFVrS5xSVh5XynsF6kJD6bc+0Rch1A5XqgdkCzbGbAenqY4yQ2TawD4vzfLMgNc8IjP9wvfgULLQ=="
+  "resolved" "https://registry.npmjs.org/react-notification-popup/-/react-notification-popup-0.1.2.tgz"
+  "version" "0.1.2"
+
 "readable-stream@^2.2.2":
   "integrity" "sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw=="
   "resolved" "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.7.tgz"
