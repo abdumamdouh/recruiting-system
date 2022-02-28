@@ -6,6 +6,8 @@ const ActiveCodingProblem = require("../../models/ActiveCodingProbelms")
 const recruiterAuth = require('../middleware/recruiterAuth') 
 const applicantAuth = require('../middleware/applicantAuth')
 const { Op } = require('@sequelize/core');
+const db = require("../../db/db");
+
 
 
 // YYYY-MM-DD HH:MI:SS
@@ -68,13 +70,17 @@ router.get("*/getCodingProblem/:id" , applicantAuth , async (req,res) => {
 
     try { 
             const codingProblem = await CodingProblemBank.findOne({
-      
 
                 where: {
                     id: req.params.id
                 }
             });
-            res.send(codingProblem);
+           const [results, metadata] = await db.query(`SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.params.id} limit 1`);
+
+           codingProblem.dataValues.testcases=results;
+
+           res.send(codingProblem);
+
         }
         catch (error) {
             res.status(400).send(error.message);
