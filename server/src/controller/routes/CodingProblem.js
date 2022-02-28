@@ -64,12 +64,21 @@ router.post("/assignProblemToApplicants" , recruiterAuth , async (req,res) =>{
 // seq: job_id --> codingproblem_id (many_to_many table)
 // (apply_for table) get applicants applied for this job and status "waiting for coding problem"
 // render coding problem to only those applicants  
-router.get("*/getCodingProblem" , applicantAuth , async (req,res) => {
-    try {
-        
-    } catch (error) {
-        res.send(error.message)
-    }
+router.get("*/getCodingProblem/:id" , applicantAuth , async (req,res) => {
+
+    try { 
+            const codingProblem = await CodingProblemBank.findOne({
+      
+
+                where: {
+                    id: req.params.id
+                }
+            });
+            res.send(codingProblem);
+        }
+        catch (error) {
+            res.status(400).send(error.message);
+        }
 })
 
 // take the applicants problem's solution
