@@ -1,7 +1,4 @@
 const express = require("express");
-const db = require("../../db/db");
-
-
 const CodingProblemBank = require("../../models/CodingProblemBank")
 const TestCases = require("../../models/TestCases")
 const ActiveCodingProblem = require("../../models/ActiveCodingProbelms")
