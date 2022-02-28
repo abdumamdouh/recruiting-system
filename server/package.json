@@ -13,6 +13,7 @@
     "@babel/core": "^7.15.8",
     "@babel/node": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
+    "@sequelize/core": "^7.0.0-alpha.10",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
