@@ -356,7 +356,6 @@ const McqTestPage = (props) => {
         const getQuestion = async () => {
             console.log(userInfo.token);
             try {
-                //TODO: check API call to fetch
                 const response = await fetch(
                     `http://localhost:5000/getMCQ/${ID}`,
                     {
@@ -400,9 +399,9 @@ const McqTestPage = (props) => {
     const handleSubmit = async () => {
         // console.log("alo");
         alert("submitted successfully!");
-        //TODO: API Call to submit
         try {
             console.log(McqAnswers);
+            //TODO: replace the hardcoded job id with the id of the job
             const rawResponse = await fetch(`http://localhost:5000/submit/1`, {
                 method: "POST",
                 headers: {
