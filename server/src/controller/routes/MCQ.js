@@ -36,6 +36,8 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         res.status(400).send(error.message);
     }
 });
+
+// get shuffled mcq questions by JobId
 router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
         let mcq = await MCQ.findByPk(req.params.id, {
@@ -57,6 +59,39 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
         res.status(200).send(mcq);
     } catch (error) {
         res.status(500).send(error.message);
+    }
+});
+
+// submit applicant answers by MCQId
+router.post("/submit/:id", applicantAuth, async (req, res) => {
+    try {
+        let { questions } = await MCQ.findByPk(req.params.id, {
+            include: {
+                model: Question,
+                as: "questions",
+                attributes: ["id", "answer"],
+                through: { attributes: [] }
+            },
+            attributes: []
+        });
+        questions = JSON.parse(JSON.stringify(questions));
+        const modifiedQuestions = questions.map((question) => ({
+            [Object.values(question)[0]]: Object.values(question)[1]
+        }));
+        // console.log(modifiedQuestions);
+        let result = 0;
+        // console.log(req.body.answers);
+        for (let answer of req.body.answers) {
+            if (
+                modifiedQuestions[Object.keys(answer)[0]] ===
+                req.body.answers[Object.keys(answer)[0]]
+            ) {
+                result++;
+            }
+        }
+        res.status(202).send(result.toString());
+    } catch (error) {
+        res.status(400).send(error.message);
     }
 });
 
