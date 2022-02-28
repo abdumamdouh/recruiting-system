@@ -346,6 +346,7 @@ const MCQ = {
 };
 
 const McqTestPage = (props) => {
+    //TODO: check if it's taken or not from BE on componentDidMount
     const [McqTaken, setMcqTaken] = useState(false);
     const [Mcq, setMcq] = useState([]);
 
@@ -368,6 +369,7 @@ const McqTestPage = (props) => {
                     }
                 );
                 const data = await response.json();
+                //TODO: check taken flag and update the state based on it
                 console.log(data);
             } catch (error) {
                 console.log(error);
@@ -390,10 +392,25 @@ const McqTestPage = (props) => {
         console.log(McqAnswers);
     };
 
-    const handleSubmit = () => {
-        console.log("alo");
+    const handleSubmit = async () => {
+        // console.log("alo");
         alert("submitted successfully!");
         //TODO: API Call to submit
+        try {
+            const rawResponse = await fetch(`http://localhost:5000/`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + userInfo.token
+                },
+                body: JSON.stringify(McqAnswers)
+            });
+            const data = await rawResponse.json();
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
         setMcqTaken(true);
     };
     return (
