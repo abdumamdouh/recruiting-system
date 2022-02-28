@@ -11,7 +11,7 @@ function Message({ setOpenModal }) {
               setOpenModal(false);
             }}
           >
-            X
+            x
           </button>
         </div>
         {/* <div className="title">
