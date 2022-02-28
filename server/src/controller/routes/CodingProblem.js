@@ -1,7 +1,13 @@
 const express = require("express");
+const db = require("../../db/db");
+
+
 const CodingProblemBank = require("../../models/CodingProblemBank")
 const TestCases = require("../../models/TestCases")
 const ActiveCodingProblem = require("../../models/ActiveCodingProbelms")
+const ApplyFor = require("../../models/ApplyFor")
+const Job = require("../../models/Job");
+
 
 const recruiterAuth = require('../middleware/recruiterAuth') 
 const applicantAuth = require('../middleware/applicantAuth')
@@ -17,6 +23,7 @@ const router = new express.Router();
 // body must contain deadline and diraution as well as job_id
 router.post('/SubmitCodingProblem', recruiterAuth , async (req,res) => {
     try {
+        req.body.recruiterId = req.recruiter.id
         const codingProblem = await CodingProblemBank.create(req.body)
         const testcases = req.body.testcases 
         
@@ -39,26 +46,34 @@ router.post('/SubmitCodingProblem', recruiterAuth , async (req,res) => {
     }
 })
 
-// Redundant route
-// assign coding problem to a certain job with it's daedline and duration
-// body must contain coding problem id and job id
-
-// router.post("/assignProblemToJob" , recruiterAuth . async (req,res =>{
-//     try {
-        
-//     } catch (error) {
-//         res.send(error.message)
-//     }
-// }))
-
 // assign coding problem to the filtered applicants (Update status in apply for table)
 // body contains job id with applicants ids that will be assigned to solve the coding problem
 router.post("/assignProblemToApplicants" , recruiterAuth , async (req,res) =>{
     try {
-        
+        const applicantsIds = req.body.applicantsIds
+        const jobId = req.body.jobId
+
+        // checking that this recruiter is the one who posted this job
+        const result = await Job.findOne({
+             where: { id:jobId }, 
+             attributes: [
+            "RecruiterId"
+        ]})
+        if (req.recruiter.id !== result.dataValues.RecruiterId){
+            throw new Error("You are not authorized.")
+        }
+
+        applicantsIds.forEach(async applicantid => {
+            await db.query(
+                "UPDATE ApplyFors SET status = ? WHERE JobId = ? AND ApplicantId = ?;",
+                {
+                    replacements: ["Waiting for coding problem." , jobId , applicantid]
+                }
+            );
+        })
+        res.send("Assigned successfully.")        
     } catch (error) {
         res.send(error.message)
-
     }
 })
 
