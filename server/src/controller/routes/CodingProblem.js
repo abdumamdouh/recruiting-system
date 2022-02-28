@@ -92,6 +92,30 @@ router.get("*/getCodingProblem/:id" , applicantAuth , async (req,res) => {
 // this route will also analyze the applicant's solution 
 // and coding problem stats table will be updated accordingly 
 
+//get coding problem by id for recruiter with full testcases :
+
+router.get("*/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
+
+    try { 
+            const codingProblem = await CodingProblemBank.findOne({
+
+                where: {
+                    id: req.params.id
+                }
+            });
+           const [results, metadata] = await db.query(`SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.params.id}`);
+
+           codingProblem.dataValues.testcases=results;
+
+           res.send(codingProblem);
+
+        }
+        catch (error) {
+            res.status(400).send(error.message);
+        }
+})
+
+
 
 
 
