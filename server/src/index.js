@@ -11,7 +11,6 @@ const ApplyFor = require("./models/ApplyFor");
 const MCQ = require("./models/MCQ");
 const Question = require("./models/Question");
 const JobMCQ = require("./models/JobMCQ");
-const MCQQuestion = require("./models/MCQQuestion");
 
 //requiring db relations
 const Relations = require("./models/Relations");
@@ -45,7 +44,6 @@ ApplyFor.sync();
 MCQ.sync();
 Question.sync();
 JobMCQ.sync();
-MCQQuestion.sync();
 
 // iniallizing server on port 5000
 app.listen(PORT, () => {
