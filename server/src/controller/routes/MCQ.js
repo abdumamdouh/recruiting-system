@@ -47,6 +47,16 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
 // get shuffled mcq questions by JobId
 router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
+        // const tookExam = await MCQStat.findOne({
+        //     where: {
+        //        MCQId,
+        //          applicantId,
+        //         jobId
+        //     }
+        // });
+        // if (tookExam) {
+        //     throw new Error("You took exam already.");
+        // }
         let mcq = await MCQ.findByPk(req.params.id, {
             include: {
                 model: Question,
