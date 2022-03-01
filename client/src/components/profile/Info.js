@@ -130,7 +130,7 @@ const Info = props => {
                     </li>
                 )}
 
-                {(userInfo.type === 'Applicant' && qual.length!==0)&&
+                {(userInfo.type === 'Applicant' && userInfo.hasOwnProperty('yearsOfExperience') )&&
                 (
                     <li
                         className="list-group-item"
@@ -142,7 +142,7 @@ const Info = props => {
                            <div class="column"> <h6 className="md">Level</h6> 
                             </div>
                             </div>
-                            {qual.length!==0 &&qual.map(q => (
+                            {!userInfo.qualifications.hasOwnProperty('programmingLanguages') &&userInfo.qualifications.map(q => (
                            <div className= "row">
                            <div class="column">  <span className="card-text" style={{'color': '#33415c'}}> {Object.keys(q)}</span> </div> 
                            <div class="column"> 
