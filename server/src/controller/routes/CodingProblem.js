@@ -4,6 +4,7 @@ const TestCases = require("../../models/TestCases")
 const ActiveCodingProblem = require("../../models/ActiveCodingProbelms")
 const ApplyFor = require("../../models/ApplyFor")
 const Job = require("../../models/Job");
+const {writeCodeToFile,testCode} = require('../helper functions/CodingProblemLogic')
 
 
 const recruiterAuth = require('../middleware/recruiterAuth') 
@@ -79,7 +80,6 @@ router.post("/assignProblemToApplicants" , recruiterAuth , async (req,res) =>{
 // (apply_for table) get applicants applied for this job and status "waiting for coding problem"
 // render coding problem to only those applicants  
 router.get("*/getCodingProblem/:id" , applicantAuth , async (req,res) => {
-
     try { 
             const codingProblem = await CodingProblemBank.findOne({
 
@@ -107,16 +107,13 @@ router.get("*/getCodingProblem/:id" , applicantAuth , async (req,res) => {
 //get coding problem by id for recruiter with full testcases :
 
 router.get("*/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
-
     try { 
             const codingProblem = await CodingProblemBank.findOne({
-
                 where: {
                     id: req.params.id
                 }
             });
            const [results, metadata] = await db.query(`SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.params.id}`);
-
            codingProblem.dataValues.testcases=results;
 
            res.send(codingProblem);
@@ -132,9 +129,6 @@ router.get("*/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
 
 
 //get all coding problems for recruiter to choose from them:
-
-
-
 router.post("/codingProblems",recruiterAuth, async (req, res) => {
     const pageNumber = req.body.pageNumber;
     // const Limit = req.body.limit
@@ -166,13 +160,32 @@ router.post("/codingProblems",recruiterAuth, async (req, res) => {
     }
 });
 
-
-
-
-
-
+// job id , CP id , language , code --> from the client
+// steps :
+// read code write in a known directory with name (applicantId-jobId-CPId)
+// get the test cases from the db(inputs & outputs)
+// compile code based on the coming language with the retrieved test cases also set timeout
+// compare output of the program with the correct output
 router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
+    try {
+        // writing the coming code in the solutions directory
+        writeCodeToFile(req.body.code,
+            req.body.jobId,
+            req.applicant.id,
+            req.body.codingProblemId,
+            req.body.language)
+        
+        // testing code correctness 
+        const [results, metadata] = await db.query(`SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.body.codingProblemId}`);
 
+        results.forEach(async testCase =>{
+            const correct = await testCode(req.body.code,req.body.language,5,testCase.inputs,testCase.outputs)
+            // console.log(correct)
+        })
+        res.send(results)
+    } catch (error) {
+        res.send(error.message)
+    }
 })
 
 module.exports = router;
