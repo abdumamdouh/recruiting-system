@@ -8,6 +8,7 @@ const Requirment = require("../../models/Requirment");
 const ApplyFor = require("../../models/ApplyFor");
 const MCQ = require("../../models/MCQ");
 const Question = require("../../models/Question");
+const MCQStat = require("../../models/MCQStat");
 const db = require("../../db/db");
 
 // requiring applicant and recruiter authentication
@@ -23,14 +24,20 @@ const router = new express.Router();
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic } = req.body;
-        let questions = req.body.questions.map(
-            ({ options: choices, ...rest }) => ({ choices, ...rest })
-        );
+        const { jobId, topic, expiryDate, duration } = req.body;
+        // console.log(expiryDate, duration);
         const mcq = await MCQ.create({ topic });
-        await mcq.addJob(jobId);
-        questions = await Question.bulkCreate(questions);
-        await mcq.addQuestion(questions);
+        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        let questions = req.body.questions.map(
+            ({ options: choices, ...rest }) => ({
+                choices,
+                ...rest,
+                MCQId: mcq.id
+            })
+        );
+        await Question.bulkCreate(questions);
+        // console.log(questions);
+        // await mcq.addQuestion(questions);
         res.status(201).send("The file is uploaded successfully");
     } catch (error) {
         res.status(400).send(error.message);
@@ -44,8 +51,8 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
             include: {
                 model: Question,
                 as: "questions",
-                attributes: ["id", "question", "choices"],
-                through: { attributes: [] }
+                attributes: ["id", "question", "choices"]
+                // through: { attributes: [] }
             },
             attributes: ["id", "topic"]
         });
@@ -65,12 +72,13 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
 // submit applicant answers by MCQId
 router.post("/submit/:id", applicantAuth, async (req, res) => {
     try {
+        const { MCQId, applicantId, jobId } = req.body;
         let { questions } = await MCQ.findByPk(req.params.id, {
             include: {
                 model: Question,
                 as: "questions",
-                attributes: ["id", "answer"],
-                through: { attributes: [] }
+                attributes: ["id", "answer"]
+                // through: { attributes: [] }
             },
             attributes: []
         });
@@ -82,12 +90,14 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             }),
             {}
         );
-        const result = Object.keys(req.body.McqAnswers).reduce(
+        // console.log(answers);
+        const score = Object.keys(req.body.McqAnswers).reduce(
             (mark, key) =>
                 req.body.McqAnswers[key] === answers[key] ? ++mark : mark,
             0
         );
-        res.status(202).send(result.toString());
+        await MCQStat.create({ MCQId, applicantId, jobId, score });
+        res.status(202).send(score.toString());
     } catch (error) {
         res.status(400).send(error.message);
     }
