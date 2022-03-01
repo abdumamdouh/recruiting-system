@@ -38,6 +38,8 @@ export default function Job(props) {
     const [onEdit, setOnEdit] = useState(false);
     //pop up message state
     const [modalOpen, setModalOpen] = useState(false);
+    //check applicant applied or not 
+    
     //pull out the props
     const {
         description,
@@ -51,7 +53,8 @@ export default function Job(props) {
         place,
         employees,
         // company,
-        Recruiter
+        Recruiter,
+        applied
     } = props.job;
 
     //handle state of modal in case of Recruiter
@@ -75,10 +78,6 @@ export default function Job(props) {
             : null;
 
     const handleApply = async () => {
-        // console.log("apply");
-        // console.log(props.id);
-        // console.log(state.user.userInfo.token);
-        //alert("Applied Successfully!");
         try {
             const rawResponse = await fetch(
                 `http://localhost:5000/jobs/applyFor/${props.id}`,
@@ -285,14 +284,22 @@ export default function Job(props) {
                 <div>
                     {type === "Applicant" ? (
                         <>
-                            <Button
+                        { applied?   <Button
+                                variant="contained"
+                              //  endIcon={<ReplyAllOutlinedIcon />}
+                                sx={{ mt: 3, mb: 2 }}
+                                disabled
+                                //onClick={handleApply}
+                            >
+                                Applied
+                            </Button>: <Button
                                 variant="contained"
                                 endIcon={<ReplyAllOutlinedIcon />}
                                 sx={{ mt: 3, mb: 2 }}
                                 onClick={handleApply}
                             >
                                 Apply
-                            </Button>
+                            </Button>}
                             <Button
                                 variant="outlined"
                                 onClick={() => console.log("hello")}
