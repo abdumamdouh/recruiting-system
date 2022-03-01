@@ -92,6 +92,19 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                     id: req.params.id
                 }
             });
+
+            const appliedForTheJob = await ApplyFor.findOne({
+                where : {
+                    JobId: req.params.id,
+                    ApplicantId: req.applicant.id
+                }
+            })
+            if (appliedForTheJob) {
+                job.dataValues.applied = true
+            } else {
+                job.dataValues.applied = false
+            }
+            console.log(job)
             res.send(job);
         } else if (req.recruiter) {
             const job = await Job.findOne({
