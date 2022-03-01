@@ -3,7 +3,20 @@ const db = require("../db/db");
 const Job = require("./Job");
 const MCQ = require("./MCQ");
 
-const JobMCQ = db.define("JobMCQ", {}, { freezeTableName: true });
+const JobMCQ = db.define(
+    "JobMCQ",
+    {
+        expiryDate: {
+            type: Sequelize.DATE,
+            allowNull: false
+        },
+        duration: {
+            type: Sequelize.INTEGER(3),
+            allowNull: false
+        }
+    },
+    { freezeTableName: true }
+);
 
 // relation between job and MCQ ( M-->N )
 Job.belongsToMany(MCQ, { through: JobMCQ });
