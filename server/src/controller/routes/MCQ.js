@@ -23,9 +23,10 @@ const router = new express.Router();
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic } = req.body;
+        const { jobId, topic, expiryDate, duration } = req.body;
+        console.log(expiryDate, duration);
         const mcq = await MCQ.create({ topic });
-        await mcq.addJob(jobId);
+        await mcq.addJob(jobId, { through: { expiryDate, duration } });
         let questions = req.body.questions.map(
             ({ options: choices, ...rest }) => ({
                 choices,
@@ -87,7 +88,7 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             }),
             {}
         );
-        console.log(answers);
+        // console.log(answers);
         const result = Object.keys(req.body.McqAnswers).reduce(
             (mark, key) =>
                 req.body.McqAnswers[key] === answers[key] ? ++mark : mark,
