@@ -6,18 +6,21 @@ import Button from "@mui/material/Button";
 
 const JobPost = ({job}) => {
     const history = useHistory()
-    const avatar =job.Recruiter.avatar;
-    const base64String = btoa(String.fromCharCode(...new Uint8Array(avatar.data)));
+  
     const handleRedirect = ()=>{
         history.push(`/feed/job/${job.id}`);
     }
+    const avatar =job.Recruiter.avatar!==null?job.Recruiter.avatar: null
+    const base64String = job.Recruiter.avatar!==null?btoa(String.fromCharCode(...new Uint8Array(avatar.data))): '';
     //console.log(job)
     return(
         <div className={classes.job} onClick={handleRedirect}>
+     { job.Recruiter.avatar!==null &&
+       
             <img
             src={`data:image/jpeg;base64,${base64String}`}
             alt='logo'
-            className={classes.image}/>
+            className={classes.image}/>}
     
             <div className={classes.jobInfo}>
                 <div>

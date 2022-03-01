@@ -105,14 +105,7 @@ const EditJob = ({setOnEdit,job}) => {
         title,
         yearsOfExperience,
         careerLevel,
-        companyDescription,
-        period,
         place,
-        employees,
-        // company,
-        Recruiter,
-        applicants,
-        Requirments
     } =job
 
     const initalFormState = {
@@ -148,11 +141,6 @@ const [requirements, setRequirements] = useState([]);
 
 
     const dispatch = useDispatch();
-
-    // useEffect(() => {
-    //     setUserData(user)
-    // }, [user])
-
   
     const handleInput = e => {
 
@@ -184,6 +172,7 @@ const [requirements, setRequirements] = useState([]);
                             
                             dispatch(editJobAction(values));
                             console.log(values);
+                            setOnEdit(false);
                         }}
                     >
                         <Form>
@@ -303,27 +292,6 @@ const [requirements, setRequirements] = useState([]);
                                                 >
                                                     {req}
                                                 </label>
-                                                {/* <input
-                                                    id="typeText"
-                                                    className="form-control"
-                                                    //className="weight"
-                                                    key={req}
-                                                    value={requirements[req]}
-                                                    type="text"
-                                                    onChange={e => {
-                                                        setStackOptions(
-                                                            state => [
-                                                                ...state,
-                                                                {
-                                                                    [req]:
-                                                                        e.target
-                                                                            .value
-                                                                }
-                                                            ]
-                                                        );
-                                                        //console.log(stackOptions)
-                                                    }}
-                                                /> */}
                                                 <br />
                                                 <FormControl style={{minWidth: 240}}>
                                                 <InputLabel id="test-select-label">Requirement Level</InputLabel>
