@@ -8,6 +8,7 @@ const Requirment = require("../../models/Requirment");
 const ApplyFor = require("../../models/ApplyFor");
 const MCQ = require("../../models/MCQ");
 const Question = require("../../models/Question");
+const MCQStat = require("../../models/MCQStat");
 const db = require("../../db/db");
 
 // requiring applicant and recruiter authentication
@@ -24,7 +25,7 @@ const router = new express.Router();
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
         const { jobId, topic, expiryDate, duration } = req.body;
-        console.log(expiryDate, duration);
+        // console.log(expiryDate, duration);
         const mcq = await MCQ.create({ topic });
         await mcq.addJob(jobId, { through: { expiryDate, duration } });
         let questions = req.body.questions.map(
@@ -71,6 +72,7 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
 // submit applicant answers by MCQId
 router.post("/submit/:id", applicantAuth, async (req, res) => {
     try {
+        const { MCQId, applicantId, jobId } = req.body;
         let { questions } = await MCQ.findByPk(req.params.id, {
             include: {
                 model: Question,
@@ -89,12 +91,13 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             {}
         );
         // console.log(answers);
-        const result = Object.keys(req.body.McqAnswers).reduce(
+        const score = Object.keys(req.body.McqAnswers).reduce(
             (mark, key) =>
                 req.body.McqAnswers[key] === answers[key] ? ++mark : mark,
             0
         );
-        res.status(202).send(result.toString());
+        await MCQStat.create({ MCQId, applicantId, jobId, score });
+        res.status(202).send(score.toString());
     } catch (error) {
         res.status(400).send(error.message);
     }
