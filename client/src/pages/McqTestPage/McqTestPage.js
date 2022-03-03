@@ -14,6 +14,10 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+
+import Message from "../../components/modal/Message";
+
+
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -349,6 +353,8 @@ const McqTestPage = (props) => {
     //TODO: check if it's taken or not from BE on componentDidMount
     const [McqTaken, setMcqTaken] = useState(false);
     const [Mcq, setMcq] = useState([]);
+    //pop up message state
+    const [modalOpen, setModalOpen] = useState(false);
 
     const { userInfo } = useSelector((state) => state.user);
 
@@ -398,7 +404,10 @@ const McqTestPage = (props) => {
 
     const handleSubmit = async () => {
         // console.log("alo");
-        alert("submitted successfully!");
+        // alert("submitted successfully!");
+        // setMcqTaken(true);
+        // setModalOpen(true)
+
         try {
             console.log(McqAnswers);
             //TODO: replace the hardcoded job id with the id of the job
@@ -413,13 +422,18 @@ const McqTestPage = (props) => {
             });
             const data = await rawResponse;
             console.log(data);
+            if(data.status===200){
+                setMcqTaken(true);
+                setModalOpen(true);
+            }
         } catch (error) {
             console.log(error);
         }
-        setMcqTaken(true);
+        // setMcqTaken(true);
     };
     return (
         <>
+            {modalOpen && <Message setOpenModal={setModalOpen} message='Submitted Successfully!' />}
             {McqTaken ? (
                 <h1>you have already take the MCQ exam before</h1>
             ) : (
