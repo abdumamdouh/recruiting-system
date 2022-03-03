@@ -411,7 +411,7 @@ const McqTestPage = (props) => {
         try {
             console.log(McqAnswers);
             //TODO: replace the hardcoded job id with the id of the job
-            const rawResponse = await fetch(`http://localhost:5000/submit/1`, {
+            const rawResponse = await fetch(`http://localhost:5000/submit/${ID}`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
