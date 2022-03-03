@@ -151,7 +151,7 @@ export default function Job(props) {
         >
             <CssBaseline />
 
-      {modalOpen && <Message setOpenModal={setModalOpen} />}
+      {modalOpen && <Message setOpenModal={setModalOpen} message='Applied successfully!' />}
             {/* applicants info in case of Recruiter */}
             {type === "Recruiter" && props.job.applicants !== undefined ? (
                 <Modal

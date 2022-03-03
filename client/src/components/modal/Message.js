@@ -1,7 +1,7 @@
 import React from "react";
 import "./modal.scss";
 
-function Message({ setOpenModal }) {
+function Message({ setOpenModal, message }) {
   return (
     <div className="modalBackground">
       <div className="modalContainer">
@@ -18,7 +18,7 @@ function Message({ setOpenModal }) {
           <h3>Are You Sure You Want to Continue?</h3>
         </div> */}
         <div className="body">
-          <p>Applied successfully!</p>
+          <p>{message}</p>
         </div>
         <div className="footer">
           <button
