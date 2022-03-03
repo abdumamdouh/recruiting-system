@@ -24,9 +24,9 @@ const router = new express.Router();
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic, expiryDate, duration } = req.body;
+        const { jobId, topic, expiryDate, duration, private } = req.body;
         // console.log(expiryDate, duration);
-        const mcq = await MCQ.create({ topic });
+        const mcq = await MCQ.create({ topic , private });
         await mcq.addJob(jobId, { through: { expiryDate, duration } });
         let questions = req.body.questions.map(
             ({ options: choices, ...rest }) => ({
@@ -36,7 +36,6 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
             })
         );
         await Question.bulkCreate(questions);
-        // console.log(questions);
         // await mcq.addQuestion(questions);
         res.status(201).send("The file is uploaded successfully");
     } catch (error) {
