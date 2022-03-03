@@ -12,6 +12,11 @@ const MCQ = db.define("MCQ", {
         type: Sequelize.STRING,
         allowNull: false,
         unique: false
+    },
+    private: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        unique: false
     }
 });
 
