@@ -8,6 +8,7 @@ const Requirment = require("../../models/Requirment");
 const ApplyFor = require("../../models/ApplyFor");
 const MCQ = require("../../models/MCQ");
 const Question = require("../../models/Question");
+const MCQStat = require("../../models/MCQStat");
 const db = require("../../db/db");
 
 // requiring applicant and recruiter authentication
@@ -23,14 +24,20 @@ const router = new express.Router();
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic } = req.body;
-        let questions = req.body.questions.map(
-            ({ options: choices, ...rest }) => ({ choices, ...rest })
-        );
+        const { jobId, topic, expiryDate, duration } = req.body;
+        // console.log(expiryDate, duration);
         const mcq = await MCQ.create({ topic });
-        await mcq.addJob(jobId);
-        questions = await Question.bulkCreate(questions);
-        await mcq.addQuestion(questions);
+        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        let questions = req.body.questions.map(
+            ({ options: choices, ...rest }) => ({
+                choices,
+                ...rest,
+                MCQId: mcq.id
+            })
+        );
+        await Question.bulkCreate(questions);
+        // console.log(questions);
+        // await mcq.addQuestion(questions);
         res.status(201).send("The file is uploaded successfully");
     } catch (error) {
         res.status(400).send(error.message);
@@ -40,12 +47,22 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
 // get shuffled mcq questions by JobId
 router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
+        // const tookExam = await MCQStat.findOne({
+        //     where: {
+        //        MCQId,
+        //          applicantId,
+        //         jobId
+        //     }
+        // });
+        // if (tookExam) {
+        //     throw new Error("You took exam already.");
+        // }
         let mcq = await MCQ.findByPk(req.params.id, {
             include: {
                 model: Question,
                 as: "questions",
-                attributes: ["id", "question", "choices"],
-                through: { attributes: [] }
+                attributes: ["id", "question", "choices"]
+                // through: { attributes: [] }
             },
             attributes: ["id", "topic"]
         });
@@ -65,31 +82,32 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
 // submit applicant answers by MCQId
 router.post("/submit/:id", applicantAuth, async (req, res) => {
     try {
+        const { MCQId, applicantId, jobId } = req.body;
         let { questions } = await MCQ.findByPk(req.params.id, {
             include: {
                 model: Question,
                 as: "questions",
-                attributes: ["id", "answer"],
-                through: { attributes: [] }
+                attributes: ["id", "answer"]
+                // through: { attributes: [] }
             },
             attributes: []
         });
         questions = JSON.parse(JSON.stringify(questions));
-        const modifiedQuestions = questions.map((question) => ({
-            [Object.values(question)[0]]: Object.values(question)[1]
-        }));
-        // console.log(modifiedQuestions);
-        let result = 0;
-        // console.log(req.body.answers);
-        for (let answer of req.body.answers) {
-            if (
-                modifiedQuestions[Object.keys(answer)[0]] ===
-                req.body.answers[Object.keys(answer)[0]]
-            ) {
-                result++;
-            }
-        }
-        res.status(202).send(result.toString());
+        const answers = questions.reduce(
+            (acc, cur) => ({
+                ...acc,
+                [cur.id]: cur.answer
+            }),
+            {}
+        );
+        // console.log(answers);
+        const score = Object.keys(req.body.McqAnswers).reduce(
+            (mark, key) =>
+                req.body.McqAnswers[key] === answers[key] ? ++mark : mark,
+            0
+        );
+        await MCQStat.create({ MCQId, applicantId, jobId, score });
+        res.status(202).send(score.toString());
     } catch (error) {
         res.status(400).send(error.message);
     }
