@@ -5,8 +5,8 @@ import {
 } from "../types/index";
 import axios from "axios";
 const serverURL = "http://localhost:5000";
-export const createExamAction = (jobId,topic,questions) => {
-    let mcq={jobId:jobId,topic:topic,questions:questions}
+export const createExamAction = (jobId,topic,questions,privatee, expiryDate,duration) => {
+    let mcq={jobId:jobId,topic:topic,questions:questions, private: privatee, expiryDate:expiryDate, duration:duration}
     console.log(mcq)
     return async (dispatch, getState) => {
         try {
