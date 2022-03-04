@@ -1,8 +1,34 @@
+
+var compiler = require('compilex');
+var options = {stats : true}; 
+compiler.init(options);
 const fs = require('fs')
-const {c, cpp, node, python, java} = require('compile-run');
 
 
 
+// function sleep(milliseconds) {
+//     const date = Date.now();
+//     let currentDate = null;
+//     do {
+//       currentDate = Date.now();
+//     } while (currentDate - date < milliseconds);
+// }
+
+
+
+// const inject = function (code , language) {
+//     const t1 = 'double __measuringExecutionTimeAM ;'
+
+//     if (language == 'cpp'){
+//         const index = code.search('main')
+
+//         for (let i = index ; i < code.length ; i++){
+//             if (code[i] == '{'){
+
+//             }
+//         }
+//     }
+// }
 
 
 
@@ -25,6 +51,8 @@ const testCode = async function (code,langauge,timeOut,inputs,outputs){
         stringInput+='\n'
     })
 
+    // console.log(stringInput)
+
     //Removing [] from the outputs string
     outputs = outputs.slice(1,outputs.length-1);
 
@@ -32,18 +60,27 @@ const testCode = async function (code,langauge,timeOut,inputs,outputs){
     {
         case'cpp':
         try {
-            result = await cpp.runSource(code,{stdin:`${stringInput}`})
-
-            if (result.stdout === outputs){
-                return 1 ;
-            } else {
-                return 0 ;
-            }
+            // compilex example
+            var envData = { OS : "windows" , cmd : "g++"};
+            compiler.compileCPPWithInput(envData , code , stringInput , function (data) {
+                compiler.fullStat(function(data){
+                    console.log(data);
+                });
+                // console.log(outputs)
+                // console.log(data.output)
+                // if (data.output === outputs){
+                //     console.log('PASSED...') ;
+                // } else {
+                //     console.log('FAILED...') ;
+                // }   
+                // console.log(data);
+            }); 
         } catch (error) {
-            console.log(error)
+            throw new Error (error)
         }
         break;
     }
 }
 
 module.exports = {writeCodeToFile,testCode}
+
