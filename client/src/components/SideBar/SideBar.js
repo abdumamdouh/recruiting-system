@@ -58,7 +58,7 @@ const SideBar = () => {
           </ul>
           <h3 className="sidebarTitle">Available Exams</h3>
           <ul className="sidebarList">
-            <Link to="/AddExam" className="link">
+            <Link to="/availableMCQs">
             <li className="sidebarListItem">
               <WorkOutline className="sidebarIcon" />
               MCQ Exam 
