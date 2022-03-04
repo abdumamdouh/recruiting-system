@@ -19,6 +19,7 @@
         "formik": "^2.2.9",
         "pure-react-carousel": "^1.27.8",
         "react": "^17.0.1",
+        "react-datepicker": "^4.7.0",
         "react-dom": "^17.0.1",
         "react-icons": "^4.1.0",
         "react-loader-spinner": "^3.1.14",

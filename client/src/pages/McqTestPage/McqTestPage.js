@@ -474,7 +474,9 @@ const McqTestPage = (props) => {
                             Mcq.questions.map((question, index) => (
                                 <FormControl key={index}>
                                     <FormLabel id="demo-row-radio-buttons-group-label">
-                                        {`${index + 1} - ${question.question}`}
+                                        <Typography variant="h6" color='black'>
+                                            {`${index + 1} - ${question.question}`}
+                                        </Typography>
                                     </FormLabel>
                                     <RadioGroup
                                         column
