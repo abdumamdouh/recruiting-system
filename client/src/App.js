@@ -25,6 +25,7 @@ import Layout from "./components/layout/Layout";
 // import HelloWorld from "./components/HelloWorld";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";
+import DashBoardPage from "./pages/DashBoardPage/DashBoardPage";
 
 const App = () => {
     return (
@@ -95,10 +96,17 @@ const App = () => {
                         name="customiseHiringPipeline"
                     />
 
+                    <ProtectedRoute
+                        exact
+                        path="/dashboard/:ID"
+                        component={DashBoardPage}
+                        name="screeningDashboard"
+                    />
+
                     {/* recruiter add exam */}
                     <ProtectedRoute
                         exact
-                        path="/addExam"
+                        path="/AddExam"
                         component={AddExam}
                         name="createJob"
                     />
