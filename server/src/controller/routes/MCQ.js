@@ -43,6 +43,32 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     }
 });
 
+// get all public mcq questions
+router.get("/getAllMCQs", recruiterAuth, async (req, res) => {
+    try {
+
+        const results = await MCQ.findAndCountAll({
+            include: {
+                model: Question,
+                as: "questions",
+                attributes: ["id", "question", "choices", "answer" ]
+            },
+            attributes: ["id", "topic"],
+            where: {
+                private: false
+            }
+        });
+        console.log(results)
+        res.send({
+            MCQs: results.rows,
+            Count: results.count
+        });
+
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 // get shuffled mcq questions by JobId
 router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
