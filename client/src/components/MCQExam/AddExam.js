@@ -14,13 +14,20 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 export default function AddExam() {
     const [topic, setTopic] = useState("");
     const [expanded, setExpanded] = useState(false);
+    const [checked, setChecked] = useState(false);
+    const [privatee, setPrivatee] = useState(false);
 
     const handleChange = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+    const handleCheckBox = () => {
+        setChecked(!checked);
+        setPrivatee(checked)
+        console.log( 'dddd',privatee)
+        console.log(checked)
+      };
     const dispatch = useDispatch();
     const jobId = useSelector(state => state.job.id);
-    console.log(jobId);
     const handleOnDrop = data => {
         console.log("---------------------------");
         console.log(data);
@@ -38,7 +45,7 @@ export default function AddExam() {
 
         console.log("arr", questions);
 
-        dispatch(createExamAction(jobId, topic, questions));
+        dispatch(createExamAction(jobId, topic, questions,privatee));
     };
 
     const handleOnError = err => {
@@ -50,9 +57,8 @@ export default function AddExam() {
         console.log(data);
         console.log("---------------------------");
     };
-
     return (
-        <div className="container">
+        <div>
             <Accordion
                 expanded={expanded === "panel1"}
                 onChange={handleChange("panel1")}
@@ -125,6 +131,15 @@ export default function AddExam() {
             >
                 <span>Drop CSV file here or click to upload.</span>
             </CSVReader>
+
+             <Typography color="black" variant="h6">
+                    Do you agree to make your exams as open source?
+                </Typography>
+                <label>
+        <input type="checkbox"     checked={checked}
+          onChange={handleCheckBox}/>
+        Agree
+      </label>
         </div>
     );
 }
