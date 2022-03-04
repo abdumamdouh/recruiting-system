@@ -133,7 +133,8 @@ export default function Job(props) {
 
     const handleCustomise = () => {
         // console.log("hello");
-        history.push(`/customiseHiring/${props.id}`);
+      //  history.push(`/customiseHiring/${props.id}`);
+        history.push(`/dashboard/${props.id}`);
     };
 
     const handleMCQ = () => {
