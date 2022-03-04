@@ -63,10 +63,23 @@
     "dicer" "0.2.5"
     "readable-stream" "1.1.x"
 
+"colors@~0.6.2":
+  "integrity" "sha1-JCP+ZnisDF2uiFLl0OW+CMmXq8w="
+  "resolved" "https://registry.npmjs.org/colors/-/colors-0.6.2.tgz"
+  "version" "0.6.2"
+
 "compile-run@^2.3.4":
   "integrity" "sha512-O0veikr1Lkbq6uBpow7qDi2v/37GJKYghwJzpp5zfU4uVcgVcU0jz6mzCQeux1HCqknHNijEnJ7+yRJ0b/UcQA=="
   "resolved" "https://registry.npmjs.org/compile-run/-/compile-run-2.3.4.tgz"
   "version" "2.3.4"
+
+"compilex@^0.7.0":
+  "integrity" "sha1-S3kktcix1yIKE6Ogb9doGC2BJoM="
+  "resolved" "https://registry.npmjs.org/compilex/-/compilex-0.7.0.tgz"
+  "version" "0.7.0"
+  dependencies:
+    "colors" "~0.6.2"
+    "cuid" "~1.2.4"
 
 "concat-stream@^1.5.2":
   "integrity" "sha512-27HBghJxjiZtIk3Ycvn/4kbJk/1uZuJFfuPEns6LaEvpvG1f0hTea8lilrouyo9mVc2GWdcEZ8OLoGmSADlrCw=="
@@ -91,6 +104,11 @@
     "bluebird" "^3.5.1"
     "lodash" "^4.17.3"
     "strip-bom" "^2.0.0"
+
+"cuid@~1.2.4":
+  "integrity" "sha1-SzYXaYf5BjzgXuCTTonM7kud6KY="
+  "resolved" "https://registry.npmjs.org/cuid/-/cuid-1.2.5.tgz"
+  "version" "1.2.5"
 
 "debug@^4.3.3":
   "integrity" "sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q=="
