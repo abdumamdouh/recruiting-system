@@ -26,7 +26,7 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
         const { jobId, topic, expiryDate, duration, private } = req.body;
         // console.log(expiryDate, duration);
-        const mcq = await MCQ.create({ topic , private });
+        const mcq = await MCQ.create({ topic, private });
         await mcq.addJob(jobId, { through: { expiryDate, duration } });
         let questions = req.body.questions.map(
             ({ options: choices, ...rest }) => ({
@@ -100,13 +100,16 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             {}
         );
         // console.log(answers);
-        const score = Object.keys(req.body.McqAnswers).reduce(
+        let score = Object.keys(req.body.McqAnswers).reduce(
             (mark, key) =>
                 req.body.McqAnswers[key] === answers[key] ? ++mark : mark,
             0
         );
+        score = Number(
+            ((score / Object.keys(answers).length) * 100).toFixed(2)
+        );
         await MCQStat.create({ MCQId, applicantId, jobId, score });
-        res.status(202).send(score.toString());
+        res.status(202).send(`${score}%`);
     } catch (error) {
         res.status(400).send(error.message);
     }
