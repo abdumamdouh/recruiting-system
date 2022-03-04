@@ -1,6 +1,7 @@
 const express = require("express");
 const _ = require("lodash");
 const Sequelize = require("sequelize");
+const Op = require('Sequelize').Op
 const Applicant = require("../../models/Applicant");
 const Recruiter = require("../../models/Recruiter");
 const Job = require("../../models/Job");
@@ -25,8 +26,9 @@ const router = new express.Router();
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
         const { jobId, topic, expiryDate, duration, private } = req.body;
+        const recruiterId = req.recruiter.id;
         // console.log(expiryDate, duration);
-        const mcq = await MCQ.create({ topic , private });
+        const mcq = await MCQ.create({ topic , private, recruiterId });
         await mcq.addJob(jobId, { through: { expiryDate, duration } });
         let questions = req.body.questions.map(
             ({ options: choices, ...rest }) => ({
@@ -55,10 +57,22 @@ router.get("/getAllMCQs", recruiterAuth, async (req, res) => {
             },
             attributes: ["id", "topic"],
             where: {
-                private: false
+                [Op.or]: [
+                    {
+                        private: 
+                        {
+                            [Op.eq]: false
+                        }
+                    },
+                    {
+                        recruiterId:
+                        {
+                            [Op.eq]: req.recruiter.id
+                        }
+                    }
+                ]
             }
         });
-        console.log(results)
         res.send({
             MCQs: results.rows,
             Count: results.count
