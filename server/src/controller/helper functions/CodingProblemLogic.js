@@ -16,19 +16,45 @@ const fs = require('fs')
 
 
 
-// const inject = function (code , language) {
-//     const t1 = 'double __measuringExecutionTimeAM ;'
+const inject = function (code , language) {
+    code = '#include <time.h>\n' + code.slice(0)
+    const t1 = '\ndouble __measuringExecutionTimeAM1 = clock();\n'
+    const t2 = '\ndouble __measuringExecutionTimeAM2 = clock();\n'
 
-//     if (language == 'cpp'){
-//         const index = code.search('main')
+    if (language == 'cpp'){
+        const index = code.search('main')
+        // stack to get the last '}'
+        const st = [] ;
+        let start ;
 
-//         for (let i = index ; i < code.length ; i++){
-//             if (code[i] == '{'){
-
-//             }
-//         }
-//     }
-// }
+        // adding the first variable inside the main function
+        for (let i = index ; i < code.length ; i++){
+            if (code[i] === '{'){
+                st.push(code[i]);
+                start = i+1 ;
+                code = code.slice(0,i+1) + t1 + code.slice(i+1)
+                break ;
+            }
+        }
+        
+        // getting the closing } of the main function
+        for (let i = start ; i < code.length ; i++){
+            // console.log(st);
+            if (code[i] === '{'){
+                st.push('{')
+            } else if (code[i] === '}'){
+                st.pop()
+            }
+            if (st.length === 0){
+                code = code.slice(0,i) + t2 + '\n';
+                code += `cout<<((__measuringExecutionTimeAM1-__measuringExecutionTimeAM2)/CLOCKS_PER_SEC);\n`
+                code += '}' 
+                break;
+            }
+        }
+        return code ;
+    }
+}
 
 
 
@@ -63,15 +89,21 @@ const testCode = async function (code,langauge,timeOut,inputs,outputs,index,numO
             // compilex example
             var envData = { OS : "windows" , cmd : "g++"};
             compiler.compileCPPWithInput(envData , code , stringInput , function (data) {
-                index.advance() ;//index++
-
-                if (data.output === outputs){//storing outputs of testcases in finalResult object which is passed from the route
+                index.advance() ;   //index++
+                console.log(data)
+                
+                if (data.output === outputs){
+                    //storing outputs of testcases in finalResult object which is passed from the route
                     finalResult[`testCase${index.value}`]="PASSED" 
                 } else {
                     finalResult[`testCase${index.value}`]="FAILED"
                 }   
                 if(index.value===numOfTests){//advancing the index inside the callback of the compiler call will asure that the value of index will be testcases done by compiler so comparing it with numbOfTest cases can be an indicator for the cb function which is responsible for res.send()
                     cb();
+                     // flushing files created in temp directory 
+                    compiler.flush(function(){
+                        // console.log('All temporary files flushed !'); 
+                    });
                 }
                 // console.log(data);
                 
@@ -90,5 +122,5 @@ const testCode = async function (code,langauge,timeOut,inputs,outputs,index,numO
     }
 }
 
-module.exports = {writeCodeToFile,testCode}
+module.exports = {writeCodeToFile,testCode,inject}
 
