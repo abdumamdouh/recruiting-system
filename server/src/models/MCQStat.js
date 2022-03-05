@@ -5,7 +5,7 @@ const MCQStat = db.define(
     "MCQStat",
     {
         score: {
-            type: Sequelize.DECIMAL(4, 2),
+            type: Sequelize.DECIMAL(5, 2),
             allowNull: false
         },
         applicantId: {
