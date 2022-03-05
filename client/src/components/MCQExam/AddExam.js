@@ -14,6 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
+import Message from '../modal/Message'
 export default function AddExam() {
     const [topic, setTopic] = useState("");
     const [expanded, setExpanded] = useState(false);
@@ -23,6 +24,7 @@ export default function AddExam() {
     const [expiryDate, setExpiryDate] = useState(new Date());
     const [duration, setDuration] = useState(0);
     const [questions, setQuestions] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
     const handleChange = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -80,10 +82,12 @@ export default function AddExam() {
                 duration
             )
         );
+        setModalOpen(true)
     };
     return (
         <div>
             <div className="container">
+            {modalOpen && <Message setOpenModal={setModalOpen} message='uploaded successfully!' />}
                 <Accordion
                     expanded={expanded === "panel1"}
                     onChange={handleChange("panel1")}
