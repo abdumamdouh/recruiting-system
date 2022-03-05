@@ -117,18 +117,26 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
 // submit applicant answers by MCQId
 router.post("/submit/:id", applicantAuth, async (req, res) => {
     try {
-        const { MCQId, applicantId, jobId } = req.body;
-        let { questions } = await MCQ.findByPk(req.params.id, {
-            include: {
-                model: Question,
-                as: "questions",
-                attributes: ["id", "answer"]
-                // through: { attributes: [] }
-            },
+        const MCQId = req.params.id;
+        const applicantId = req.applicant.id;
+        // const jobId = req.body;
+        let data = await MCQ.findByPk(req.params.id, {
+            include: [
+                {
+                    model: Question,
+                    as: "questions",
+                    attributes: ["id", "answer"]
+                },
+                {
+                    model: Job,
+                    attributes: ["id"],
+                    through: { attributes: [] }
+                }
+            ],
             attributes: []
         });
-        questions = JSON.parse(JSON.stringify(questions));
-        const answers = questions.reduce(
+        data = JSON.parse(JSON.stringify(data));
+        const answers = data.questions.reduce(
             (acc, cur) => ({
                 ...acc,
                 [cur.id]: cur.answer
@@ -144,7 +152,12 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
         score = Number(
             ((score / Object.keys(answers).length) * 100).toFixed(2)
         );
-        await MCQStat.create({ MCQId, applicantId, jobId, score });
+        await MCQStat.create({
+            MCQId,
+            applicantId,
+            jobId: data.Jobs[0].id,
+            score
+        });
         res.status(202).send(`${score}%`);
     } catch (error) {
         res.status(400).send(error.message);
