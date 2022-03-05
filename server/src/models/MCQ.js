@@ -17,12 +17,12 @@ const MCQ = db.define("MCQ", {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         unique: false
-    },
-    recruiterId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        unique: false
     }
+    // recruiterId: {
+    //     type: Sequelize.INTEGER,
+    //     allowNull: true,
+    //     unique: false
+    // }
 });
 
 module.exports = MCQ;
