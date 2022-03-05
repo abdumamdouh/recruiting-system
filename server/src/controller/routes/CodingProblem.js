@@ -4,7 +4,7 @@ const TestCases = require("../../models/TestCases")
 const ActiveCodingProblem = require("../../models/ActiveCodingProbelms")
 const ApplyFor = require("../../models/ApplyFor")
 const Job = require("../../models/Job");
-const {writeCodeToFile,testCode} = require('../helper functions/CodingProblemLogic')
+const {writeCodeToFile,testCode,inject} = require('../helper functions/CodingProblemLogic')
 
 
 const recruiterAuth = require('../middleware/recruiterAuth') 
@@ -168,6 +168,11 @@ router.post("/codingProblems",recruiterAuth, async (req, res) => {
 // compare output of the program with the correct output
 router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
     try {
+
+        // inject time measuring code
+        req.body.code = inject(req.body.code,req.body.language)
+        // console.log(modifiedCode)
+
         // writing the coming code in the solutions directory
         writeCodeToFile(req.body.code,
             req.body.jobId,
@@ -177,16 +182,17 @@ router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
         
         // testing code correctness 
         const [results, metadata] = await db.query(`SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.body.codingProblemId}`);
-        let finalResult={};//to store the result of each test case
-            const index ={
+        //to store the result of each test case
+        let finalResult={};
+        const index ={
                 value:0,
-                advance:()=>{index.value=index.value+1}// object to be passed by ref.
-            };// represents the number of iterations 
+                // object to be passed by ref.
+                advance:()=>{index.value=index.value+1}
+        };// represents the number of iterations 
+        
         results.forEach(async testCase =>{
-            // if(index===results.length){
-            //     index=0;  // when it is equal zero it means that we are in the last test case and we will invoke a call back to send the response
-            // }
-            const cb =()=>{// calll back to be called when the last test is executed  
+            // call back to be called when the last test is executed
+            const cb =()=>{  
                 res.send(finalResult)
             }
             const numOfTests=results.length
