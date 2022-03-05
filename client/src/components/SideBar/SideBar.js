@@ -5,15 +5,16 @@ import {
     Timeline,
     TrendingUp,
     PermIdentity,
-    Storefront,
-    AttachMoney,
     BarChart,
-    MailOutline,
-    DynamicFeed,
-    ChatBubbleOutline,
+
     WorkOutline,
     Report,
   } from '@mui/icons-material'
+  import AddchartIcon from '@mui/icons-material/Addchart';
+  import AdbIcon from '@mui/icons-material/Adb';
+  import BackupTableIcon from '@mui/icons-material/BackupTable';
+  import AssignmentIcon from '@mui/icons-material/Assignment';
+  import AddTaskIcon from '@mui/icons-material/AddTask';
   import { Link } from "react-router-dom";
 const SideBar = () => {
     return (
@@ -39,19 +40,20 @@ const SideBar = () => {
           <ul className="sidebarList">
             <Link to="/AddExam" className="link">
             <li className="sidebarListItem">
-              <WorkOutline className="sidebarIcon" />
+              <AddchartIcon
+               className="sidebarIcon" />
               MCQ Exam
             </li>
             </Link>
             <Link to="/products" className="link">
             <li className="sidebarListItem">
-              <WorkOutline className="sidebarIcon" />
+              <AdbIcon className="sidebarIcon" />
               Coding Problem
             </li>
             </Link>
             <Link to="/products" className="link">
             <li className="sidebarListItem">
-              <WorkOutline className="sidebarIcon" />
+              <AddTaskIcon className="sidebarIcon" />
               Task
             </li>
             </Link>
@@ -60,19 +62,19 @@ const SideBar = () => {
           <ul className="sidebarList">
             <Link to="/availableMCQs">
             <li className="sidebarListItem">
-              <WorkOutline className="sidebarIcon" />
+              <BackupTableIcon  className="sidebarIcon" />
               MCQ Exam 
             </li>
             </Link>
             <Link to="/products" className="link">
             <li className="sidebarListItem">
-              <WorkOutline className="sidebarIcon" />
+              <AdbIcon className="sidebarIcon" />
               Coding Problem
             </li>
             </Link>
             <Link to="/products" className="link">
             <li className="sidebarListItem">
-              <WorkOutline className="sidebarIcon" />
+              <AssignmentIcon className="sidebarIcon" />
               Task
             </li>
             </Link>

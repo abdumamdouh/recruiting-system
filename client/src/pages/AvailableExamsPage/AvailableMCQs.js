@@ -16,11 +16,11 @@ const AvailableMCQs = () => {
     return (
        
         <div>
-            {MCQs.map(m => (
+            {MCQs.map((m, index) => (
                 <ul style={{ listStyle: "none" }}>
                     {" "}
                     <li key={m.id}>
-                        <Card topic={m.topic} Count={Count} number={m.index} id={m.id} questions={m.questions}/>{" "}
+                        <Card topic={m.topic} Count={Count} number={index+1} id={m.id} questions={m.questions}/>{" "}
                     </li>{" "}
                 </ul>
             ))}

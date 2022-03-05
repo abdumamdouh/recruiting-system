@@ -8,6 +8,7 @@ const Card = (props) => {
     const handleClick =()=>{
         history.push(`/exam/${props.id}`);
     }
+    console.log(props.number)
     return (
         <div className="card" style={{width: '18rem'}}>
         <div className="card-body">
