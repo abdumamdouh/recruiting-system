@@ -410,6 +410,8 @@ const McqTestPage = (props) => {
 
         try {
             console.log(McqAnswers);
+            console.log(JSON.stringify(McqAnswers));
+            console.log(userInfo.token)
             //TODO: replace the hardcoded job id with the id of the job
             const rawResponse = await fetch(`http://localhost:5000/submit/1`, {
                 method: "POST",
@@ -418,16 +420,16 @@ const McqTestPage = (props) => {
                     "Content-Type": "application/json",
                     Authorization: "Bearer " + userInfo.token
                 },
-                body: JSON.stringify(McqAnswers)
+                body: JSON.stringify({ McqAnswers })
             });
             const data = await rawResponse;
             console.log(data);
-            if(data.status===200){
+            if(data.status===202){
                 setMcqTaken(true);
                 setModalOpen(true);
             }
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
         }
         // setMcqTaken(true);
     };
@@ -435,7 +437,7 @@ const McqTestPage = (props) => {
         <>
             {modalOpen && <Message setOpenModal={setModalOpen} message='Submitted Successfully!' />}
             {McqTaken ? (
-                <h1>you have already take the MCQ exam before</h1>
+                <h1>you have already taken the MCQ exam before</h1>
             ) : (
                 <Container
                     component="main"
