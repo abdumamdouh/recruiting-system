@@ -8,7 +8,6 @@ const Question = require("./Question");
 
 // relation between requirment and job (Has) ( 1-->N )
 Job.hasMany(Requirment, {
-    //
     // as: "stack",
     foreignKey: "JobId",
     onDelete: "CASCADE",
@@ -25,6 +24,15 @@ Recruiter.hasMany(Job, {
     hooks: true
 });
 Job.belongsTo(Recruiter);
+
+// relation between Recruiter and MCQ ( 1-->N )
+Recruiter.hasMany(MCQ, {
+    foreignKey: "recruiterId",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+    hooks: true
+});
+MCQ.belongsTo(Recruiter, { foreignKey: "recruiterId" });
 
 // relation between MCQ and Questions ( 1-->N )
 MCQ.hasMany(Question, {
