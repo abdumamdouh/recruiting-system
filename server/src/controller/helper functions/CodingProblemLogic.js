@@ -40,7 +40,7 @@ const writeCodeToFile = function (code,jobId,applicantId,codingProblemId,languag
     })
 }
 
-const testCode = async function (code,langauge,timeOut,inputs,outputs){
+const testCode = async function (code,langauge,timeOut,inputs,outputs,index,numOfTests,finalResult,cb){
     let result ;
     let stringInput = '' ;
     inputs = JSON.parse(inputs)
@@ -63,17 +63,25 @@ const testCode = async function (code,langauge,timeOut,inputs,outputs){
             // compilex example
             var envData = { OS : "windows" , cmd : "g++"};
             compiler.compileCPPWithInput(envData , code , stringInput , function (data) {
-                compiler.fullStat(function(data){
-                    console.log(data);
-                });
+                index.advance() ;//index++
+
+                if (data.output === outputs){//storing outputs of testcases in finalResult object which is passed from the route
+                    finalResult[`testCase${index.value}`]="PASSED" 
+                } else {
+                    finalResult[`testCase${index.value}`]="FAILED"
+                }   
+                if(index.value===numOfTests){//advancing the index inside the callback of the compiler call will asure that the value of index will be testcases done by compiler so comparing it with numbOfTest cases can be an indicator for the cb function which is responsible for res.send()
+                    cb();
+                }
+                // console.log(data);
+                
+                //console.log(index.value)
+                // compiler.fullStat(function(data){
+                //     console.log(data);
+                    
+                // });
                 // console.log(outputs)
                 // console.log(data.output)
-                // if (data.output === outputs){
-                //     console.log('PASSED...') ;
-                // } else {
-                //     console.log('FAILED...') ;
-                // }   
-                // console.log(data);
             }); 
         } catch (error) {
             throw new Error (error)

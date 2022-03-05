@@ -177,12 +177,26 @@ router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
         
         // testing code correctness 
         const [results, metadata] = await db.query(`SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.body.codingProblemId}`);
-
+        let finalResult={};//to store the result of each test case
+            const index ={
+                value:0,
+                advance:()=>{index.value=index.value+1}// object to be passed by ref.
+            };// represents the number of iterations 
         results.forEach(async testCase =>{
-            const correct = await testCode(req.body.code,req.body.language,5,testCase.inputs,testCase.outputs)
+            // if(index===results.length){
+            //     index=0;  // when it is equal zero it means that we are in the last test case and we will invoke a call back to send the response
+            // }
+            const cb =()=>{// calll back to be called when the last test is executed  
+                res.send(finalResult)
+            }
+            const numOfTests=results.length
+            const correct = await testCode(req.body.code,req.body.language,5,testCase.inputs,testCase.outputs,index,numOfTests,finalResult,cb)
+            
             // console.log(correct)
         })
-        res.send(results)
+
+     
+        //res.send(results)
     } catch (error) {
         res.send(error.message)
     }
