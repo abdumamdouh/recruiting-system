@@ -17,7 +17,6 @@ import FormLabel from "@mui/material/FormLabel";
 
 import Message from "../../components/modal/Message";
 
-
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -362,17 +361,14 @@ const McqTestPage = (props) => {
         const getQuestion = async () => {
             console.log(userInfo.token);
             try {
-                const response = await fetch(
-                    `http://localhost:5000/getMCQ/1`,
-                    {
-                        method: "GET",
-                        headers: {
-                            Accept: "application/json",
-                            "Content-Type": "application/json",
-                            Authorization: "Bearer " + userInfo.token
-                        }
+                const response = await fetch(`http://localhost:5000/getMCQ/1`, {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
                     }
-                );
+                });
                 const data = await response.json();
                 //TODO: check taken flag and update the state based on it
                 console.log("alo");
@@ -411,7 +407,7 @@ const McqTestPage = (props) => {
         try {
             console.log(McqAnswers);
             console.log(JSON.stringify(McqAnswers));
-            console.log(userInfo.token)
+            console.log(userInfo.token);
             //TODO: replace the hardcoded job id with the id of the job
             const rawResponse = await fetch(`http://localhost:5000/submit/1`, {
                 method: "POST",
@@ -424,7 +420,7 @@ const McqTestPage = (props) => {
             });
             const data = await rawResponse;
             console.log(data);
-            if(data.status===202){
+            if (data.status === 202) {
                 setMcqTaken(true);
                 setModalOpen(true);
             }
@@ -435,9 +431,14 @@ const McqTestPage = (props) => {
     };
     return (
         <>
-            {modalOpen && <Message setOpenModal={setModalOpen} message='Submitted Successfully!' />}
+            {modalOpen && (
+                <Message
+                    setOpenModal={setModalOpen}
+                    message="Submitted Successfully!"
+                />
+            )}
             {McqTaken ? (
-                <h1>you have already taken the MCQ exam before</h1>
+                <h1>You have submitted the MCQ exam successfully.</h1>
             ) : (
                 <Container
                     component="main"
@@ -455,6 +456,7 @@ const McqTestPage = (props) => {
                         sx={{
                             marginTop: 5,
                             marginBottom: 5,
+                            color: "#696969",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "left",
@@ -465,7 +467,11 @@ const McqTestPage = (props) => {
                         <Typography
                             color="black"
                             variant="h5"
-                            style={{ textAlign: "center" }}
+                            style={{
+                                textAlign: "center",
+                                fontWeight: "800",
+                                fontSize: "35px"
+                            }}
                         >
                             {Mcq.topic}
                         </Typography>
@@ -475,9 +481,44 @@ const McqTestPage = (props) => {
                         {Mcq.questions &&
                             Mcq.questions.map((question, index) => (
                                 <FormControl key={index}>
-                                    <FormLabel id="demo-row-radio-buttons-group-label">
-                                        <Typography variant="h6" color='black'>
-                                            {`${index + 1} - ${question.question}`}
+                                    <FormLabel
+                                        id="demo-row-radio-buttons-group-label"
+                                        style={{
+                                            display: "grid",
+                                            gridTemplateColumns: "auto auto",
+                                            justifyContent: "start",
+                                            gridGap: "8px"
+                                        }}
+                                    >
+                                        <Typography
+                                            variant="h6"
+                                            color="black"
+                                            style={{
+                                                fontWeight: "600",
+                                                fontSize: "25px",
+                                                // overflowWrap: "break-word",
+                                                display: "inline"
+                                                // justifyItems: "start"
+                                            }}
+                                        >{`${index + 1}-`}</Typography>
+                                        <Typography
+                                            variant="h6"
+                                            color="black"
+                                            style={{
+                                                fontWeight: "600",
+                                                fontSize: "25px",
+                                                wordWrap: "break-word",
+                                                wordBreak: "break-all",
+                                                display: "inline"
+                                            }}
+                                        >
+                                            {`${question.question}${
+                                                question.question[
+                                                    question.question.length - 1
+                                                ] === "."
+                                                    ? ""
+                                                    : "."
+                                            }`}
                                         </Typography>
                                     </FormLabel>
                                     <RadioGroup
@@ -495,10 +536,49 @@ const McqTestPage = (props) => {
                                         {question.choices.map(
                                             (choice, index) => (
                                                 <FormControlLabel
+                                                    labelPlacement="top"
+                                                    sx={{
+                                                        display: "grid",
+                                                        gridTemplateColumns:
+                                                            "auto auto",
+                                                        justifyContent: "start",
+                                                        alignContent: "start"
+                                                    }}
                                                     key={index}
                                                     value={choice}
-                                                    control={<Radio />}
-                                                    label={choice}
+                                                    control={
+                                                        <Radio
+                                                            sx={{
+                                                                alignSelf:
+                                                                    "start"
+                                                            }}
+                                                        />
+                                                    }
+                                                    label={
+                                                        <Typography
+                                                            style={{
+                                                                fontFamily:
+                                                                    "calibri",
+                                                                fontSize:
+                                                                    "19px",
+                                                                wordWrap:
+                                                                    "break-word",
+                                                                wordBreak:
+                                                                    "break-all",
+                                                                display:
+                                                                    "inline"
+                                                            }}
+                                                        >
+                                                            {`${choice}${
+                                                                choice[
+                                                                    choice.length -
+                                                                        1
+                                                                ] === "."
+                                                                    ? ""
+                                                                    : "."
+                                                            }`}
+                                                        </Typography>
+                                                    }
                                                 />
                                             )
                                         )}
