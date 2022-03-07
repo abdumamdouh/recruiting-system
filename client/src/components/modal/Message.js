@@ -19,7 +19,7 @@ function Message({ setOpenModal, message }) {
           <h3>Are You Sure You Want to Continue?</h3>
         </div> */}
                     <div className="body">
-                        <p>{message}</p>
+                        <p>{message[0].toUpperCase() + message.slice(1)}</p>
                     </div>
                     <div className="footer">
                         <button
