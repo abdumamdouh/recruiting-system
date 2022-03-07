@@ -71,7 +71,7 @@ export default function Job(props) {
     const state = useSelector((state) => state);
     const { type } = state.user.userInfo;
     // console.log(type);
-
+    const [applyFor,setApplyFor]=useState(false)
     const copyApplicants =
         type === "Recruiter" && props.job.applicants !== undefined
             ? [...props.job.applicants]
@@ -94,6 +94,7 @@ export default function Job(props) {
 
           if(data.status===200){
               setModalOpen(true)
+              setApplyFor(true)
           }
             console.log(data);
         } catch (error) {
@@ -285,7 +286,7 @@ export default function Job(props) {
                 <div>
                     {type === "Applicant" ? (
                         <>
-                        { applied?   <Button
+                        { (applied ||applyFor)?   <Button
                                 variant="contained"
                               //  endIcon={<ReplyAllOutlinedIcon />}
                                 sx={{ mt: 3, mb: 2 }}
