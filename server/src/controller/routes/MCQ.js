@@ -160,7 +160,9 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
         });
         res.status(202).send(`${score}%`);
     } catch (error) {
-        res.status(400).send(error.message);
+        error.message === "Validation error"
+            ? res.status(406).send("You have already submitted it.")
+            : res.status(400).send(error.message);
     }
 });
 
