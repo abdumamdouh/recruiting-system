@@ -38,7 +38,7 @@ export default function AddExam() {
         setSelectedDate(date);
         const formattedDate = `${date.getFullYear()}-${date.getMonth() +
             1}-${date.getDate()}`;
-        setExpiryDate(formattedDate);
+        setExpiryDate(date);
         console.log(expiryDate);
     };
     const dispatch = useDispatch();
