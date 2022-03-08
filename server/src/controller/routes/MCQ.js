@@ -10,6 +10,7 @@ const ApplyFor = require("../../models/ApplyFor");
 const MCQ = require("../../models/MCQ");
 const Question = require("../../models/Question");
 const MCQStat = require("../../models/MCQStat");
+const JobMCQ = require("../../models/JobMCQ")
 const db = require("../../db/db");
 
 // requiring applicant and recruiter authentication
@@ -55,6 +56,29 @@ router.post("/pickMCQ", recruiterAuth, async (req, res) => {
 
         res.status(201).send("The MCQ is added successfully");
 
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+// get all availale tasks of the job 
+router.get("/getAllTasks/:id", recruiterAuth, async (req, res) => {
+    try {
+        const jobId = req.params.id;
+
+        const mcqs = await JobMCQ.findAndCountAll({
+            where: {
+                jobId: jobId,
+                expiryDate: {
+                    [Op.gt]: new Date()
+                }
+            }
+        });
+
+        res.send({
+            MCQs: mcqs.rows,
+            Count: mcqs.count
+        });
     } catch (error) {
         res.status(400).send(error.message);
     }
