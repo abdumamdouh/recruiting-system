@@ -36,8 +36,6 @@ export default function AddExam() {
     };
     const handleDate = date => {
         setSelectedDate(date);
-        const formattedDate = `${date.getFullYear()}-${date.getMonth() +
-            1}-${date.getDate()}`;
         setExpiryDate(date);
         console.log(expiryDate);
     };
