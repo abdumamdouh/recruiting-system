@@ -21,5 +21,9 @@ const JobMCQ = db.define(
 // relation between job and MCQ ( M-->N )
 Job.belongsToMany(MCQ, { through: JobMCQ });
 MCQ.belongsToMany(Job, { through: JobMCQ });
+Job.hasMany(JobMCQ);
+JobMCQ.belongsTo(Job);
+MCQ.hasMany(JobMCQ);
+JobMCQ.belongsTo(MCQ);
 
 module.exports = JobMCQ;
