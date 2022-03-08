@@ -5,6 +5,9 @@ import {
     GET_EXAMS_REQUEST,
     GET_EXAMS_SUCCESS,
     GET_EXAMS_FAIL,
+    PICK_EXAM_REQUEST,
+    PICK_EXAM_SUCCESS,
+    PICK_EXAM_FAIL
 } from "../types/index";
 import axios from "axios";
 const serverURL = "http://localhost:5000";
@@ -73,3 +76,38 @@ export const getExamsAction = () => {
 }
 };
 }
+//pick exam from available exams
+
+export const pickExamAction = (jobId,MCQId, expiryDate,duration) => {
+    let mcq={jobId:jobId, MCQId: MCQId,expiryDate:expiryDate, duration:duration}
+    console.log(mcq)
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: PICK_EXAM_REQUEST,
+                loading: true
+            });
+            const { userInfo } = getState().user;
+            console.log(userInfo.token);
+            const rawResponse = await fetch(
+                `${serverURL}/pickMCQ`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    },
+                    body: JSON.stringify(mcq)
+                }
+            );
+            const data = await rawResponse
+    dispatch({ type: PICK_EXAM_SUCCESS, payload: data });
+} catch (error) {
+    dispatch({
+        type: PICK_EXAM_FAIL,
+        payload: error.response && error.response.data
+    });
+}
+};
+};
