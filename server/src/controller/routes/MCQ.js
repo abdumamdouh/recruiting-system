@@ -45,6 +45,22 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     }
 });
 
+// Pick an availale MCQ exam to the job 
+router.post("/pickMCQ", recruiterAuth, async (req, res) => {
+    try {
+        const { jobId, MCQId, expiryDate, duration} = req.body;
+        const mcq = await MCQ.findByPk( MCQId );
+        
+        await mcq.addJob(jobId, { through: { expiryDate, duration } }); 
+
+        res.status(201).send("The MCQ is added successfully");
+
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+
 // get all public mcq questions
 router.get("/getAllMCQs", recruiterAuth, async (req, res) => {
     try {
