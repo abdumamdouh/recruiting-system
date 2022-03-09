@@ -7,7 +7,10 @@ import {
     GET_EXAMS_FAIL,
     PICK_EXAM_REQUEST,
     PICK_EXAM_SUCCESS,
-    PICK_EXAM_FAIL
+    PICK_EXAM_FAIL,
+    GET_JOB_EXAMS_REQUEST,
+    GET_JOB_EXAMS_SUCCESS,
+    GET_JOB_EXAMS_FAIL,
 } from "../types/index";
 import axios from "axios";
 const serverURL = "http://localhost:5000";
@@ -111,3 +114,36 @@ export const pickExamAction = (jobId,MCQId, expiryDate,duration) => {
 }
 };
 };
+
+//get available exams for certain job
+export const getJobExamsAction = (jobId) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type:  GET_JOB_EXAMS_REQUEST,
+                loading: true
+            });
+            const { userInfo } = getState().user;
+            console.log(userInfo.token);
+            const rawResponse = await fetch(
+                `${serverURL}/getAllTasks/${jobId}`,
+                {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    }
+                }
+            );
+            const data = await rawResponse.json();        
+    dispatch({ type: GET_JOB_EXAMS_SUCCESS, payload: data });
+   
+} catch (error) {
+    dispatch({
+        type: GET_JOB_EXAMS_FAIL,
+        payload: error.response && error.response.data
+    });
+}
+};
+}
