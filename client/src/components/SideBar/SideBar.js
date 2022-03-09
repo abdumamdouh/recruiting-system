@@ -38,7 +38,7 @@ const SideBar = () => {
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Create Exams</h3>
           <ul className="sidebarList">
-            <Link to="/AddExam" className="link">
+            <Link to="/dashboard/AddExam" className="link">
             <li className="sidebarListItem">
               <AddchartIcon
                className="sidebarIcon" />
