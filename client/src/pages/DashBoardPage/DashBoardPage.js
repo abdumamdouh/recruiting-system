@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import './DashBoardPage.scss'
 import AvailableMCQs from '../AvailableExamsPage/AvailableMCQs';
 import ExamPage from '../ExamPage/ExamPage'
+import UploadedExams from '../UploadedExamsPage/UploadedExams';
 const DashBoardPage = () => {
     return (
         <Router>
@@ -15,12 +16,16 @@ const DashBoardPage = () => {
             <Route path="/AddExam">
             <AddExam />
           </Route>
-            <Route path="/availableMCQs">
+            <Route path="/dashboard/availableMCQs">
             <AvailableMCQs />
           </Route>
             <Route path="/exam/:id">
             <ExamPage />
           </Route>
+            <Route path="/dashboard/uploadedexams">
+            <UploadedExams />
+          </Route>
+          
             </Switch>
             </div>  
         </div>

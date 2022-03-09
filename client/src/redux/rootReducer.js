@@ -7,6 +7,7 @@ import jobsReducer from "./reducers/jobs";
 import jobReducer from "./reducers/job";
 import examReducer from './reducers/exam'
 import choosenExamReducer from './reducers/exam'
+import uploadedExamReducer from "./reducers/uploadedExams";
 
 const persistConfig = {
   key: "root",
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
   jobs: jobsReducer,
   job: jobReducer,
   exam:examReducer,
-  choosenExam:choosenExamReducer
+  choosenExam:choosenExamReducer,
+  uploadedExams: uploadedExamReducer
 });
 
 export default persistReducer(persistConfig, rootReducer);
