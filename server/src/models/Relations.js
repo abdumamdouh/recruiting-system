@@ -5,6 +5,7 @@ const Job = require("./Job");
 const Requirment = require("./Requirment");
 const MCQ = require("./MCQ");
 const Question = require("./Question");
+const Task = require("./Task")
 
 // relation between requirment and job (Has) ( 1-->N )
 Job.hasMany(Requirment, {
@@ -43,3 +44,13 @@ MCQ.hasMany(Question, {
     hooks: true
 });
 Question.belongsTo(MCQ);
+
+// relation between recruiter and task( 1-->N )
+Recruiter.hasMany(Task, {
+    foreignKey: "RecruiterId",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+    hooks: true
+});
+Task.belongsTo(Recruiter);
+

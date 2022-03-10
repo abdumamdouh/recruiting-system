@@ -62,3 +62,13 @@ export const CREATE_EXAM_FAIL = 'CREATE_EXAM_FAIL'
 export const GET_EXAMS_REQUEST= 'GET_EXAM_REQUEST'
 export const GET_EXAMS_SUCCESS = 'GET_EXAMS_SUCCESS'
 export const GET_EXAMS_FAIL = 'GET_EXAMS_FAIL'
+
+//pick exam from available exams
+export const PICK_EXAM_REQUEST = 'PICK_EXAM_REQUEST'
+export const PICK_EXAM_SUCCESS = 'PICK_EXAM_SUCCESS'
+export const PICK_EXAM_FAIL = 'PICK_EXAM_FAIL'
+
+//get exams for certain job
+export const GET_JOB_EXAMS_REQUEST = 'GET_JOB_EXAMS_REQUEST'
+export const GET_JOB_EXAMS_SUCCESS = 'GET_JOB_EXAMS_SUCCESS'
+export const GET_JOB_EXAMS_FAIL = 'GET_JOB_EXAMS_FAIL'
