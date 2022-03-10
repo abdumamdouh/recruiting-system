@@ -61,33 +61,6 @@ router.post("/pickMCQ", recruiterAuth, async (req, res) => {
     }
 });
 
-// get all availale tasks of the job 
-router.get("/getAllTasks/:id", recruiterAuth, async (req, res) => {
-    try {
-        const jobId = req.params.id;
-
-        const mcqs = await JobMCQ.findAndCountAll({
-            include: {
-                model: MCQ, 
-                attributes: ["topic"]
-            },
-            attributes: [ "MCQId", "expiryDate" ],
-            where: {
-                jobId: jobId,
-                expiryDate: {
-                    [Op.gt]: new Date()
-                }
-            }
-        });
-
-        res.send({
-            MCQs: mcqs.rows,
-            Count: mcqs.count
-        });
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
-});
 
 
 // get all public mcq questions
