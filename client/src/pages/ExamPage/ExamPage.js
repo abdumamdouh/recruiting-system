@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import MaterialTable from 'material-table'
+// import MaterialTable from 'material-table'
 
 import  "./ExamPage.scss"
 const ExamPage = () => {
