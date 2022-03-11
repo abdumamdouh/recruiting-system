@@ -3,10 +3,14 @@ const _ = require("lodash");
 const Applicant = require("../../models/Applicant");
 const Recruiter = require("../../models/Recruiter");
 const Job = require("../../models/Job");
+const MCQ = require("../../models/MCQ");
+const JobMCQ = require("../../models/JobMCQ");
 const Requirment = require("../../models/Requirment");
 const ApplyFor = require("../../models/ApplyFor");
 const Sequelize = require("sequelize");
 const db = require("../../db/db");
+const Op = require("Sequelize").Op;
+
 
 // requiring applicant and recruiter authentication
 const recruiterAuth = require("../middleware/recruiterAuth");
@@ -303,6 +307,82 @@ router.post("/jobs/applyFor/:id", applicantAuth, async (req, res) => {
         res.status(400).send(error.message);
     }
 });
+
+// get all availale tasks of the job 
+router.get("/getAllTasks/:id", recruiterAuth, async (req, res) => {
+    try {
+        const jobId = req.params.id;
+
+        const mcqs = await JobMCQ.findAndCountAll({
+            include: {
+                model: MCQ, 
+                attributes: ["topic"]
+            },
+            attributes: [ "MCQId", "expiryDate" ],
+            where: {
+                jobId: jobId,
+                expiryDate: {
+                    [Op.gt]: new Date()
+                }
+            }
+        });
+
+        res.send({
+            MCQs: mcqs.rows,
+            Count: mcqs.count
+        });
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+// assign the diffrent tasks of the job to applicants 
+router.post("/assignTasks", recruiterAuth, async (req, res) => {
+    try {
+        const jobId = req.body.jobId;
+        
+        if(req.body.MCQ) {
+            const mcq = req.body.MCQ;
+            const MCQId = mcq.MCQId;
+            const applicants = await ApplyFor.findAll({
+                // attributes: ["assigned"],
+                where: {
+                    jobId: jobId,
+                    ApplicantId: {
+                        [Op.in] : mcq.applicants
+                    }
+                }
+            })
+
+            applicants.forEach ( async (applicant) => {
+                const assigned =JSON.parse(applicant.dataValues.assigned);
+                
+                console.log(assigned)
+                assigned.MCQs.push(MCQId)
+                assigned.MCQs = assigned.MCQs.filter((v, i, a) => a.indexOf(v) === i);
+                applicant.assigned = JSON.stringify(assigned)
+                console.log(typeof applicant)
+                await applicant.save()
+            }) 
+            
+            res.send("MCQ Assigned");
+            
+        } else if(req.body.codingProblem) {
+            const codingProblems = req.body.codingProblem;
+            
+        } else if(req.body.task) {
+            const tasks = req.body.task;
+            
+        } else {
+            
+        }
+
+
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
 
 // Delete a job
 router.delete("/DeleteJob/:id", recruiterAuth, async (req, res) => {

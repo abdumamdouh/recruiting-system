@@ -35,6 +35,7 @@ const examReducer = (state = {}, action) => {
                 error: action.payload,
                 loading: false
             };
+       
         default:
             return state;
     }

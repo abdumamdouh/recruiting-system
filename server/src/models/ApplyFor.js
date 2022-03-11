@@ -26,11 +26,18 @@ const ApplyFor = db.define('ApplyFor',{
         primaryKey: true,
         onDelete: 'cascade'
     },
-    status: {
-        type: Sequelize.STRING,
+    assigned: {
+        type: Sequelize.JSON,
         allowNull: false,
-        defaultValue: "pending"
+        defaultValue: JSON.stringify({
+            MCQs: [],
+            tasks: [],
+            codingProblems:[]
+        })
     }
+
+
+
 });
 
 module.exports = ApplyFor ;

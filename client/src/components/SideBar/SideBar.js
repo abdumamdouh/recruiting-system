@@ -38,7 +38,7 @@ const SideBar = () => {
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Create Exams</h3>
           <ul className="sidebarList">
-            <Link to="/AddExam" className="link">
+            <Link to="/dashboard/AddExam" className="link">
             <li className="sidebarListItem">
               <AddchartIcon
                className="sidebarIcon" />
@@ -60,7 +60,7 @@ const SideBar = () => {
           </ul>
           <h3 className="sidebarTitle">Available Exams</h3>
           <ul className="sidebarList">
-            <Link to="/availableMCQs">
+            <Link to="/dashboard/availableMCQs">
             <li className="sidebarListItem">
               <BackupTableIcon  className="sidebarIcon" />
               MCQ Exam 
@@ -89,10 +89,10 @@ const SideBar = () => {
                 Candidates
               </li>
             </Link>
-            <Link to="/products" className="link">
+            <Link to="/dashboard/uploadedexams" className="link">
             <li className="sidebarListItem">
               <WorkOutline className="sidebarIcon" />
-              Jobs
+              Uploaded Exams
             </li>
             </Link>
             <li className="sidebarListItem">
