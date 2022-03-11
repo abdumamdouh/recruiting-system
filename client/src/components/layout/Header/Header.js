@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BiMenuAltRight } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 import classes from "./Header.module.scss";
 import { logoutUserAction } from "../../../redux/actions/user";
@@ -87,7 +88,14 @@ function Header() {
                         {user.hasOwnProperty("userInfo") &&
                             user.userInfo.hasOwnProperty("type") && (
                                 <li>
-                                    <Link to="/updates">Updates</Link>
+                                    <Link to="/updates">
+                                        Updates{" "}
+                                        {user && (
+                                            <>
+                                                <NotificationsIcon color="error" />
+                                            </>
+                                        )}
+                                    </Link>
                                 </li>
                             )}
 
