@@ -29,11 +29,11 @@ const ApplyFor = db.define('ApplyFor',{
     assigned: {
         type: Sequelize.JSON,
         allowNull: false,
-        defaultValue: {
+        defaultValue: JSON.stringify({
             MCQs: [],
             tasks: [],
             codingProblems:[]
-        }
+        })
     }
 
 
