@@ -20,6 +20,7 @@ import ApplicantPage from "./pages/ApplicantPage/ApplicantPage";
 import CustomiseHiringPage from "./pages/CustomiseHiringPage/CustomiseHiringPage";
 import AddExam from "./components/MCQExam/AddExam";
 import McqTestPage from "./pages/McqTestPage/McqTestPage";
+import UpdatesPage from "./pages/UpdatesPage/UpdatesPage";
 // components
 import Layout from "./components/layout/Layout";
 // import HelloWorld from "./components/HelloWorld";
@@ -122,7 +123,7 @@ const App = () => {
                     <ProtectedRoute
                         exact
                         path="/updates"
-                        component={McqTestPage}
+                        component={UpdatesPage}
                         name="updates"
                     />
 
