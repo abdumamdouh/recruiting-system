@@ -1,0 +1,33 @@
+.c {
+    width: 45%;
+    border: 2px solid black;
+    border-radius: 15px;
+}
+
+.hh3 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.update {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 2px grey solid;
+    cursor: pointer;
+}
+.update:hover {
+    background-color: rgb(232, 232, 235);
+}
+
+.updates {
+    display: flex;
+    flex-direction: column;
+}
+
+.immg {
+    max-width: 70px;
+    height: auto;
+    margin-right: 10px;
+    border-radius: 35px;
+}
