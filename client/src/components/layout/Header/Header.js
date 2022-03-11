@@ -13,7 +13,7 @@ function Header() {
         width: undefined,
         height: undefined
     });
-    const user = useSelector(state => state.user);
+    const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
     useEffect(() => {
         const handleResize = () => {
@@ -34,24 +34,21 @@ function Header() {
     }, [size.width, menuOpen]);
 
     const handleMenu = () => {
-        setMenuOpen(p => !p);
+        setMenuOpen((p) => !p);
     };
-    
+
     const handleLogOut = async () => {
         // console.log("Log Out");
 
         try {
-            const rawResponse = await fetch(
-                `http://localhost:5000/logout`,
-                {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        Authorization: "Bearer " + user.userInfo.token
-                    }
+            const rawResponse = await fetch(`http://localhost:5000/logout`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + user.userInfo.token
                 }
-            );
+            });
             const data = await rawResponse.json();
             console.log(data);
         } catch (error) {
@@ -79,26 +76,39 @@ function Header() {
                         <li>
                             <Link to="/feed">Feed</Link>
                         </li>
-                       
-                        {(user.hasOwnProperty("userInfo")&&user.userInfo.hasOwnProperty("type") )&& (
-                        <li>
-                            <Link to="/account">Account</Link>
-                        </li>
-                      )}
-                     
-                        {((user.hasOwnProperty("userInfo")&&!user.userInfo.hasOwnProperty("type"))||!user.hasOwnProperty("userInfo") )&& (
+
+                        {user.hasOwnProperty("userInfo") &&
+                            user.userInfo.hasOwnProperty("type") && (
+                                <li>
+                                    <Link to="/account">Account</Link>
+                                </li>
+                            )}
+
+                        {user.hasOwnProperty("userInfo") &&
+                            user.userInfo.hasOwnProperty("type") && (
+                                <li>
+                                    <Link to="/updates">Updates</Link>
+                                </li>
+                            )}
+
+                        {((user.hasOwnProperty("userInfo") &&
+                            !user.userInfo.hasOwnProperty("type")) ||
+                            !user.hasOwnProperty("userInfo")) && (
                             <li>
                                 <Link to="/login">Login</Link>
                             </li>
                         )}
-                        {(user.hasOwnProperty("userInfo")&&user.userInfo.hasOwnProperty("type") )&& (
-                          <li>
-                            <Link to="/login">
-                                <span onClick={handleLogOut}>Logout</span>
-                            </Link>
-                        </li>
-                        )}
-                       
+
+                        {user.hasOwnProperty("userInfo") &&
+                            user.userInfo.hasOwnProperty("type") && (
+                                <li>
+                                    <Link to="/login">
+                                        <span onClick={handleLogOut}>
+                                            Logout
+                                        </span>
+                                    </Link>
+                                </li>
+                            )}
                     </ul>
                 </nav>
                 <div className={classes.header__content__toggle}>
