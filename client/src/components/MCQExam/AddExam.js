@@ -12,6 +12,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DatePicker from "react-datepicker";
+import { CSVLink, CSVDownload } from "react-csv";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import Message from '../modal/Message'
@@ -25,6 +26,11 @@ export default function AddExam() {
     const [duration, setDuration] = useState(0);
     const [questions, setQuestions] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
+    const csvData = [
+        ["Which of the following module is not a built-in node module?","fsread", "zlib", "https", "fsread"],
+        ["The Node.js modules can be exposed using:", "expose", "module", "exports", "exports"],
+        ["What is Callback?", "The callback is a technique in which a method calls back the caller method.", "The callback is an asynchronous equivalent for a function.","Both of the above.", "The callback is an asynchronous equivalent for a function."],     
+      ];
     const handleChange = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -123,12 +129,7 @@ export default function AddExam() {
                             but the first field MUST be question and the last
                             field MUST be the correct answer
                         </Typography>
-                        <Typography
-                            style={{ fontWeight: 500, fontSize: "20px" }}
-                        >
-                            Example: Which of the following acts as the input of
-                            a class-based component,Class,Props,Render,Props
-                        </Typography>
+                      
                     </AccordionDetails>
                 </Accordion>
             </div>
@@ -218,6 +219,10 @@ export default function AddExam() {
                         setDuration(e.target.value);
                     }}
                 />
+            </div>
+            <div className="mb">
+ 
+<CSVLink data={csvData} filename={"CSV_EXAM_TEMPLATE"}>Download MCQ Exam Template</CSVLink>
             </div>
 
             <Button variant="contained" onClick={handleClick}>
