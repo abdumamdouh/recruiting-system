@@ -92,6 +92,17 @@ function Header() {
                                         Updates{" "}
                                         {user && (
                                             <>
+                                                <span
+                                                    style={{
+                                                        border: "1px red solid",
+                                                        backgroundColor: "red",
+                                                        color: "white",
+                                                        borderRadius: "70px",
+                                                        padding: "1px"
+                                                    }}
+                                                >
+                                                    2
+                                                </span>
                                                 <NotificationsIcon color="error" />
                                             </>
                                         )}
