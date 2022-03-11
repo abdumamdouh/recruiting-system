@@ -11,6 +11,9 @@ import {
     GET_JOB_EXAMS_REQUEST,
     GET_JOB_EXAMS_SUCCESS,
     GET_JOB_EXAMS_FAIL,
+    ASSIGN_TASK_TO_APPLICANTS_REQUEST,
+    ASSIGN_TASK_TO_APPLICANTS_SUCCESS,
+    ASSIGN_TASK_TO_APPLICANTS_FAIL
 } from "../types/index";
 import axios from "axios";
 const serverURL = "http://localhost:5000";
@@ -147,3 +150,37 @@ export const getJobExamsAction = (jobId) => {
 }
 };
 }
+
+export const assignExamAction = (jobId,id,selectionModel) => {
+    let MCQ={jobId:jobId, MCQ:{ MCQId: id,applicants:selectionModel}}
+    console.log(MCQ)
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: ASSIGN_TASK_TO_APPLICANTS_REQUEST,
+                loading: true
+            });
+            const { userInfo } = getState().user;
+            console.log(userInfo.token);
+            const rawResponse = await fetch(
+                `${serverURL}/assignTasks`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    },
+                    body: JSON.stringify(MCQ)
+                }
+            );
+            const data = await rawResponse
+    dispatch({ type: ASSIGN_TASK_TO_APPLICANTS_SUCCESS, payload: data });
+} catch (error) {
+    dispatch({
+        type: ASSIGN_TASK_TO_APPLICANTS_FAIL,
+        payload: error.response && error.response.data
+    });
+}
+};
+};
