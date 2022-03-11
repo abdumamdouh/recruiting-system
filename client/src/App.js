@@ -119,6 +119,13 @@ const App = () => {
                         name="McqTest"
                     />
 
+                    <ProtectedRoute
+                        exact
+                        path="/updates"
+                        component={McqTestPage}
+                        name="updates"
+                    />
+
                     <Route
                         exact
                         path="/404"
