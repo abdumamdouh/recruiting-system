@@ -86,7 +86,8 @@ function Header() {
                             )}
 
                         {user.hasOwnProperty("userInfo") &&
-                            user.userInfo.hasOwnProperty("type") && (
+                            user.userInfo.hasOwnProperty("type") &&
+                            user.userInfo.type === "Applicant" && (
                                 <li>
                                     <Link to="/updates">
                                         Updates{" "}
