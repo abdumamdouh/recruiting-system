@@ -26,7 +26,7 @@ const ExamPage = () => {
               
                 <div className="table-responsive table-container">
                 <table className="table table-hover">
-                    <thead>
+                    <thead className="thead-dark">
                         <tr>
                 
                             <th scope="col">question</th>
