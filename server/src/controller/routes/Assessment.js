@@ -34,17 +34,24 @@ router.get("/assessments", applicantAuth, async (req, res) => {
         });
         let everyMCQ = await MCQ.findAll({
             where: { id: data[0].assigned.MCQs },
+            attributes: ["id", "topic"],
             include: [
-                { model: JobMCQ, attributes: ["expiryDate", "duration"] },
+                // { model: JobMCQ, attributes: ["expiryDate", "duration"] },
                 {
                     model: Job,
-                    attributes: []
-                    // through: { attributes: ["duration", "expiryDate"] }
+                    attributes: ["title", "description"],
+                    include: [
+                        {
+                            model: Recruiter,
+                            attributes: ["company", "avatar"]
+                        }
+                    ],
+                    through: { attributes: ["duration", "expiryDate"] }
                 }
-            ],
-            attributes: ["id", "topic"]
+            ]
         });
         everyMCQ = JSON.parse(JSON.stringify(everyMCQ));
+        console.log(everyMCQ);
         everyMCQ.forEach(({ id, topic, JobMCQs }, index, arr) => {
             arr[index] = {
                 id,
