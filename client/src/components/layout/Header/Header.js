@@ -93,7 +93,7 @@ function Header() {
                                         Updates{" "}
                                         {user && (
                                             <>
-                                                <span
+                                                {/* <span
                                                     style={{
                                                         border: "1px red solid",
                                                         backgroundColor: "red",
@@ -103,7 +103,7 @@ function Header() {
                                                     }}
                                                 >
                                                     2
-                                                </span>
+                                                </span> */}
                                                 <NotificationsIcon color="error" />
                                             </>
                                         )}
