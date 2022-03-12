@@ -107,7 +107,7 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
             } else {
                 job.dataValues.applied = false;
             }
-            console.log(job);
+            // console.log(job);
             res.send(job);
         } else if (req.recruiter) {
             const job = await Job.findOne({
@@ -131,60 +131,10 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                 }
             });
             if (job) {
-                // get applicants(Names,IDs) applied for that job
-                const [results, metadata] = await db.query(
-                    "SELECT A.userName,A.id FROM ApplyFors AS AF INNER JOIN Applicants AS A ON AF.ApplicantId = A.id WHERE AF.JobId=?",
-                    {
-                        replacements: [job.id]
-                    }
-                );
 
-                let maxScore = 0;
-
-                job.Requirments.forEach((requirement) => {
-                    maxScore = maxScore + requirement.weight * 4;
-                });
-
-                // calculate the score of each applicant and append it to each applicant
-                for (let index = 0; index < results.length; index++) {
-                    const a = results[index];
-                    let aScore = 0;
-                    const applicantA = await Applicant.findOne({
-                        where: {
-                            id: a.id
-                        }
-                    });
-
-                    for (
-                        let index = 0;
-                        index < applicantA.qualifications.length;
-                        index++
-                    ) {
-                        const qualification = applicantA.qualifications[index];
-                        const requirmentObj = await job.Requirments.find(
-                            (req) => {
-                                return req.name == Object.keys(qualification);
-                            }
-                        );
-
-                        if (requirmentObj) {
-                            aScore =
-                                aScore +
-                                requirmentObj.weight *
-                                    Object.values(qualification)[0];
-                        }
-                    }
-                    results[index].score = Math.ceil((aScore / maxScore) * 100);
-                }
-
-                // sort the applicants by the score
-                results.sort((a, b) => {
-                    return b.score - a.score;
-                });
-                console.log(results);
-                job.dataValues.applicants = results;
-
+                job.dataValues.applicants = await applicantScores(job);
                 res.send(job);
+
             } else {
                 throw new Error("You are not authorized to view this job");
             }
@@ -264,20 +214,24 @@ router.patch("/jobs/:id", recruiterAuth, async (req, res) => {
         Object.keys(req.body).forEach(
             (title) => (job[title] = req.body[title])
         );
-        Requirment.destroy({ where: { JobId: job.id }, force: true });
-        const requirements = req.body.stack.map((requirment) => ({
-            name: Object.keys(requirment)[0],
-            weight: Object.values(requirment)[0],
-            JobId: job.id
-        }));
+        if (req.body.stack) {
+            Requirment.destroy({ where: { JobId: job.id }, force: true });
+            const requirements = req.body.stack.map((requirment) => ({
+                name: Object.keys(requirment)[0],
+                weight: Object.values(requirment)[0],
+                JobId: job.id
+            }));
+            Requirment.bulkCreate(requirements);
+            _.set(
+                job.dataValues,
+                "stack",
+                requirements.map((requirement) =>
+                    _.omit(requirement, ["JobId"])
+                )
+            );
+        }
         // console.log(requirements);
         await job.save();
-        Requirment.bulkCreate(requirements);
-        _.set(
-            job.dataValues,
-            "stack",
-            requirements.map((requirement) => _.omit(requirement, ["JobId"]))
-        );
         res.send(job);
     } catch (error) {
         res.status(400).send(error.message);
