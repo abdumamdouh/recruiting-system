@@ -61,8 +61,10 @@ router.post("/pickMCQ", recruiterAuth, async (req, res) => {
 });
 
 // get all public mcq questions
-router.get("/getAllMCQs", recruiterAuth, async (req, res) => {
+router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
     try {
+        const pageNumber = req.params.pageNumber;
+        console.log(pageNumber);
         const results = await MCQ.findAndCountAll({
             include: {
                 model: Question,
@@ -70,6 +72,8 @@ router.get("/getAllMCQs", recruiterAuth, async (req, res) => {
                 attributes: ["id", "question", "choices", "answer"]
             },
             attributes: ["id", "topic"],
+            offset: (pageNumber - 1) * 4,
+            limit: 4,
             where: {
                 [Op.or]: [
                     {
