@@ -67,11 +67,11 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
         console.log(pageNumber);
         const results = await MCQ.findAndCountAll({
             include: {
-                model: Question,
-                as: "questions",
-                attributes: ["id", "question", "choices", "answer"]
+                    model: Question,
+                    as: "questions",
+                    attributes: ["id", "question", "choices", "answer"]
             },
-            attributes: ["id", "topic"],
+            attributes: ["id", "topic", "recruiterId"],
             offset: (pageNumber - 1) * 4,
             limit: 4,
             where: {
