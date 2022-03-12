@@ -89,9 +89,13 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
                 ]
             }
         });
+        console.log(results);
+
+        const count = await db.query("SELECT COUNT(*) FROM mcqs")
+       
         res.send({
             MCQs: results.rows,
-            Count: results.count
+            Count: count[0][0]['COUNT(*)'] // returning count of the exams for pagination
         });
     } catch (error) {
         res.status(500).send(error.message);
