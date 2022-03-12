@@ -41,7 +41,7 @@ const AvailableMCQs = () => {
                 <ReactPaginate
                     previousLabel={"Previous"}
                     nextLabel={"Next"}
-                    pageCount={Math.ceil(4)}
+                    pageCount={Math.ceil(Count/4)}
                     onPageChange={changePage}
                     containerClassName={"paginationBttns"}
                     previousLinkClassName={"previousBttn"}
