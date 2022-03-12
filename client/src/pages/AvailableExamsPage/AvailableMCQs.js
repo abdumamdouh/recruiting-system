@@ -13,6 +13,12 @@ const AvailableMCQs = () => {
     }, [dispatch]);
     const { MCQs } = useSelector(state => state.exam);
     const { Count } = useSelector(state => state.exam);
+
+
+    const changePage = ({ selected }) => {
+        setPageNumber(selected + 1);
+        dispatch(getExamsAction(selected + 1));
+    };
     console.log(MCQs);
     if(MCQs!== undefined){
     return (
@@ -32,11 +38,11 @@ const AvailableMCQs = () => {
                     nextLabel={"Next"}
                     pageCount={Math.ceil(Count / 10)}
                     onPageChange={changePage}
-                    containerClassName={classes.paginationBttns}
-                    previousLinkClassName={classes.previousBttn}
-                    nextLinkClassName={classes.nextBttn}
-                    disabledClassName={classes.paginationDisabled}
-                    activeClassName={classes.paginationActive}
+                    containerClassName={"paginationBttns"}
+                    previousLinkClassName={"previousBttn"}
+                    nextLinkClassName={"nextBttn"}
+                    disabledClassName={"paginationDisabled"}
+                    activeClassName={"paginationActive"}
                 />  
         </div>
     )}
