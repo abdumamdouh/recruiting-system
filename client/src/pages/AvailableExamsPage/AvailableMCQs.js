@@ -13,7 +13,10 @@ const AvailableMCQs = () => {
     }, [dispatch]);
     const { MCQs } = useSelector(state => state.exam);
     const { Count } = useSelector(state => state.exam);
-    const mcqCount = MCQs.length 
+
+
+    //const mcqCount = useSelector(state => state.exam.MCQs.length);
+    //console.log("exams: ",mcqCount)
 
     const [pageNumber, setPageNumber] = useState(1);
 
@@ -30,7 +33,7 @@ const AvailableMCQs = () => {
                 <ul style={{ listStyle: "none",padding:"10px", margin:"10px auto"}} className="examul">
                     {" "}
                     <li key={m.id} style={{marginLeft: '30px'}} className="examli">
-                        <Card topic={m.topic} Count={Count} number={index+1} id={m.id} questions={m.questions}/>{" "}
+                        <Card topic={m.topic} Count={Count} number={(pageNumber-1)*4+(index+1)} id={m.id} questions={m.questions}/>{" "}
                     </li>{" "}
                 </ul>
             ))}
@@ -38,7 +41,7 @@ const AvailableMCQs = () => {
                 <ReactPaginate
                     previousLabel={"Previous"}
                     nextLabel={"Next"}
-                    pageCount={Math.ceil(mcqCount / 10)}
+                    pageCount={Math.ceil(4)}
                     onPageChange={changePage}
                     containerClassName={"paginationBttns"}
                     previousLinkClassName={"previousBttn"}
