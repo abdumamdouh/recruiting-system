@@ -131,58 +131,58 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                 }
             });
             if (job) {
-                // get applicants(Names,IDs) applied for that job
-                const [results, metadata] = await db.query(
-                    "SELECT A.userName,A.id FROM ApplyFors AS AF INNER JOIN Applicants AS A ON AF.ApplicantId = A.id WHERE AF.JobId=?",
-                    {
-                        replacements: [job.id]
-                    }
-                );
+                // // get applicants(Names,IDs) applied for that job
+                // const [results, metadata] = await db.query(
+                //     "SELECT A.userName,A.id FROM ApplyFors AS AF INNER JOIN Applicants AS A ON AF.ApplicantId = A.id WHERE AF.JobId=?",
+                //     {
+                //         replacements: [job.id]
+                //     }
+                // );
 
-                let maxScore = 0;
+                // let maxScore = 0;
 
-                job.Requirments.forEach((requirement) => {
-                    maxScore = maxScore + requirement.weight * 4;
-                });
+                // job.Requirments.forEach((requirement) => {
+                //     maxScore = maxScore + requirement.weight * 4;
+                // });
 
-                // calculate the score of each applicant and append it to each applicant
-                for (let index = 0; index < results.length; index++) {
-                    const a = results[index];
-                    let aScore = 0;
-                    const applicantA = await Applicant.findOne({
-                        where: {
-                            id: a.id
-                        }
-                    });
+                // // calculate the score of each applicant and append it to each applicant
+                // for (let index = 0; index < results.length; index++) {
+                //     const a = results[index];
+                //     let aScore = 0;
+                //     const applicantA = await Applicant.findOne({
+                //         where: {
+                //             id: a.id
+                //         }
+                //     });
 
-                    for (
-                        let index = 0;
-                        index < applicantA.qualifications.length;
-                        index++
-                    ) {
-                        const qualification = applicantA.qualifications[index];
-                        const requirmentObj = await job.Requirments.find(
-                            (req) => {
-                                return req.name == Object.keys(qualification);
-                            }
-                        );
+                //     for (
+                //         let index = 0;
+                //         index < applicantA.qualifications.length;
+                //         index++
+                //     ) {
+                //         const qualification = applicantA.qualifications[index];
+                //         const requirmentObj = await job.Requirments.find(
+                //             (req) => {
+                //                 return req.name == Object.keys(qualification);
+                //             }
+                //         );
 
-                        if (requirmentObj) {
-                            aScore =
-                                aScore +
-                                requirmentObj.weight *
-                                    Object.values(qualification)[0];
-                        }
-                    }
-                    results[index].score = Math.ceil((aScore / maxScore) * 100);
-                }
+                //         if (requirmentObj) {
+                //             aScore =
+                //                 aScore +
+                //                 requirmentObj.weight *
+                //                     Object.values(qualification)[0];
+                //         }
+                //     }
+                //     results[index].score = Math.ceil((aScore / maxScore) * 100);
+                // }
 
-                // sort the applicants by the score
-                results.sort((a, b) => {
-                    return b.score - a.score;
-                });
-                console.log(results);
-                job.dataValues.applicants = results;
+                // // sort the applicants by the score
+                // results.sort((a, b) => {
+                //     return b.score - a.score;
+                // });
+                // console.log(results);
+                job.dataValues.applicants = applicantScores(job);
 
                 res.send(job);
             } else {
