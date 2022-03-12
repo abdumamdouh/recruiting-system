@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import "./UpdatePage.scss";
 
@@ -12,6 +12,16 @@ const UPDATES = [
 ];
 
 const UpdatesPage = (props) => {
+    //slice of state for udpates
+    const [updates, setUpdates] = useState([]);
+
+    useEffect(() => {
+        const fetchUpdates = async () => {
+            console.log("alo");
+        };
+        fetchUpdates();
+    }, []);
+
     return (
         <div className="c">
             <h3 className="hh3">Your Updates</h3>
