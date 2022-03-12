@@ -3,6 +3,8 @@ import { getExamsAction } from "../../redux/actions/exam";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/Card/Card";
 import "./AvailableMCQ.scss";
+import ReactPaginate from "react-paginate";
+ 
 const AvailableMCQs = () => {
     const dispatch = useDispatch();
 
@@ -24,6 +26,18 @@ const AvailableMCQs = () => {
                     </li>{" "}
                 </ul>
             ))}
+
+                <ReactPaginate
+                    previousLabel={"Previous"}
+                    nextLabel={"Next"}
+                    pageCount={Math.ceil(Count / 10)}
+                    onPageChange={changePage}
+                    containerClassName={classes.paginationBttns}
+                    previousLinkClassName={classes.previousBttn}
+                    nextLinkClassName={classes.nextBttn}
+                    disabledClassName={classes.paginationDisabled}
+                    activeClassName={classes.paginationActive}
+                />  
         </div>
     )}
     else
