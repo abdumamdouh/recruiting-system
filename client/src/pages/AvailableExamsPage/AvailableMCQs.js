@@ -14,6 +14,7 @@ const AvailableMCQs = () => {
     const { MCQs } = useSelector(state => state.exam);
     const { Count } = useSelector(state => state.exam);
 
+    const [pageNumber, setPageNumber] = useState(1);
 
     const changePage = ({ selected }) => {
         setPageNumber(selected + 1);
