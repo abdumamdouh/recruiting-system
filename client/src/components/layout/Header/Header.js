@@ -86,13 +86,14 @@ function Header() {
                             )}
 
                         {user.hasOwnProperty("userInfo") &&
-                            user.userInfo.hasOwnProperty("type") && (
+                            user.userInfo.hasOwnProperty("type") &&
+                            user.userInfo.type === "Applicant" && (
                                 <li>
                                     <Link to="/updates">
                                         Updates{" "}
                                         {user && (
                                             <>
-                                                <span
+                                                {/* <span
                                                     style={{
                                                         border: "1px red solid",
                                                         backgroundColor: "red",
@@ -102,7 +103,7 @@ function Header() {
                                                     }}
                                                 >
                                                     2
-                                                </span>
+                                                </span> */}
                                                 <NotificationsIcon color="error" />
                                             </>
                                         )}

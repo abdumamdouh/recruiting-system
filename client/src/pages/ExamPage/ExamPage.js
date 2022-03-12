@@ -5,10 +5,10 @@ import { useParams } from "react-router-dom";
 import "./ExamPage.scss";
 const ExamPage = () => {
     const { id } = useParams();
-    const { MCQs } = useSelector((state) => state.exam);
-    const { Count } = useSelector((state) => state.exam);
+    const { MCQs } = useSelector(state => state.exam);
+    const { Count } = useSelector(state => state.exam);
 
-    const MCQ = MCQs.filter((m) => m.id == id);
+    const MCQ = MCQs.filter(m => m.id == id);
     console.log(id);
     console.log(MCQ);
     //     const initData =[...MCQ]
@@ -25,7 +25,7 @@ const ExamPage = () => {
             {MCQ.map((m, index) => (
                 <div className="table-responsive table-container">
                     <table className="table table-hover">
-                        <thead>
+                        <thead className="thead-dark">
                             <tr>
                                 <th scope="col">question</th>
                                 <th scope="col">choices</th>
@@ -35,13 +35,12 @@ const ExamPage = () => {
                         <tbody>
                             {m.questions.map((q, index) => (
                                 <tr>
-                                    {/* <th scope="row">{index + 1}</th> */}
                                     <td>
                                         {`${index + 1}.`}
                                         {q.question}
                                     </td>
                                     <td>
-                                        {q.choices.map((c) => (
+                                        {q.choices.map(c => (
                                             <span>{`{${c}},`}</span>
                                         ))}
                                     </td>
@@ -52,13 +51,9 @@ const ExamPage = () => {
                     </table>
                 </div>
             ))}
-            {/* <MaterialTable 
-                title='Material Table'
-                data={data}
-                columns={columns}
-            /> */}
         </div>
     );
 };
 
 export default ExamPage;
+
