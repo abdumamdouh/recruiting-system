@@ -51,7 +51,7 @@ export const createExamAction = (jobId,topic,questions,privatee, expiryDate,dura
 };
 };
 
-export const getExamsAction = () => {
+export const getExamsAction = (pageNumber) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
@@ -61,7 +61,7 @@ export const getExamsAction = () => {
             const { userInfo } = getState().user;
             console.log(userInfo.token);
             const rawResponse = await fetch(
-                `${serverURL}/getAllMCQs`,
+                `${serverURL}/getAllMCQs/${pageNumber}`,
                 {
                     method: "GET",
                     headers: {
