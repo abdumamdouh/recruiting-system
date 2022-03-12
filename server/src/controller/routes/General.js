@@ -22,20 +22,24 @@ router.post("/Login", async (req, res) => {
             });
         } else if (applicant) {
             const token = await applicant.generateAuthToken();
-            let { assigned } = await ApplyFor.findByPk(applicant.id, {
+            const record = await ApplyFor.findByPk(applicant.id, {
                 attributes: ["assigned"]
                 // raw: true
             });
-            assigned = JSON.parse(assigned);
-            const hasAssessment = !Object.keys(assigned).every(
-                (key) => assigned[key] === 0
-            );
+            let hasAssessment = null;
+            if (record) {
+                let { assigned } = record;
+                assigned = JSON.parse(assigned);
+                hasAssessment = !Object.keys(assigned).every(
+                    (key) => assigned[key] === 0
+                );
+            }
             // console.log(hasAssessment);
             res.status(200).send({
                 token,
                 type: "Applicant",
                 name: `${applicant.firstName} ${applicant.lastName}.`,
-                hasAssessment
+                ...(hasAssessment && { hasAssessment })
             });
         } else {
             throw new Error("Email or password is incorrect.");
