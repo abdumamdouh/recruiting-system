@@ -61,15 +61,19 @@ router.post("/pickMCQ", recruiterAuth, async (req, res) => {
 });
 
 // get all public mcq questions
-router.get("/getAllMCQs", recruiterAuth, async (req, res) => {
+router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
     try {
+        const pageNumber = req.params.pageNumber;
+        console.log(pageNumber);
         const results = await MCQ.findAndCountAll({
             include: {
-                model: Question,
-                as: "questions",
-                attributes: ["id", "question", "choices", "answer"]
+                    model: Question,
+                    as: "questions",
+                    attributes: ["id", "question", "choices", "answer"]
             },
-            attributes: ["id", "topic"],
+            attributes: ["id", "topic", "recruiterId"],
+            offset: (pageNumber - 1) * 4,
+            limit: 4,
             where: {
                 [Op.or]: [
                     {
@@ -85,9 +89,11 @@ router.get("/getAllMCQs", recruiterAuth, async (req, res) => {
                 ]
             }
         });
+
+        const count = await db.query("SELECT COUNT(*) FROM mcqs")
         res.send({
             MCQs: results.rows,
-            Count: results.count
+            Count: count[0][0]['COUNT(*)'] // returning count of the exams for pagination
         });
     } catch (error) {
         res.status(500).send(error.message);
