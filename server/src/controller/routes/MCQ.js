@@ -10,7 +10,7 @@ const ApplyFor = require("../../models/ApplyFor");
 const MCQ = require("../../models/MCQ");
 const Question = require("../../models/Question");
 const MCQStat = require("../../models/MCQStat");
-const JobMCQ = require("../../models/JobMCQ")
+const JobMCQ = require("../../models/JobMCQ");
 const db = require("../../db/db");
 
 // requiring applicant and recruiter authentication
@@ -46,22 +46,19 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     }
 });
 
-// Pick an availale MCQ exam to the job 
+// Pick an availale MCQ exam to the job
 router.post("/pickMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, MCQId, expiryDate, duration} = req.body;
-        const mcq = await MCQ.findByPk( MCQId );
-        
-        await mcq.addJob(jobId, { through: { expiryDate, duration } }); 
+        const { jobId, MCQId, expiryDate, duration } = req.body;
+        const mcq = await MCQ.findByPk(MCQId);
+
+        await mcq.addJob(jobId, { through: { expiryDate, duration } });
 
         res.status(201).send("The MCQ is added successfully");
-
     } catch (error) {
         res.status(400).send(error.message);
     }
 });
-
-
 
 // get all public mcq questions
 router.get("/getAllMCQs", recruiterAuth, async (req, res) => {

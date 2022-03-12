@@ -11,7 +11,6 @@ const Sequelize = require("sequelize");
 const db = require("../../db/db");
 const Op = require("Sequelize").Op;
 
-
 // requiring applicant and recruiter authentication
 const recruiterAuth = require("../middleware/recruiterAuth");
 const applicantAuth = require("../middleware/applicantAuth");
@@ -47,7 +46,7 @@ router.post("/Feed", async (req, res) => {
             include: [
                 {
                     model: Recruiter,
-                    attributes: ["company","avatar"],
+                    attributes: ["company", "avatar"],
                     // INNER JOIN
                     required: true
                 }
@@ -81,7 +80,7 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                 include: [
                     {
                         model: Recruiter,
-                        attributes: ["company","avatar"],
+                        attributes: ["company", "avatar"],
                         // INNER JOIN
                         required: true
                     },
@@ -98,24 +97,24 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
             });
 
             const appliedForTheJob = await ApplyFor.findOne({
-                where : {
+                where: {
                     JobId: req.params.id,
                     ApplicantId: req.applicant.id
                 }
-            })
+            });
             if (appliedForTheJob) {
-                job.dataValues.applied = true
+                job.dataValues.applied = true;
             } else {
-                job.dataValues.applied = false
+                job.dataValues.applied = false;
             }
-            console.log(job)
+            console.log(job);
             res.send(job);
         } else if (req.recruiter) {
             const job = await Job.findOne({
                 include: [
                     {
                         model: Recruiter,
-                        attributes: ["company","avatar"],
+                        attributes: ["company", "avatar"],
                         // INNER JOIN
                         required: true
                     },
@@ -142,9 +141,9 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
 
                 let maxScore = 0;
 
-                job.Requirments.forEach( requirement => {
+                job.Requirments.forEach((requirement) => {
                     maxScore = maxScore + requirement.weight * 4;
-                })
+                });
 
                 // calculate the score of each applicant and append it to each applicant
                 for (let index = 0; index < results.length; index++) {
@@ -175,8 +174,7 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                                     Object.values(qualification)[0];
                         }
                     }
-                    results[index].score = Math.ceil(aScore / maxScore * 100);
-
+                    results[index].score = Math.ceil((aScore / maxScore) * 100);
                 }
 
                 // sort the applicants by the score
@@ -205,7 +203,7 @@ router.post("/recruiter/myjobs", recruiterAuth, async (req, res) => {
             include: [
                 {
                     model: Recruiter,
-                    attributes: ["company","avatar"],
+                    attributes: ["company", "avatar"],
                     // INNER JOIN
                     required: true
                 }
@@ -308,17 +306,17 @@ router.post("/jobs/applyFor/:id", applicantAuth, async (req, res) => {
     }
 });
 
-// get all availale tasks of the job 
+// get all availale tasks of the job
 router.get("/getAllTasks/:id", recruiterAuth, async (req, res) => {
     try {
         const jobId = req.params.id;
 
         const mcqs = await JobMCQ.findAndCountAll({
             include: {
-                model: MCQ, 
+                model: MCQ,
                 attributes: ["topic"]
             },
-            attributes: [ "MCQId", "expiryDate" ],
+            attributes: ["MCQId", "expiryDate"],
             where: {
                 jobId: jobId,
                 expiryDate: {
@@ -336,12 +334,12 @@ router.get("/getAllTasks/:id", recruiterAuth, async (req, res) => {
     }
 });
 
-// assign the diffrent tasks of the job to applicants 
+// assign the diffrent tasks of the job to applicants
 router.post("/assignTasks", recruiterAuth, async (req, res) => {
     try {
         const jobId = req.body.jobId;
-        
-        if(req.body.MCQ) {
+
+        if (req.body.MCQ) {
             const mcq = req.body.MCQ;
             const MCQId = mcq.MCQId;
             const applicants = await ApplyFor.findAll({
@@ -349,40 +347,35 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
                 where: {
                     jobId: jobId,
                     ApplicantId: {
-                        [Op.in] : mcq.applicants
+                        [Op.in]: mcq.applicants
                     }
                 }
-            })
+            });
 
-            applicants.forEach ( async (applicant) => {
-                const assigned =JSON.parse(applicant.dataValues.assigned);
-                
-                console.log(assigned)
-                assigned.MCQs.push(MCQId)
-                assigned.MCQs = assigned.MCQs.filter((v, i, a) => a.indexOf(v) === i);
-                applicant.assigned = JSON.stringify(assigned)
-                console.log(typeof applicant)
-                await applicant.save()
-            }) 
-            
+            applicants.forEach(async (applicant) => {
+                const assigned = JSON.parse(applicant.dataValues.assigned);
+
+                // console.log(assigned)
+                assigned.MCQs.push(MCQId);
+                assigned.MCQs = assigned.MCQs.filter(
+                    (v, i, a) => a.indexOf(v) === i
+                );
+                applicant.assigned = JSON.stringify(assigned);
+                // console.log(typeof applicant)
+                await applicant.save();
+            });
+
             res.send("MCQ Assigned");
-            
-        } else if(req.body.codingProblem) {
+        } else if (req.body.codingProblem) {
             const codingProblems = req.body.codingProblem;
-            
-        } else if(req.body.task) {
+        } else if (req.body.task) {
             const tasks = req.body.task;
-            
         } else {
-            
         }
-
-
     } catch (error) {
         res.status(400).send(error.message);
     }
 });
-
 
 // Delete a job
 router.delete("/DeleteJob/:id", recruiterAuth, async (req, res) => {
