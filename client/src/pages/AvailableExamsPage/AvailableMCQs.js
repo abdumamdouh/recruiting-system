@@ -9,10 +9,11 @@ const AvailableMCQs = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getExamsAction());
+        dispatch(getExamsAction(1));
     }, [dispatch]);
     const { MCQs } = useSelector(state => state.exam);
     const { Count } = useSelector(state => state.exam);
+    const mcqCount = MCQs.length 
 
     const [pageNumber, setPageNumber] = useState(1);
 
@@ -24,9 +25,9 @@ const AvailableMCQs = () => {
     if(MCQs!== undefined){
     return (
        
-        <div className="container card-container">
+        <div className="card-container">
             {MCQs.map((m, index) => (
-                <ul style={{ listStyle: "none" }} className="examul">
+                <ul style={{ listStyle: "none",padding:"10px", margin:"10px auto"}} className="examul">
                     {" "}
                     <li key={m.id} style={{marginLeft: '30px'}} className="examli">
                         <Card topic={m.topic} Count={Count} number={index+1} id={m.id} questions={m.questions}/>{" "}
@@ -37,7 +38,7 @@ const AvailableMCQs = () => {
                 <ReactPaginate
                     previousLabel={"Previous"}
                     nextLabel={"Next"}
-                    pageCount={Math.ceil(Count / 10)}
+                    pageCount={Math.ceil(mcqCount / 10)}
                     onPageChange={changePage}
                     containerClassName={"paginationBttns"}
                     previousLinkClassName={"previousBttn"}
