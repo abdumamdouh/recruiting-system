@@ -214,20 +214,24 @@ router.patch("/jobs/:id", recruiterAuth, async (req, res) => {
         Object.keys(req.body).forEach(
             (title) => (job[title] = req.body[title])
         );
-        Requirment.destroy({ where: { JobId: job.id }, force: true });
-        const requirements = req.body.stack.map((requirment) => ({
-            name: Object.keys(requirment)[0],
-            weight: Object.values(requirment)[0],
-            JobId: job.id
-        }));
+        if (req.body.stack) {
+            Requirment.destroy({ where: { JobId: job.id }, force: true });
+            const requirements = req.body.stack.map((requirment) => ({
+                name: Object.keys(requirment)[0],
+                weight: Object.values(requirment)[0],
+                JobId: job.id
+            }));
+            Requirment.bulkCreate(requirements);
+            _.set(
+                job.dataValues,
+                "stack",
+                requirements.map((requirement) =>
+                    _.omit(requirement, ["JobId"])
+                )
+            );
+        }
         // console.log(requirements);
         await job.save();
-        Requirment.bulkCreate(requirements);
-        _.set(
-            job.dataValues,
-            "stack",
-            requirements.map((requirement) => _.omit(requirement, ["JobId"]))
-        );
         res.send(job);
     } catch (error) {
         res.status(400).send(error.message);
