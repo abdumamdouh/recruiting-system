@@ -40,55 +40,59 @@ const UpdatesPage = (props) => {
                 console.log(error);
             }
         };
-        fetchUpdates();
+        if (userInfo.hasOwnProperty("hasAssessment")) fetchUpdates();
     }, []);
 
     return (
         <div className="c">
-            <h3 className="hh3">Your Assessments</h3>
-            <div className="updates">
-                {updates.map((update) => (
-                    <div className="update">
-                        <img
-                            src="https://a.allegroimg.com/original/115895/b594fa094f3288495c442ac555f5/KLOCKI-HAM-BMW-T-E60-E61-VALEO-Typ-samochodu-Samochody-osobowe"
-                            alt="logo"
-                            className="immg"
-                        />
-                        <p>
-                            <strong>Title:</strong> {update.title} <br></br>
-                            <strong>Company:</strong> {update.company} <br></br>
-                            <strong>Description:</strong> {update.description}{" "}
-                            <br></br>
-                            <div className="mcq">
-                                <strong>MCQs:</strong>
-                                <ul class="nav flex-column goleft">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#">
-                                            Active
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">
-                                            Link
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">
-                                            Link
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link disabled" href="#">
-                                            Disabled
-                                        </a>
-                                    </li>
-                                </ul>
+            {!userInfo.hasOwnProperty("hasAssessment") ? (
+                <h3 className="hh3">You don't have any Assessment yet.</h3>
+            ) : (
+                <>
+                    <h3 className="hh3">Your Assessments</h3>
+                    <div className="updates">
+                        {updates.map((update) => (
+                            <div className="update">
+                                <img
+                                    src="https://a.allegroimg.com/original/115895/b594fa094f3288495c442ac555f5/KLOCKI-HAM-BMW-T-E60-E61-VALEO-Typ-samochodu-Samochody-osobowe"
+                                    alt="logo"
+                                    className="immg"
+                                />
+                                <p>
+                                    <strong>Title:</strong> {update.title}{" "}
+                                    <br></br>
+                                    <strong>Company:</strong> {update.company}{" "}
+                                    <br></br>
+                                    <strong>Description:</strong>{" "}
+                                    {update.description} <br></br>
+                                    <div className="mcq">
+                                        <strong>MCQs:</strong>
+                                        <ul class="nav flex-row goleft">
+                                            {update.MCQ.map((obj) => (
+                                                <li
+                                                    key={obj.topic}
+                                                    class="nav-item"
+                                                >
+                                                    <a
+                                                        class="nav-link active"
+                                                        rel="popover"
+                                                        href="#"
+                                                        data-bs-content="dsadasdas"
+                                                        data-trigger="hover"
+                                                    >
+                                                        {obj.topic}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    {/* <strong>Expiry Date:</strong> 25/3/2021 <br></br> */}
+                                </p>
                             </div>
-                            {/* <strong>Expiry Date:</strong> 25/3/2021 <br></br> */}
-                        </p>
+                        ))}
                     </div>
-                ))}
-            </div>
+                </>
+            )}
         </div>
     );
 };
