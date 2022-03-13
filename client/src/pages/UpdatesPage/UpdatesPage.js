@@ -45,7 +45,7 @@ const UpdatesPage = (props) => {
 
     return (
         <div className="c">
-            <h3 className="hh3">Your Updates</h3>
+            <h3 className="hh3">Your Assessments</h3>
             <div className="updates">
                 {updates.map((update) => (
                     <div className="update">
@@ -55,9 +55,36 @@ const UpdatesPage = (props) => {
                             className="immg"
                         />
                         <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Explicabo in enim consequuntur incidunt iure
-                            non. Nisi, est iste. Sit, quibusdam!
+                            <strong>Title:</strong> {update.title} <br></br>
+                            <strong>Company:</strong> {update.company} <br></br>
+                            <strong>Description:</strong> {update.description}{" "}
+                            <br></br>
+                            <div className="mcq">
+                                <strong>MCQs:</strong>
+                                <ul class="nav flex-column goleft">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#">
+                                            Active
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                            Link
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                            Link
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link disabled" href="#">
+                                            Disabled
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            {/* <strong>Expiry Date:</strong> 25/3/2021 <br></br> */}
                         </p>
                     </div>
                 ))}

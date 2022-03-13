@@ -31,3 +31,14 @@
     margin-right: 10px;
     border-radius: 35px;
 }
+.mcq {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: start;
+    align-content: start;
+}
+.goleft {
+    align-self: end;
+    word-wrap: break-word;
+    word-break: break-all;
+}
