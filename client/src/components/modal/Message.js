@@ -28,7 +28,7 @@ function Message({ setOpenModal, message }) {
                             }}
                             id="cancelBtn"
                         >
-                            close
+                            Close
                         </button>
                         {/* <button>Continue</button> */}
                     </div>
