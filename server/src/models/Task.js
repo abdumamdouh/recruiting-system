@@ -13,8 +13,8 @@ const Task = db.define('Task',{
         allowNull: false  
     },
     uploadFormat:{
-        type: Sequelize.JSON ,
-        defaultValue:"ZIP,RAR"
+        type: Sequelize.STRING ,
+        defaultValue:"zip-rar"
     }
 });
 

@@ -118,7 +118,9 @@ Applicant.prototype.updatePublicApplicantData = async function ( newUser ) {
 
 // Validate Applicant by it's email and password
 Applicant.findByCredentials = async (email,password) => {
-    const applicant = await Applicant.findOne({ where: { email } })
+    const applicant = await Applicant.findOne({ 
+        attributes:['id','password'],
+        where: { email } })
     if (!applicant){
         return undefined
     }

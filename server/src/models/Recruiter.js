@@ -109,7 +109,10 @@ Recruiter.prototype.updatePublicRecruiterData = async function ( newUser ) {
 
 // Validate Recruiter by it's email and password
 Recruiter.findByCredentials = async (email,password) => {
-    const recruiter = await Recruiter.findOne({ where: { email } })
+    const recruiter = await Recruiter.findOne({
+        attributes:['id','password','company','avatar'],
+        where: { email } 
+    })
     if (!recruiter){
         return undefined
     }

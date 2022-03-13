@@ -14,6 +14,8 @@ const JobMCQ = require("./models/JobMCQ");
 const MCQStat = require("./models/MCQStat");
 const Task = require("./models/Task");
 const ActiveTask = require("./models/ActiveTask");
+const TaskUploads = require("./models/TaskUploads");
+
 
 //requiring db relations
 const Relations = require("./models/Relations");
@@ -54,6 +56,7 @@ JobMCQ.sync();
 MCQStat.sync();
 Task.sync();
 ActiveTask.sync();
+TaskUploads.sync();
 
 // iniallizing server on port 5000
 app.listen(PORT, () => {

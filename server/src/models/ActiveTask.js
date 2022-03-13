@@ -1,30 +1,18 @@
 const Sequelize = require('sequelize')
 const db = require('../db/db')
+const Task = require('./Task')
+const Job = require('./Job')
+
 
 const ActiveTask = db.define('ActiveTask',{
-    taskId:{
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        refernces:{
-            model: 'Tasks', 
-            key: 'id'
-        }
-    },
-    jobId:{
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        refernces:{
-            model: 'Jobs', 
-            key: 'id'
-        } 
-    },
     deadline:{
         type: Sequelize.DATE ,
         allowNull:false
     }
 });
 
+// M->N relation between Job and task
+Job.belongsToMany(Task, { through: ActiveTask });
+Task.belongsToMany(Job, { through: ActiveTask });
 
 module.exports = ActiveTask ;
