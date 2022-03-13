@@ -104,7 +104,11 @@ function Header() {
                                                 >
                                                     2
                                                 </span> */}
-                                                <NotificationsIcon color="error" />
+                                                {user.userInfo.hasOwnProperty(
+                                                    "hasAssessment"
+                                                ) && (
+                                                    <NotificationsIcon color="error" />
+                                                )}
                                             </>
                                         )}
                                     </Link>
