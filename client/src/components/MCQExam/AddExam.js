@@ -15,7 +15,7 @@ import DatePicker from "react-datepicker";
 import { CSVLink, CSVDownload } from "react-csv";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
-import Message from '../modal/Message'
+import Message from "../modal/Message";
 export default function AddExam() {
     const [topic, setTopic] = useState("");
     const [expanded, setExpanded] = useState(false);
@@ -27,11 +27,29 @@ export default function AddExam() {
     const [questions, setQuestions] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const csvData = [
-        ["Which of the following module is not a built-in node module?","fsread", "zlib", "https", "fsread"],
-        ["The Node.js modules can be exposed using:", "expose", "module", "exports", "exports"],
-        ["What is Callback?", "The callback is a technique in which a method calls back the caller method.", "The callback is an asynchronous equivalent for a function.","Both of the above.", "The callback is an asynchronous equivalent for a function."],     
-      ];
-    const handleChange = panel => (event, isExpanded) => {
+        [
+            "Which of the following module is not a built-in node module?",
+            "fsread",
+            "zlib",
+            "https",
+            "fsread"
+        ],
+        [
+            "The Node.js modules can be exposed using:",
+            "expose",
+            "module",
+            "exports",
+            "exports"
+        ],
+        [
+            "What is Callback?",
+            "The callback is a technique in which a method calls back the caller method.",
+            "The callback is an asynchronous equivalent for a function.",
+            "Both of the above.",
+            "The callback is an asynchronous equivalent for a function."
+        ]
+    ];
+    const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
     const handleCheckBox = () => {
@@ -40,19 +58,19 @@ export default function AddExam() {
         console.log("dddd", privatee);
         console.log(checked);
     };
-    const handleDate = date => {
+    const handleDate = (date) => {
         setSelectedDate(date);
         setExpiryDate(date);
         console.log(expiryDate);
     };
     const dispatch = useDispatch();
-    const jobId = useSelector(state => state.job.id);
-    const handleOnDrop = data => {
+    const jobId = useSelector((state) => state.job.id);
+    const handleOnDrop = (data) => {
         console.log("---------------------------");
         console.log(data);
         console.log("---------------------------");
         let arr = [];
-        data.filter(d => d.data.length !== 1).map(d => arr.push(d.data));
+        data.filter((d) => d.data.length !== 1).map((d) => arr.push(d.data));
         const array = [...arr];
         const length = array[0].length;
         // arr = arr.slice(0, arr.length - 1);
@@ -66,11 +84,11 @@ export default function AddExam() {
         setQuestions(questions);
     };
 
-    const handleOnError = err => {
+    const handleOnError = (err) => {
         console.log(err);
     };
 
-    const handleOnRemoveFile = data => {
+    const handleOnRemoveFile = (data) => {
         console.log("---------------------------");
         console.log(data);
         console.log("---------------------------");
@@ -86,12 +104,17 @@ export default function AddExam() {
                 duration
             )
         );
-        setModalOpen(true)
+        setModalOpen(true);
     };
     return (
-        <div>
+        <div className="upload">
             <div className="container">
-            {modalOpen && <Message setOpenModal={setModalOpen} message='uploaded successfully!' />}
+                {modalOpen && (
+                    <Message
+                        setOpenModal={setModalOpen}
+                        message="uploaded successfully!"
+                    />
+                )}
                 <Accordion
                     expanded={expanded === "panel1"}
                     onChange={handleChange("panel1")}
@@ -129,7 +152,6 @@ export default function AddExam() {
                             but the first field MUST be question and the last
                             field MUST be the correct answer
                         </Typography>
-                      
                     </AccordionDetails>
                 </Accordion>
             </div>
@@ -148,7 +170,7 @@ export default function AddExam() {
                     id="outlined-basic"
                     label="Exam topic"
                     variant="outlined"
-                    onChange={e => setTopic(e.target.value)}
+                    onChange={(e) => setTopic(e.target.value)}
                 />
             </Box>
             <h4 style={{ color: "black", marginBottom: "20px" }}>
@@ -195,6 +217,7 @@ export default function AddExam() {
                         selected={selectedDate}
                         onChange={handleDate}
                         dateFormat="dd/MM/yyyy"
+                        className="DatePicker"
                     />
                 </div>
             </div>
@@ -215,19 +238,25 @@ export default function AddExam() {
                     label="duration"
                     size="md"
                     value={duration}
-                    onChange={e => {
+                    onChange={(e) => {
                         setDuration(e.target.value);
                     }}
                 />
             </div>
             <div className="mb">
- 
-<CSVLink data={csvData} filename={"CSV_EXAM_TEMPLATE"}>Download MCQ Exam Template</CSVLink>
+                <CSVLink data={csvData} filename={"CSV_EXAM_TEMPLATE"}>
+                    Download MCQ Exam Template
+                </CSVLink>
             </div>
-
-            <Button variant="contained" onClick={handleClick}>
-                Upload MCQ Exam
-            </Button>
+            <div className="mb">
+                <Button
+                    style={{ marginBottom: "10px" }}
+                    variant="contained"
+                    onClick={handleClick}
+                >
+                    Upload MCQ Exam
+                </Button>
+            </div>
         </div>
     );
 }
