@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { OverlayTrigger, Popover } from "react-bootstrap";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useSelector } from "react-redux";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./UpdatePage.scss";
 
 const UPDATES = [
@@ -34,10 +36,7 @@ const UpdatesPage = (props) => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
     const { userInfo } = useSelector((state) => state.user);
-
-    const popover = {};
 
     useEffect(() => {
         const fetchUpdates = async () => {
@@ -142,38 +141,97 @@ const UpdatesPage = (props) => {
                                     className="immg"
                                 />
                                 <p>
-                                    <strong>Title:</strong> {update.title}{" "}
-                                    <br></br>
-                                    <strong>Company:</strong> {update.company}{" "}
-                                    <br></br>
-                                    <strong>Description:</strong>{" "}
-                                    {update.description} <br></br>
                                     <div className="mcq">
-                                        <strong>
-                                            {update.MCQ.length > 1
-                                                ? "Assessments"
-                                                : "Assessment"}
-                                            :
-                                        </strong>
-                                        <ul class="nav flex-row goleft">
-                                            {update.MCQ.map((obj) => (
-                                                <>
-                                                    <li
-                                                        key={obj.topic}
-                                                        class="nav-item"
-                                                    >
-                                                        <a
-                                                            class="nav-link active"
-                                                            href="#"
-                                                        >
-                                                            {obj.topic}
-                                                        </a>
-                                                    </li>
-                                                </>
-                                            ))}
+                                        <p>
+                                            <strong>Title:</strong>
+                                        </p>{" "}
+                                        <p>{update.title}</p>
+                                        <p>
+                                            <strong>Company:</strong>
+                                        </p>{" "}
+                                        <p>{update.company}</p>
+                                        <p>
+                                            <strong>Description:</strong>
+                                        </p>{" "}
+                                        <p>{update.description}</p>
+                                        <p>
+                                            <strong>
+                                                {update.MCQ.length > 1
+                                                    ? "Assessments"
+                                                    : "Assessment"}
+                                                :
+                                            </strong>
+                                        </p>
+                                        <ul class="nav">
+                                            <div className="assessment">
+                                                {update.MCQ.map((obj) => (
+                                                    <>
+                                                        <div>
+                                                            <OverlayTrigger
+                                                                key={obj.topic}
+                                                                placement="auto-start"
+                                                                delay={{
+                                                                    show: 250,
+                                                                    hide: 400
+                                                                }}
+                                                                overlay={
+                                                                    <Popover
+                                                                        id={
+                                                                            obj.topic
+                                                                        }
+                                                                    >
+                                                                        <Popover.Header as="h3">
+                                                                            MCQ
+                                                                        </Popover.Header>
+                                                                        <Popover.Body>
+                                                                            <strong>
+                                                                                Expiry
+                                                                                Date:
+                                                                            </strong>{" "}
+                                                                            {obj.expiryDate.substring(
+                                                                                0,
+                                                                                obj.expiryDate.search(
+                                                                                    "T"
+                                                                                )
+                                                                            )}
+                                                                            <br></br>
+                                                                            <strong>
+                                                                                Duration:
+                                                                            </strong>{" "}
+                                                                            {
+                                                                                obj.duration
+                                                                            }{" "}
+                                                                            minutes
+                                                                            <br></br>
+                                                                        </Popover.Body>
+                                                                    </Popover>
+                                                                }
+                                                            >
+                                                                <li
+                                                                    key={
+                                                                        obj.topic
+                                                                    }
+                                                                    class="nav-item"
+                                                                >
+                                                                    <a
+                                                                        style={{
+                                                                            textDecoration:
+                                                                                "none"
+                                                                        }}
+                                                                        href="#"
+                                                                    >
+                                                                        {
+                                                                            obj.topic
+                                                                        }
+                                                                    </a>
+                                                                </li>
+                                                            </OverlayTrigger>
+                                                        </div>
+                                                    </>
+                                                ))}
+                                            </div>
                                         </ul>
                                     </div>
-                                    {/* <strong>Expiry Date:</strong> 25/3/2021 <br></br> */}
                                 </p>
                             </div>
                         ))}
