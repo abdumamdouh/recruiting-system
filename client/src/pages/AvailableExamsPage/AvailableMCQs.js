@@ -7,7 +7,7 @@ import ReactPaginate from "react-paginate";
  
 const AvailableMCQs = () => {
     const dispatch = useDispatch();
-
+    const {RecruiterId} = useSelector(state => state.job);
     useEffect(() => {
         dispatch(getExamsAction(1));
     }, [dispatch]);
@@ -33,7 +33,7 @@ const AvailableMCQs = () => {
                 <ul style={{ listStyle: "none",padding:"10px", margin:"10px auto"}} className="examul">
                     {" "}
                     <li key={m.id} style={{marginLeft: '30px'}} className="examli">
-                        <Card topic={m.topic} Count={Count} number={(pageNumber-1)*4+(index+1)} id={m.id} questions={m.questions}/>{" "}
+                        <Card topic={m.topic} Count={Count} number={(pageNumber-1)*4+(index+1)} id={m.id} owned={m.recruiterId == RecruiterId? true:false} Rec={RecruiterId} questions={m.questions}/>{" "}
                     </li>{" "}
                 </ul>
             ))}
