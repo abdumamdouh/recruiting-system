@@ -35,7 +35,7 @@ const UpdatesPage = (props) => {
                 );
                 const data = await response.json();
                 console.log(data);
-                // setUpdates(data);
+                setUpdates(data);
             } catch (error) {
                 console.log(error);
             }
@@ -47,31 +47,20 @@ const UpdatesPage = (props) => {
         <div className="c">
             <h3 className="hh3">Your Updates</h3>
             <div className="updates">
-                <div className="update">
-                    <img
-                        src="https://a.allegroimg.com/original/115895/b594fa094f3288495c442ac555f5/KLOCKI-HAM-BMW-T-E60-E61-VALEO-Typ-samochodu-Samochody-osobowe"
-                        alt="logo"
-                        className="immg"
-                    />
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Explicabo in enim consequuntur incidunt iure non. Nisi,
-                        est iste. Sit, quibusdam!
-                    </p>
-                </div>
-
-                <div className="update">
-                    <img
-                        src="https://a.allegroimg.com/original/115895/b594fa094f3288495c442ac555f5/KLOCKI-HAM-BMW-T-E60-E61-VALEO-Typ-samochodu-Samochody-osobowe"
-                        alt="logo"
-                        className="immg"
-                    />
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Explicabo in enim consequuntur incidunt iure non. Nisi,
-                        est iste. Sit, quibusdam!
-                    </p>
-                </div>
+                {updates.map((update) => (
+                    <div className="update">
+                        <img
+                            src="https://a.allegroimg.com/original/115895/b594fa094f3288495c442ac555f5/KLOCKI-HAM-BMW-T-E60-E61-VALEO-Typ-samochodu-Samochody-osobowe"
+                            alt="logo"
+                            className="immg"
+                        />
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Explicabo in enim consequuntur incidunt iure
+                            non. Nisi, est iste. Sit, quibusdam!
+                        </p>
+                    </div>
+                ))}
             </div>
         </div>
     );
