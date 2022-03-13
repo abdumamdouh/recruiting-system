@@ -40,28 +40,35 @@ const UpdatesPage = (props) => {
                 console.log(error);
             }
         };
-        fetchUpdates();
+        if (userInfo.hasOwnProperty("hasAssessment")) fetchUpdates();
     }, []);
 
     return (
         <div className="c">
-            <h3 className="hh3">Your Updates</h3>
-            <div className="updates">
-                {updates.map((update) => (
-                    <div className="update">
-                        <img
-                            src="https://a.allegroimg.com/original/115895/b594fa094f3288495c442ac555f5/KLOCKI-HAM-BMW-T-E60-E61-VALEO-Typ-samochodu-Samochody-osobowe"
-                            alt="logo"
-                            className="immg"
-                        />
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Explicabo in enim consequuntur incidunt iure
-                            non. Nisi, est iste. Sit, quibusdam!
-                        </p>
+            {!userInfo.hasOwnProperty("hasAssessment") ? (
+                <h3 className="hh3">You don't have any Assessment yet.</h3>
+            ) : (
+                <>
+                    <h3 className="hh3">Your Updates</h3>
+                    <div className="updates">
+                        {updates.map((update) => (
+                            <div className="update">
+                                <img
+                                    src="https://a.allegroimg.com/original/115895/b594fa094f3288495c442ac555f5/KLOCKI-HAM-BMW-T-E60-E61-VALEO-Typ-samochodu-Samochody-osobowe"
+                                    alt="logo"
+                                    className="immg"
+                                />
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Explicabo in enim
+                                    consequuntur incidunt iure non. Nisi, est
+                                    iste. Sit, quibusdam!
+                                </p>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                </>
+            )}
         </div>
     );
 };
