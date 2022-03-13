@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
 import "./UpdatePage.scss";
 
 const UPDATES = [
@@ -17,6 +16,8 @@ const UpdatesPage = (props) => {
     const [updates, setUpdates] = useState([]);
 
     const { userInfo } = useSelector((state) => state.user);
+
+    const popover = {};
 
     useEffect(() => {
         const fetchUpdates = async () => {
@@ -66,23 +67,27 @@ const UpdatesPage = (props) => {
                                     <strong>Description:</strong>{" "}
                                     {update.description} <br></br>
                                     <div className="mcq">
-                                        <strong>MCQs:</strong>
+                                        <strong>
+                                            {update.MCQ.length > 1
+                                                ? "Assessments"
+                                                : "Assessment"}
+                                            :
+                                        </strong>
                                         <ul class="nav flex-row goleft">
                                             {update.MCQ.map((obj) => (
-                                                <li
-                                                    key={obj.topic}
-                                                    class="nav-item"
-                                                >
-                                                    <a
-                                                        class="nav-link active"
-                                                        rel="popover"
-                                                        href="#"
-                                                        data-bs-content="dsadasdas"
-                                                        data-trigger="hover"
+                                                <>
+                                                    <li
+                                                        key={obj.topic}
+                                                        class="nav-item"
                                                     >
-                                                        {obj.topic}
-                                                    </a>
-                                                </li>
+                                                        <a
+                                                            class="nav-link active"
+                                                            href="#"
+                                                        >
+                                                            {obj.topic}
+                                                        </a>
+                                                    </li>
+                                                </>
                                             ))}
                                         </ul>
                                     </div>
