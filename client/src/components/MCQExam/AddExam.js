@@ -224,10 +224,11 @@ export default function AddExam() {
  
 <CSVLink data={csvData} filename={"CSV_EXAM_TEMPLATE"}>Download MCQ Exam Template</CSVLink>
             </div>
-
-            <Button variant="contained" onClick={handleClick}>
+    <div className="mb">
+            <Button  variant="contained" onClick={handleClick}>
                 Upload MCQ Exam
             </Button>
+            </div>
         </div>
     );
 }

@@ -1,18 +1,19 @@
 .sidebar {
     flex: 2;
-    height: calc(100vh - 200px);
-    width: calc(100vh - 200px);
+    height: calc(100vh - 150px);
+    width: calc(100vh - 250px);
     background-color: rgb(251, 251, 255);
     position: sticky;
     top: 50px;
     margin-right: 50px;
-    margin-left:-300px;
-
+    margin-left:-8rem;
+    // margin-top:20px;
   }
   
   .sidebarWrapper {
       padding:0;
       margin:0;
+      margin-top:10px;
     padding: 20px;
     color: #555;
   }
