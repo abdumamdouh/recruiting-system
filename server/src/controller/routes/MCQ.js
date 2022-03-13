@@ -67,9 +67,9 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
         console.log(pageNumber);
         const results = await MCQ.findAndCountAll({
             include: {
-                    model: Question,
-                    as: "questions",
-                    attributes: ["id", "question", "choices", "answer"]
+                model: Question,
+                as: "questions",
+                attributes: ["id", "question", "choices", "answer"]
             },
             attributes: ["id", "topic", "recruiterId"],
             offset: (pageNumber - 1) * 4,
@@ -90,10 +90,10 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
             }
         });
 
-        const count = await db.query("SELECT COUNT(*) FROM mcqs")
+        const count = await db.query("SELECT COUNT(*) FROM mcqs");
         res.send({
             MCQs: results.rows,
-            Count: count[0][0]['COUNT(*)'] // returning count of the exams for pagination
+            Count: count[0][0]["COUNT(*)"] // returning count of the exams for pagination
         });
     } catch (error) {
         res.status(500).send(error.message);
@@ -141,7 +141,7 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
         const MCQId = req.params.id;
         const applicantId = req.applicant.id;
         // const jobId = req.body;
-        let data = await MCQ.findByPk(req.params.id, {
+        let data = await MCQ.findByPk(MCQId, {
             include: [
                 {
                     model: Question,
@@ -157,6 +157,24 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             attributes: []
         });
         data = JSON.parse(JSON.stringify(data));
+        let { assigned } = await ApplyFor.findOne({
+            where: {
+                ApplicantId: applicantId,
+                JobId: data.Jobs[0].id
+            },
+            attributes: ["assigned"],
+            raw: true
+        });
+        assigned = JSON.parse(assigned);
+        assigned.MCQs = _.without(assigned.MCQs, Number(MCQId));
+        // console.log(assigned);
+        assigned = JSON.stringify(assigned);
+        await ApplyFor.update(
+            { assigned },
+            {
+                where: { ApplicantId: applicantId, JobId: data.Jobs[0].id }
+            }
+        );
         const answers = data.questions.reduce(
             (acc, cur) => ({
                 ...acc,

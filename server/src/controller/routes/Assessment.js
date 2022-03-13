@@ -33,7 +33,7 @@ router.get("/assessments", applicantAuth, async (req, res) => {
         data.forEach((job) => {
             job.assigned = JSON.parse(job.assigned);
         });
-        console.log(data);
+        // console.log(data);
         const assessments = await Promise.all(
             data.map(async (job) => {
                 let everyMCQ = await MCQ.findAll({
