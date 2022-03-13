@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import classes from "../Forms/common.module.scss";
 import { updateApplicantAction } from "../../redux/actions/user";
 import { FormControl } from "@mui/material";
-const EditQualifications = ({ setOnEditQualifications,setQual }) => {
+const EditQualifications = ({ setOnEditQualifications, setQual }) => {
     const stacks = [
         "HTML5/CSS3",
         "NodeJs",
@@ -46,7 +46,7 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
 
     const dispatch = useDispatch();
 
-    let user = useSelector(state => state.user);
+    let user = useSelector((state) => state.user);
     const { userInfo } = user;
     const majors = [
         "BackEnd",
@@ -72,10 +72,10 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
     };
 
     const [formValues, setFormValues] = useState(initialValues);
-    const [checkedArr, setCheckedArr] =useState([])
+    const [checkedArr, setCheckedArr] = useState([]);
     //console.log(formValues);
 
-    const changeAvatar = e => {
+    const changeAvatar = (e) => {
         //     const file = e.target.files[0]
         //     const err = checkImage(file)
         //     if(err) return dispatch({
@@ -84,26 +84,26 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
         //     setAvatar(file)
     };
 
-    const handleView = e => {
+    const handleView = (e) => {
         if (e.target.value === "software-engineer") {
             setView("sw");
         } else setView("notsw");
 
         handleChange(e);
     };
-   
-    const handleChange = e => {
+
+    const handleChange = (e) => {
         const { name, value } = e.target;
 
         if (name === "qualifications" || name === "skills") {
             let arr = formValues.skills;
             if (arr.includes(value)) {
-                arr = arr.filter(stack => stack !== value);
+                arr = arr.filter((stack) => stack !== value);
                 setSkills({ arr });
                 console.log(skills);
                 setFormValues({
                     ...formValues,
-                    qualifications:   skills ,
+                    qualifications: skills
                     // skills: skills
                 });
             } else {
@@ -112,7 +112,7 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
             setSkills(arr);
             setFormValues({
                 ...formValues,
-                qualifications:  skills ,
+                qualifications: skills
                 // skills: skills
             });
 
@@ -124,11 +124,11 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
         }
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setSkills(formValues.skills);
         let returnedValue = [];
-        skills.map(value => returnedValue.push({ [value]: 0 }));
+        skills.map((value) => returnedValue.push({ [value]: 0 }));
         console.log(returnedValue);
         setSkills(returnedValue);
         console.log("sssss", skills);
@@ -136,17 +136,17 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
         const secondHalf = skills.slice().splice(-middleIndex);
         console.log("sn", secondHalf);
         setSkills([...secondHalf]);
-        setQual([...secondHalf])
+        setQual([...secondHalf]);
         user = {
             ...userInfo,
             major: formValues.major,
             level: formValues.level,
             yearsOfExperience: formValues.yearsOfExperience,
-            qualifications: secondHalf,
+            qualifications: secondHalf
             // skills: secondHalf
         };
         console.log(user);
-        dispatch(updateApplicantAction(user))
+        dispatch(updateApplicantAction(user));
         setOnEditQualifications(false);
     };
     return (
@@ -418,7 +418,7 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
                             <br />
                             <div className={classes.Box}>
                                 <h4 style={{ margin: "10px" }}>
-                                    Years Of Experience
+                                    Years of experience
                                 </h4>
                                 <input
                                     style={{ marginRight: "5px" }}
@@ -433,7 +433,7 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
                             <br />
                             <div className={classes.Box}>
                                 <h4 style={{ margin: "10px" }}>
-                                    Your Favourite stack
+                                    Your favourite stack
                                 </h4>
                                 <ul
                                     style={{ margin: "10px" }}
@@ -441,7 +441,6 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
                                 >
                                     {stacks.map((stack, index) => {
                                         return (
-                                         
                                             <li
                                                 style={{ marginRight: "5px" }}
                                                 className={classes.Li}
@@ -461,45 +460,54 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
                                                     //     )
                                                     //         ? true
                                                     //         : false
-                                                    // 
+                                                    //
                                                 />
                                                 <label key={index}>
                                                     {stack}
                                                 </label>
-                                              <br />
+                                                <br />
                                                 {skillLevels && (
-                                                    <FormControl style={{minWidth: 120}}>
-                                                    <Select
-                                                        labelId="demo-simple-select-label"
-                                                        id="demo-simple-select"
-                                                        key={index}
-                                                        value={stacks[stack]}
-                                                        label="stack"
-                                                        onChange={e => {
-                                                            setSkills(state => [
-                                                                ...state,
-                                                                {
-                                                                    [stack]:
-                                                                        e.target
-                                                                            .value
-                                                                }
-                                                            ]);
-                                                            console.log(skills);
+                                                    <FormControl
+                                                        style={{
+                                                            minWidth: 120
                                                         }}
                                                     >
-                                                        <MenuItem value={1}>
-                                                            Beginner
-                                                        </MenuItem>
-                                                        <MenuItem value={2}>
-                                                            Experienced
-                                                        </MenuItem>
-                                                        <MenuItem value={3}>
-                                                            Advanced
-                                                        </MenuItem>
-                                                        <MenuItem value={4}>
-                                                            Expert
-                                                        </MenuItem>
-                                                    </Select>
+                                                        <Select
+                                                            labelId="demo-simple-select-label"
+                                                            id="demo-simple-select"
+                                                            key={index}
+                                                            value={skills}
+                                                            label="stack"
+                                                            onChange={(e) => {
+                                                                setSkills(
+                                                                    (state) => [
+                                                                        ...state,
+                                                                        {
+                                                                            [stack]:
+                                                                                e
+                                                                                    .target
+                                                                                    .value
+                                                                        }
+                                                                    ]
+                                                                );
+                                                                console.log(
+                                                                    skills
+                                                                );
+                                                            }}
+                                                        >
+                                                            <MenuItem value={1}>
+                                                                Beginner
+                                                            </MenuItem>
+                                                            <MenuItem value={2}>
+                                                                Experienced
+                                                            </MenuItem>
+                                                            <MenuItem value={3}>
+                                                                Advanced
+                                                            </MenuItem>
+                                                            <MenuItem value={4}>
+                                                                Expert
+                                                            </MenuItem>
+                                                        </Select>
                                                     </FormControl>
                                                 )}
                                             </li>
@@ -510,7 +518,9 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
                         </div>
                     ) : (
                         <div className={classes.Box}>
-                            <h4>Years Of Experience</h4>
+                            <h4 style={{ margin: "10px" }}>
+                                Years Of Experience
+                            </h4>
                             <input
                                 className={classes.Input}
                                 name="yearsOfExperience"
@@ -521,14 +531,13 @@ const EditQualifications = ({ setOnEditQualifications,setQual }) => {
                     )}
                 </div>
 
-
                 {view === "sw" && (
                     <button
                         className="btn btn-info w-100"
                         type="button"
                         onClick={() => setSkillLevels(true)}
                     >
-                       Add your Level at each skill
+                        Add your Level at each skill
                     </button>
                 )}
                 <button
