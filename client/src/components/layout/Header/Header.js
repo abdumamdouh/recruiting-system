@@ -90,7 +90,7 @@ function Header() {
                             user.userInfo.type === "Applicant" && (
                                 <li>
                                     <Link to="/updates">
-                                        Updates{" "}
+                                        Assessments{" "}
                                         {user && (
                                             <>
                                                 {/* <span
