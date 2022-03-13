@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Typography } from "@material-ui/core";
 import TextField from "@mui/material/TextField";
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import {pickExamAction} from '../../redux/actions/exam'
 import Message from '../modal/Message'
 import CardPopup from './CardPopup'
@@ -42,10 +43,14 @@ const Card = (props) => {
             {modalOpen && <CardPopup setOpenModal={setModalOpen} id={props.id} jobId={jobId} message='uploaded successfully!' />}
         <div className="card" style={{width: '18rem'}}>
         <div className="card-body">
-          <h4 className="card-title">Exam {props.number}</h4>
-          <h6 className="card-subtitle mb-2 text-muted">Exam topic: {props.topic}</h6>
-          <p className="card-text">This Exam consists of {props.questions.length} questions</p>
-         <button className="btn btn-primary mb" onClick={handleClick}>View MCQ Exam</button>
+        <div className="inline-group">
+          <span className="card-title">Exam {props.number} </span>
+          {/* <span className='ml-4 black p-2  bg-success text-whites'>{props.owned? 'Owned Exam': 'Public Exam'}</span> */}
+          {props.owned? <span className='ml-4 black p-2  bg-light  text-dark bg-opacity-25'> Private Exam <CheckOutlinedIcon />   </span> : <span className='ml-4 black p-2  bg-light text-whites'>Public Exam </span>}
+          </div>
+          <h6 className="card-subtitle mb-2 mt-2 text-muted">Exam topic: {props.topic}</h6>
+          <p className="card-text">Number of questions: {props.questions.length} </p>
+         <button className="btn btn-primary mb-2" onClick={handleClick}>View MCQ Exam</button>
          {/* <button className="btn btn-primary" onClick={handleChooseExam}>Choose MCQ Exam</button> */}
          <button className="btn btn-primary" onClick={()=>setModalOpen(true)}>Choose MCQ Exam</button>
        {choosed && <div>
