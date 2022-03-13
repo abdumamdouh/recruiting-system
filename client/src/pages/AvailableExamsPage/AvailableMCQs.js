@@ -27,7 +27,7 @@ const AvailableMCQs = () => {
     console.log(MCQs);
     if(MCQs!== undefined){
     return (
-       
+       <div>
         <div className="card-container">
             {MCQs.map((m, index) => (
                 <ul style={{ listStyle: "none",padding:"10px", margin:"10px auto"}} className="examul">
@@ -38,7 +38,10 @@ const AvailableMCQs = () => {
                 </ul>
             ))}
 
-                <ReactPaginate
+             
+        </div>
+        <div className="footer">
+        <ReactPaginate
                     previousLabel={"Previous"}
                     nextLabel={"Next"}
                     pageCount={Math.ceil(Count/4)}
@@ -49,6 +52,7 @@ const AvailableMCQs = () => {
                     disabledClassName={"paginationDisabled"}
                     activeClassName={"paginationActive"}
                 />  
+        </div>
         </div>
     )}
     else
