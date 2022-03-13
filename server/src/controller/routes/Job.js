@@ -214,7 +214,8 @@ router.patch("/jobs/:id", recruiterAuth, async (req, res) => {
         Object.keys(req.body).forEach(
             (title) => (job[title] = req.body[title])
         );
-        if (req.body.stack) {
+        if (req.body.stack.length) {
+        
             Requirment.destroy({ where: { JobId: job.id }, force: true });
             const requirements = req.body.stack.map((requirment) => ({
                 name: Object.keys(requirment)[0],

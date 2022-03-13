@@ -131,7 +131,7 @@ const UpdatesPage = (props) => {
                 </>
             ) : (
                 <>
-                    <h3 className="hh3">Your Updates</h3>
+                    <h3 className="hh3">Your Assessments</h3>
                     <div className="updates">
                         {updates.map((update) => (
                             <div className="update">
@@ -141,10 +141,34 @@ const UpdatesPage = (props) => {
                                     className="immg"
                                 />
                                 <p>
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Explicabo in enim
-                                    consequuntur incidunt iure non. Nisi, est
-                                    iste. Sit, quibusdam!
+                                    <strong>Title:</strong> {update.title}{" "}
+                                    <br></br>
+                                    <strong>Company:</strong> {update.company}{" "}
+                                    <br></br>
+                                    <strong>Description:</strong>{" "}
+                                    {update.description} <br></br>
+                                    <div className="mcq">
+                                        <strong>MCQs:</strong>
+                                        <ul class="nav flex-row goleft">
+                                            {update.MCQ.map((obj) => (
+                                                <li
+                                                    key={obj.topic}
+                                                    class="nav-item"
+                                                >
+                                                    <a
+                                                        class="nav-link active"
+                                                        rel="popover"
+                                                        href="#"
+                                                        data-bs-content="dsadasdas"
+                                                        data-trigger="hover"
+                                                    >
+                                                        {obj.topic}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    {/* <strong>Expiry Date:</strong> 25/3/2021 <br></br> */}
                                 </p>
                             </div>
                         ))}
