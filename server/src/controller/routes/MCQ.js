@@ -122,7 +122,7 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
         });
         // console.log(tookExam);
         if (tookExam) {
-            throw new Error("You took exam already.");
+            return res.status(406).send("You took exam already.");
         }
         let mcq = await MCQ.findByPk(req.params.id, {
             include: {
