@@ -105,8 +105,8 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
         // const tookExam = await MCQStat.findOne({
         //     where: {
-        //        MCQId,
-        //          applicantId,
+        //         MCQId,
+        //         applicantId,
         //         jobId
         //     }
         // });
