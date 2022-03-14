@@ -166,7 +166,8 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             raw: true
         });
         assigned = JSON.parse(assigned);
-        assigned.MCQs = _.without(assigned.MCQs, Number(MCQId));
+        console.log(assigned);
+        assigned.MCQs = _.without(Number(assigned.MCQs), Number(MCQId));
         // console.log(assigned);
         assigned = JSON.stringify(assigned);
         await ApplyFor.update(
