@@ -54,7 +54,7 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                     ]
                 });
                 everyMCQ = JSON.parse(JSON.stringify(everyMCQ));
-                // console.log(everyMCQ[0].Jobs);
+                console.log(everyMCQ[0].Jobs);
                 const jobAssessments = {
                     jobId: everyMCQ[0].Jobs[0].id,
                     title: everyMCQ[0].Jobs[0].title,

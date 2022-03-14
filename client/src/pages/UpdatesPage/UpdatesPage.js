@@ -10,9 +10,9 @@ import "./UpdatePage.scss";
 
 const UPDATES = [
     {
-        examTopic: "nigga",
-        recruiter: "elsisi",
-        jobTitile: "zbal",
+        examTopic: "JS",
+        recruiter: "Jack",
+        jobTitile: "Backend",
         img: "https://a.allegroimg.com/original/115895/b594fa094f3288495c442ac555f5/KLOCKI-HAM-BMW-T-E60-E61-VALEO-Typ-samochodu-Samochody-osobowe"
     }
 ];
@@ -136,7 +136,8 @@ const UpdatesPage = (props) => {
                         {updates.map((update) => (
                             <div className="update">
                                 <img
-                                    src="https://a.allegroimg.com/original/115895/b594fa094f3288495c442ac555f5/KLOCKI-HAM-BMW-T-E60-E61-VALEO-Typ-samochodu-Samochody-osobowe"
+                                    // make img dynamic
+                                    src="download.jpg"
                                     alt="logo"
                                     className="immg"
                                 />
@@ -213,6 +214,7 @@ const UpdatesPage = (props) => {
                                                                     }
                                                                     class="nav-item"
                                                                 >
+                                                                    {/*redirect*/}
                                                                     <a
                                                                         style={{
                                                                             textDecoration:
