@@ -103,16 +103,27 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
 // get shuffled mcq questions by JobId
 router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
-        // const tookExam = await MCQStat.findOne({
-        //     where: {
-        //         MCQId,
-        //         applicantId,
-        //         jobId
-        //     }
-        // });
-        // if (tookExam) {
-        //     throw new Error("You took exam already.");
-        // }
+        const job = await MCQ.findByPk(req.params.id, {
+            attributes: [],
+            include: [
+                { model: Job, attributes: ["id"], through: { attributes: [] } }
+            ]
+        });
+        // console.log(JSON.parse(JSON.stringify(job)));
+        // console.log(`MCQId: ${req.params.id},
+        //     applicantId: ${req.applicant.id},
+        //     jobId: ${job.Jobs[0].id}`);
+        const tookExam = await MCQStat.findOne({
+            where: {
+                MCQId: req.params.id,
+                applicantId: req.applicant.id,
+                jobId: job.Jobs[0].id
+            }
+        });
+        // console.log(tookExam);
+        if (tookExam) {
+            throw new Error("You took exam already.");
+        }
         let mcq = await MCQ.findByPk(req.params.id, {
             include: {
                 model: Question,
@@ -166,7 +177,8 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             raw: true
         });
         assigned = JSON.parse(assigned);
-        assigned.MCQs = _.without(assigned.MCQs, Number(MCQId));
+        console.log(assigned);
+        assigned.MCQs = _.without(Number(assigned.MCQs), Number(MCQId));
         // console.log(assigned);
         assigned = JSON.stringify(assigned);
         await ApplyFor.update(
