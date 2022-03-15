@@ -120,6 +120,75 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
     }
 });
 
+// get all categories of the questions
+router.get("/categories", recruiterAuth, async (req, res) => {
+    try {
+        let categories = await Question.findAll({
+            attributes: [
+                [
+                    Sequelize.fn("DISTINCT", Sequelize.col("category")),
+                    "category"
+                ]
+            ]
+        });
+        if (!categories) {
+            return res.status(404).send("No categories yet in the database.");
+        }
+        categories = categories.map(({ category }) => category);
+        res.status(200).send({ categories });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// get all topics related to this certain category
+router.post("/topics", recruiterAuth, async (req, res) => {
+    try {
+        const { category } = req.body;
+        let topics = await Question.findAll({
+            where: { category },
+            attributes: [
+                [Sequelize.fn("DISTINCT", Sequelize.col("topic")), "topic"]
+            ]
+        });
+        if (!topics) {
+            return res
+                .status(404)
+                .send("No topics yet related to this category.");
+        }
+        topics = topics.map(({ topic }) => topic);
+        res.status(200).send({ topics });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// get all questions related to this certain topic
+router.post("/questions", recruiterAuth, async (req, res) => {
+    try {
+        const { topic } = req.body;
+        const questions = await Question.findAll({
+            where: { topic },
+            attributes: ["id", "question", "choices", "answer", "difficulty"]
+        });
+        if (!questions) {
+            return res
+                .status(404)
+                .send("No questions yet related to this certain topic.");
+        }
+        // console.log(questions[0].choices);
+        questions.forEach((question) => {
+            question.difficulty =
+                question.difficulty !== null
+                    ? question.difficulty
+                    : "Not specified";
+        });
+        res.status(200).send({ questions });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 // get shuffled mcq questions by JobId
 router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
