@@ -11,6 +11,11 @@ const Question = db.define(
             autoIncrement: true,
             allowNull: false
         },
+        category: {
+            type: Sequelize.STRING,
+            // allowNull: false
+            unique: false
+        },
         topic: {
             type: Sequelize.STRING,
             // allowNull: false,
