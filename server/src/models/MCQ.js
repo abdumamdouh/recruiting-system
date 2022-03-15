@@ -8,7 +8,7 @@ const MCQ = db.define("MCQ", {
         autoIncrement: true,
         allowNull: false
     },
-    topic: {
+    category: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: false
