@@ -20,29 +20,48 @@ const RecOrApp = require("../middleware/RecOrApp");
 const { where } = require("sequelize");
 const { object } = require("joi");
 const { includes } = require("lodash");
+const { is } = require("sequelize/lib/operators");
 
 const router = new express.Router();
 
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic, expiryDate, duration, private } = req.body;
+        const { jobId, category, expiryDate, duration, private } = req.body;
         const recruiterId = req.recruiter.id;
+        // let questions = await Promise.all(
+        //     req.body.questions.map(async ({ options: choices, ...rest }) => {
+        //         let question = {
+        //             choices,
+        //             ...rest
+        //             // MCQId: mcq.id
+        //         };
+        //         question = Question.build(question);
+        //         question = await question.validate();
+        //         // question = await question.save();
+        //         return question;
+        //     })
+        // );
         // console.log(expiryDate, duration);
-        const mcq = await MCQ.create({ topic, private, recruiterId });
-        await mcq.addJob(jobId, { through: { expiryDate, duration } });
         let questions = req.body.questions.map(
             ({ options: choices, ...rest }) => ({
                 choices,
-                ...rest,
-                MCQId: mcq.id
+                ...rest
+                // MCQId: mcq.id
             })
         );
-        await Question.bulkCreate(questions);
-        // await mcq.addQuestion(questions);
+        // console.log(questions);
+        questions = await Question.bulkCreate(questions, { validate: true });
+        const mcq = await MCQ.create({ category, private, recruiterId });
+        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        await mcq.addQuestion(questions);
         res.status(201).send("The file is uploaded successfully");
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).send(
+            error.message
+                ? error.message
+                : error.errors[0].errors.errors[0].message
+        );
     }
 });
 
@@ -71,7 +90,7 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
                 as: "questions",
                 attributes: ["id", "question", "choices", "answer"]
             },
-            attributes: ["id", "topic", "recruiterId"],
+            attributes: ["id", "category", "recruiterId"],
             offset: (pageNumber - 1) * 4,
             limit: 4,
             where: {
@@ -128,10 +147,10 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
             include: {
                 model: Question,
                 as: "questions",
-                attributes: ["id", "question", "choices"]
-                // through: { attributes: [] }
+                attributes: ["id", "question", "choices"],
+                through: { attributes: [] }
             },
-            attributes: ["id", "topic"]
+            attributes: ["id", "category"]
         });
         mcq = JSON.parse(JSON.stringify(mcq));
         mcq.questions = _.shuffle(mcq.questions);
@@ -157,7 +176,8 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
                 {
                     model: Question,
                     as: "questions",
-                    attributes: ["id", "answer"]
+                    attributes: ["id", "answer"],
+                    through: { attributes: [] }
                 },
                 {
                     model: Job,
@@ -177,7 +197,6 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             raw: true
         });
         assigned = JSON.parse(assigned);
-        console.log(assigned);
         assigned.MCQs = _.without(Number(assigned.MCQs), Number(MCQId));
         // console.log(assigned);
         assigned = JSON.stringify(assigned);
