@@ -14,7 +14,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DatePicker from "react-datepicker";
 import { CSVLink, CSVDownload } from "react-csv";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
 import Message from "../modal/Message";
 export default function AddExam() {
     const [topic, setTopic] = useState("");
@@ -28,25 +27,44 @@ export default function AddExam() {
     const [modalOpen, setModalOpen] = useState(false);
     const csvData = [
         [
+            "question",
+            "choice1",
+            "choice2",
+            "choice3",
+            "answer",
+            "category",
+            "topic",
+            "difficulty"
+        ],
+        [
             "Which of the following module is not a built-in node module?",
             "fsread",
             "zlib",
             "https",
-            "fsread"
+            "fsread",
+            "Software engineering",
+            "Backend",
+            "easy"
         ],
         [
             "The Node.js modules can be exposed using:",
             "expose",
             "module",
             "exports",
-            "exports"
+            "exports",
+            "Software engineering",
+            "Backend",
+            "medium"
         ],
         [
             "What is Callback?",
             "The callback is a technique in which a method calls back the caller method.",
             "The callback is an asynchronous equivalent for a function.",
             "Both of the above.",
-            "The callback is an asynchronous equivalent for a function."
+            "The callback is an asynchronous equivalent for a function.",
+            "Software engineering",
+            "Backend",
+            "hard"
         ]
     ];
     const handleChange = (panel) => (event, isExpanded) => {
@@ -74,14 +92,29 @@ export default function AddExam() {
         const array = [...arr];
         const length = array[0].length;
         // arr = arr.slice(0, arr.length - 1);
-        let questions = arr.map((a, index) => ({
+        console.log('data length', array[0].length)
+        if(array[0].length === 5|| array[0].length===6 || array[0].length===7 )
+        {
+            let questions = arr.map((a, index) => ({
+                question: a[0],
+                options: a.slice(1, length - 1),
+                answer: a[length -1 ],
+        
+            }));
+            console.log("arr", questions);
+            setQuestions(questions);
+        }
+      else{  let questions = arr.map((a, index) => ({
             question: a[0],
-            options: a.slice(1, length - 1),
-            answer: a[length - 1]
+            options: a.slice(1, length - 4),
+            answer: a[length -4 ],
+            category: a[length - 3],
+            topic: a[length-2],
+            difficulty: a[length-1]
         }));
 
         console.log("arr", questions);
-        setQuestions(questions);
+        setQuestions(questions);}
     };
 
     const handleOnError = (err) => {
@@ -140,17 +173,22 @@ export default function AddExam() {
                         }}
                     >
                         <Typography
-                            style={{ fontWeight: 500, fontSize: "20px" }}
+                            style={{ fontWeight: 500, fontSize: "15px" }}
                         >
                             Add your questions in the form:
                             question,choice1,choice2,choice3,answer
                         </Typography>
                         <Typography
-                            style={{ fontWeight: 500, fontSize: "20px" }}
+                            style={{ fontWeight: 500, fontSize: "15px" }}
                         >
                             you can add any number of choices between 3 and 5,
                             but the first field MUST be question and the last
                             field MUST be the correct answer
+                        </Typography>
+                        <Typography
+                            style={{ fontWeight: 500, fontSize: "15px" }}
+                        >
+                           Three Additional fields could be added as: question,choice1,choice2,choice3,answer,category,topic,difficulty
                         </Typography>
                     </AccordionDetails>
                 </Accordion>
