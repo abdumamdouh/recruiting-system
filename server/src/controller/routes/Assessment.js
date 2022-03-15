@@ -38,7 +38,7 @@ router.get("/assessments", applicantAuth, async (req, res) => {
             data.map(async (job) => {
                 let everyMCQ = await MCQ.findAll({
                     where: { id: job.assigned.MCQs },
-                    attributes: ["id", "category"],
+                    attributes: ["id", "topic"],
                     include: [
                         {
                             model: Job,
