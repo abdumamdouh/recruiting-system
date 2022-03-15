@@ -151,7 +151,7 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
                 attributes: ["id", "question", "choices"],
                 through: { attributes: [] }
             },
-            attributes: ["id", "category"]
+            attributes: ["id", "topic"]
         });
         mcq = JSON.parse(JSON.stringify(mcq));
         mcq.questions = _.shuffle(mcq.questions);
