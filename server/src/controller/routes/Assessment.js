@@ -38,7 +38,7 @@ router.get("/assessments", applicantAuth, async (req, res) => {
             data.map(async (job) => {
                 let everyMCQ = await MCQ.findAll({
                     where: { id: job.assigned.MCQs },
-                    attributes: ["id", "topic"],
+                    attributes: ["id", "category"],
                     include: [
                         {
                             model: Job,
@@ -54,16 +54,16 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                     ]
                 });
                 everyMCQ = JSON.parse(JSON.stringify(everyMCQ));
-                console.log(everyMCQ[0].Jobs);
+                // console.log(everyMCQ[0].Jobs);
                 const jobAssessments = {
                     jobId: everyMCQ[0].Jobs[0].id,
                     title: everyMCQ[0].Jobs[0].title,
                     description: everyMCQ[0].Jobs[0].description,
                     company: everyMCQ[0].Jobs[0].Recruiter.company,
                     avatar: everyMCQ[0].Jobs[0].Recruiter.avatar,
-                    MCQ: everyMCQ.map(({ id, topic, Jobs }) => ({
+                    MCQ: everyMCQ.map(({ id, category, Jobs }) => ({
                         MCQId: id,
-                        topic,
+                        category,
                         expiryDate: Jobs[0].JobMCQ.expiryDate,
                         duration: Jobs[0].JobMCQ.duration
                     }))
