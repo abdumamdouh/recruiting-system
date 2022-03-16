@@ -20,7 +20,7 @@ const DashBoardPage = () => {
             <Route path="/dashboard/availableMCQs">
             <AvailableMCQs />
           </Route>
-            <Route path="/exam/:id">
+            <Route path="/dashboard/exam/:id">
             <ExamPage />
           </Route>
             <Route  exact path="/dashboard/uploadedexams">
