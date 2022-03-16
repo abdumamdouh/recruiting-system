@@ -134,11 +134,15 @@ export default function AddExam() {
                 questions,
                 privatee,
                 expiryDate,
-                duration
+                duration,
+                showSuccessMessage
             )
         );
-        setModalOpen(true);
+       ;
     };
+    const showSuccessMessage = () => {
+        setModalOpen(true)
+    }
     return (
         <div className="upload">
             <div className="container">
