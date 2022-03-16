@@ -21,7 +21,7 @@ const Card = (props) => {
     const [modalOpen, setModalOpen] = useState(false);
     //redirect to questions' page
     const handleClick = () => {
-        history.push(`/exam/${props.id}`);
+        history.push(`/dashboard/exam/${props.id}`);
     };
     const handleChooseExam = () => {
         console.log("date", expiryDate);

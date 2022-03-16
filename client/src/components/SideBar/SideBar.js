@@ -60,7 +60,7 @@ const SideBar = () => {
           </ul>
           <h3 className="sidebarTitle">Available Exams</h3>
           <ul className="sidebarList">
-            <Link to="/dashboard/availableMCQs">
+            <Link to="/dashboard/availableMCQs" className="link">
             <li className="sidebarListItem">
               <BackupTableIcon  className="sidebarIcon" />
               MCQ Exam 
@@ -83,7 +83,7 @@ const SideBar = () => {
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Quick Menu</h3>
           <ul className="sidebarList">
-            <Link to="/users" className="link">
+            <Link to="/dashboard/candidates" className="link">
               <li className="sidebarListItem">
                 <PermIdentity className="sidebarIcon" />
                 Candidates
