@@ -2,6 +2,10 @@ import "./AddExam.scss";
 import { CSVReader } from "react-papaparse";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+
 import { useState } from "react";
 import { createExamAction } from "../../redux/actions/exam";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +16,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DatePicker from "react-datepicker";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink} from "react-csv";
 import "react-datepicker/dist/react-datepicker.css";
 import Message from "../modal/Message";
 export default function AddExam() {
@@ -25,6 +29,7 @@ export default function AddExam() {
     const [duration, setDuration] = useState(0);
     const [questions, setQuestions] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
+    const [value, setValue] = useState(new Date());
     const csvData = [
         [
             "question",
@@ -67,7 +72,7 @@ export default function AddExam() {
             "hard"
         ]
     ];
-    const handleChange = (panel) => (event, isExpanded) => {
+    const handleChange = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
     const handleCheckBox = () => {
@@ -76,52 +81,55 @@ export default function AddExam() {
         console.log("dddd", privatee);
         console.log(checked);
     };
-    const handleDate = (date) => {
+    const handleDate = date => {
         setSelectedDate(date);
         setExpiryDate(date);
         console.log(expiryDate);
     };
     const dispatch = useDispatch();
-    const jobId = useSelector((state) => state.job.id);
-    const handleOnDrop = (data) => {
+    const jobId = useSelector(state => state.job.id);
+    const handleOnDrop = data => {
         console.log("---------------------------");
         console.log(data);
         console.log("---------------------------");
         let arr = [];
-        data.filter((d) => d.data.length !== 1).map((d) => arr.push(d.data));
+        data.filter(d => d.data.length !== 1).map(d => arr.push(d.data));
         const array = [...arr];
         const length = array[0].length;
         // arr = arr.slice(0, arr.length - 1);
-        console.log('data length', array[0].length)
-        if(array[0].length === 5|| array[0].length===6 || array[0].length===7 )
-        {
+        console.log("data length", array[0].length);
+        if (
+            array[0].length === 5 ||
+            array[0].length === 6 ||
+            array[0].length === 7
+        ) {
             let questions = arr.map((a, index) => ({
                 question: a[0],
                 options: a.slice(1, length - 1),
-                answer: a[length -1 ],
-        
+                answer: a[length - 1]
             }));
             console.log("arr", questions);
             setQuestions(questions);
-        }
-      else{  let questions = arr.map((a, index) => ({
-            question: a[0],
-            options: a.slice(1, length - 4),
-            answer: a[length -4 ],
-            category: a[length - 3],
-            topic: a[length-2],
-            difficulty: a[length-1]
-        }));
+        } else {
+            let questions = arr.map((a, index) => ({
+                question: a[0],
+                options: a.slice(1, length - 4),
+                answer: a[length - 4],
+                category: a[length - 3],
+                topic: a[length - 2],
+                difficulty: a[length - 1]
+            }));
 
-        console.log("arr", questions);
-        setQuestions(questions);}
+            console.log("arr", questions);
+            setQuestions(questions);
+        }
     };
 
-    const handleOnError = (err) => {
+    const handleOnError = err => {
         console.log(err);
     };
 
-    const handleOnRemoveFile = (data) => {
+    const handleOnRemoveFile = data => {
         console.log("---------------------------");
         console.log(data);
         console.log("---------------------------");
@@ -138,11 +146,10 @@ export default function AddExam() {
                 showSuccessMessage
             )
         );
-       ;
     };
     const showSuccessMessage = () => {
-        setModalOpen(true)
-    }
+        setModalOpen(true);
+    };
     return (
         <div className="upload">
             <div className="container">
@@ -192,7 +199,8 @@ export default function AddExam() {
                         <Typography
                             style={{ fontWeight: 500, fontSize: "15px" }}
                         >
-                           Three Additional fields could be added as: question,choice1,choice2,choice3,answer,category,topic,difficulty
+                            Three Additional fields could be added as:
+                            question,choice1,choice2,choice3,answer,category,topic,difficulty
                         </Typography>
                     </AccordionDetails>
                 </Accordion>
@@ -212,7 +220,7 @@ export default function AddExam() {
                     id="outlined-basic"
                     label="Exam topic"
                     variant="outlined"
-                    onChange={(e) => setTopic(e.target.value)}
+                    onChange={e => setTopic(e.target.value)}
                 />
             </Box>
             <h4 style={{ color: "black", marginBottom: "20px" }}>
@@ -255,12 +263,24 @@ export default function AddExam() {
                     Expiration Date for this exam
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
-                    <DatePicker
+                    {/* <DatePicker
                         selected={selectedDate}
                         onChange={handleDate}
                         dateFormat="dd/MM/yyyy"
                         className="DatePicker"
-                    />
+                    /> */}
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DateTimePicker
+                            renderInput={props => <TextField {...props} />}
+                            label="DateTimePicker"
+                            value={value}
+                            onChange={newValue => {
+                                setValue(newValue);
+                                setExpiryDate(value);
+                                console.log(value);
+                            }}
+                        />
+                    </LocalizationProvider>
                 </div>
             </div>
             <div className="black mb">
@@ -280,7 +300,7 @@ export default function AddExam() {
                     label="duration"
                     size="md"
                     value={duration}
-                    onChange={(e) => {
+                    onChange={e => {
                         setDuration(e.target.value);
                     }}
                 />
