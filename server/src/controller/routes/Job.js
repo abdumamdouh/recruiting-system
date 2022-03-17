@@ -297,6 +297,19 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
         if (req.body.MCQ) {
             const mcq = req.body.MCQ;
             const MCQId = mcq.MCQId;
+
+            const mcqRecord = await MCQ.findByPk(MCQId);
+            if(!mcqRecord) {
+                throw new Error("This MCQ id is invalid");
+            }
+
+            const jobRecord = await Job.findByPk(jobId);
+            if(!jobRecord) {
+                throw new Error("This Job id is invalid");
+            } else if ( jobRecord.RecruiterId !== req.recruiter.id ) {
+                throw new Error("You are not authorized to view this job");
+            }
+
             const applicants = await ApplyFor.findAll({
                 // attributes: ["assigned"],
                 where: {
@@ -307,18 +320,24 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
                 }
             });
 
-            applicants.forEach(async (applicant) => {
-                const assigned = JSON.parse(applicant.dataValues.assigned);
-
-                // console.log(assigned)
-                assigned.MCQs.push(MCQId);
-                assigned.MCQs = assigned.MCQs.filter(
-                    (v, i, a) => a.indexOf(v) === i
-                );
-                applicant.assigned = JSON.stringify(assigned);
-                // console.log(typeof applicant)
-                await applicant.save();
-            });
+            if(!applicants) {
+                throw new Error("There is no applicants assigned for this job");
+            } else if (applicants.size() !== mcq.applicants.size()) {
+                throw new Error("Some applicants are not applied for this job");
+            } else {
+                applicants.forEach(async (applicant) => {
+                    const assigned = JSON.parse(applicant.dataValues.assigned);
+    
+                    // console.log(assigned)
+                    assigned.MCQs.push(MCQId);
+                    assigned.MCQs = assigned.MCQs.filter(
+                        (v, i, a) => a.indexOf(v) === i
+                    );
+                    applicant.assigned = JSON.stringify(assigned);
+                    // console.log(typeof applicant)
+                    await applicant.save();
+                });
+            }
 
             res.send("MCQ Assigned");
         } else if (req.body.codingProblem) {
