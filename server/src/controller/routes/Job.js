@@ -297,6 +297,19 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
         if (req.body.MCQ) {
             const mcq = req.body.MCQ;
             const MCQId = mcq.MCQId;
+
+            const mcqRecord = await MCQ.findByPk(MCQId);
+            if(!mcqRecord) {
+                throw new Error("This MCQ id is invalid");
+            }
+
+            const jobRecord = await Job.findByPk(jobId);
+            if(!jobRecord) {
+                throw new Error("This Job id is invalid");
+            } else if ( jobRecord.RecruiterId !== req.recruiter.id ) {
+                throw new Error("You are not authorized to view this job");
+            }
+
             const applicants = await ApplyFor.findAll({
                 // attributes: ["assigned"],
                 where: {
