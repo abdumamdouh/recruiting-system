@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import classes from "./QuestionBank.module.scss"
 import Question from "./Question"
 import ReactPaginate from "react-paginate";
+import { getCategory } from "../../redux/actions/bank";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -15,11 +16,15 @@ const QuestionBank = () => {
     
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     dispatch(getJobsAction(1));
-    // }, [dispatch]);
+
+
+    useEffect(() => {
+        dispatch(getCategory());
+    }, [dispatch]);
 
     const Jobs = useSelector(state => state.jobs.Jobs);
+    const {categories} = useSelector(state => state.bank.category);
+
     const { Count } = useSelector(state => state.jobs);
     const [pageNumber, setPageNumber] = useState(1);
     const [view,setView]=useState('notsw');
@@ -35,10 +40,6 @@ const QuestionBank = () => {
 
 
     const questions=[1,2,3,4,5,6,7,8,9,10]
-    const filters=[   { value: "software", label: "software" },
-    { value: "medicine", label: "medicine" },
-    { value: "Education", label: "Education" },
-   ]
     const secondFilter=["java","C++"]
 
 
@@ -53,10 +54,10 @@ const QuestionBank = () => {
   }
 
   const bringquestions =()=>{
-      
+
   }
 
-    if (questions !== undefined) {
+    if (categories !== undefined) {
         return (
 
             <div>
@@ -94,17 +95,6 @@ const QuestionBank = () => {
 
 
                 </div> */}
-
-
-
-
-
-
-
-
-
-
-
                         <lable>
                             Category
                         </lable>
@@ -115,11 +105,17 @@ const QuestionBank = () => {
                             className="custom-select text-capitalize"
                         >
                             <option>--Select category--</option>
-                            <option value="software">
-                                Software 
-                            </option>
-                            <option value="pharmacy">pharmacy</option>
-                            <option value="medicine">medicine</option>
+                           {
+                               categories.map(category=>{
+                                   return(
+                                       <option key={category}
+                                       value={categories}
+                                       name="category">
+                                           {category}
+                                       </option>
+                                   )
+                               })
+                           }
                             
                         </select>
 
@@ -149,9 +145,9 @@ const QuestionBank = () => {
                         }
 
                 <div className={classes.list}>
-                    {questions.map(question => (
+                    {/* {questions.map(question => (
                         <Question key={question} question={question} />
-                        ))}
+                        ))} */}
                     <br />
                     <ReactPaginate
                         previousLabel={"Previous"}
