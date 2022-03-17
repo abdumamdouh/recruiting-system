@@ -27,6 +27,7 @@ import Layout from "./components/layout/Layout";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";
 import DashBoardPage from "./pages/DashBoardPage/DashBoardPage";
+import Question from "./components/QuestionBank/Question"
 
 const App = () => {
     return (
@@ -109,6 +110,13 @@ const App = () => {
                         exact
                         path="/AddExam"
                         component={AddExam}
+                        name="createJob"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/questionbank"
+                        component={Question}
                         name="createJob"
                     />
 
