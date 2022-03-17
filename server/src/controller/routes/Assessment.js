@@ -54,16 +54,16 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                     ]
                 });
                 everyMCQ = JSON.parse(JSON.stringify(everyMCQ));
-                // console.log(everyMCQ[0].Jobs);
+                // console.log(everyMCQ[0]);
                 const jobAssessments = {
                     jobId: everyMCQ[0].Jobs[0].id,
                     title: everyMCQ[0].Jobs[0].title,
                     description: everyMCQ[0].Jobs[0].description,
                     company: everyMCQ[0].Jobs[0].Recruiter.company,
                     avatar: everyMCQ[0].Jobs[0].Recruiter.avatar,
-                    MCQ: everyMCQ.map(({ id, category, Jobs }) => ({
+                    MCQ: everyMCQ.map(({ id, topic, Jobs }) => ({
                         MCQId: id,
-                        category,
+                        topic,
                         expiryDate: Jobs[0].JobMCQ.expiryDate,
                         duration: Jobs[0].JobMCQ.duration
                     }))
