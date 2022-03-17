@@ -183,6 +183,13 @@ router.post("/questions", recruiterAuth, async (req, res) => {
                     ? question.difficulty
                     : "Not specified";
         });
+        const difficulty = ["Easy", "Medium", "Hard", "Not specified"];
+        questions.sort(
+            (a, b) =>
+                difficulty.indexOf(a.difficulty) -
+                difficulty.indexOf(b.difficulty)
+        );
+        console.log(questions);
         res.status(200).send({ questions });
     } catch (error) {
         res.status(500).send(error.message);
