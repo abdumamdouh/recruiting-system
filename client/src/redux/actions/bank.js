@@ -7,7 +7,7 @@ import {
     CHOOSE_TOPIC_FAIL
 
 } from "../types/index";
-
+import axios from "axios";
 
 
 const serverURL = "http://localhost:5000";
@@ -47,21 +47,18 @@ export const getCategory = () => {
 
 
 
-
-
-
-export const getCategory = () => {
+export const getTopic = (category) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
-                type: CHOOSE_CATEGORY_REQUEST,
+                type: CHOOSE_TOPIC_REQUEST,
                 loading: true
             });
             const { userInfo } = getState().user;
             //console.log(userInfo.token);
            //console.log(userData)
             const rawResponse = await fetch(
-                `${serverURL}/categories`,
+                `${serverURL}/topics/${category}`,
                 {
                     method: "GET",
                     headers: {
@@ -74,12 +71,14 @@ export const getCategory = () => {
             const data = await rawResponse.json();        
 
 
-    dispatch({ type: CHOOSE_CATEGORY_SUCCESS, payload:data });
+    dispatch({ type: CHOOSE_TOPIC_SUCCESS, payload:data });
 } catch (error) {
     dispatch({
-        type: CHOOSE_CATEGORY_FAIL,
+        type: CHOOSE_TOPIC_FAIL,
         payload: error.response && error.response.data
     });
 }
 };
 };
+
+
