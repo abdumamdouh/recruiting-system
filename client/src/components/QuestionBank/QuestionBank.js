@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import classes from "./QuestionBank.module.scss"
 import Question from "./Question"
 import ReactPaginate from "react-paginate";
-import { getCategory } from "../../redux/actions/bank";
+import { getCategory,getTopic } from "../../redux/actions/bank";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -18,13 +18,23 @@ const QuestionBank = () => {
 
 
 
+    const [forchange,setForchange]=useState("")
+
     useEffect(() => {
-        dispatch(getCategory());
-    }, [dispatch]);
+        dispatch(getTopic("software"));
+        console.log("execcc")
+    },[forchange]);
 
-    const Jobs = useSelector(state => state.jobs.Jobs);
-    const {categories} = useSelector(state => state.bank.category);
+    //const Jobs = useSelector(state => state.jobs.Jobs);
 
+
+    const bank=useSelector(state => state.bank)
+
+    
+    console.log("imm bannnnnnnnnnk  ",bank)
+
+
+    //const categories=["software"]
     const { Count } = useSelector(state => state.jobs);
     const [pageNumber, setPageNumber] = useState(1);
     const [view,setView]=useState('notsw');
@@ -50,6 +60,8 @@ const QuestionBank = () => {
 
   const  handleView =(e)=>{
       setView(e.target.value)
+      dispatch(getTopic(e.target.value))
+
 
   }
 
@@ -57,7 +69,7 @@ const QuestionBank = () => {
 
   }
 
-    if (categories !== undefined) {
+    if (bank.hasOwnProperty("category")) {
         return (
 
             <div>
@@ -106,10 +118,10 @@ const QuestionBank = () => {
                         >
                             <option>--Select category--</option>
                            {
-                               categories.map(category=>{
+                               bank.category.categories.map(category=>{
                                    return(
                                        <option key={category}
-                                       value={categories}
+                                       value={category}
                                        name="category">
                                            {category}
                                        </option>
@@ -164,12 +176,14 @@ const QuestionBank = () => {
              </div>
         );
     } else
+    
         return (
             <Stack spacing={1}>
                 <Skeleton variant="text" />
                 <Skeleton variant="rectangular" width={210} height={210} />
                 <Skeleton variant="rectangular" width={210} height={210} />
             </Stack>
+            
         );
 };
 
