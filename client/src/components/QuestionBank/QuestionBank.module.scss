@@ -3,7 +3,11 @@
     margin: 10px;
   }
 
+  .radio{
+    padding:5px;
+    margin: 5px;
 
+  }
   .list{
       width: 50%;
      padding: auto;
@@ -20,12 +24,16 @@
     margin: 10px auto;
     border: 1px solid #dad7d7;
     border-radius: 3px;
+    flex-direction: column;
+
     cursor: pointer;
   }
   
   .questionInfo {
     margin: 10px;
+    
     display: flex;
+    
     flex-direction: column;
   
     > div > {
