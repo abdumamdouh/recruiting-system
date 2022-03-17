@@ -12,22 +12,23 @@ const Question = ({question}) => {
             <div className={classes.questionInfo}>
                 How old are you ?    
             </div>
-            
-                {answers.map(answer=>{
-                    return(
-                        <div>
-                    <input
+            <br/>
+            <div>
+
+            {answers.map(answer=>{
+                return(
+                <span className={classes.radio} >
+                    <input className={classes.radio}
                         type="radio"
                         name={answer}
                         value={answer}/>
                     <label>
-                    {answer}
+                        {answer}
                     </label>        
-                    </div>
-                    )
-                })}
-            
-
+                </span>
+                )
+            })}
+            </div>
         </div>
 
     )
