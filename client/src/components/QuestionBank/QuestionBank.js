@@ -21,7 +21,7 @@ const QuestionBank = () => {
     const [forchange,setForchange]=useState("")
 
     useEffect(() => {
-        dispatch(getTopic("software"));
+        dispatch(getCategory());
         console.log("execcc")
     },[forchange]);
 
@@ -42,7 +42,7 @@ const QuestionBank = () => {
     
     const changePage = ({ selected }) => {
         setPageNumber(selected + 1);
-       // dispatch(getJobsAction(selected + 1));
+       //dispatch(getJobsAction(selected + 1));
     };
 
 
@@ -143,11 +143,18 @@ const QuestionBank = () => {
                                     className="custom-select text-capitalize"
                                 >
                                     <option>--Select topic--</option>
-                                    <option value="java">
-                                        java 
-                                    </option>
-                                    <option value="c++">c++</option>
-                                    <option value="testing">testing</option>
+                                    {
+                                        bank.hasOwnProperty("topic")&&(
+                                        bank.topic.topics.map(topic=>{
+                                        return(
+                                            <option key={topic}
+                                            value={topic}
+                                            name="category">
+                                                {topic}
+                                            </option>
+                                        )
+                               }))
+                           }
                                     
                                 </select>
 
