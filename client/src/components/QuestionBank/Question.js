@@ -17,12 +17,14 @@ const Question = ({question}) => {
 
             {answers.map(answer=>{
                 return(
-                <span className={classes.radio} >
+                <span  key={answer}
+                 className={classes.radio} >
                     <input className={classes.radio}
+                    key={answer}
                         type="radio"
                         name={answer}
                         value={answer}/>
-                    <label>
+                    <label  key={answer}>
                         {answer}
                     </label>        
                 </span>
