@@ -133,110 +133,126 @@ const UpdatesPage = (props) => {
                 <>
                     <h3 className="hh3">Your Assessments</h3>
                     <div className="updates">
-                        {updates.map((update) => (
-                            <div className="update">
-                                <img
-                                    // make img dynamic
-                                    src="download.jpg"
-                                    alt="logo"
-                                    className="immg"
-                                />
-                                <p>
-                                    <div className="mcq">
-                                        <p>
-                                            <strong>Title:</strong>
-                                        </p>{" "}
-                                        <p>{update.title}</p>
-                                        <p>
-                                            <strong>Company:</strong>
-                                        </p>{" "}
-                                        <p>{update.company}</p>
-                                        <p>
-                                            <strong>Description:</strong>
-                                        </p>{" "}
-                                        <p>{update.description}</p>
-                                        <p>
-                                            <strong>
-                                                {update.MCQ.length > 1
-                                                    ? "Assessments"
-                                                    : "Assessment"}
-                                                :
-                                            </strong>
-                                        </p>
-                                        <ul class="nav">
-                                            <div className="assessment">
-                                                {update.MCQ.map((obj) => (
-                                                    <>
-                                                        <div>
-                                                            <OverlayTrigger
-                                                                key={obj.topic}
-                                                                placement="auto-start"
-                                                                delay={{
-                                                                    show: 250,
-                                                                    hide: 400
-                                                                }}
-                                                                overlay={
-                                                                    <Popover
-                                                                        id={
-                                                                            obj.topic
-                                                                        }
-                                                                    >
-                                                                        <Popover.Header as="h3">
-                                                                            MCQ
-                                                                        </Popover.Header>
-                                                                        <Popover.Body>
-                                                                            <strong>
-                                                                                Expiry
-                                                                                Date:
-                                                                            </strong>{" "}
-                                                                            {obj.expiryDate.substring(
-                                                                                0,
-                                                                                obj.expiryDate.search(
-                                                                                    "T"
-                                                                                )
-                                                                            )}
-                                                                            <br></br>
-                                                                            <strong>
-                                                                                Duration:
-                                                                            </strong>{" "}
-                                                                            {
-                                                                                obj.duration
-                                                                            }{" "}
-                                                                            minutes
-                                                                            <br></br>
-                                                                        </Popover.Body>
-                                                                    </Popover>
-                                                                }
-                                                            >
-                                                                <li
+                        {updates.map((update) => {
+                            const avatar =
+                                update.avatar !== null ? update.avatar : null;
+                            const base64String =
+                                update.avatar !== null
+                                    ? btoa(
+                                          String.fromCharCode(
+                                              ...new Uint8Array(avatar.data)
+                                          )
+                                      )
+                                    : "";
+                            return (
+                                <div className="update">
+                                    {base64String === "" ? null : (
+                                        <img
+                                            // make img dynamic
+                                            src={base64String}
+                                            alt="logo"
+                                            className="immg"
+                                        />
+                                    )}
+                                    <p>
+                                        <div className="mcq">
+                                            <p>
+                                                <strong>Title:</strong>
+                                            </p>{" "}
+                                            <p>{update.title}</p>
+                                            <p>
+                                                <strong>Company:</strong>
+                                            </p>{" "}
+                                            <p>{update.company}</p>
+                                            <p>
+                                                <strong>Description:</strong>
+                                            </p>{" "}
+                                            <p>{update.description}</p>
+                                            <p>
+                                                <strong>
+                                                    {update.MCQ.length > 1
+                                                        ? "Assessments"
+                                                        : "Assessment"}
+                                                    :
+                                                </strong>
+                                            </p>
+                                            <ul class="nav">
+                                                <div className="assessment">
+                                                    {update.MCQ.map((obj) => (
+                                                        <>
+                                                            <div>
+                                                                <OverlayTrigger
                                                                     key={
                                                                         obj.topic
                                                                     }
-                                                                    class="nav-item"
+                                                                    placement="auto-start"
+                                                                    delay={{
+                                                                        show: 250,
+                                                                        hide: 400
+                                                                    }}
+                                                                    overlay={
+                                                                        <Popover
+                                                                            id={
+                                                                                obj.topic
+                                                                            }
+                                                                        >
+                                                                            <Popover.Header as="h3">
+                                                                                MCQ
+                                                                            </Popover.Header>
+                                                                            <Popover.Body>
+                                                                                <strong>
+                                                                                    Expiry
+                                                                                    Date:
+                                                                                </strong>{" "}
+                                                                                {obj.expiryDate.substring(
+                                                                                    0,
+                                                                                    obj.expiryDate.search(
+                                                                                        "T"
+                                                                                    )
+                                                                                )}
+                                                                                <br></br>
+                                                                                <strong>
+                                                                                    Duration:
+                                                                                </strong>{" "}
+                                                                                {
+                                                                                    obj.duration
+                                                                                }{" "}
+                                                                                minutes
+                                                                                <br></br>
+                                                                            </Popover.Body>
+                                                                        </Popover>
+                                                                    }
                                                                 >
-                                                                    {/*redirect*/}
-                                                                    <a
-                                                                        style={{
-                                                                            textDecoration:
-                                                                                "none"
-                                                                        }}
-                                                                        href="#"
-                                                                    >
-                                                                        {
+                                                                    <li
+                                                                        key={
                                                                             obj.topic
                                                                         }
-                                                                    </a>
-                                                                </li>
-                                                            </OverlayTrigger>
-                                                        </div>
-                                                    </>
-                                                ))}
-                                            </div>
-                                        </ul>
-                                    </div>
-                                </p>
-                            </div>
-                        ))}
+                                                                        class="nav-item"
+                                                                    >
+                                                                        {/*redirect*/}
+                                                                        <a
+                                                                            style={{
+                                                                                textDecoration:
+                                                                                    "none"
+                                                                            }}
+                                                                            href="#"
+                                                                        >
+                                                                            {
+                                                                                obj.topic
+                                                                            }
+                                                                        </a>
+                                                                    </li>
+                                                                </OverlayTrigger>
+                                                            </div>
+                                                        </>
+                                                    ))}
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </p>
+                                </div>
+                            );
+                        })}
                     </div>
                 </>
             )}
