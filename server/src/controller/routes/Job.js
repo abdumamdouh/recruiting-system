@@ -319,11 +319,10 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
                     }
                 }
             });
-
-            if(!applicants) {
-                throw new Error("There is no applicants assigned for this job");
-            } else if (applicants.size() !== mcq.applicants.size()) {
-                throw new Error("Some applicants are not applied for this job");
+            if(!applicants.length) {
+                throw new Error("Applicants are not applied for this job");
+            } else if (applicants.length !== mcq.applicants.length) {
+                throw new Error("Applicants are not applied for this job");
             } else {
                 applicants.forEach(async (applicant) => {
                     const assigned = JSON.parse(applicant.dataValues.assigned);
