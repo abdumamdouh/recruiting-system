@@ -189,7 +189,7 @@ router.post("/questions", recruiterAuth, async (req, res) => {
                 difficulty.indexOf(a.difficulty) -
                 difficulty.indexOf(b.difficulty)
         );
-        console.log(questions);
+        // console.log(questions);
         res.status(200).send({ questions });
     } catch (error) {
         res.status(500).send(error.message);
