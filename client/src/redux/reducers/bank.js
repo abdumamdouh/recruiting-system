@@ -31,12 +31,9 @@ const bankReducer = (state = {}, action) => {
                 error: action.payload,
             }    
         case CHOOSE_TOPIC_REQUEST:
-           // console.log("bank reducer: ",action.payload)
-
-            return{
-                ...state
-            }
-
+           
+        console.log("reducer state",state)
+            return state
         case CHOOSE_TOPIC_SUCCESS:
             //console.log("bank reducer: ",action.payload)
             return {
