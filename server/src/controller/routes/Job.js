@@ -307,18 +307,24 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
                 }
             });
 
-            applicants.forEach(async (applicant) => {
-                const assigned = JSON.parse(applicant.dataValues.assigned);
-
-                // console.log(assigned)
-                assigned.MCQs.push(MCQId);
-                assigned.MCQs = assigned.MCQs.filter(
-                    (v, i, a) => a.indexOf(v) === i
-                );
-                applicant.assigned = JSON.stringify(assigned);
-                // console.log(typeof applicant)
-                await applicant.save();
-            });
+            if(!applicants) {
+                throw new Error("There is no applicants assigned for this job");
+            } else if (applicants.size() !== mcq.applicants.size()) {
+                throw new Error("Some applicants are not applied for this job");
+            } else {
+                applicants.forEach(async (applicant) => {
+                    const assigned = JSON.parse(applicant.dataValues.assigned);
+    
+                    // console.log(assigned)
+                    assigned.MCQs.push(MCQId);
+                    assigned.MCQs = assigned.MCQs.filter(
+                        (v, i, a) => a.indexOf(v) === i
+                    );
+                    applicant.assigned = JSON.stringify(assigned);
+                    // console.log(typeof applicant)
+                    await applicant.save();
+                });
+            }
 
             res.send("MCQ Assigned");
         } else if (req.body.codingProblem) {
