@@ -31,7 +31,7 @@ const QuestionBank = () => {
     //const categories=["software"]
     const { Count } = useSelector((state) => state.jobs);
     const [pageNumber, setPageNumber] = useState(1);
-    const [view, setView] = useState("notsw");
+    const [view, setView] = useState("");
 
     const changePage = ({ selected }) => {
         setPageNumber(selected + 1);
@@ -271,7 +271,7 @@ const QuestionBank = () => {
                     })}
                 </select>
 
-                {view === "software" ? (
+                {view !== "" ? (
                     <div>
                         <lable>topic</lable>
                         <select
