@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import classes from "./QuestionBank.module.scss";
@@ -34,25 +34,29 @@ const QuestionBank = () => {
             field: "category",
             headerName: "Category",
             width: 90,
-            sortable: false
+            sortable: false,
+            filterable: false
         },
         {
             field: "topic",
             headerName: "Topic",
             width: 150,
-            sortable: false
+            sortable: false,
+            filterable: false
         },
         {
             field: "question",
             headerName: "Question",
             width: 150,
-            sortable: false
+            sortable: false,
+            filterable: false
         },
         {
             field: "choices",
             headerName: "Choices",
             width: 110,
             sortable: false,
+            filterable: false,
             renderCell: (params) => (
                 // console.log(params.value);
                 <ul>
@@ -67,13 +71,18 @@ const QuestionBank = () => {
             headerName: "Answer",
             description: "This column has a value getter and is not sortable.",
             width: 160,
-            sortable: false
+            sortable: false,
+            filterable: false
         },
         {
             field: "difficulty",
             headerName: "Difficulty",
             sortable: true,
-            sortComparator: 
+            filterable: false,
+            sortComparator: (a, b) => {
+                const difficulty = ["Easy", "Medium", "Hard", "Not specified"];
+                return difficulty.indexOf(a) - difficulty.indexOf(b);
+            },
             width: 160,
             renderCell: (params) => {
                 // console.log(value);
@@ -236,15 +245,26 @@ const QuestionBank = () => {
                 </div> */}
 
                 <DataGrid
-                    className="MuiDataGrid"
+                    density="comfortable"
                     rows={rows}
                     getRowId={(row) => row.internalId}
                     rowHeight={rows[0].choices.length * 25}
                     columns={columns}
-                    pageSize={10}
+                    pageSize={5}
                     disableColumnSelector={true}
                     sx={{
                         "& .MuiDataGrid-cell:focus-within": { outline: "none" }
+                    }}
+                    sortingOrder={["asc", "desc"]}
+                    initialState={{
+                        sorting: {
+                            sortModel: [
+                                {
+                                    field: "difficulty",
+                                    sort: "asc"
+                                }
+                            ]
+                        }
                     }}
                 />
 
