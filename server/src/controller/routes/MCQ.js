@@ -171,9 +171,9 @@ router.get("/topics/:category", recruiterAuth, async (req, res) => {
 });
 
 // get all questions related to this certain topic
-router.post("/questions", recruiterAuth, async (req, res) => {
+router.get("/questions/:topic", recruiterAuth, async (req, res) => {
     try {
-        const { topic } = req.body;
+        const { topic } = req.params;
         const questions = await Question.findAll({
             where: { topic },
             attributes: ["id", "question", "choices", "answer", "difficulty"]
