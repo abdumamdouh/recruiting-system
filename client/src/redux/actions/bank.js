@@ -4,7 +4,10 @@ import {
     CHOOSE_CATEGORY_FAIL,
     CHOOSE_TOPIC_REQUEST,
     CHOOSE_TOPIC_SUCCESS,
-    CHOOSE_TOPIC_FAIL
+    CHOOSE_TOPIC_FAIL,
+    GET_QUESTIONS_REQUEST,
+    GET_QUESTIONS_SUCCESS,
+    GET_QUESTIONS_FAIL
 
 } from "../types/index";
 import axios from "axios";
@@ -82,4 +85,42 @@ export const getTopic = (category,setView) => {
 };
 };
 
+
+
+
+
+export const getQuestions = (topic,setTopic) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: CHOOSE_TOPIC_REQUEST,
+                loading: true
+            });
+            const { userInfo } = getState().user;
+            //console.log(userInfo.token);
+           //console.log(userData)
+            const rawResponse = await fetch(
+                `${serverURL}/topics/${category}`,
+                {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    }
+                }
+            );
+            const data = await rawResponse.json();        
+
+
+    dispatch({ type: CHOOSE_TOPIC_SUCCESS, payload:data });
+    setView(category);
+} catch (error) {
+    dispatch({
+        type: CHOOSE_TOPIC_FAIL,
+        payload: error.response && error.response.data
+    });
+}
+};
+};
 
