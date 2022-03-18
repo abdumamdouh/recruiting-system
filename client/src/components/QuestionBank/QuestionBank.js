@@ -36,6 +36,9 @@ const QuestionBank = () => {
     const [pageNumber, setPageNumber] = useState(1);
     const [view, setView] = useState("");
 
+    const [topic, setTopic] = useState("");
+
+
 
     const changePage = ({ selected }) => {
         setPageNumber(selected + 1);
@@ -43,20 +46,6 @@ const QuestionBank = () => {
     };
 
     const columns = [
-        {
-            field: "category",
-            headerName: "Category",
-            width: 90,
-            sortable: false,
-            filterable: false
-        },
-        {
-            field: "topic",
-            headerName: "Topic",
-            width: 150,
-            sortable: false,
-            filterable: false
-        },
         {
             field: "question",
             headerName: "Question",
@@ -216,7 +205,11 @@ const QuestionBank = () => {
         setView(e.target.value);
     };
 
-    const bringquestions = () => {};
+    const bringquestions = (e) => {
+        dispatch(getQuestions(e.target.value,view,setTopic));
+
+        setTopic(e.target.value);
+    };
 
     if (bank.hasOwnProperty("category")) {
         return (
@@ -300,10 +293,11 @@ const QuestionBank = () => {
                         </select>
                     </div>
                 ) : null}
+                {bank.hasOwnProperty('question')&&
                 <DataGrid
                     density="comfortable"
-                    rows={rows}
-                    getRowId={(row) => row.internalId}
+                    rows={bank.question.questions}
+                    getRowId={(row) => row.id}
                     rowHeight={rows[0].choices.length * 25}
                     columns={columns}
                     pageSize={5}
@@ -323,7 +317,7 @@ const QuestionBank = () => {
                         }
                     }}
                 />
-
+                }
                 {/* <div className={classes.list}> */}
                 {/* {questions.map(question => (
                         <Question key={question} question={question} />
