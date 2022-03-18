@@ -62,16 +62,21 @@ const UpdatesPage = (props) => {
                 console.log(error);
             }
         };
-        if (userInfo.hasOwnProperty("hasAssessment")) fetchUpdates();
+        if (userInfo.hasOwnProperty("hasAssessments")) fetchUpdates();
     }, []);
 
     const handleRedirection = () => {
-        console.log('redii')
-    }
+        console.log("redii");
+    };
 
+    const handleMCQ = (obj) => {
+        console.log(obj);
+        setModalData(obj);
+        handleOpen();
+    };
     return (
         <div className="c">
-            {!userInfo.hasOwnProperty("hasAssessment") ? (
+            {!userInfo.hasOwnProperty("hasAssessments") ? (
                 <>
                     <h3 className="hh3">You don't have any Assessment yet.</h3>
                     <div>
@@ -236,17 +241,18 @@ const UpdatesPage = (props) => {
                                                                         class="nav-item"
                                                                     >
                                                                         {/*redirect*/}
-                                                                        <a
-                                                                            style={{
-                                                                                textDecoration:
-                                                                                    "none"
-                                                                            }}
-                                                                            href="#"
+                                                                        <span
+                                                                            onClick={() =>
+                                                                                handleMCQ(
+                                                                                    obj
+                                                                                )
+                                                                            }
+                                                                            className="redirect"
                                                                         >
                                                                             {
                                                                                 obj.topic
                                                                             }
-                                                                        </a>
+                                                                        </span>
                                                                     </li>
                                                                 </OverlayTrigger>
                                                             </div>
