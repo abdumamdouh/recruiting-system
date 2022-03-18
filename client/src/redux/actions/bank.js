@@ -89,7 +89,7 @@ export const getTopic = (category,setView) => {
 
 
 
-export const getQuestions = (topic,setTopic) => {
+export const getQuestions = (topic,view,setTopic) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
@@ -100,7 +100,7 @@ export const getQuestions = (topic,setTopic) => {
             //console.log(userInfo.token);
            //console.log(userData)
             const rawResponse = await fetch(
-                `${serverURL}/questions/${topic}`,
+                `${serverURL}/questions/${view}/${topic}`,
                 {
                     method: "GET",
                     headers: {
