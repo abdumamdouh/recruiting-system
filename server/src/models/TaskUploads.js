@@ -18,13 +18,29 @@ const TaskUploads = db.define('TaskUploads',{
             key: "id"
         }
     },
+    JobId:{
+        type:Sequelize.INTEGER,
+        allowNull: false,
+        references:{
+            model:"Jobs",
+            key: "id"
+        }
+    },
+    TaskId:{
+        type:Sequelize.INTEGER,
+        allowNull: false,
+        references:{
+            model:"Tasks",
+            key: "id"
+        }
+    },
     uploadedTask:{
         type:Sequelize.BLOB('long'),
         allowNull:false
     }
 });
 
-Job.belongsToMany(Task, { through: TaskUploads });
-Task.belongsToMany(Job, { through: TaskUploads });
+// Job.belongsToMany(Task, { through: TaskUploads });
+// Task.belongsToMany(Job, { through: TaskUploads });
 
 module.exports = TaskUploads ;
