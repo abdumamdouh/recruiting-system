@@ -93,14 +93,14 @@ export const getQuestions = (topic,setTopic) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
-                type: CHOOSE_TOPIC_REQUEST,
+                type: GET_QUESTIONS_REQUEST,
                 loading: true
             });
             const { userInfo } = getState().user;
             //console.log(userInfo.token);
            //console.log(userData)
             const rawResponse = await fetch(
-                `${serverURL}/topics/${category}`,
+                `${serverURL}/questions/${topic}`,
                 {
                     method: "GET",
                     headers: {
@@ -113,11 +113,11 @@ export const getQuestions = (topic,setTopic) => {
             const data = await rawResponse.json();        
 
 
-    dispatch({ type: CHOOSE_TOPIC_SUCCESS, payload:data });
-    setView(category);
+    dispatch({ type: GET_QUESTIONS_SUCCESS, payload:data });
+    setTopic(topic);
 } catch (error) {
     dispatch({
-        type: CHOOSE_TOPIC_FAIL,
+        type: GET_QUESTIONS_FAIL,
         payload: error.response && error.response.data
     });
 }
