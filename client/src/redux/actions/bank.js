@@ -47,7 +47,7 @@ export const getCategory = () => {
 
 
 
-export const getTopic = (category) => {
+export const getTopic = (category,setView) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
@@ -72,6 +72,7 @@ export const getTopic = (category) => {
 
 
     dispatch({ type: CHOOSE_TOPIC_SUCCESS, payload:data });
+    setView(category);
 } catch (error) {
     dispatch({
         type: CHOOSE_TOPIC_FAIL,
