@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import classes from "./QuestionBank.module.scss";
 import Question from "./Question";
 import ReactPaginate from "react-paginate";
+import { getCategory, getTopic } from "../../redux/actions/bank";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -14,21 +15,29 @@ import ReactPaginate from "react-paginate";
 const QuestionBank = () => {
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     dispatch(getJobsAction(1));
-    // }, [dispatch]);
+    const [forchange, setForchange] = useState("");
 
-    const Jobs = useSelector((state) => state.jobs.Jobs);
+    useEffect(() => {
+        dispatch(getCategory());
+        console.log("execcc");
+    }, [forchange]);
+
+    //const Jobs = useSelector(state => state.jobs.Jobs);
+
+    const bank = useSelector((state) => state.bank);
+
+    console.log("imm bannnnnnnnnnk  ", bank);
+
+    //const categories=["software"]
     const { Count } = useSelector((state) => state.jobs);
     const [pageNumber, setPageNumber] = useState(1);
     const [view, setView] = useState("notsw");
 
     const changePage = ({ selected }) => {
         setPageNumber(selected + 1);
-        // dispatch(getJobsAction(selected + 1));
+        //dispatch(getJobsAction(selected + 1));
     };
 
-    const questions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const columns = [
         {
             field: "category",
@@ -188,11 +197,8 @@ const QuestionBank = () => {
             difficulty: "Easy"
         }
     ];
-    const filters = [
-        { value: "software", label: "software" },
-        { value: "medicine", label: "medicine" },
-        { value: "Education", label: "Education" }
-    ];
+
+    const questions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const secondFilter = ["java", "C++"];
 
     const filtervalues = {
@@ -202,11 +208,12 @@ const QuestionBank = () => {
 
     const handleView = (e) => {
         setView(e.target.value);
+        dispatch(getTopic(e.target.value));
     };
 
     const bringquestions = () => {};
 
-    if (questions !== undefined) {
+    if (bank.hasOwnProperty("category")) {
         return (
             <div style={{ height: 400 }}>
                 {/* 
@@ -244,6 +251,50 @@ const QuestionBank = () => {
 
                 </div> */}
 
+                <lable>Category</lable>
+                <select
+                    name="category"
+                    onChange={handleView}
+                    className="custom-select text-capitalize"
+                >
+                    <option>--Select category--</option>
+                    {bank.category.categories.map((category) => {
+                        return (
+                            <option
+                                key={category}
+                                value={category}
+                                name="category"
+                            >
+                                {category}
+                            </option>
+                        );
+                    })}
+                </select>
+
+                {view === "software" ? (
+                    <div>
+                        <lable>topic</lable>
+                        <select
+                            name="topic"
+                            onChange={bringquestions}
+                            className="custom-select text-capitalize"
+                        >
+                            <option>--Select topic--</option>
+                            {bank.hasOwnProperty("topic") &&
+                                bank.topic.topics.map((topic) => {
+                                    return (
+                                        <option
+                                            key={topic}
+                                            value={topic}
+                                            name="category"
+                                        >
+                                            {topic}
+                                        </option>
+                                    );
+                                })}
+                        </select>
+                    </div>
+                ) : null}
                 <DataGrid
                     density="comfortable"
                     rows={rows}
@@ -268,66 +319,23 @@ const QuestionBank = () => {
                     }}
                 />
 
-                {/* <lable>
-                            Category
-                        </lable>
-                        <select
-                           
-                            name="category"
-                            onChange={handleView}
-                            className="custom-select text-capitalize"
-                        >
-                            <option>--Select category--</option>
-                            <option value="software">
-                                Software 
-                            </option>
-                            <option value="pharmacy">pharmacy</option>
-                            <option value="medicine">medicine</option>
-                            
-                        </select>
-
-                        {view==="software"?
-                            <div>
-                                <lable>
-                                    topic
-                                </lable>
-                                <select
-                                
-                                    name="topic"
-                                    onChange={bringquestions}
-                                    className="custom-select text-capitalize"
-                                >
-                                    <option>--Select topic--</option>
-                                    <option value="java">
-                                        java 
-                                    </option>
-                                    <option value="c++">c++</option>
-                                    <option value="testing">testing</option>
-                                    
-                                </select>
-
-                            </div>
-                            :
-                            null
-                        }
-
-                <div className={classes.list}>
-                    {questions.map(question => (
+                {/* <div className={classes.list}> */}
+                {/* {questions.map(question => (
                         <Question key={question} question={question} />
-                        ))}
-                    <br />
-                    <ReactPaginate
-                        previousLabel={"Previous"}
-                        nextLabel={"Next"}
-                        pageCount={Math.ceil(Count / 10)}
-                        onPageChange={changePage}
-                        containerClassName={classes.paginationBttns}
-                        previousLinkClassName={classes.previousBttn}
-                        nextLinkClassName={classes.nextBttn}
-                        disabledClassName={classes.paginationDisabled}
-                        activeClassName={classes.paginationActive}
-                        />
-                </div> */}
+                        ))} */}
+                {/* <br />
+                <ReactPaginate
+                    previousLabel={"Previous"}
+                    nextLabel={"Next"}
+                    pageCount={Math.ceil(Count / 10)}
+                    onPageChange={changePage}
+                    containerClassName={classes.paginationBttns}
+                    previousLinkClassName={classes.previousBttn}
+                    nextLinkClassName={classes.nextBttn}
+                    disabledClassName={classes.paginationDisabled}
+                    activeClassName={classes.paginationActive}
+                    </div>
+                    />*/}
             </div>
         );
     } else
