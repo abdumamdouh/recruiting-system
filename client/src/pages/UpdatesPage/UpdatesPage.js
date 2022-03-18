@@ -84,7 +84,7 @@ const UpdatesPage = (props) => {
                 <>
                     <h3 className="hh3">Your Assessments</h3>
                     <div className="updates">
-                        {updates.map((update) => {
+                        {updates.map((update, index) => {
                             const avatar =
                                 update.avatar !== null ? update.avatar : null;
                             const base64String =
@@ -223,7 +223,11 @@ const UpdatesPage = (props) => {
                                 id="modal-modal-title"
                                 variant="h6"
                                 component="h2"
-                                style={{ color: "black" }}
+                                style={{
+                                    color: "black",
+                                    fontWeight: 600,
+                                    fontSize: "1.75rem"
+                                }}
                             >
                                 MCQ Test
                             </Typography>
@@ -232,7 +236,7 @@ const UpdatesPage = (props) => {
                                 sx={{ mt: 2 }}
                                 style={{ textAlign: "center" }}
                             >
-                                now you will be redirect to a MCQ Test.the topic
+                                Now you will be redirect to a MCQ Test.the topic
                                 of the MCQ is Alo and the duration is 30
                                 minutes.
                             </Typography>
