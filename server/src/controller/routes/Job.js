@@ -324,7 +324,32 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
         } else if (req.body.codingProblem) {
             const codingProblems = req.body.codingProblem;
         } else if (req.body.task) {
-            const tasks = req.body.task;
+            const task = req.body.task;
+            const TaskId = task.TaskId;
+            const applicants = await ApplyFor.findAll({
+                // attributes: ["assigned"],
+                where: {
+                    jobId: jobId,
+                    ApplicantId: {
+                        [Op.in]: task.applicants
+                    }
+                }
+            });
+
+            applicants.forEach(async (applicant) => {
+                const assigned = JSON.parse(applicant.dataValues.assigned);
+
+                // console.log(assigned)
+                assigned.tasks.push(TaskId);
+                assigned.tasks = assigned.tasks.filter(
+                    (v, i, a) => a.indexOf(v) === i
+                );
+                applicant.assigned = JSON.stringify(assigned);
+                // console.log(typeof applicant)
+                await applicant.save();
+            });
+
+            res.send("Task Assigned");
         } else {
         }
     } catch (error) {
