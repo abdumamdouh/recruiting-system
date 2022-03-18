@@ -1,4 +1,5 @@
 const express = require("express");
+const db = require("../../db/db");
 
 
 const RecOrApp = require("../middleware/RecOrApp");
@@ -10,6 +11,8 @@ const Task = require('../../models/Task');
 const ActiveTask = require('../../models/ActiveTask');
 const TaskUploads = require('../../models/TaskUploads');
 const Job = require('../../models/Job');
+const ApplyFor = require('../../models/ApplyFor')
+
 const { response } = require("express");
 
 const router = new express.Router();
@@ -51,6 +54,24 @@ router.post('/createTask' , recruiterAuth ,async (req,res) => {
 // Accepted JSON: None, just the uploaded file 
 router.post('/uploadTask/:TaskId/:JobId' , applicantAuth , taskUploadmulter.single('task'), async (req,res) => {
     try {
+        // checking if you are authorized to deal with this task 
+        const assigned = await ApplyFor.findOne({
+            attributes:['assigned'],
+            where:{
+                JobId:req.params.JobId,
+                ApplicantId:req.applicant.id
+            },
+            raw:true
+        })
+        if(!assigned){
+            throw new Error ("You did not apply for this job")
+        }
+        assignedObj = JSON.parse(assigned.assigned)
+        // console.log(assignedObj.tasks,req.params.TaskId)
+        
+        if (! assignedObj.tasks.includes(Number(req.params.TaskId))){
+            throw new Error ("You are not assigned this task.")
+        }
         await TaskUploads.create({
             JobId:req.params.JobId,
             TaskId:req.params.TaskId,
@@ -59,6 +80,7 @@ router.post('/uploadTask/:TaskId/:JobId' , applicantAuth , taskUploadmulter.sing
         })
         res.status(201).send("Task uploaded successfully.")
     } catch (error) {
+        console.log(error)
         res.status(400).send(error.message)
     }
 })
@@ -139,17 +161,53 @@ router.get('/allTasks', recruiterAuth , async (req,res) => {
 router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
     try {
         if(req.recruiter){
+            // checking if you're the one who posted this job or not
+            const record = await Job.findOne({
+                attributes:['RecruiterId'],
+                where:{
+                    id:req.params.JobId
+                },
+                raw:true
+            })
+            if (req.recruiter.id !== record.RecruiterId){
+                throw new Error("You are not authorized to view this job.")
+            }
             const result = await db.query(
-                `Select T.description,AT.deadline,count(TU.id) FROM tasks AS T
+                `Select T.description,AT.deadline,count(TU.id) AS Applied_Count FROM tasks AS T
                  INNER JOIN activetasks AS AT ON T.id = AT.TaskId 
                  INNER JOIN taskuploads AS TU ON T.id = TU.TaskId
                  WHERE T.id = ${req.params.TaskId}
                  AND (AT.JobId = ${req.params.JobId} AND AT.TaskId = ${req.params.TaskId})
-                 AND (TU.JobId = ${req.params.JobId} AND TU.TaskId = ${req.params.TaskId})`
+                 AND (TU.JobId = ${req.params.JobId} AND TU.TaskId = ${req.params.TaskId})
+                 LIMIT 1 ;`
             );
             res.send(result);
         } else if (req.applicant){
-
+            // checking if you are authorized to deal with this task 
+            const assigned = await ApplyFor.findOne({
+                attributes:['assigned'],
+                where:{
+                    JobId:req.params.JobId,
+                    ApplicantId:req.applicant.id
+                },
+                raw:true
+            })
+            if(!assigned){
+                throw new Error ("You did not apply for this job.")
+            }
+            assignedObj = JSON.parse(assigned.assigned)
+            // console.log(assignedObj.tasks,req.params.TaskId)
+        
+            if (! assignedObj.tasks.includes(Number(req.params.TaskId))){
+                throw new Error ("You are not assigned this task.")
+            }
+            const result = await db.query(
+                `Select T.description,AT.deadline FROM tasks AS T
+                 INNER JOIN activetasks AS AT ON T.id = AT.TaskId 
+                 WHERE T.id = ${req.params.TaskId}
+                 AND (AT.JobId = ${req.params.JobId} AND AT.TaskId = ${req.params.TaskId});`
+            );
+            res.send(result);
         }
     } catch (error) {
         res.send(error.message)
