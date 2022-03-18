@@ -35,10 +35,10 @@ const bankReducer = (state = {}, action) => {
         console.log("reducer state",state)
             return state
         case CHOOSE_TOPIC_SUCCESS:
-            //console.log("bank reducer: ",action.payload)
+            console.log("bank reducer: ",action.payload)
             return {
                 topic:action.payload,    
-                ...state
+                category:state.category
             }    
 
         case CHOOSE_TOPIC_FAIL:
