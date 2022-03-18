@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { OverlayTrigger, Popover } from "react-bootstrap";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -30,8 +31,11 @@ const modalStyle = {
 };
 
 const UpdatesPage = (props) => {
+    const history = useHistory();
     //slice of state for udpates
     const [updates, setUpdates] = useState([]);
+    //modal state
+    const [modalData, setModalData] = useState();
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -60,74 +64,24 @@ const UpdatesPage = (props) => {
                 console.log(error);
             }
         };
-        if (userInfo.hasOwnProperty("hasAssessment")) fetchUpdates();
+        if (userInfo.hasOwnProperty("hasAssessments")) fetchUpdates();
     }, []);
 
+    const handleRedirection = (id) => {
+        // console.log("redii");
+        history.push(`/job/exam/${id}`);
+    };
+
+    const handleMCQ = (obj) => {
+        console.log(obj);
+        setModalData(obj);
+        handleOpen();
+    };
     return (
         <div className="c">
-            {!userInfo.hasOwnProperty("hasAssessment") ? (
+            {!userInfo.hasOwnProperty("hasAssessments") ? (
                 <>
                     <h3 className="hh3">You don't have any Assessment yet.</h3>
-                    <div>
-                        <Button onClick={handleOpen}>Open modal</Button>
-                        <Modal
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                        >
-                            <Box
-                                sx={modalStyle}
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column"
-                                }}
-                            >
-                                <Typography
-                                    id="modal-modal-title"
-                                    variant="h6"
-                                    component="h2"
-                                    style={{ color: "black" }}
-                                >
-                                    MCQ Test
-                                </Typography>
-                                <Typography
-                                    id="modal-modal-description"
-                                    sx={{ mt: 2 }}
-                                    style={{ textAlign: "center" }}
-                                >
-                                    now you will be redirect to a MCQ Test.the
-                                    topic of the MCQ is Alo and the duration is
-                                    30 minutes.
-                                </Typography>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "center"
-                                    }}
-                                >
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => console.log("mcqqq")}
-                                        style={{
-                                            marginTop: "15px",
-                                            marginRight: "15px"
-                                        }}
-                                    >
-                                        Take MCQ NOW
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        color="error"
-                                        onClick={handleClose}
-                                        style={{ marginTop: "15px" }}
-                                    >
-                                        Exit
-                                    </Button>
-                                </div>
-                            </Box>
-                        </Modal>
-                    </div>
                 </>
             ) : (
                 <>
@@ -230,17 +184,18 @@ const UpdatesPage = (props) => {
                                                                         class="nav-item"
                                                                     >
                                                                         {/*redirect*/}
-                                                                        <a
-                                                                            style={{
-                                                                                textDecoration:
-                                                                                    "none"
-                                                                            }}
-                                                                            href="#"
+                                                                        <span
+                                                                            onClick={() =>
+                                                                                handleMCQ(
+                                                                                    obj
+                                                                                )
+                                                                            }
+                                                                            className="redirect"
                                                                         >
                                                                             {
                                                                                 obj.topic
                                                                             }
-                                                                        </a>
+                                                                        </span>
                                                                     </li>
                                                                 </OverlayTrigger>
                                                             </div>
@@ -254,6 +209,65 @@ const UpdatesPage = (props) => {
                             );
                         })}
                     </div>
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box
+                            sx={modalStyle}
+                            style={{
+                                display: "flex",
+                                flexDirection: "column"
+                            }}
+                        >
+                            <Typography
+                                id="modal-modal-title"
+                                variant="h6"
+                                component="h2"
+                                style={{ color: "black" }}
+                            >
+                                MCQ Test
+                            </Typography>
+                            <Typography
+                                id="modal-modal-description"
+                                sx={{ mt: 2 }}
+                                style={{ textAlign: "center" }}
+                            >
+                                now you will be redirect to a MCQ Test.the topic
+                                of the MCQ is Alo and the duration is 30
+                                minutes.
+                            </Typography>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Button
+                                    variant="contained"
+                                    onClick={() =>
+                                        handleRedirection(modalData.id)
+                                    }
+                                    style={{
+                                        marginTop: "15px",
+                                        marginRight: "15px"
+                                    }}
+                                >
+                                    Take MCQ NOW
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="error"
+                                    onClick={handleClose}
+                                    style={{ marginTop: "15px" }}
+                                >
+                                    Exit
+                                </Button>
+                            </div>
+                        </Box>
+                    </Modal>
                 </>
             )}
         </div>

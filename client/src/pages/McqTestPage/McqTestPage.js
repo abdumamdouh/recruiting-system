@@ -409,15 +409,18 @@ const McqTestPage = (props) => {
             console.log(JSON.stringify(McqAnswers));
             console.log(userInfo.token);
             //TODO: replace the hardcoded job id with the id of the job
-            const rawResponse = await fetch(`http://localhost:5000/submit/1`, {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + userInfo.token
-                },
-                body: JSON.stringify({ McqAnswers })
-            });
+            const rawResponse = await fetch(
+                `http://localhost:5000/submit/${ID}`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    },
+                    body: JSON.stringify({ McqAnswers })
+                }
+            );
             const data = await rawResponse;
             console.log(data);
             if (data.status === 202) {
