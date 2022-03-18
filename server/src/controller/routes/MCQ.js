@@ -171,11 +171,11 @@ router.get("/topics/:category", recruiterAuth, async (req, res) => {
 });
 
 // get all questions related to this certain topic
-router.get("/questions/:topic", recruiterAuth, async (req, res) => {
+router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
     try {
-        const { topic } = req.params;
+        const { topic,category } = req.params;
         const questions = await Question.findAll({
-            where: { topic },
+            where: { topic,category },
             attributes: ["id", "question", "choices", "answer", "difficulty"]
         });
         if (!questions) {
