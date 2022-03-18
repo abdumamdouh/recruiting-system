@@ -123,8 +123,6 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
 // get all categories of the questions
 router.get("/categories", recruiterAuth, async (req, res) => {
     try {
-        console.log("henaa caaaat")
-
         let categories = await Question.findAll({
             attributes: [
                 [
@@ -147,11 +145,6 @@ router.get("/categories", recruiterAuth, async (req, res) => {
 router.get("/topics/:category", recruiterAuth, async (req, res) => {
     try {
         const { category } = req.params;
-
-      
-        console.log
-
-        console.log("henaa")
         let topics = await Question.findAll({
             where: { category },
             attributes: [
@@ -173,9 +166,9 @@ router.get("/topics/:category", recruiterAuth, async (req, res) => {
 // get all questions related to this certain topic
 router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
     try {
-        const { topic,category } = req.params;
+        const { topic, category } = req.params;
         const questions = await Question.findAll({
-            where: { topic,category },
+            where: { topic, category },
             attributes: ["id", "question", "choices", "answer", "difficulty"]
         });
         if (!questions) {
