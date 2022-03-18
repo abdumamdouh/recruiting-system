@@ -10,6 +10,7 @@ const Task = require('../../models/Task');
 const ActiveTask = require('../../models/ActiveTask');
 const TaskUploads = require('../../models/TaskUploads');
 const Job = require('../../models/Job');
+const { response } = require("express");
 
 const router = new express.Router();
 
@@ -20,14 +21,16 @@ const router = new express.Router();
 // {
 //     "description":"Some discription",
 //     "deadline":"2/10/2022",
-//     "JobId":1
+//     "JobId":1,
+//     "uploadFormat":"zip-rar" (optional)
 // }
 router.post('/createTask' , recruiterAuth ,async (req,res) => {
     try {
         // craeting the task
         const task = await Task.create({
             description:req.body.description,
-            RecruiterId: req.recruiter.id
+            RecruiterId: req.recruiter.id ,
+            uploadFormat: req.recruiter.uploadFormat ? req.recruiter.uploadFormat:"zip-rar" 
         })
         // adding it to the active tasks table
         await ActiveTask.create({
@@ -106,7 +109,7 @@ router.get('*/:JobId/:TaskId/uploadedTasks' , recruiterAuth ,async (req,res) => 
 
 // ************************************************************************************************
 
-// get all available tasks done by a recruiter 
+// get all previous tasks done by a recruiter 
 // Accepted JSON: None
 router.get('/allTasks', recruiterAuth , async (req,res) => {
     try {
@@ -131,5 +134,26 @@ router.get('/allTasks', recruiterAuth , async (req,res) => {
 
 // ************************************************************************************************
 
+// get a single task view for (recruiter,applicant)
+// Accepted JSON: None
+router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
+    try {
+        if(req.recruiter){
+            const result = await db.query(
+                `Select T.description,AT.deadline,count(TU.id) FROM tasks AS T
+                 INNER JOIN activetasks AS AT ON T.id = AT.TaskId 
+                 INNER JOIN taskuploads AS TU ON T.id = TU.TaskId
+                 WHERE T.id = ${req.params.TaskId}
+                 AND (AT.JobId = ${req.params.JobId} AND AT.TaskId = ${req.params.TaskId})
+                 AND (TU.JobId = ${req.params.JobId} AND TU.TaskId = ${req.params.TaskId})`
+            );
+            res.send(result);
+        } else if (req.applicant){
+
+        }
+    } catch (error) {
+        res.send(error.message)
+    }
+})
 
 module.exports = router;
