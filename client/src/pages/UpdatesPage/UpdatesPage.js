@@ -240,8 +240,9 @@ const UpdatesPage = (props) => {
                                 style={{ textAlign: "center" }}
                             >
                                 Now you will be redirect to a MCQ Test.the topic
-                                of the MCQ is Alo and the duration is 30
-                                minutes.
+                                of the MCQ is <strong>{modalData.topic}</strong>{" "}
+                                and the duration is{" "}
+                                <strong>{modalData.duration}</strong> minutes.
                             </Typography>
                             <div
                                 style={{
