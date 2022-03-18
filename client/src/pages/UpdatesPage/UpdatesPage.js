@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { OverlayTrigger, Popover } from "react-bootstrap";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -30,6 +31,7 @@ const modalStyle = {
 };
 
 const UpdatesPage = (props) => {
+    const history = useHistory();
     //slice of state for udpates
     const [updates, setUpdates] = useState([]);
     //modal state
@@ -65,8 +67,9 @@ const UpdatesPage = (props) => {
         if (userInfo.hasOwnProperty("hasAssessments")) fetchUpdates();
     }, []);
 
-    const handleRedirection = () => {
-        console.log("redii");
+    const handleRedirection = (id) => {
+        // console.log("redii");
+        history.push(`/job/exam/${id}`);
     };
 
     const handleMCQ = (obj) => {
@@ -244,7 +247,9 @@ const UpdatesPage = (props) => {
                             >
                                 <Button
                                     variant="contained"
-                                    onClick={() => handleRedirection()}
+                                    onClick={() =>
+                                        handleRedirection(modalData.id)
+                                    }
                                     style={{
                                         marginTop: "15px",
                                         marginRight: "15px"
