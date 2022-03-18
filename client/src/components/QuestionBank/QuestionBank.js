@@ -3,10 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
 import classes from "./QuestionBank.module.scss";
 import Question from "./Question";
 import ReactPaginate from "react-paginate";
-import { getCategory, getTopic,getQuestions } from "../../redux/actions/bank";
+import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -22,14 +27,137 @@ const QuestionBank = () => {
         console.log("execcc");
     }, [forchange]);
 
-
-
-
     //const Jobs = useSelector(state => state.jobs.Jobs);
 
-    const bank= useSelector((state) =>state.bank);
+    const bank = useSelector((state) => state.bank);
 
     console.log("imm bannnnnnnnnnk  ", bank);
+    function isOverflown(element) {
+        return (
+            element.scrollHeight > element.clientHeight ||
+            element.scrollWidth > element.clientWidth
+        );
+    }
+
+    const GridCellExpand = React.memo(function GridCellExpand(props) {
+        const { width, value } = props;
+        const wrapper = React.useRef(null);
+        const cellDiv = React.useRef(null);
+        const cellValue = React.useRef(null);
+        const [anchorEl, setAnchorEl] = React.useState(null);
+        const [showFullCell, setShowFullCell] = React.useState(false);
+        const [showPopper, setShowPopper] = React.useState(false);
+
+        const handleMouseEnter = () => {
+            const isCurrentlyOverflown = isOverflown(cellValue.current);
+            setShowPopper(isCurrentlyOverflown);
+            setAnchorEl(cellDiv.current);
+            setShowFullCell(true);
+        };
+
+        const handleMouseLeave = () => {
+            setShowFullCell(false);
+        };
+
+        React.useEffect(() => {
+            if (!showFullCell) {
+                return undefined;
+            }
+
+            function handleKeyDown(nativeEvent) {
+                // IE11, Edge (prior to using Bink?) use 'Esc'
+                if (nativeEvent.key === "Escape" || nativeEvent.key === "Esc") {
+                    setShowFullCell(false);
+                }
+            }
+
+            document.addEventListener("keydown", handleKeyDown);
+
+            return () => {
+                document.removeEventListener("keydown", handleKeyDown);
+            };
+        }, [setShowFullCell, showFullCell]);
+
+        return (
+            <Box
+                ref={wrapper}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                sx={{
+                    alignItems: "center",
+                    lineHeight: "24px",
+                    width: 1,
+                    height: 1,
+                    position: "relative",
+                    display: "flex"
+                }}
+            >
+                <Box
+                    ref={cellDiv}
+                    sx={{
+                        height: 1,
+                        width,
+                        display: "block",
+                        position: "absolute",
+                        top: 0
+                    }}
+                />
+                <Box
+                    ref={cellValue}
+                    sx={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis"
+                    }}
+                >
+                    {value}
+                </Box>
+                {showPopper && (
+                    <Popper
+                        open={showFullCell && anchorEl !== null}
+                        anchorEl={anchorEl}
+                        style={{ width, marginLeft: -17 }}
+                    >
+                        <Paper
+                            elevation={1}
+                            style={{
+                                minHeight: wrapper.current.offsetHeight - 3
+                            }}
+                        >
+                            <Typography variant="body2" style={{ padding: 8 }}>
+                                {value}
+                            </Typography>
+                        </Paper>
+                    </Popper>
+                )}
+            </Box>
+        );
+    });
+
+    GridCellExpand.propTypes = {
+        value: PropTypes.string.isRequired,
+        width: PropTypes.number.isRequired
+    };
+
+    function renderCellExpand(params) {
+        return (
+            <GridCellExpand
+                value={params.value || ""}
+                width={params.colDef.computedWidth}
+            />
+        );
+    }
+
+    renderCellExpand.propTypes = {
+        /**
+         * The column of the row that the current cell belongs to.
+         */
+        colDef: PropTypes.object.isRequired,
+        /**
+         * The cell value, but if the column has valueGetter, use getValue.
+         */
+        value: PropTypes.string.isRequired
+    };
 
     //const categories=["software"]
     const { Count } = useSelector((state) => state.jobs);
@@ -37,8 +165,6 @@ const QuestionBank = () => {
     const [view, setView] = useState("");
 
     const [topic, setTopic] = useState("");
-
-
 
     const changePage = ({ selected }) => {
         setPageNumber(selected + 1);
@@ -51,7 +177,8 @@ const QuestionBank = () => {
             headerName: "Question",
             width: 150,
             sortable: false,
-            filterable: false
+            filterable: false,
+            renderCell: renderCellExpand
         },
         {
             field: "choices",
@@ -200,13 +327,13 @@ const QuestionBank = () => {
     };
 
     const handleView = (e) => {
-        dispatch(getTopic(e.target.value,setView));
+        dispatch(getTopic(e.target.value, setView));
 
         setView(e.target.value);
     };
 
     const bringquestions = (e) => {
-        dispatch(getQuestions(e.target.value,view,setTopic));
+        dispatch(getQuestions(e.target.value, view, setTopic));
 
         setTopic(e.target.value);
     };
@@ -249,11 +376,12 @@ const QuestionBank = () => {
 
                 </div> */}
 
-                <lable>Category</lable>
+                <label>Category</label>
                 <select
                     name="category"
                     onChange={handleView}
                     className="custom-select text-capitalize"
+                    style={{ marginBottom: "0.5rem" }}
                 >
                     <option>--Select category--</option>
                     {bank.category.categories.map((category) => {
@@ -271,11 +399,12 @@ const QuestionBank = () => {
 
                 {view !== "" ? (
                     <div>
-                        <lable>topic</lable>
+                        <label>Topic</label>
                         <select
                             name="topic"
                             onChange={bringquestions}
                             className="custom-select text-capitalize"
+                            style={{ marginBottom: "1rem" }}
                         >
                             <option>--Select topic--</option>
                             {bank.hasOwnProperty("topic") &&
@@ -293,31 +422,33 @@ const QuestionBank = () => {
                         </select>
                     </div>
                 ) : null}
-                {bank.hasOwnProperty('question')&&
-                <DataGrid
-                    density="comfortable"
-                    rows={bank.question.questions}
-                    getRowId={(row) => row.id}
-                    rowHeight={rows[0].choices.length * 25}
-                    columns={columns}
-                    pageSize={5}
-                    disableColumnSelector={true}
-                    sx={{
-                        "& .MuiDataGrid-cell:focus-within": { outline: "none" }
-                    }}
-                    sortingOrder={["asc", "desc"]}
-                    initialState={{
-                        sorting: {
-                            sortModel: [
-                                {
-                                    field: "difficulty",
-                                    sort: "asc"
-                                }
-                            ]
-                        }
-                    }}
-                />
-                }
+                {bank.hasOwnProperty("question") && (
+                    <DataGrid
+                        density="comfortable"
+                        rows={bank.question.questions}
+                        getRowId={(row) => row.id}
+                        rowHeight={rows[0].choices.length * 25}
+                        columns={columns}
+                        pageSize={5}
+                        disableColumnSelector={true}
+                        sx={{
+                            "& .MuiDataGrid-cell:focus-within": {
+                                outline: "none"
+                            }
+                        }}
+                        sortingOrder={["asc", "desc"]}
+                        initialState={{
+                            sorting: {
+                                sortModel: [
+                                    {
+                                        field: "difficulty",
+                                        sort: "asc"
+                                    }
+                                ]
+                            }
+                        }}
+                    />
+                )}
                 {/* <div className={classes.list}> */}
                 {/* {questions.map(question => (
                         <Question key={question} question={question} />

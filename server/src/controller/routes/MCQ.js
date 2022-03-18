@@ -83,7 +83,7 @@ router.post("/pickMCQ", recruiterAuth, async (req, res) => {
 router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
     try {
         const pageNumber = req.params.pageNumber;
-        console.log(pageNumber);
+        // console.log(pageNumber);
         const results = await MCQ.findAndCountAll({
             include: {
                 model: Question,
