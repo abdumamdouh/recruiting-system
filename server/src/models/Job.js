@@ -117,13 +117,18 @@ applicantScores = async function (job) {
         {
             replacements: [job.id]
         }
-    );
+    );  
+
+
+    // Formula => Requirments[75%] + yearsOfExperience[25%]  
 
     let maxScore = 0;
-
     job.Requirments.forEach((requirement) => {
         maxScore = maxScore + requirement.weight * 4;
     });
+    const maxYearsOfExperienceFactor = ( 50 * job.yearsOfExperience  ) / (maxScore / 3);
+    const maxYearsOfExperience = maxScore / 3;
+
 
     // calculate the score of each applicant and append it to each applicant
     for (let index = 0; index < results.length; index++) {
@@ -154,7 +159,10 @@ applicantScores = async function (job) {
                         Object.values(qualification)[0];
             }
         }
-        results[index].score = Math.ceil((aScore / maxScore) * 100);
+
+        const applicantYearsOfExperienceScore = ( applicantA.yearsOfExperience * job.yearsOfExperience ) / maxYearsOfExperienceFactor;
+
+        results[index].score = Math.ceil( ( ( aScore + applicantYearsOfExperienceScore ) / ( maxScore + maxYearsOfExperience) ) * 100);
     }
 
     // sort the applicants by the score
