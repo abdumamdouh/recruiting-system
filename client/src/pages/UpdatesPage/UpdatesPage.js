@@ -79,66 +79,6 @@ const UpdatesPage = (props) => {
             {!userInfo.hasOwnProperty("hasAssessments") ? (
                 <>
                     <h3 className="hh3">You don't have any Assessment yet.</h3>
-                    <div>
-                        <Button onClick={handleOpen}>Open modal</Button>
-                        <Modal
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                        >
-                            <Box
-                                sx={modalStyle}
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column"
-                                }}
-                            >
-                                <Typography
-                                    id="modal-modal-title"
-                                    variant="h6"
-                                    component="h2"
-                                    style={{ color: "black" }}
-                                >
-                                    MCQ Test
-                                </Typography>
-                                <Typography
-                                    id="modal-modal-description"
-                                    sx={{ mt: 2 }}
-                                    style={{ textAlign: "center" }}
-                                >
-                                    now you will be redirect to a MCQ Test.the
-                                    topic of the MCQ is Alo and the duration is
-                                    30 minutes.
-                                </Typography>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "center"
-                                    }}
-                                >
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => handleRedirection()}
-                                        style={{
-                                            marginTop: "15px",
-                                            marginRight: "15px"
-                                        }}
-                                    >
-                                        Take MCQ NOW
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        color="error"
-                                        onClick={handleClose}
-                                        style={{ marginTop: "15px" }}
-                                    >
-                                        Exit
-                                    </Button>
-                                </div>
-                            </Box>
-                        </Modal>
-                    </div>
                 </>
             ) : (
                 <>
@@ -266,6 +206,63 @@ const UpdatesPage = (props) => {
                             );
                         })}
                     </div>
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box
+                            sx={modalStyle}
+                            style={{
+                                display: "flex",
+                                flexDirection: "column"
+                            }}
+                        >
+                            <Typography
+                                id="modal-modal-title"
+                                variant="h6"
+                                component="h2"
+                                style={{ color: "black" }}
+                            >
+                                MCQ Test
+                            </Typography>
+                            <Typography
+                                id="modal-modal-description"
+                                sx={{ mt: 2 }}
+                                style={{ textAlign: "center" }}
+                            >
+                                now you will be redirect to a MCQ Test.the topic
+                                of the MCQ is Alo and the duration is 30
+                                minutes.
+                            </Typography>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Button
+                                    variant="contained"
+                                    onClick={() => handleRedirection()}
+                                    style={{
+                                        marginTop: "15px",
+                                        marginRight: "15px"
+                                    }}
+                                >
+                                    Take MCQ NOW
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="error"
+                                    onClick={handleClose}
+                                    style={{ marginTop: "15px" }}
+                                >
+                                    Exit
+                                </Button>
+                            </div>
+                        </Box>
+                    </Modal>
                 </>
             )}
         </div>
