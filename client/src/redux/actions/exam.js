@@ -17,7 +17,7 @@ import {
 } from "../types/index";
 import axios from "axios";
 const serverURL = "http://localhost:5000";
-export const createExamAction = (jobId,topic,questions,privatee, expiryDate,duration) => {
+export const createExamAction = (jobId,topic,questions,privatee, expiryDate,duration,showSuccessMessage) => {
     let mcq={jobId:jobId,topic:topic,questions:questions, private: privatee, expiryDate:expiryDate, duration:duration}
     console.log(mcq)
     return async (dispatch, getState) => {
@@ -42,6 +42,9 @@ export const createExamAction = (jobId,topic,questions,privatee, expiryDate,dura
             );
             const data = await rawResponse
     dispatch({ type: CREATE_EXAM_SUCCESS, payload: data });
+    console.log('status', data.status);
+    if(data.status !==400) { showSuccessMessage()}
+   
 } catch (error) {
     dispatch({
         type: CREATE_EXAM_FAIL,
@@ -51,7 +54,7 @@ export const createExamAction = (jobId,topic,questions,privatee, expiryDate,dura
 };
 };
 
-export const getExamsAction = () => {
+export const getExamsAction = (pageNumber) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
@@ -61,7 +64,7 @@ export const getExamsAction = () => {
             const { userInfo } = getState().user;
             console.log(userInfo.token);
             const rawResponse = await fetch(
-                `${serverURL}/getAllMCQs`,
+                `${serverURL}/getAllMCQs/${pageNumber}`,
                 {
                     method: "GET",
                     headers: {
@@ -151,7 +154,7 @@ export const getJobExamsAction = (jobId) => {
 };
 }
 
-export const assignExamAction = (jobId,id,selectionModel) => {
+export const assignExamAction = (jobId,id,selectionModel, showSuccessMessage) => {
     let MCQ={jobId:jobId, MCQ:{ MCQId: id,applicants:selectionModel}}
     console.log(MCQ)
     return async (dispatch, getState) => {
@@ -175,6 +178,7 @@ export const assignExamAction = (jobId,id,selectionModel) => {
                 }
             );
             const data = await rawResponse
+            if(data.status !==400) { showSuccessMessage()}
     dispatch({ type: ASSIGN_TASK_TO_APPLICANTS_SUCCESS, payload: data });
 } catch (error) {
     dispatch({

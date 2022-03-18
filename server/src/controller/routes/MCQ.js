@@ -20,6 +20,7 @@ const RecOrApp = require("../middleware/RecOrApp");
 const { where } = require("sequelize");
 const { object } = require("joi");
 const { includes } = require("lodash");
+const { is } = require("sequelize/lib/operators");
 
 const router = new express.Router();
 
@@ -28,21 +29,39 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
         const { jobId, topic, expiryDate, duration, private } = req.body;
         const recruiterId = req.recruiter.id;
+        // let questions = await Promise.all(
+        //     req.body.questions.map(async ({ options: choices, ...rest }) => {
+        //         let question = {
+        //             choices,
+        //             ...rest
+        //             // MCQId: mcq.id
+        //         };
+        //         question = Question.build(question);
+        //         question = await question.validate();
+        //         // question = await question.save();
+        //         return question;
+        //     })
+        // );
         // console.log(expiryDate, duration);
-        const mcq = await MCQ.create({ topic, private, recruiterId });
-        await mcq.addJob(jobId, { through: { expiryDate, duration } });
         let questions = req.body.questions.map(
             ({ options: choices, ...rest }) => ({
                 choices,
-                ...rest,
-                MCQId: mcq.id
+                ...rest
+                // MCQId: mcq.id
             })
         );
-        await Question.bulkCreate(questions);
-        // await mcq.addQuestion(questions);
+        // console.log(questions);
+        questions = await Question.bulkCreate(questions, { validate: true });
+        const mcq = await MCQ.create({ topic, private, recruiterId });
+        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        await mcq.addQuestion(questions);
         res.status(201).send("The file is uploaded successfully");
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).send(
+            error.message
+                ? error.message
+                : error.errors[0].errors.errors[0].message
+        );
     }
 });
 
@@ -61,15 +80,20 @@ router.post("/pickMCQ", recruiterAuth, async (req, res) => {
 });
 
 // get all public mcq questions
-router.get("/getAllMCQs", recruiterAuth, async (req, res) => {
+router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
     try {
+        const pageNumber = req.params.pageNumber;
+        console.log(pageNumber);
         const results = await MCQ.findAndCountAll({
             include: {
                 model: Question,
                 as: "questions",
                 attributes: ["id", "question", "choices", "answer"]
+                // through: { attributes: [] }
             },
-            attributes: ["id", "topic"],
+            attributes: ["id", "topic", "recruiterId"],
+            offset: (pageNumber - 1) * 4,
+            limit: 4,
             where: {
                 [Op.or]: [
                     {
@@ -85,10 +109,88 @@ router.get("/getAllMCQs", recruiterAuth, async (req, res) => {
                 ]
             }
         });
+
+        const count = await db.query("SELECT COUNT(*) FROM mcqs");
         res.send({
             MCQs: results.rows,
-            Count: results.count
+            Count: count[0][0]["COUNT(*)"] // returning count of the exams for pagination
         });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// get all categories of the questions
+router.get("/categories", recruiterAuth, async (req, res) => {
+    try {
+        let categories = await Question.findAll({
+            attributes: [
+                [
+                    Sequelize.fn("DISTINCT", Sequelize.col("category")),
+                    "category"
+                ]
+            ]
+        });
+        if (!categories) {
+            return res.status(404).send("No categories yet in the database.");
+        }
+        categories = categories.map(({ category }) => category);
+        res.status(200).send({ categories });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// get all topics related to this certain category
+router.post("/topics", recruiterAuth, async (req, res) => {
+    try {
+        const { category } = req.body;
+        let topics = await Question.findAll({
+            where: { category },
+            attributes: [
+                [Sequelize.fn("DISTINCT", Sequelize.col("topic")), "topic"]
+            ]
+        });
+        if (!topics) {
+            return res
+                .status(404)
+                .send("No topics yet related to this category.");
+        }
+        topics = topics.map(({ topic }) => topic);
+        res.status(200).send({ topics });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// get all questions related to this certain topic
+router.post("/questions", recruiterAuth, async (req, res) => {
+    try {
+        const { category, topic } = req.body;
+        const questions = await Question.findAll({
+            where: { category, topic },
+            attributes: ["id", "question", "choices", "answer", "difficulty"]
+        });
+        if (!questions) {
+            return res
+                .status(404)
+                .send("No questions yet related to this certain topic.");
+        }
+        // console.log(questions[0].choices);
+        questions.forEach((question) => {
+            question.difficulty =
+                question.difficulty !== null
+                    ? question.difficulty
+                    : "Not specified";
+        });
+        const difficulty = ["Easy", "Medium", "Hard", "Not specified"];
+        questions.sort(
+            (a, b) =>
+                difficulty.indexOf(a.difficulty) -
+                difficulty.indexOf(b.difficulty)
+        );
+        // console.log(questions);
+        res.status(200).send({ questions });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -97,22 +199,33 @@ router.get("/getAllMCQs", recruiterAuth, async (req, res) => {
 // get shuffled mcq questions by JobId
 router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
-        // const tookExam = await MCQStat.findOne({
-        //     where: {
-        //        MCQId,
-        //          applicantId,
-        //         jobId
-        //     }
-        // });
-        // if (tookExam) {
-        //     throw new Error("You took exam already.");
-        // }
+        const job = await MCQ.findByPk(req.params.id, {
+            attributes: [],
+            include: [
+                { model: Job, attributes: ["id"], through: { attributes: [] } }
+            ]
+        });
+        // console.log(JSON.parse(JSON.stringify(job)));
+        // console.log(`MCQId: ${req.params.id},
+        //     applicantId: ${req.applicant.id},
+        //     jobId: ${job.Jobs[0].id}`);
+        const tookExam = await MCQStat.findOne({
+            where: {
+                MCQId: req.params.id,
+                applicantId: req.applicant.id,
+                jobId: job.Jobs[0].id
+            }
+        });
+        // console.log(tookExam);
+        if (tookExam) {
+            return res.status(406).send("You took exam already.");
+        }
         let mcq = await MCQ.findByPk(req.params.id, {
             include: {
                 model: Question,
                 as: "questions",
-                attributes: ["id", "question", "choices"]
-                // through: { attributes: [] }
+                attributes: ["id", "question", "choices"],
+                through: { attributes: [] }
             },
             attributes: ["id", "topic"]
         });
@@ -135,12 +248,13 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
         const MCQId = req.params.id;
         const applicantId = req.applicant.id;
         // const jobId = req.body;
-        let data = await MCQ.findByPk(req.params.id, {
+        let data = await MCQ.findByPk(MCQId, {
             include: [
                 {
                     model: Question,
                     as: "questions",
-                    attributes: ["id", "answer"]
+                    attributes: ["id", "answer"],
+                    through: { attributes: [] }
                 },
                 {
                     model: Job,
@@ -151,6 +265,24 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             attributes: []
         });
         data = JSON.parse(JSON.stringify(data));
+        let { assigned } = await ApplyFor.findOne({
+            where: {
+                ApplicantId: applicantId,
+                JobId: data.Jobs[0].id
+            },
+            attributes: ["assigned"],
+            raw: true
+        });
+        assigned = JSON.parse(assigned);
+        assigned.MCQs = _.without(Number(assigned.MCQs), Number(MCQId));
+        // console.log(assigned);
+        assigned = JSON.stringify(assigned);
+        await ApplyFor.update(
+            { assigned },
+            {
+                where: { ApplicantId: applicantId, JobId: data.Jobs[0].id }
+            }
+        );
         const answers = data.questions.reduce(
             (acc, cur) => ({
                 ...acc,

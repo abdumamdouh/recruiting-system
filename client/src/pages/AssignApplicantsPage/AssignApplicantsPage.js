@@ -1,15 +1,16 @@
-import React from 'react';
+import React,{ useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {assignExamAction} from '../../redux/actions/exam'
  
-
+import Message from '../../components/modal/Message'
 const AssignApplicantsPage = () => {
     const dispatch = useDispatch();
     const job = useSelector(state=>state.job)
     const jobId= job.id
     const [selectionModel, setSelectionModel] = React.useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
     //mcqId
     const { id } = useParams();
     const handleApplicants=(params)=>{
@@ -32,14 +33,24 @@ const AssignApplicantsPage = () => {
     //     }
     // },
       ];
+      const showSuccessMessage = () => {
+        setModalOpen(true)
+    }
     const handleAllApplicants = ()=>{
         console.log(job.applicants)
         console.log('selection', selectionModel)
         console.log('jobID',jobId)
-        dispatch(assignExamAction(jobId,id,selectionModel))
+        dispatch(assignExamAction(jobId,id,selectionModel,showSuccessMessage))
+
     }
     return (
         <div style={{ height: 400, width: '100%' }}>
+          {modalOpen && (
+                    <Message
+                        setOpenModal={setModalOpen}
+                        message="Assigned successfully!"
+                    />
+                )}
       <DataGrid
         rows={rows}
         columns={columns}

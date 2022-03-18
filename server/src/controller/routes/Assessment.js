@@ -26,42 +26,53 @@ router.get("/assessments", applicantAuth, async (req, res) => {
         const { id: applicantId } = req.applicant;
         // console.log(applicantId);
         const data = await ApplyFor.findAll({
-            where: applicantId,
-            attributes: ["assigned", "JobId"]
+            where: { ApplicantId: applicantId },
+            attributes: ["assigned", "JobId"],
+            raw: true
         });
         data.forEach((job) => {
             job.assigned = JSON.parse(job.assigned);
         });
-        let everyMCQ = await MCQ.findAll({
-            where: { id: data[0].assigned.MCQs },
-            attributes: ["id", "topic"],
-            include: [
-                // { model: JobMCQ, attributes: ["expiryDate", "duration"] },
-                {
-                    model: Job,
-                    attributes: ["title", "description"],
+        // console.log(data);
+        const assessments = await Promise.all(
+            data.map(async (job) => {
+                let everyMCQ = await MCQ.findAll({
+                    where: { id: job.assigned.MCQs },
+                    attributes: ["id", "topic"],
                     include: [
                         {
-                            model: Recruiter,
-                            attributes: ["company", "avatar"]
+                            model: Job,
+                            attributes: ["id", "title", "description"],
+                            include: [
+                                {
+                                    model: Recruiter,
+                                    attributes: ["company", "avatar"]
+                                }
+                            ],
+                            through: { attributes: ["duration", "expiryDate"] }
                         }
-                    ],
-                    through: { attributes: ["duration", "expiryDate"] }
-                }
-            ]
-        });
-        everyMCQ = JSON.parse(JSON.stringify(everyMCQ));
-        console.log(everyMCQ);
-        everyMCQ.forEach(({ id, topic, JobMCQs }, index, arr) => {
-            arr[index] = {
-                id,
-                topic,
-                expiryDate: JobMCQs[0].expiryDate,
-                duration: JobMCQs[0].duration
-            };
-        });
+                    ]
+                });
+                everyMCQ = JSON.parse(JSON.stringify(everyMCQ));
+                // console.log(everyMCQ[0]);
+                const jobAssessments = {
+                    jobId: everyMCQ[0].Jobs[0].id,
+                    title: everyMCQ[0].Jobs[0].title,
+                    description: everyMCQ[0].Jobs[0].description,
+                    company: everyMCQ[0].Jobs[0].Recruiter.company,
+                    avatar: everyMCQ[0].Jobs[0].Recruiter.avatar,
+                    MCQ: everyMCQ.map(({ id, topic, Jobs }) => ({
+                        MCQId: id,
+                        topic,
+                        expiryDate: Jobs[0].JobMCQ.expiryDate,
+                        duration: Jobs[0].JobMCQ.duration
+                    }))
+                };
+                return jobAssessments;
+            })
+        );
         // console.log(everyMCQ[0].JobMCQs);
-        res.status(200).send({ MCQs: everyMCQ });
+        res.status(200).send(assessments);
     } catch (error) {
         res.status(500).send(error.message);
     }

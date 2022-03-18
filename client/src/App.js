@@ -98,7 +98,7 @@ const App = () => {
                     />
 
                     <ProtectedRoute
-                        exact
+                        
                         path="/dashboard/:ID"
                         component={DashBoardPage}
                         name="screeningDashboard"
