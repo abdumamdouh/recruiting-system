@@ -32,6 +32,8 @@ const modalStyle = {
 const UpdatesPage = (props) => {
     //slice of state for udpates
     const [updates, setUpdates] = useState([]);
+    //modal state
+    const [modalData, setModalData] = useState();
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -62,6 +64,10 @@ const UpdatesPage = (props) => {
         };
         if (userInfo.hasOwnProperty("hasAssessment")) fetchUpdates();
     }, []);
+
+    const handleRedirection = () => {
+        console.log('redii')
+    }
 
     return (
         <div className="c">
@@ -108,7 +114,7 @@ const UpdatesPage = (props) => {
                                 >
                                     <Button
                                         variant="contained"
-                                        onClick={() => console.log("mcqqq")}
+                                        onClick={() => handleRedirection()}
                                         style={{
                                             marginTop: "15px",
                                             marginRight: "15px"
