@@ -6,7 +6,7 @@ import Stack from "@mui/material/Stack";
 import classes from "./QuestionBank.module.scss";
 import Question from "./Question";
 import ReactPaginate from "react-paginate";
-import { getCategory, getTopic } from "../../redux/actions/bank";
+import { getCategory, getTopic,getQuestions } from "../../redux/actions/bank";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
