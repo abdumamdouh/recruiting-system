@@ -124,7 +124,15 @@ const QuestionBank = () => {
                                 minHeight: wrapper.current.offsetHeight - 3
                             }}
                         >
-                            <Typography variant="body2" style={{ padding: 8 }}>
+                            <Typography
+                                variant="body2"
+                                style={{
+                                    padding: 8,
+                                    overflowWrap: "break-word",
+                                    // wordBreak: "break-all",
+                                    hyphens: "auto"
+                                }}
+                            >
                                 {value}
                             </Typography>
                         </Paper>
@@ -186,14 +194,17 @@ const QuestionBank = () => {
             width: 110,
             sortable: false,
             filterable: false,
-            renderCell: (params) => (
-                // console.log(params.value);
-                <ul>
-                    {params.value.map((choice) => (
-                        <li>{choice}</li>
-                    ))}
-                </ul>
-            )
+            renderCell: [
+                (params) => (
+                    // console.log(params.value);
+                    <ul>
+                        {params.value.map((choice) => (
+                            <li>{choice}</li>
+                        ))}
+                    </ul>
+                ),
+                renderCellExpand
+            ]
         },
         {
             field: "answer",
