@@ -22,9 +22,12 @@ const QuestionBank = () => {
         console.log("execcc");
     }, [forchange]);
 
+
+
+
     //const Jobs = useSelector(state => state.jobs.Jobs);
 
-    const bank = useSelector((state) => state.bank);
+    const bank= useSelector((state) =>state.bank);
 
     console.log("imm bannnnnnnnnnk  ", bank);
 
@@ -32,6 +35,7 @@ const QuestionBank = () => {
     const { Count } = useSelector((state) => state.jobs);
     const [pageNumber, setPageNumber] = useState(1);
     const [view, setView] = useState("");
+
 
     const changePage = ({ selected }) => {
         setPageNumber(selected + 1);
@@ -207,8 +211,9 @@ const QuestionBank = () => {
     };
 
     const handleView = (e) => {
+        dispatch(getTopic(e.target.value,setView));
+
         setView(e.target.value);
-        dispatch(getTopic(e.target.value));
     };
 
     const bringquestions = () => {};
