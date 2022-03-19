@@ -64,6 +64,20 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         );
     }
 });
+// Add MCQ from the question bank
+router.post("/createExam", recruiterAuth, async (req, res) => {
+    try {
+        const { jobId, topic, expiryDate, duration, private, questions } =
+            req.body;
+        const { id: recruiterId } = req.recruiter;
+        const mcq = await MCQ.create({ topic, private, recruiterId });
+        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        await mcq.addQuestion(questions);
+        res.status(201).send("The exam is created successfully.");
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
 
 // Pick an availale MCQ exam to the job
 router.post("/pickMCQ", recruiterAuth, async (req, res) => {
