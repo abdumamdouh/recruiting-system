@@ -8,12 +8,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
-import MuiAlert from "@mui/material/Alert";
+import SnackBar from "./SnackBar";
 import classes from "./QuestionBank.module.scss";
 import Question from "./Question";
 import ReactPaginate from "react-paginate";
 import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
-import { Snackbar } from "@mui/material";
+
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -28,34 +28,6 @@ const QuestionBank = () => {
         dispatch(getCategory());
         console.log("execcc");
     }, [forchange]);
-
-    const Alert = React.forwardRef(function Alert(props, ref) {
-        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-    });
-
-    function CustomizedSnackbars() {
-        const [open, setOpen] = React.useState(false);
-
-        const handleClick = () => {
-            setOpen(true);
-        };
-
-        const handleClose = (event, reason) => {
-            if (reason === "clickaway") {
-                return;
-            }
-
-            setOpen(false);
-        };
-
-        return (
-            <Snackbar severity="error">
-                <Alert severity="error" sx={{ width: "100%" }}>
-                    Already Added
-                </Alert>
-            </Snackbar>
-        );
-    }
 
     //const Jobs = useSelector(state => state.jobs.Jobs);
 
@@ -548,7 +520,8 @@ const QuestionBank = () => {
                         }}
                         onRowClick={(params) => {
                             if (selectedQuestions.includes(params.row)) {
-                                CustomizedSnackbars();
+                                // <SnackBar setOpen={setOpen} />;
+                                console.log("error");
                             } else {
                                 selectedQuestions.push(params.row);
                                 console.log(selectedQuestions);
@@ -556,6 +529,8 @@ const QuestionBank = () => {
                         }}
                     />
                 )}
+                <button>SelectedQuestions</button>
+                <button>Create Exam</button>
                 {/* <div className={classes.list}> */}
                 {/* {questions.map(question => (
                         <Question key={question} question={question} />
