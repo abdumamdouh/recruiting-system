@@ -8,10 +8,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
+import MuiAlert from "@mui/material/Alert";
 import classes from "./QuestionBank.module.scss";
 import Question from "./Question";
 import ReactPaginate from "react-paginate";
 import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
+import { Snackbar } from "@mui/material";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -27,11 +29,53 @@ const QuestionBank = () => {
         console.log("execcc");
     }, [forchange]);
 
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+    function CustomizedSnackbars() {
+        const [open, setOpen] = React.useState(false);
+
+        const handleClick = () => {
+            setOpen(true);
+        };
+
+        const handleClose = (event, reason) => {
+            if (reason === "clickaway") {
+                return;
+            }
+
+            setOpen(false);
+        };
+
+        return (
+            <Snackbar severity="error">
+                <Alert severity="error" sx={{ width: "100%" }}>
+                    Already Added
+                </Alert>
+            </Snackbar>
+        );
+    }
+
     //const Jobs = useSelector(state => state.jobs.Jobs);
 
     const bank = useSelector((state) => state.bank);
 
     console.log("imm bannnnnnnnnnk  ", bank);
+    let selectedQuestions = [];
+    const html = (text) => {
+        const e1 = document.createElement("ul");
+        e1.innerHTML = text;
+        console.log(e1.textContent);
+        return e1;
+    };
+
+    // &#9679;
+
+    function getChoices(params) {
+        return `${params.value.join("*")}`;
+    }
+
     function isOverflown(element) {
         return (
             element.scrollHeight > element.clientHeight ||
@@ -44,12 +88,14 @@ const QuestionBank = () => {
         const wrapper = React.useRef(null);
         const cellDiv = React.useRef(null);
         const cellValue = React.useRef(null);
+        // const liValue = React.useRef(null);
         const [anchorEl, setAnchorEl] = React.useState(null);
         const [showFullCell, setShowFullCell] = React.useState(false);
         const [showPopper, setShowPopper] = React.useState(false);
 
         const handleMouseEnter = () => {
             const isCurrentlyOverflown = isOverflown(cellValue.current);
+            // console.log(isOverflow(liValue.current));
             setShowPopper(isCurrentlyOverflown);
             setAnchorEl(cellDiv.current);
             setShowFullCell(true);
@@ -105,12 +151,27 @@ const QuestionBank = () => {
                 <Box
                     ref={cellValue}
                     sx={{
-                        whiteSpace: "nowrap",
+                        // whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis"
                     }}
                 >
-                    {value}
+                    {value.split("*").length > 1
+                        ? value.split("*").map((element) => (
+                              <div
+                                  style={{
+                                      display: "list-item",
+                                      listStylePosition: "inside",
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis"
+                                  }}
+                                  key={Math.random().toString()}
+                                  //   ref={liValue}
+                              >
+                                  {element}
+                              </div>
+                          ))
+                        : value}
                 </Box>
                 {showPopper && (
                     <Popper
@@ -129,11 +190,22 @@ const QuestionBank = () => {
                                 style={{
                                     padding: 8,
                                     overflowWrap: "break-word",
+                                    // whiteSpace: "pre-wrap",
                                     // wordBreak: "break-all",
                                     hyphens: "auto"
                                 }}
                             >
-                                {value}
+                                {value.split("*").length > 1
+                                    ? value
+                                          .split("*")
+                                          .map((element) => (
+                                              <li
+                                                  key={Math.random().toString()}
+                                              >
+                                                  {element}
+                                              </li>
+                                          ))
+                                    : value}
                             </Typography>
                         </Paper>
                     </Popper>
@@ -194,17 +266,32 @@ const QuestionBank = () => {
             width: 110,
             sortable: false,
             filterable: false,
-            renderCell: [
-                (params) => (
-                    // console.log(params.value);
-                    <ul>
-                        {params.value.map((choice) => (
-                            <li>{choice}</li>
-                        ))}
-                    </ul>
-                ),
-                renderCellExpand
-            ]
+            valueGetter: getChoices,
+            renderCell: renderCellExpand
+            // renderCell: (params) => (
+            //     // console.log(params.value);
+            //     <ul>
+            //         {params.value.map((choice) => {
+            //             console.log(params);
+            //             // params.value = choice;
+            //             return (
+            //                 <li
+            //                     onMouseEnter={() =>
+            //                         renderCellExpand({
+            //                             value: choice,
+            //                             defCol: {
+            //                                 computedWidth:
+            //                                     params.defCol.computedWidth
+            //                             }
+            //                         })
+            //                     }
+            //                 >
+            //                     {choice}
+            //                 </li>
+            //             );
+            //         })}
+            //     </ul>
+            // )
         },
         {
             field: "answer",
@@ -212,7 +299,8 @@ const QuestionBank = () => {
             description: "This column has a value getter and is not sortable.",
             width: 160,
             sortable: false,
-            filterable: false
+            filterable: false,
+            renderCell: renderCellExpand
         },
         {
             field: "difficulty",
@@ -456,6 +544,14 @@ const QuestionBank = () => {
                                         sort: "asc"
                                     }
                                 ]
+                            }
+                        }}
+                        onRowClick={(params) => {
+                            if (selectedQuestions.includes(params.row)) {
+                                CustomizedSnackbars();
+                            } else {
+                                selectedQuestions.push(params.row);
+                                console.log(selectedQuestions);
                             }
                         }}
                     />
