@@ -13,7 +13,7 @@ import classes from "./QuestionBank.module.scss";
 import Question from "./Question";
 import ReactPaginate from "react-paginate";
 import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
-import QuestionsPopUp from './QuestionsPopUp'
+import QuestionsPopUp from "./QuestionsPopUp";
 import CustomizeExamPopup from "./CustomizeExamPopUp";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
@@ -28,24 +28,26 @@ const QuestionBank = () => {
     const [modalOpen, setModalOpen] = useState(false);
     //for opening create exam popup
     const [openExam, setOpenExam] = useState(false);
+    const [questions, setQuestions] = useState([]);
+    const [selectedQuestions, setSelectedQuestions] = useState([]);
     useEffect(() => {
         dispatch(getCategory());
         console.log("execcc");
     }, [forchange]);
-    const openQuestions = ()=>{
-        setModalOpen(true)
-    }
-    const openCustomizeExam = ()=>{
-        setOpenExam(true)
-    }
+    const openQuestions = () => {
+        setModalOpen(true);
+    };
+    const openCustomizeExam = () => {
+        setOpenExam(true);
+    };
 
     //const Jobs = useSelector(state => state.jobs.Jobs);
 
-    const bank = useSelector((state) => state.bank);
+    const bank = useSelector(state => state.bank);
 
     console.log("imm bannnnnnnnnnk  ", bank);
-    let selectedQuestions = [];
-    const html = (text) => {
+    // const selectedQuestions = [];
+    const html = text => {
         const e1 = document.createElement("ul");
         e1.innerHTML = text;
         console.log(e1.textContent);
@@ -105,7 +107,7 @@ const QuestionBank = () => {
                 document.removeEventListener("keydown", handleKeyDown);
             };
         }, [setShowFullCell, showFullCell]);
-       
+
         return (
             <Box
                 ref={wrapper}
@@ -139,12 +141,12 @@ const QuestionBank = () => {
                     }}
                 >
                     {value.split("*").length > 1
-                        ? value.split("*").map((element) => (
+                        ? value.split("*").map(element => (
                               <div
                                   style={{
                                       display: "list-item",
                                       listStylePosition: "inside",
-                                      overflow: "hidden",
+                                      //   overflow: "hidden",
                                       textOverflow: "ellipsis"
                                   }}
                                   key={Math.random().toString()}
@@ -180,7 +182,7 @@ const QuestionBank = () => {
                                 {value.split("*").length > 1
                                     ? value
                                           .split("*")
-                                          .map((element) => (
+                                          .map(element => (
                                               <li
                                                   key={Math.random().toString()}
                                               >
@@ -222,7 +224,7 @@ const QuestionBank = () => {
     };
 
     //const categories=["software"]
-    const { Count } = useSelector((state) => state.jobs);
+    const { Count } = useSelector(state => state.jobs);
     const [pageNumber, setPageNumber] = useState(1);
     const [view, setView] = useState("");
 
@@ -294,7 +296,7 @@ const QuestionBank = () => {
                 return difficulty.indexOf(a) - difficulty.indexOf(b);
             },
             width: 160,
-            renderCell: (params) => {
+            renderCell: params => {
                 // console.log(value);
                 if (params.value === "Easy") {
                     return (
@@ -399,7 +401,7 @@ const QuestionBank = () => {
         }
     ];
 
-    const questions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    // const questions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const secondFilter = ["java", "C++"];
 
     const filtervalues = {
@@ -407,13 +409,13 @@ const QuestionBank = () => {
         topic: ""
     };
 
-    const handleView = (e) => {
+    const handleView = e => {
         dispatch(getTopic(e.target.value, setView));
 
         setView(e.target.value);
     };
 
-    const bringquestions = (e) => {
+    const bringquestions = e => {
         dispatch(getQuestions(e.target.value, view, setTopic));
 
         setTopic(e.target.value);
@@ -422,15 +424,17 @@ const QuestionBank = () => {
     if (bank.hasOwnProperty("category")) {
         return (
             <div style={{ height: 400 }}>
-             {modalOpen && (
-                    <QuestionsPopUp 
+                {modalOpen && (
+                    <QuestionsPopUp
                         setOpenModal={setModalOpen}
                         message="test"
                     />
                 )}
-             {openExam && (
-                   <CustomizeExamPopup setOpenExam={setOpenExam} />
-
+                {openExam && (
+                    <CustomizeExamPopup
+                        setOpenExam={setOpenExam}
+                        questions={questions}
+                    />
                 )}
                 {/* 
                 <div>
@@ -475,7 +479,7 @@ const QuestionBank = () => {
                     style={{ marginBottom: "0.5rem" }}
                 >
                     <option>--Select category--</option>
-                    {bank.category.categories.map((category) => {
+                    {bank.category.categories.map(category => {
                         return (
                             <option
                                 key={category}
@@ -499,7 +503,7 @@ const QuestionBank = () => {
                         >
                             <option>--Select topic--</option>
                             {bank.hasOwnProperty("topic") &&
-                                bank.topic.topics.map((topic) => {
+                                bank.topic.topics.map(topic => {
                                     return (
                                         <option
                                             key={topic}
@@ -517,7 +521,7 @@ const QuestionBank = () => {
                     <DataGrid
                         density="comfortable"
                         rows={bank.question.questions}
-                        getRowId={(row) => row.id}
+                        getRowId={row => row.id}
                         rowHeight={rows[0].choices.length * 25}
                         columns={columns}
                         pageSize={5}
@@ -538,19 +542,25 @@ const QuestionBank = () => {
                                 ]
                             }
                         }}
-                        onRowClick={(params) => {
+                        onRowClick={params => {
                             if (selectedQuestions.includes(params.row)) {
                                 // <SnackBar setOpen={setOpen} />;
                                 console.log("error");
                             } else {
                                 selectedQuestions.push(params.row);
+                                setSelectedQuestions(selectedQuestions);
+                                questions.push(params.row.id);
+
+                                console.log("selec", selectedQuestions);
+                                setQuestions(questions);
+                                console.log("questions", questions);
                                 console.log(selectedQuestions);
                             }
                         }}
                     />
                 )}
-                <button onClick = {openQuestions}>SelectedQuestions</button>
-                <button onClick ={openCustomizeExam}>Create Exam</button> 
+                <button onClick={openQuestions}>SelectedQuestions</button>
+                <button onClick={openCustomizeExam}>Create Exam</button>
                 {/* <div className={classes.list}> */}
                 {/* {questions.map(question => (
                         <Question key={question} question={question} />
