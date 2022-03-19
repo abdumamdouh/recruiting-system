@@ -7,6 +7,7 @@ import AvailableMCQs from "../AvailableExamsPage/AvailableMCQs";
 import ExamPage from "../ExamPage/ExamPage";
 import UploadedExams from "../UploadedExamsPage/UploadedExams";
 import AssignApplicantsPage from "../AssignApplicantsPage/AssignApplicantsPage";
+import AssignCandidatesPage from "../AssignCandidatesPage/AssignCandidatesPage"
 import CandidatesPage from "../CandidatesPage/CandidatesPage";
 import ApplicantPage from "../ApplicantPage/ApplicantPage"
 const DashBoardPage = () => {
@@ -30,6 +31,9 @@ const DashBoardPage = () => {
                         </Route>
                         <Route path="/dashboard/uploadedexams/assignapplicants/:id">
                             <AssignApplicantsPage />
+                        </Route>
+                        <Route path="/dashboard/uploadedexams/assigncandidates/:id">
+                            <AssignCandidatesPage />
                         </Route>
                         <Route path="/dashboard/candidates">
                             <CandidatesPage />

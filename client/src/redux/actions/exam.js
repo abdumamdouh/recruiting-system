@@ -15,7 +15,6 @@ import {
     ASSIGN_TASK_TO_APPLICANTS_SUCCESS,
     ASSIGN_TASK_TO_APPLICANTS_FAIL
 } from "../types/index";
-import axios from "axios";
 const serverURL = "http://localhost:5000";
 export const createExamAction = (jobId,topic,questions,privatee, expiryDate,duration,showSuccessMessage) => {
     let mcq={jobId:jobId,topic:topic,questions:questions, private: privatee, expiryDate:expiryDate, duration:duration}

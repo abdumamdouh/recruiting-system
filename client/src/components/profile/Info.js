@@ -6,11 +6,12 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { getApplicantProfileAction,getRecruiterProfileAction } from "../../redux/actions/user";
 import './info.scss'
+import Message from "../../components/modal/Message";
 
 const Info = props => {
 
     const dispatch = useDispatch();
-
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         if(userInfo.type==="Applicant")
@@ -64,7 +65,11 @@ const Info = props => {
             }
         );
         //const res = await axios.post("http://localhost:5000/Recruiter/me/avatar", formData,config);
-        console.log(rawResponse);
+        console.log(rawResponse.status)
+        if(rawResponse.status == 200)
+        {
+            setModalOpen(true);
+        }
     } catch (ex) {
         console.log(ex);
     }
@@ -72,6 +77,12 @@ const Info = props => {
     };
     return (
         <>
+         {modalOpen && (
+                <Message
+                    setOpenModal={setModalOpen}
+                    message="image uploaded successfully!"
+                />
+            )}
             <div className="card" style={{ width: "50rem", height: "80%" }}>
                 <div className="card-header">Turing</div>
                 <div className="list-group list-group-flush">
