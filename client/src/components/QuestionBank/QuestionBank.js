@@ -14,6 +14,7 @@ import Question from "./Question";
 import ReactPaginate from "react-paginate";
 import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
 import QuestionsPopUp from './QuestionsPopUp'
+import CustomizeExamPopup from "./CustomizeExamPopUp";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -25,12 +26,17 @@ const QuestionBank = () => {
     const [forchange, setForchange] = useState("");
     //for opening questions popup
     const [modalOpen, setModalOpen] = useState(false);
+    //for opening create exam popup
+    const [openExam, setOpenExam] = useState(false);
     useEffect(() => {
         dispatch(getCategory());
         console.log("execcc");
     }, [forchange]);
     const openQuestions = ()=>{
         setModalOpen(true)
+    }
+    const openCustomizeExam = ()=>{
+        setOpenExam(true)
     }
 
     //const Jobs = useSelector(state => state.jobs.Jobs);
@@ -422,6 +428,10 @@ const QuestionBank = () => {
                         message="test"
                     />
                 )}
+             {openExam && (
+                   <CustomizeExamPopup setOpenExam={setOpenExam} />
+
+                )}
                 {/* 
                 <div>
 
@@ -540,7 +550,7 @@ const QuestionBank = () => {
                     />
                 )}
                 <button onClick = {openQuestions}>SelectedQuestions</button>
-                <button>Create Exam</button>
+                <button onClick ={openCustomizeExam}>Create Exam</button> 
                 {/* <div className={classes.list}> */}
                 {/* {questions.map(question => (
                         <Question key={question} question={question} />
