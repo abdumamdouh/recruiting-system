@@ -10,7 +10,8 @@ import { Typography } from "@material-ui/core";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { pickExamAction } from "../../redux/actions/exam";
-function CustomizeExamPopup({ setOpenExam, message, id, jobId }) {
+function CustomizeExamPopup({ setOpenExam, message, id, questions }) {
+    const state = useSelector(state => state);
     const [topic, setTopic] = useState("");
     const [checked, setChecked] = useState(false);
     const [privatee, setPrivatee] = useState(false);
@@ -19,16 +20,53 @@ function CustomizeExamPopup({ setOpenExam, message, id, jobId }) {
     const [expiryDate, setExpiryDate] = useState(new Date());
     const [duration, setDuration] = useState(0);
     const [value, setValue] = useState(new Date());
+    const jobId = useSelector(state => state.job.id);
+
     const handleCheckBox = () => {
         setChecked(!checked);
         setPrivatee(checked);
         console.log("dddd", privatee);
         console.log(checked);
+        console.log("jj", jobId);
     };
     const handleSubmit = () => {
-        console.log('exam',expiryDate);
+        console.log("exam", expiryDate);
         // const MCQId = id;
         // dispatch(pickExamAction(jobId, MCQId, expiryDate, duration));
+    };
+    const handleCreate = async () => {
+        try {
+            let mcq = {
+                jobId: jobId,
+                topic: topic,
+                questions: questions,
+                private: privatee,
+                expiryDate: expiryDate,
+                duration: duration
+            };
+            const rawResponse = await fetch(
+                `http://localhost:5000/createExam`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + state.user.userInfo.token
+                    },
+                    body: JSON.stringify(mcq)
+                }
+            );
+            const data = await rawResponse;
+
+            console.log(mcq);
+            //   if(data.status===200){
+            //       setModalOpen(true)
+            //       setApplyFor(true)
+            //   }
+            console.log(data);
+        } catch (error) {
+            console.log(error.message);
+        }
     };
     return (
         <div className="customize-exam-overlay">
@@ -44,76 +82,92 @@ function CustomizeExamPopup({ setOpenExam, message, id, jobId }) {
                         </button>
                     </div>
                     <div className="body">
-                    <Box
-                component="form"
-                sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" }
-                }}
-                noValidate
-                autoComplete="off"
-            >
-            <div className="row">
-               <div className="column">
-               <Typography className="black" variant="h6">
-                    Exam Topic
-                </Typography>
-               </div>
+                        <Box
+                            component="form"
+                            sx={{
+                                "& > :not(style)": { m: 1, width: "25ch" }
+                            }}
+                            noValidate
+                            autoComplete="off"
+                        >
+                            <div className="row">
+                                <div className="column">
+                                    <Typography className="black" variant="h6">
+                                        Exam Topic
+                                    </Typography>
+                                </div>
 
-               <div className="column">  <TextField
-                    id="outlined-basic"
-                    label="Exam topic"
-                    variant="outlined"
-                    onChange={e => setTopic(e.target.value)}
-                /></div>
-                </div>
-            </Box>
-            </div>
+                                <div className="column">
+                                    {" "}
+                                    <TextField
+                                        id="outlined-basic"
+                                        label="Exam topic"
+                                        variant="outlined"
+                                        onChange={e => setTopic(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        </Box>
+                    </div>
                     <div className="body">
                         <div className="mb black row">
-                           <div className="column">
-                           <Typography color="black" variant="h6">
-                                 Expiration Date
-                            </Typography>
-                           </div>
-                            <div style={{ marginTop: "10px" }} className="column">
-                                
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DateTimePicker
-                            renderInput={props => <TextField {...props} />}
-                            label="DateTimePicker"
-                            value={value}
-                            onChange={newValue => {
-                                setValue(newValue);
-                                setExpiryDate(value);
-                                console.log(value);
-                            }}
-                        />
-                    </LocalizationProvider>
+                            <div className="column">
+                                <Typography color="black" variant="h6">
+                                    Expiration Date
+                                </Typography>
+                            </div>
+                            <div
+                                style={{ marginTop: "10px" }}
+                                className="column"
+                            >
+                                <LocalizationProvider
+                                    dateAdapter={AdapterDateFns}
+                                >
+                                    <DateTimePicker
+                                        renderInput={props => (
+                                            <TextField {...props} />
+                                        )}
+                                        label="DateTimePicker"
+                                        value={value}
+                                        onChange={newValue => {
+                                            setValue(newValue);
+                                            setExpiryDate(value);
+                                            console.log(value);
+                                        }}
+                                    />
+                                </LocalizationProvider>
                             </div>
                         </div>
                     </div>
                     <div className="body">
-                    <div className="mb row">
-                    <div className="column">
-                <Typography
-                    style={{ color: "black" }}
-                    variant="h6"
-                    color="black"
-                >
-                    Do you agree to use your exams as open source?
-                </Typography>
-                </div>
-                <div className="column">
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={handleCheckBox}
-                    />
-                    <span className="black ml" style={{'font-size': '20px'}}> I Agree</span>
-                </label>
-                </div>
-            </div>
+                        <div className="mb row">
+                            <div className="column">
+                                <Typography
+                                    style={{ color: "black" }}
+                                    variant="h6"
+                                    color="black"
+                                >
+                                    Do you agree to use your exams as open
+                                    source?
+                                </Typography>
+                            </div>
+                            <div className="column">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        checked={checked}
+                                        onChange={handleCheckBox}
+                                    />
+                                    <span
+                                        className="black ml"
+                                        style={{ "font-size": "20px" }}
+                                    >
+                                        {" "}
+                                        I Agree
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div className="body">
                         <div className="black mb">
@@ -136,7 +190,7 @@ function CustomizeExamPopup({ setOpenExam, message, id, jobId }) {
                                 label="duration"
                                 size="md"
                                 value={duration}
-                                onChange={(e) => {
+                                onChange={e => {
                                     setDuration(e.target.value);
                                 }}
                             />
@@ -144,8 +198,8 @@ function CustomizeExamPopup({ setOpenExam, message, id, jobId }) {
                     </div>
 
                     <div className="footer">
-                        <button id="submitBtn" onClick={handleSubmit}>
-                            Choose Exam
+                        <button id="submitBtn" onClick={handleCreate}>
+                            Create Exam
                         </button>
 
                         <button
