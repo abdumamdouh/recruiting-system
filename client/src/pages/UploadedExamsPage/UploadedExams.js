@@ -14,6 +14,10 @@ const UploadedExams = () => {
         console.log("ay 7aga");
         history.push(`/dashboard/uploadedexams/assignapplicants/${id}`);
     };
+    const handleAssignCanidate = id => {
+        console.log("ay 7aga");
+        history.push(`/dashboard/uploadedexams/assigncandidates/${id}`);
+    };
     if (MCQs !== undefined) {
         return (
             <div>
@@ -31,6 +35,16 @@ const UploadedExams = () => {
                                         onClick={() => handleAssign(m.MCQId)}
                                     >
                                         Assign Exam to Applicants
+                                    </button>
+                                </div>
+                                <div class="column">
+                                    {" "}
+                                    <button
+                                        style={{ marginLeft: "20px" }}
+                                        className="btn btn-primary"
+                                        onClick={() => handleAssignCanidate(m.MCQId)}
+                                    >
+                                        Assign Exam to Candidates
                                     </button>
                                 </div>
                             </div>{" "}
