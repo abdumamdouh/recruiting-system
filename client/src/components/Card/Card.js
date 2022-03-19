@@ -7,7 +7,6 @@ import { Typography } from "@material-ui/core";
 import TextField from "@mui/material/TextField";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import { pickExamAction } from "../../redux/actions/exam";
-import Message from "../modal/Message";
 import CardPopup from "./CardPopup";
 import "./Card.scss";
 const Card = (props) => {
