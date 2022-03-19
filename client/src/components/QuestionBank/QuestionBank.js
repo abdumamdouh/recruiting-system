@@ -13,7 +13,7 @@ import classes from "./QuestionBank.module.scss";
 import Question from "./Question";
 import ReactPaginate from "react-paginate";
 import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
-
+import QuestionsPopUp from './QuestionsPopUp'
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -23,11 +23,15 @@ const QuestionBank = () => {
     const dispatch = useDispatch();
 
     const [forchange, setForchange] = useState("");
-
+    //for opening questions popup
+    const [modalOpen, setModalOpen] = useState(false);
     useEffect(() => {
         dispatch(getCategory());
         console.log("execcc");
     }, [forchange]);
+    const openQuestions = ()=>{
+        setModalOpen(true)
+    }
 
     //const Jobs = useSelector(state => state.jobs.Jobs);
 
@@ -95,7 +99,7 @@ const QuestionBank = () => {
                 document.removeEventListener("keydown", handleKeyDown);
             };
         }, [setShowFullCell, showFullCell]);
-
+       
         return (
             <Box
                 ref={wrapper}
@@ -412,6 +416,12 @@ const QuestionBank = () => {
     if (bank.hasOwnProperty("category")) {
         return (
             <div style={{ height: 400 }}>
+             {modalOpen && (
+                    <QuestionsPopUp 
+                        setOpenModal={setModalOpen}
+                        message="test"
+                    />
+                )}
                 {/* 
                 <div>
 
@@ -529,7 +539,7 @@ const QuestionBank = () => {
                         }}
                     />
                 )}
-                <button>SelectedQuestions</button>
+                <button onClick = {openQuestions}>SelectedQuestions</button>
                 <button>Create Exam</button>
                 {/* <div className={classes.list}> */}
                 {/* {questions.map(question => (
