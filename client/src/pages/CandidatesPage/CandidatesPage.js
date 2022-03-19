@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { assignExamAction } from "../../redux/actions/exam";
-
+import SendIcon from "@mui/icons-material/Send";
 import { useHistory } from "react-router-dom";
+import Button from "@mui/material/Button";
 import Message from "../../components/modal/Message";
 const CandidatesPage = () => {
     const history = useHistory();
@@ -15,14 +15,8 @@ const CandidatesPage = () => {
     const [modalOpen, setModalOpen] = useState(false);
     //mcqId
     const { id } = useParams();
-    const handleApplicants = params => {
-        console.log(job.applicants);
-        console.log("r", rows);
-        console.log(params.id);
-        console.log("roww", params.row);
-        console.log("ss", id);
-    };
-    const handleApplicantRedirect = (id) => {
+
+    const handleApplicantRedirect = id => {
         history.push(`/dashboard/applicant/${id}`);
     };
     const copyApplicants =
@@ -36,31 +30,29 @@ const CandidatesPage = () => {
     const columns = [
         { field: "id", headerName: "ID", width: 70 },
         { field: "userName", headerName: "User Name", width: 130 },
-        { field: "score", headerName: "Screening result", width: 130 },
-            { field: 'action', headerName: 'Action', width: 130,
-            renderCell:(params)=>{
-                return(
-                    <button className="btn btn-primary" onClick={()=> handleApplicantRedirect(
-                        params.id
-                    )}>show profile</button>
-                
-                    
-                )
+        { field: "score", headerName: "Screening result %", width: 140 },
+        {
+            field: "action",
+            headerName: "Profile",
+            width: 130,
+            renderCell: params => {
+                return (
+                    // <button className="btn btn-primary" onClick={()=> handleApplicantRedirect(
+                    //     params.id
+                    // )}>show profile</button>
+                    <Button
+                        variant="text"
+                        style={{ color: "black" }}
+                        onClick={() => handleApplicantRedirect(params.id)}
+                        endIcon={<SendIcon />}
+                    >
+                        profile
+                    </Button>
+                );
             }
-        },
+        }
     ];
-    const showSuccessMessage = () => {
-        setModalOpen(true);
-    };
-    const handleAllApplicants = () => {
-        console.log(job.applicants);
-        console.log("selection", selectionModel);
-        console.log("jobID", jobId);
-        console.log("filter", filteredApplicants);
-        dispatch(
-            assignExamAction(jobId, id, selectionModel, showSuccessMessage)
-        );
-    };
+
     return (
         <div style={{ height: 400, width: "100%" }}>
             {modalOpen && (
@@ -80,14 +72,6 @@ const CandidatesPage = () => {
                 }}
                 selectionModel={selectionModel}
             />
-            <button
-                className="btn btn-primary"
-                style={{ marginTop: "20px" }}
-                onClick={handleAllApplicants}
-            >
-                {" "}
-                Assign Exam to Applicants
-            </button>
         </div>
     );
 };
