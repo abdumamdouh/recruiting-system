@@ -10,6 +10,7 @@ import AssignApplicantsPage from "../AssignApplicantsPage/AssignApplicantsPage";
 import AssignCandidatesPage from "../AssignCandidatesPage/AssignCandidatesPage"
 import CandidatesPage from "../CandidatesPage/CandidatesPage";
 import ApplicantPage from "../ApplicantPage/ApplicantPage"
+import QuestionBank from "../../components/QuestionBank/QuestionBank"
 const DashBoardPage = () => {
     return (
         <Router>
@@ -40,6 +41,9 @@ const DashBoardPage = () => {
                         </Route>
                         <Route path="/dashboard/applicant/:ID">
                           <ApplicantPage/>
+                        </Route>
+                        <Route path="/dashboard/questionbank">
+                          <QuestionBank/>
                         </Route>
                     </Switch>
                 </div>

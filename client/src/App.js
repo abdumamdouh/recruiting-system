@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 
 // pages
-
 import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import Applicant from "./pages/SignUpPage/Applicant";
@@ -27,10 +26,12 @@ import Layout from "./components/layout/Layout";
 // protected route
 import ProtectedRoute from "./ProtectedRoute";
 import DashBoardPage from "./pages/DashBoardPage/DashBoardPage";
+import Question from "./components/QuestionBank/Question";
 
 const App = () => {
     return (
         <Router>
+            {/* <SnackBar willopen={true} /> */}
             <Layout>
                 <Switch>
                     <Route exact path="/" component={HomePage} name="/" />
@@ -98,7 +99,6 @@ const App = () => {
                     />
 
                     <ProtectedRoute
-                        
                         path="/dashboard/:ID"
                         component={DashBoardPage}
                         name="screeningDashboard"
@@ -109,6 +109,13 @@ const App = () => {
                         exact
                         path="/AddExam"
                         component={AddExam}
+                        name="createJob"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/questionbank"
+                        component={Question}
                         name="createJob"
                     />
 

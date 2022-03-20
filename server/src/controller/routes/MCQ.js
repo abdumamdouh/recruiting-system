@@ -64,6 +64,20 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         );
     }
 });
+// Add MCQ from the question bank
+router.post("/createExam", recruiterAuth, async (req, res) => {
+    try {
+        const { jobId, topic, expiryDate, duration, private, questions } =
+            req.body;            
+        const { id: recruiterId } = req.recruiter;
+        const mcq = await MCQ.create({ topic, private, recruiterId });
+        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        await mcq.addQuestion(questions);
+        res.status(201).send("The exam is created successfully.");
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
 
 // Pick an availale MCQ exam to the job
 router.post("/pickMCQ", recruiterAuth, async (req, res) => {
@@ -83,7 +97,7 @@ router.post("/pickMCQ", recruiterAuth, async (req, res) => {
 router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
     try {
         const pageNumber = req.params.pageNumber;
-        console.log(pageNumber);
+        // console.log(pageNumber);
         const results = await MCQ.findAndCountAll({
             include: {
                 model: Question,
@@ -142,9 +156,9 @@ router.get("/categories", recruiterAuth, async (req, res) => {
 });
 
 // get all topics related to this certain category
-router.post("/topics", recruiterAuth, async (req, res) => {
+router.get("/topics/:category", recruiterAuth, async (req, res) => {
     try {
-        const { category } = req.body;
+        const { category } = req.params;
         let topics = await Question.findAll({
             where: { category },
             attributes: [
@@ -164,7 +178,7 @@ router.post("/topics", recruiterAuth, async (req, res) => {
 });
 
 // get all questions related to this certain topic
-router.post("/questions", recruiterAuth, async (req, res) => {
+router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
     try {
         const { category, topic } = req.body;
         const questions = await Question.findAll({

@@ -45,6 +45,18 @@ const SideBar = () => {
               MCQ Exam
             </li>
             </Link>
+
+              {// for Question Bnak
+            }
+            <Link to="/dashboard/questionbank" className="link">
+            <li className="sidebarListItem">
+              <BackupTableIcon  className="sidebarIcon" />
+              Questions Bank 
+            </li>
+            </Link>
+            {
+              //////////////////////////////////////////////////////
+            }
             <Link to="/products" className="link">
             <li className="sidebarListItem">
               <AdbIcon className="sidebarIcon" />
