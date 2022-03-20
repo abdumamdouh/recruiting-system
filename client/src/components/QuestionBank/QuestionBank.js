@@ -584,7 +584,7 @@ const QuestionBank = () => {
                         }}
                     />
                 )}
-                <div className="footer" >
+                <div className="footer" style={{marginTop:'20px'}}>
                     <button
                     style={{marginBottom: '20px'}}
                          className="btn btn-primary ml"
