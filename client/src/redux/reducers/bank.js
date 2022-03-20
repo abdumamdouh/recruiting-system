@@ -52,7 +52,7 @@ const bankReducer = (state = {}, action) => {
 
 
         case GET_QUESTIONS_REQUEST:
-            return state
+            return state 
 
         case GET_QUESTIONS_SUCCESS:
             return {
