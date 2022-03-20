@@ -32,6 +32,8 @@ const QuestionBank = () => {
     const [questions, setQuestions] = useState([]);
     const [selectedQuestions, setSelectedQuestions] = useState([]);
     const [isDisabled, setDisabled] = useState(true);
+    const [isDoubleClick, setisDoubleClick] = useState(false);
+
     useEffect(() => {
         dispatch(getCategory());
         console.log("execcc");
@@ -428,6 +430,13 @@ const QuestionBank = () => {
     if (bank.hasOwnProperty("category")) {
         return (
             <div style={{ height: 400 }}>
+                {isDoubleClick ? (
+                    <SnackBar
+                        isDoubleClick={isDoubleClick}
+                        setisDoubleClick={setisDoubleClick}
+                    />
+                ) : null}
+
                 {modalOpen && (
                     <QuestionsPopUp
                         setOpenModal={setModalOpen}
@@ -550,6 +559,7 @@ const QuestionBank = () => {
                         onRowClick={(params) => {
                             if (selectedQuestions.includes(params.row)) {
                                 // <SnackBar setOpen={true} />;
+                                setisDoubleClick(true);
                                 console.log("error");
                             } else {
                                 enableButtons();

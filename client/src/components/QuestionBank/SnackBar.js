@@ -6,22 +6,23 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function SnackBar(props) {
-    const [open, setOpen] = React.useState(false);
+function SnackBar({ isDoubleClick, setisDoubleClick }) {
+    // const [open, setOpen] = React.useState(isDoubleClick);
     const handleClick = () => {
-        setOpen(true);
+        setisDoubleClick(true);
     };
 
     const handleClose = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-
-        setOpen(false);
+        setisDoubleClick(false);
     };
 
     return (
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            open={isDoubleClick}
+            autoHideDuration={6000}
+            onClose={handleClose}
+        >
             <Alert
                 onClose={handleClose}
                 severity="error"
