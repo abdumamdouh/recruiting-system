@@ -15,6 +15,9 @@ const recruiterAuth = async (req, res, next) => {
                 found = 1 
             }
         });
+
+        // console.log(recruiterTokens)
+
         if( !recruiter || !found) {
             throw new Error()
         }

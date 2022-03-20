@@ -97,7 +97,7 @@ export const getQuestions = (topic,view,setTopic) => {
                 loading: true
             });
             const { userInfo } = getState().user;
-            //console.log(userInfo.token);
+            // console.log(userInfo.token);
            //console.log(userData)
             const rawResponse = await fetch(
                 `${serverURL}/questions/${view}/${topic}`,

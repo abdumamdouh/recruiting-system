@@ -182,7 +182,7 @@ router.get("/topics/:category", recruiterAuth, async (req, res) => {
 // get all questions related to this certain topic
 router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
     try {
-        const { category, topic } = req.body;
+        const { category, topic } = req.params;
         const questions = await Question.findAll({
             where: { category, topic },
             attributes: ["id", "question", "choices", "answer", "difficulty"]
@@ -208,6 +208,7 @@ router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
         // console.log(questions);
         res.status(200).send({ questions });
     } catch (error) {
+        console.log(error)
         res.status(500).send(error.message);
     }
 });
