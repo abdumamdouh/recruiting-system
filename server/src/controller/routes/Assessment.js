@@ -53,6 +53,7 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                         }
                     ]
                 });
+                
                 everyMCQ = JSON.parse(JSON.stringify(everyMCQ));
                 // console.log(everyMCQ[0]);
                 const jobAssessments = {

@@ -103,7 +103,7 @@ const UpdatesPage = (props) => {
                                     {base64String === "" ? null : (
                                         <img
                                             // make img dynamic
-                                            src={base64String}
+                                            src={`data:image/jpeg;base64,${base64String}`}
                                             alt="logo"
                                             className="immg"
                                         />
