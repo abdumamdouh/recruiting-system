@@ -259,9 +259,9 @@ export default function Job(props) {
                 <Typography color="black">
                     <LocationOnOutlinedIcon />
                     {` ${place} - ${workPlaceType}.`}{" "}
-                    <Typography variant="caption" display="inline" color="gray">
+                    {/* <Typography variant="caption" display="inline" color="gray">
                         {`${period} day ago.`}
-                    </Typography>
+                    </Typography> */}
                     {type === "Recruiter" &&
                     props.job.applicants !== undefined ? (
                         <Typography
@@ -423,7 +423,7 @@ export default function Job(props) {
                         </Typography>
                     ))}
 
-                <Divider />
+              
 
                 {/* <Typography
                     variant="h6"
@@ -462,10 +462,10 @@ export default function Job(props) {
                 </Typography> */}
                 {type === "Recruiter" && (
                     <div>
-                        <Divider />
+                        {/* <Divider />
                         <Typography variant="h6" color="black">
                             Screening results
-                        </Typography>
+                        </Typography> */}
                         {/* <div className="row">
                             <div className="column left">
                                 <Typography variant="h8" color="black">
@@ -490,7 +490,7 @@ export default function Job(props) {
                                 />
                             </div>
                         </div> */}
-                        <Button
+                        {/* <Button
                             variant="contained"
                             onClick={showCandidates}
                             sx={{ mt: 3, mb: 2, ml: 1 }}
@@ -498,7 +498,7 @@ export default function Job(props) {
                             size="small"
                         >
                             Show Candidates
-                        </Button>
+                        </Button> */}
                         {onEdit && (
                             <EditJob setOnEdit={setOnEdit} job={props.job} />
                         )}
