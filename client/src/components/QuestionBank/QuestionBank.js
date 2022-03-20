@@ -15,6 +15,7 @@ import ReactPaginate from "react-paginate";
 import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
 import QuestionsPopUp from "./QuestionsPopUp";
 import CustomizeExamPopup from "./CustomizeExamPopUp";
+import { Select } from "@mui/material";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -30,6 +31,7 @@ const QuestionBank = () => {
     const [openExam, setOpenExam] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [selectedQuestions, setSelectedQuestions] = useState([]);
+    const [isDisabled, setDisabled] = useState(true);
     useEffect(() => {
         dispatch(getCategory());
         console.log("execcc");
@@ -40,14 +42,16 @@ const QuestionBank = () => {
     const openCustomizeExam = () => {
         setOpenExam(true);
     };
-
+    const enableButtons = () => {
+        setDisabled(false);
+    };
     //const Jobs = useSelector(state => state.jobs.Jobs);
 
-    const bank = useSelector(state => state.bank);
+    const bank = useSelector((state) => state.bank);
 
     console.log("imm bannnnnnnnnnk  ", bank);
     // const selectedQuestions = [];
-    const html = text => {
+    const html = (text) => {
         const e1 = document.createElement("ul");
         e1.innerHTML = text;
         console.log(e1.textContent);
@@ -141,7 +145,7 @@ const QuestionBank = () => {
                     }}
                 >
                     {value.split("*").length > 1
-                        ? value.split("*").map(element => (
+                        ? value.split("*").map((element) => (
                               <div
                                   style={{
                                       display: "list-item",
@@ -182,7 +186,7 @@ const QuestionBank = () => {
                                 {value.split("*").length > 1
                                     ? value
                                           .split("*")
-                                          .map(element => (
+                                          .map((element) => (
                                               <li
                                                   key={Math.random().toString()}
                                               >
@@ -224,7 +228,7 @@ const QuestionBank = () => {
     };
 
     //const categories=["software"]
-    const { Count } = useSelector(state => state.jobs);
+    const { Count } = useSelector((state) => state.jobs);
     const [pageNumber, setPageNumber] = useState(1);
     const [view, setView] = useState("");
 
@@ -296,7 +300,7 @@ const QuestionBank = () => {
                 return difficulty.indexOf(a) - difficulty.indexOf(b);
             },
             width: 160,
-            renderCell: params => {
+            renderCell: (params) => {
                 // console.log(value);
                 if (params.value === "Easy") {
                     return (
@@ -409,13 +413,13 @@ const QuestionBank = () => {
         topic: ""
     };
 
-    const handleView = e => {
+    const handleView = (e) => {
         dispatch(getTopic(e.target.value, setView));
 
         setView(e.target.value);
     };
 
-    const bringquestions = e => {
+    const bringquestions = (e) => {
         dispatch(getQuestions(e.target.value, view, setTopic));
 
         setTopic(e.target.value);
@@ -428,6 +432,7 @@ const QuestionBank = () => {
                     <QuestionsPopUp
                         setOpenModal={setModalOpen}
                         message="test"
+                        SQuestions={selectedQuestions}
                     />
                 )}
                 {openExam && (
@@ -479,7 +484,7 @@ const QuestionBank = () => {
                     style={{ marginBottom: "0.5rem" }}
                 >
                     <option>--Select category--</option>
-                    {bank.category.categories.map(category => {
+                    {bank.category.categories.map((category) => {
                         return (
                             <option
                                 key={category}
@@ -503,7 +508,7 @@ const QuestionBank = () => {
                         >
                             <option>--Select topic--</option>
                             {bank.hasOwnProperty("topic") &&
-                                bank.topic.topics.map(topic => {
+                                bank.topic.topics.map((topic) => {
                                     return (
                                         <option
                                             key={topic}
@@ -521,7 +526,7 @@ const QuestionBank = () => {
                     <DataGrid
                         density="comfortable"
                         rows={bank.question.questions}
-                        getRowId={row => row.id}
+                        getRowId={(row) => row.id}
                         rowHeight={rows[0].choices.length * 25}
                         columns={columns}
                         pageSize={5}
@@ -542,15 +547,18 @@ const QuestionBank = () => {
                                 ]
                             }
                         }}
-                        onRowClick={params => {
+                        onRowClick={(params) => {
                             if (selectedQuestions.includes(params.row)) {
-                                // <SnackBar setOpen={setOpen} />;
+                                // <SnackBar setOpen={true} />;
                                 console.log("error");
                             } else {
-                                selectedQuestions.push(params.row);
-                                setSelectedQuestions(selectedQuestions);
+                                enableButtons();
+                                const hambola = [
+                                    ...selectedQuestions,
+                                    params.row
+                                ];
+                                setSelectedQuestions(hambola);
                                 questions.push(params.row.id);
-
                                 console.log("selec", selectedQuestions);
                                 setQuestions(questions);
                                 console.log("questions", questions);
@@ -559,8 +567,23 @@ const QuestionBank = () => {
                         }}
                     />
                 )}
-                <button onClick={openQuestions}>SelectedQuestions</button>
-                <button onClick={openCustomizeExam}>Create Exam</button>
+                <div className="footer">
+                    <button
+                        id="submitBtn"
+                        onClick={openQuestions}
+                        disabled={isDisabled}
+                    >
+                        Selected Questions
+                    </button>
+                    <button
+                        id="submitBtn"
+                        onClick={openCustomizeExam}
+                        disabled={isDisabled}
+                    >
+                        Create Exam
+                    </button>
+                </div>
+
                 {/* <div className={classes.list}> */}
                 {/* {questions.map(question => (
                         <Question key={question} question={question} />

@@ -127,3 +127,27 @@
         cursor: default;
     }
 }
+.footer {
+    flex: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#submitBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+    text-align: center;
+    background-color: rgb(43, 54, 207);
+    padding: 25px;
+    width: 150px;
+    height: 45px;
+    margin: 10px;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+}

@@ -11,7 +11,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { pickExamAction } from "../../redux/actions/exam";
 function CustomizeExamPopup({ setOpenExam, message, id, questions }) {
-    const state = useSelector(state => state);
+    const state = useSelector((state) => state);
     const [topic, setTopic] = useState("");
     const [checked, setChecked] = useState(false);
     const [privatee, setPrivatee] = useState(false);
@@ -20,7 +20,7 @@ function CustomizeExamPopup({ setOpenExam, message, id, questions }) {
     const [expiryDate, setExpiryDate] = useState(new Date());
     const [duration, setDuration] = useState(0);
     const [value, setValue] = useState(new Date());
-    const jobId = useSelector(state => state.job.id);
+    const jobId = useSelector((state) => state.job.id);
 
     const handleCheckBox = () => {
         setChecked(!checked);
@@ -103,7 +103,9 @@ function CustomizeExamPopup({ setOpenExam, message, id, questions }) {
                                         id="outlined-basic"
                                         label="Exam topic"
                                         variant="outlined"
-                                        onChange={e => setTopic(e.target.value)}
+                                        onChange={(e) =>
+                                            setTopic(e.target.value)
+                                        }
                                     />
                                 </div>
                             </div>
@@ -124,12 +126,13 @@ function CustomizeExamPopup({ setOpenExam, message, id, questions }) {
                                     dateAdapter={AdapterDateFns}
                                 >
                                     <DateTimePicker
-                                        renderInput={props => (
+                                        className="DatePicker"
+                                        renderInput={(props) => (
                                             <TextField {...props} />
                                         )}
                                         label="DateTimePicker"
                                         value={value}
-                                        onChange={newValue => {
+                                        onChange={(newValue) => {
                                             setValue(newValue);
                                             setExpiryDate(value);
                                             console.log(value);
@@ -190,7 +193,7 @@ function CustomizeExamPopup({ setOpenExam, message, id, questions }) {
                                 label="duration"
                                 size="md"
                                 value={duration}
-                                onChange={e => {
+                                onChange={(e) => {
                                     setDuration(e.target.value);
                                 }}
                             />
