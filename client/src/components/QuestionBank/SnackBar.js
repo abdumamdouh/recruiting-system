@@ -6,8 +6,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function SnackBar({ isDoubleClick, setisDoubleClick }) {
+function SnackBar({ isDoubleClick, setisDoubleClick, error }) {
     // const [open, setOpen] = React.useState(isDoubleClick);
+
     const handleClick = () => {
         setisDoubleClick(true);
     };
@@ -20,16 +21,26 @@ function SnackBar({ isDoubleClick, setisDoubleClick }) {
         <Snackbar
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             open={isDoubleClick}
-            autoHideDuration={6000}
+            autoHideDuration={2000}
             onClose={handleClose}
         >
-            <Alert
-                onClose={handleClose}
-                severity="error"
-                sx={{ width: "100%" }}
-            >
-                Already Added
-            </Alert>
+            {error ? (
+                <Alert
+                    onClose={handleClose}
+                    severity="error"
+                    sx={{ width: "100%" }}
+                >
+                    The question is already added.
+                </Alert>
+            ) : (
+                <Alert
+                    sx={{ width: "100%" }}
+                    onClose={handleClose}
+                    severity="success"
+                >
+                    Created sucessfully!
+                </Alert>
+            )}
         </Snackbar>
     );
 }

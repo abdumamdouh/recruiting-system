@@ -33,6 +33,7 @@ const QuestionBank = () => {
     const [selectedQuestions, setSelectedQuestions] = useState([]);
     const [isDisabled, setDisabled] = useState(true);
     const [isDoubleClick, setisDoubleClick] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         dispatch(getCategory());
@@ -430,12 +431,17 @@ const QuestionBank = () => {
     if (bank.hasOwnProperty("category")) {
         return (
             <div style={{ height: 400 }}>
-                {isDoubleClick ? (
-                    <SnackBar
-                        isDoubleClick={isDoubleClick}
-                        setisDoubleClick={setisDoubleClick}
-                    />
-                ) : null}
+                <SnackBar
+                    isDoubleClick={isDoubleClick}
+                    setisDoubleClick={setisDoubleClick}
+                    error={true}
+                />
+
+                <SnackBar
+                    isDoubleClick={success}
+                    setisDoubleClick={setSuccess}
+                    error={false}
+                />
 
                 {modalOpen && (
                     <QuestionsPopUp
@@ -448,6 +454,7 @@ const QuestionBank = () => {
                     <CustomizeExamPopup
                         setOpenExam={setOpenExam}
                         questions={questions}
+                        setSuccess={setSuccess}
                     />
                 )}
                 {/* 

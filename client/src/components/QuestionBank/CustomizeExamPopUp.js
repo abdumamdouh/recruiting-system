@@ -10,7 +10,13 @@ import { Typography } from "@material-ui/core";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { pickExamAction } from "../../redux/actions/exam";
-function CustomizeExamPopup({ setOpenExam, message, id, questions }) {
+function CustomizeExamPopup({
+    setOpenExam,
+    message,
+    id,
+    questions,
+    setSuccess
+}) {
     const state = useSelector((state) => state);
     const [topic, setTopic] = useState("");
     const [checked, setChecked] = useState(false);
@@ -57,7 +63,8 @@ function CustomizeExamPopup({ setOpenExam, message, id, questions }) {
                 }
             );
             const data = await rawResponse;
-
+            setSuccess(true);
+            setOpenExam(false);
             console.log(mcq);
             //   if(data.status===200){
             //       setModalOpen(true)
