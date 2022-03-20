@@ -21,8 +21,8 @@ const bankReducer = (state = {}, action) => {
 
         case CHOOSE_CATEGORY_SUCCESS:
             return {
-                category:action.payload,    
-                ...state}
+                category:action.payload  
+            }
 
         case CHOOSE_CATEGORY_FAIL:
             return{
@@ -66,7 +66,7 @@ const bankReducer = (state = {}, action) => {
                 error: action.payload,
             }    
         default:
-            return state;
+            return {};
     }
 };
 export default bankReducer;
