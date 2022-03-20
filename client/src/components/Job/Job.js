@@ -309,14 +309,14 @@ export default function Job(props) {
                             >
                                 Save
                             </Button>
-                            <Button
+                            {/* <Button
                                 variant="contained"
                                 onClick={handleMCQ}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                                 color="secondary"
                             >
                                 Take MCQ exam
-                            </Button>
+                            </Button> */}
                         </>
                     ) : (
                         <>
