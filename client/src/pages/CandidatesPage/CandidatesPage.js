@@ -66,7 +66,6 @@ const CandidatesPage = () => {
                 columns={columns}
                 pageSize={50}
                 rowsPerPageOptions={[10]}
-                checkboxSelection
                 onSelectionModelChange={newSelectionModel => {
                     setSelectionModel(newSelectionModel);
                 }}
