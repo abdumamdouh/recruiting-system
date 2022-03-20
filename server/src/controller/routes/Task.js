@@ -1,4 +1,5 @@
 const express = require("express");
+const db = require("../../db/db");
 
 
 const RecOrApp = require("../middleware/RecOrApp");
@@ -10,6 +11,9 @@ const Task = require('../../models/Task');
 const ActiveTask = require('../../models/ActiveTask');
 const TaskUploads = require('../../models/TaskUploads');
 const Job = require('../../models/Job');
+const ApplyFor = require('../../models/ApplyFor')
+
+const { response } = require("express");
 
 const router = new express.Router();
 
@@ -20,14 +24,16 @@ const router = new express.Router();
 // {
 //     "description":"Some discription",
 //     "deadline":"2/10/2022",
-//     "JobId":1
+//     "JobId":1,
+//     "uploadFormat":"zip-rar" (optional)
 // }
 router.post('/createTask' , recruiterAuth ,async (req,res) => {
     try {
         // craeting the task
         const task = await Task.create({
             description:req.body.description,
-            RecruiterId: req.recruiter.id
+            RecruiterId: req.recruiter.id ,
+            uploadFormat: req.recruiter.uploadFormat ? req.recruiter.uploadFormat:"zip-rar" 
         })
         // adding it to the active tasks table
         await ActiveTask.create({
@@ -40,7 +46,7 @@ router.post('/createTask' , recruiterAuth ,async (req,res) => {
         res.status(401).send(error.message)
     }
 })
-//returned JSON: None
+//returned JSON: "Task created successfully."
 
 // ****************************************************************************************************
 
@@ -48,6 +54,24 @@ router.post('/createTask' , recruiterAuth ,async (req,res) => {
 // Accepted JSON: None, just the uploaded file 
 router.post('/uploadTask/:TaskId/:JobId' , applicantAuth , taskUploadmulter.single('task'), async (req,res) => {
     try {
+        // checking if you are authorized to deal with this task 
+        const assigned = await ApplyFor.findOne({
+            attributes:['assigned'],
+            where:{
+                JobId:req.params.JobId,
+                ApplicantId:req.applicant.id
+            },
+            raw:true
+        })
+        if(!assigned){
+            throw new Error ("You did not apply for this job")
+        }
+        assignedObj = JSON.parse(assigned.assigned)
+        // console.log(assignedObj.tasks,req.params.TaskId)
+        
+        if (! assignedObj.tasks.includes(Number(req.params.TaskId))){
+            throw new Error ("You are not assigned this task.")
+        }
         await TaskUploads.create({
             JobId:req.params.JobId,
             TaskId:req.params.TaskId,
@@ -56,10 +80,14 @@ router.post('/uploadTask/:TaskId/:JobId' , applicantAuth , taskUploadmulter.sing
         })
         res.status(201).send("Task uploaded successfully.")
     } catch (error) {
+        console.log(error)
         res.status(400).send(error.message)
     }
 })
-// returned JSON: None
+// returned JSON: 
+// 1-) "You did not apply for this job"
+// 2-) "You are not assigned this task."
+// 3-) "Task uploaded successfully."
 
 // **************************************************************************************************
 
@@ -106,7 +134,7 @@ router.get('*/:JobId/:TaskId/uploadedTasks' , recruiterAuth ,async (req,res) => 
 
 // ************************************************************************************************
 
-// get all available tasks done by a recruiter 
+// get all previous tasks done by a recruiter 
 // Accepted JSON: None
 router.get('/allTasks', recruiterAuth , async (req,res) => {
     try {
@@ -126,10 +154,119 @@ router.get('/allTasks', recruiterAuth , async (req,res) => {
 //     {
 //         "description": "Some discription",
 //         "uploadFormat": "zip-rar"
+//     },
+//     {
+//         "description": "Some discription",
+//         "uploadFormat": "zip-rar"
 //     }
 // ]
 
 // ************************************************************************************************
 
+// get a single task view for (recruiter,applicant)
+// Accepted JSON: None
+router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
+    try {
+        if(req.recruiter){
+            // checking if you're the one who posted this job or not
+            const record = await Job.findOne({
+                attributes:['RecruiterId'],
+                where:{
+                    id:req.params.JobId
+                },
+                raw:true
+            })
+            if (req.recruiter.id !== record.RecruiterId){
+                throw new Error("You are not authorized to view this job.")
+            }
+            let result = {}
+            result.data = (await Task.findOne({
+                attributes:['description','uploadFormat'] ,
+                where:{
+                   id:req.params.TaskId 
+                },
+                raw:true
+            }))
+
+            result.deadline = (await ActiveTask.findOne({
+                attributes:['deadline'],
+                where:{
+                    JobId: req.params.JobId,
+                    TaskId: req.params.TaskId
+                },
+                raw:true
+            })).deadline
+
+            result.Uploaded_count = await TaskUploads.count({
+                attributes:['id'],
+                where:{
+                    TaskId : req.params.TaskId,
+                    JobId : req.params.JobId
+                },
+                raw:true
+            })
+            
+            res.send(result);
+        } else if (req.applicant){
+            // checking if you are authorized to deal with this task 
+            const assigned = await ApplyFor.findOne({
+                attributes:['assigned'],
+                where:{
+                    JobId:req.params.JobId,
+                    ApplicantId:req.applicant.id
+                },
+                raw:true
+            })
+            if(!assigned){
+                throw new Error ("You did not apply for this job.")
+            }
+            assignedObj = JSON.parse(assigned.assigned)
+            // console.log(assignedObj.tasks,req.params.TaskId)
+        
+            if (! assignedObj.tasks.includes(Number(req.params.TaskId))){
+                throw new Error ("You are not assigned this task.")
+            }
+            let result = {}
+            result.data = (await Task.findOne({
+                attributes:['description','uploadFormat'] ,
+                where:{
+                   id:req.params.TaskId 
+                },
+                raw:true
+            }))
+
+            result.deadline = (await ActiveTask.findOne({
+                attributes:['deadline'],
+                where:{
+                    JobId: req.params.JobId,
+                    TaskId: req.params.TaskId
+                },
+                raw:true
+            })).deadline
+            res.send(result);
+        }
+    } catch (error) {
+        res.send(error.message)
+    }
+})
+// Returned JSON:
+// For Applicants:
+// {
+//     "data": {
+//         "description": "Some discription",
+//         "uploadFormat": "zip-rar"
+//     },
+//     "deadline": "2022-02-09T22:00:00.000Z"
+// }
+
+// For Recruiters:
+// {
+//     "data": {
+//         "description": "Some discription",
+//         "uploadFormat": "zip-rar"
+//     },
+//     "deadline": "2022-02-09T22:00:00.000Z",
+//     "Uploaded_count": 1
+// }
 
 module.exports = router;

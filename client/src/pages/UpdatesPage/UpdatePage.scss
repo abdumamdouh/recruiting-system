@@ -8,21 +8,25 @@
     text-align: center;
     margin: 20px 0;
 }
-
 .update {
     display: flex;
     align-items: center;
     padding: 15px;
-    border-bottom: 2px grey solid;
-    cursor: pointer;
+    // border-bottom: 2px grey solid;
+    // cursor: pointer;
 }
 .update:hover {
     background-color: rgb(232, 232, 235);
+    // border-radius: 0 0 15px 15px;
 }
 
 .updates {
     display: flex;
     flex-direction: column;
+}
+
+.updates .update:last-child:hover {
+    border-radius: 0 0 15px 15px;
 }
 
 .immg {
@@ -49,4 +53,11 @@
     align-self: end;
     word-wrap: break-word;
     word-break: break-all;
+}
+.redirect {
+    color: #004cc4;
+}
+.redirect:hover {
+    color: #9c9c9c;
+    cursor: pointer;
 }

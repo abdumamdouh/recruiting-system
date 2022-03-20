@@ -78,20 +78,17 @@ export default function AddExam() {
     const handleCheckBox = () => {
         setChecked(!checked);
         setPrivatee(checked);
-        console.log("dddd", privatee);
-        console.log(checked);
     };
     const handleDate = date => {
         setSelectedDate(date);
         setExpiryDate(date);
-        console.log(expiryDate);
     };
     const dispatch = useDispatch();
     const jobId = useSelector(state => state.job.id);
     const handleOnDrop = data => {
-        console.log("---------------------------");
+       
         console.log(data);
-        console.log("---------------------------");
+     
         let arr = [];
         data.filter(d => d.data.length !== 1).map(d => arr.push(d.data));
         const array = [...arr];
@@ -130,9 +127,9 @@ export default function AddExam() {
     };
 
     const handleOnRemoveFile = data => {
-        console.log("---------------------------");
+        
         console.log(data);
-        console.log("---------------------------");
+      
     };
     const handleClick = () => {
         dispatch(
@@ -306,7 +303,7 @@ export default function AddExam() {
                 />
             </div>
             <div className="mb">
-                <CSVLink data={csvData} filename={"CSV_EXAM_TEMPLATE"}>
+                <CSVLink data={csvData} filename={"exam_template"}>
                     Download MCQ Exam Template
                 </CSVLink>
             </div>

@@ -7,6 +7,9 @@ const MCQ = require("../../models/MCQ");
 const JobMCQ = require("../../models/JobMCQ");
 const Requirment = require("../../models/Requirment");
 const ApplyFor = require("../../models/ApplyFor");
+const ActiveTask = require("../../models/ActiveTask")
+
+
 const Sequelize = require("sequelize");
 const db = require("../../db/db");
 const Op = require("Sequelize").Op;
@@ -297,6 +300,19 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
         if (req.body.MCQ) {
             const mcq = req.body.MCQ;
             const MCQId = mcq.MCQId;
+
+            const mcqRecord = await MCQ.findByPk(MCQId);
+            if(!mcqRecord) {
+                throw new Error("This MCQ id is invalid");
+            }
+
+            const jobRecord = await Job.findByPk(jobId);
+            if(!jobRecord) {
+                throw new Error("This Job id is invalid");
+            } else if ( jobRecord.RecruiterId !== req.recruiter.id ) {
+                throw new Error("You are not authorized to view this job");
+            }
+
             const applicants = await ApplyFor.findAll({
                 // attributes: ["assigned"],
                 where: {
@@ -306,25 +322,75 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
                     }
                 }
             });
-
-            applicants.forEach(async (applicant) => {
-                const assigned = JSON.parse(applicant.dataValues.assigned);
-
-                // console.log(assigned)
-                assigned.MCQs.push(MCQId);
-                assigned.MCQs = assigned.MCQs.filter(
-                    (v, i, a) => a.indexOf(v) === i
-                );
-                applicant.assigned = JSON.stringify(assigned);
-                // console.log(typeof applicant)
-                await applicant.save();
-            });
+            if(!applicants.length) {
+                throw new Error("Applicants are not applied for this job");
+            } else if (applicants.length !== mcq.applicants.length) {
+                throw new Error("Applicants are not applied for this job");
+            } else {
+                applicants.forEach(async (applicant) => {
+                    const assigned = JSON.parse(applicant.dataValues.assigned);
+    
+                    // console.log(assigned)
+                    assigned.MCQs.push(MCQId);
+                    assigned.MCQs = assigned.MCQs.filter(
+                        (v, i, a) => a.indexOf(v) === i
+                    );
+                    applicant.assigned = JSON.stringify(assigned);
+                    // console.log(typeof applicant)
+                    await applicant.save();
+                });
+            }
 
             res.send("MCQ Assigned");
         } else if (req.body.codingProblem) {
             const codingProblems = req.body.codingProblem;
         } else if (req.body.task) {
-            const tasks = req.body.task;
+            const task = req.body.task;
+            const TaskId = task.TaskId;
+
+            const taskRecord = await ActiveTask.findOne({
+                where: {
+                    TaskId:TaskId}
+            });
+            if(!taskRecord) {
+                throw new Error("This task is not Active");
+            }
+
+            const jobRecord = await Job.findByPk(jobId);
+            if(!jobRecord) {
+                throw new Error("This Job id is invalid");
+            } else if ( jobRecord.RecruiterId !== req.recruiter.id ) {
+                throw new Error("You are not authorized to view this job");
+            }
+
+            const applicants = await ApplyFor.findAll({
+                // attributes: ["assigned"],
+                where: {
+                    jobId: jobId,
+                    ApplicantId: {
+                        [Op.in]: task.applicants
+                    }
+                }
+            });
+            if(!applicants.length) {
+                throw new Error("No applicants applied for this job");
+            } else if (applicants.length !== task.applicants.length) {
+                throw new Error("No applicants applied for this job");
+            } else {
+                applicants.forEach(async (applicant) => {
+                    const assigned = JSON.parse(applicant.dataValues.assigned);
+    
+                    // console.log(assigned)
+                    assigned.tasks.push(TaskId);
+                    assigned.tasks = assigned.tasks.filter(
+                        (v, i, a) => a.indexOf(v) === i
+                    );
+                    applicant.assigned = JSON.stringify(assigned);
+                    // console.log(typeof applicant)
+                    await applicant.save();
+                });
+            }
+            res.send("Task assigned successfully.");
         } else {
         }
     } catch (error) {

@@ -180,9 +180,9 @@ router.get("/topics/:category", recruiterAuth, async (req, res) => {
 // get all questions related to this certain topic
 router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
     try {
-        const { topic, category } = req.params;
+        const { category, topic } = req.body;
         const questions = await Question.findAll({
-            where: { topic, category },
+            where: { category, topic },
             attributes: ["id", "question", "choices", "answer", "difficulty"]
         });
         if (!questions) {
@@ -197,6 +197,13 @@ router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
                     ? question.difficulty
                     : "Not specified";
         });
+        const difficulty = ["Easy", "Medium", "Hard", "Not specified"];
+        questions.sort(
+            (a, b) =>
+                difficulty.indexOf(a.difficulty) -
+                difficulty.indexOf(b.difficulty)
+        );
+        // console.log(questions);
         res.status(200).send({ questions });
     } catch (error) {
         res.status(500).send(error.message);

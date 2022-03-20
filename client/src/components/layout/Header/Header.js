@@ -105,7 +105,7 @@ function Header() {
                                                     2
                                                 </span> */}
                                                 {user.userInfo.hasOwnProperty(
-                                                    "hasAssessment"
+                                                    "hasAssessments"
                                                 ) && (
                                                     <NotificationsIcon color="error" />
                                                 )}
