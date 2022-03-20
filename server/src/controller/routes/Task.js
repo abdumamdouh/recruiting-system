@@ -46,7 +46,7 @@ router.post('/createTask' , recruiterAuth ,async (req,res) => {
         res.status(401).send(error.message)
     }
 })
-//returned JSON: None
+//returned JSON: "Task created successfully."
 
 // ****************************************************************************************************
 
@@ -84,7 +84,10 @@ router.post('/uploadTask/:TaskId/:JobId' , applicantAuth , taskUploadmulter.sing
         res.status(400).send(error.message)
     }
 })
-// returned JSON: None
+// returned JSON: 
+// 1-) "You did not apply for this job"
+// 2-) "You are not assigned this task."
+// 3-) "Task uploaded successfully."
 
 // **************************************************************************************************
 
@@ -151,6 +154,10 @@ router.get('/allTasks', recruiterAuth , async (req,res) => {
 //     {
 //         "description": "Some discription",
 //         "uploadFormat": "zip-rar"
+//     },
+//     {
+//         "description": "Some discription",
+//         "uploadFormat": "zip-rar"
 //     }
 // ]
 
@@ -172,15 +179,33 @@ router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
             if (req.recruiter.id !== record.RecruiterId){
                 throw new Error("You are not authorized to view this job.")
             }
-            const result = await db.query(
-                `Select T.description,AT.deadline,count(TU.id) AS Applied_Count FROM tasks AS T
-                 INNER JOIN activetasks AS AT ON T.id = AT.TaskId 
-                 INNER JOIN taskuploads AS TU ON T.id = TU.TaskId
-                 WHERE T.id = ${req.params.TaskId}
-                 AND (AT.JobId = ${req.params.JobId} AND AT.TaskId = ${req.params.TaskId})
-                 AND (TU.JobId = ${req.params.JobId} AND TU.TaskId = ${req.params.TaskId})
-                 LIMIT 1 ;`
-            );
+            let result = {}
+            result.data = (await Task.findOne({
+                attributes:['description','uploadFormat'] ,
+                where:{
+                   id:req.params.TaskId 
+                },
+                raw:true
+            }))
+
+            result.deadline = (await ActiveTask.findOne({
+                attributes:['deadline'],
+                where:{
+                    JobId: req.params.JobId,
+                    TaskId: req.params.TaskId
+                },
+                raw:true
+            })).deadline
+
+            result.Uploaded_count = await TaskUploads.count({
+                attributes:['id'],
+                where:{
+                    TaskId : req.params.TaskId,
+                    JobId : req.params.JobId
+                },
+                raw:true
+            })
+            
             res.send(result);
         } else if (req.applicant){
             // checking if you are authorized to deal with this task 
@@ -201,17 +226,47 @@ router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
             if (! assignedObj.tasks.includes(Number(req.params.TaskId))){
                 throw new Error ("You are not assigned this task.")
             }
-            const result = await db.query(
-                `Select T.description,AT.deadline FROM tasks AS T
-                 INNER JOIN activetasks AS AT ON T.id = AT.TaskId 
-                 WHERE T.id = ${req.params.TaskId}
-                 AND (AT.JobId = ${req.params.JobId} AND AT.TaskId = ${req.params.TaskId});`
-            );
+            let result = {}
+            result.data = (await Task.findOne({
+                attributes:['description','uploadFormat'] ,
+                where:{
+                   id:req.params.TaskId 
+                },
+                raw:true
+            }))
+
+            result.deadline = (await ActiveTask.findOne({
+                attributes:['deadline'],
+                where:{
+                    JobId: req.params.JobId,
+                    TaskId: req.params.TaskId
+                },
+                raw:true
+            })).deadline
             res.send(result);
         }
     } catch (error) {
         res.send(error.message)
     }
 })
+// Returned JSON:
+// For Applicants:
+// {
+//     "data": {
+//         "description": "Some discription",
+//         "uploadFormat": "zip-rar"
+//     },
+//     "deadline": "2022-02-09T22:00:00.000Z"
+// }
+
+// For Recruiters:
+// {
+//     "data": {
+//         "description": "Some discription",
+//         "uploadFormat": "zip-rar"
+//     },
+//     "deadline": "2022-02-09T22:00:00.000Z",
+//     "Uploaded_count": 1
+// }
 
 module.exports = router;

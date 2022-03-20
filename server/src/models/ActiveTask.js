@@ -15,4 +15,11 @@ const ActiveTask = db.define('ActiveTask',{
 Job.belongsToMany(Task, { through: ActiveTask });
 Task.belongsToMany(Job, { through: ActiveTask });
 
+// db.query(`
+// CREATE EVENT IF NOT EXISTS  delete_passed_tasks
+// ON SCHEDULE EVERY 1 MINUTE
+// STARTS CURRENT_TIMESTAMP 
+// DO 
+// DELETE FROM ActiveTasks AS AT WHERE now() > AT.deadline  ;`)
+
 module.exports = ActiveTask ;
