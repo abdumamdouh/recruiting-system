@@ -584,16 +584,20 @@ const QuestionBank = () => {
                         }}
                     />
                 )}
-                <div className="footer">
+                <div className="footer" style={{marginTop:'20px'}}>
                     <button
-                        id="submitBtn"
+                    style={{marginBottom: '20px'}}
+                         className="btn btn-primary ml"
+                        // id="submitBtn"
                         onClick={openQuestions}
                         disabled={isDisabled}
                     >
                         Selected Questions
                     </button>
-                    <button
-                        id="submitBtn"
+                    <button 
+                    style={{marginBottom: '20px'}}
+                    className="btn btn-primary ml"
+                        // id="submitBtn"
                         onClick={openCustomizeExam}
                         disabled={isDisabled}
                     >
