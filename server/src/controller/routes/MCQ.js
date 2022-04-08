@@ -27,7 +27,7 @@ const router = new express.Router();
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic, expiryDate, duration, private } = req.body;
+        const { jobId, topic, private } = req.body;
         const recruiterId = req.recruiter.id;
         // let questions = await Promise.all(
         //     req.body.questions.map(async ({ options: choices, ...rest }) => {
@@ -55,7 +55,7 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         // console.log(questions);
         questions = await Question.bulkCreate(questions, { validate: true });
         const mcq = await MCQ.create({ topic, private, recruiterId });
-        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        // await mcq.addJob(jobId, { through: { expiryDate, duration } });
         await mcq.addQuestion(questions);
         res.status(201).send("The file is uploaded successfully");
     } catch (error) {
@@ -69,11 +69,11 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
 // Add MCQ from the question bank
 router.post("/createExam", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic, expiryDate, duration, private, questions } =
+        const { jobId, topic, private, questions } =
             req.body;
         const { id: recruiterId } = req.recruiter;
         const mcq = await MCQ.create({ topic, private, recruiterId });
-        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        // await mcq.addJob(jobId, { through: { expiryDate, duration } });
         await mcq.addQuestion(questions);
         res.status(201).send("The exam is created successfully.");
     } catch (error) {
