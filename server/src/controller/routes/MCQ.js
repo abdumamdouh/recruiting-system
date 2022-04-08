@@ -44,8 +44,10 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         // );
         // console.log(expiryDate, duration);
         let questions = req.body.questions.map(
-            ({ options: choices, ...rest }) => ({
+            ({ options: choices, category, topic, ...rest }) => ({
                 choices,
+                category: category ? category : "Others",
+                topic: topic ? topic : req.body.topic,
                 ...rest
                 // MCQId: mcq.id
             })
@@ -68,7 +70,7 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
 router.post("/createExam", recruiterAuth, async (req, res) => {
     try {
         const { jobId, topic, expiryDate, duration, private, questions } =
-            req.body;            
+            req.body;
         const { id: recruiterId } = req.recruiter;
         const mcq = await MCQ.create({ topic, private, recruiterId });
         await mcq.addJob(jobId, { through: { expiryDate, duration } });

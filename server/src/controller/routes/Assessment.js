@@ -34,8 +34,15 @@ router.get("/assessments", applicantAuth, async (req, res) => {
             job.assigned = JSON.parse(job.assigned);
         });
         // console.log(data);
+        const jobs = data.filter(
+            ({ assigned }) =>
+                !Object.keys(assigned).every(
+                    (key) => assigned[key].length === 0
+                )
+        );
+        // console.log(jobs);
         const assessments = await Promise.all(
-            data.map(async (job) => {
+            jobs.map(async (job) => {
                 let everyMCQ = await MCQ.findAll({
                     where: { id: job.assigned.MCQs },
                     attributes: ["id", "topic"],
@@ -53,7 +60,6 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                         }
                     ]
                 });
-                
                 everyMCQ = JSON.parse(JSON.stringify(everyMCQ));
                 // console.log(everyMCQ[0]);
                 const jobAssessments = {
