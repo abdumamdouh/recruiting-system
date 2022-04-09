@@ -28,7 +28,7 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
             setTimeout(() => {
                 setRows((prevRows) => prevRows.filter((row) => row.id !== id));
             });
-            handleDelete();
+            handleDelete(id);
         },
         []
     );
