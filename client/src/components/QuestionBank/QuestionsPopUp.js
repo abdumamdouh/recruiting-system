@@ -23,6 +23,7 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
             element.scrollWidth > element.clientWidth
         );
     }
+
     const deleteQuestion = React.useCallback(
         (id) => () => {
             setTimeout(() => {
@@ -32,6 +33,7 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
         },
         []
     );
+
     const GridCellExpand = React.memo(function GridCellExpand(props) {
         const { width, value } = props;
         const wrapper = React.useRef(null);
@@ -291,7 +293,10 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
                         label="Delete"
-                        onClick={deleteQuestion(params.id)}
+                        onClick={() => {
+                            console.log(params);
+                            deleteQuestion(params.id);
+                        }}
                     />
                 ]
             }
