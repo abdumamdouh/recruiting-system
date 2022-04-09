@@ -455,6 +455,7 @@ const QuestionBank = () => {
                             );
                             console.log("alo", filtered);
                             setSelectedQuestions(filtered);
+                            setQuestions(filtered);
                         }}
                     />
                 )}
