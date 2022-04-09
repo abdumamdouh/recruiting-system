@@ -539,71 +539,73 @@ const QuestionBank = () => {
                     </div>
                 ) : null}
                 {bank.hasOwnProperty("question") && (
-                    <DataGrid
-                        density="comfortable"
-                        rows={bank.question.questions}
-                        getRowId={(row) => row.id}
-                        rowHeight={rows[0].choices.length * 25}
-                        columns={columns}
-                        pageSize={5}
-                        disableColumnSelector={true}
-                        sx={{
-                            "& .MuiDataGrid-cell:focus-within": {
-                                outline: "none"
-                            }
-                        }}
-                        sortingOrder={["asc", "desc"]}
-                        initialState={{
-                            sorting: {
-                                sortModel: [
-                                    {
-                                        field: "difficulty",
-                                        sort: "asc"
-                                    }
-                                ]
-                            }
-                        }}
-                        onRowClick={(params) => {
-                            if (selectedQuestions.includes(params.row)) {
-                                // <SnackBar setOpen={true} />;
-                                setisDoubleClick(true);
-                                console.log("error");
-                            } else {
-                                enableButtons();
-                                const hambola = [
-                                    ...selectedQuestions,
-                                    params.row
-                                ];
-                                setSelectedQuestions(hambola);
-                                questions.push(params.row.id);
-                                console.log("selec", selectedQuestions);
-                                setQuestions(questions);
-                                console.log("questions", questions);
-                                console.log(selectedQuestions);
-                            }
-                        }}
-                    />
+                    <>
+                        <DataGrid
+                            density="comfortable"
+                            rows={bank.question.questions}
+                            getRowId={(row) => row.id}
+                            rowHeight={rows[0].choices.length * 25}
+                            columns={columns}
+                            pageSize={5}
+                            disableColumnSelector={true}
+                            sx={{
+                                "& .MuiDataGrid-cell:focus-within": {
+                                    outline: "none"
+                                }
+                            }}
+                            sortingOrder={["asc", "desc"]}
+                            initialState={{
+                                sorting: {
+                                    sortModel: [
+                                        {
+                                            field: "difficulty",
+                                            sort: "asc"
+                                        }
+                                    ]
+                                }
+                            }}
+                            onRowClick={(params) => {
+                                if (selectedQuestions.includes(params.row)) {
+                                    // <SnackBar setOpen={true} />;
+                                    setisDoubleClick(true);
+                                    console.log("error");
+                                } else {
+                                    enableButtons();
+                                    const hambola = [
+                                        ...selectedQuestions,
+                                        params.row
+                                    ];
+                                    setSelectedQuestions(hambola);
+                                    questions.push(params.row.id);
+                                    console.log("selec", selectedQuestions);
+                                    setQuestions(questions);
+                                    console.log("questions", questions);
+                                    console.log(selectedQuestions);
+                                }
+                            }}
+                        />
+                        <div className="footer" style={{ marginTop: "20px" }}>
+                            <button
+                                style={{ marginBottom: "20px" }}
+                                className="btn btn-primary ml"
+                                // id="submitBtn"
+                                onClick={openQuestions}
+                                disabled={isDisabled}
+                            >
+                                Preview Questions
+                            </button>
+                            <button
+                                style={{ marginBottom: "20px" }}
+                                className="btn btn-primary ml"
+                                // id="submitBtn"
+                                onClick={openCustomizeExam}
+                                disabled={isDisabled}
+                            >
+                                Create Exam
+                            </button>
+                        </div>
+                    </>
                 )}
-                <div className="footer" style={{marginTop:'20px'}}>
-                    <button
-                    style={{marginBottom: '20px'}}
-                         className="btn btn-primary ml"
-                        // id="submitBtn"
-                        onClick={openQuestions}
-                        disabled={isDisabled}
-                    >
-                        Selected Questions
-                    </button>
-                    <button 
-                    style={{marginBottom: '20px'}}
-                    className="btn btn-primary ml"
-                        // id="submitBtn"
-                        onClick={openCustomizeExam}
-                        disabled={isDisabled}
-                    >
-                        Create Exam
-                    </button>
-                </div>
 
                 {/* <div className={classes.list}> */}
                 {/* {questions.map(question => (
