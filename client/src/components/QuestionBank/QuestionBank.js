@@ -453,10 +453,13 @@ const QuestionBank = () => {
                             const filtered = selectedQuestions.filter(
                                 (question) => question.id !== id
                             );
+                            const filteredID = questions.filter(
+                                (i) => i !== id
+                            );
                             console.log("alo", selectedQuestions);
                             console.log("alo", filtered);
                             setSelectedQuestions(filtered);
-                            setQuestions(filtered);
+                            setQuestions(filteredID);
                         }}
                     />
                 )}
