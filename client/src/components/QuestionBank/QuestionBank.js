@@ -449,10 +449,11 @@ const QuestionBank = () => {
                         message="test"
                         SQuestions={selectedQuestions}
                         handleDelete={(id) => {
-                            console.log("alo", id, selectedQuestions);
+                            console.log("alo", id);
                             const filtered = selectedQuestions.filter(
                                 (question) => question.id !== id
                             );
+                            console.log("alo", filtered);
                             setSelectedQuestions(filtered);
                         }}
                     />

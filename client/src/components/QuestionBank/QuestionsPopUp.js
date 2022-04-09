@@ -326,7 +326,7 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
                             density="comfortable"
                             rows={SQuestions}
                             getRowId={(SQuestions) => SQuestions.id}
-                            rowHeight={SQuestions[0].choices.length * 25}
+                            rowHeight={SQuestions[0]?.choices.length * 25}
                             columns={columns}
                             pageSize={5}
                             disableColumnSelector={true}
