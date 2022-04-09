@@ -16,7 +16,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DatePicker from "react-datepicker";
-import { CSVLink} from "react-csv";
+import { CSVLink } from "react-csv";
 import "react-datepicker/dist/react-datepicker.css";
 import Message from "../modal/Message";
 export default function AddExam() {
@@ -24,12 +24,8 @@ export default function AddExam() {
     const [expanded, setExpanded] = useState(false);
     const [checked, setChecked] = useState(false);
     const [privatee, setPrivatee] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [expiryDate, setExpiryDate] = useState(new Date());
-    const [duration, setDuration] = useState(0);
     const [questions, setQuestions] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [value, setValue] = useState(new Date());
     const csvData = [
         [
             "question",
@@ -79,16 +75,12 @@ export default function AddExam() {
         setChecked(!checked);
         setPrivatee(checked);
     };
-    const handleDate = date => {
-        setSelectedDate(date);
-        setExpiryDate(date);
-    };
+   
     const dispatch = useDispatch();
     const jobId = useSelector(state => state.job.id);
     const handleOnDrop = data => {
-       
         console.log(data);
-     
+
         let arr = [];
         data.filter(d => d.data.length !== 1).map(d => arr.push(d.data));
         const array = [...arr];
@@ -127,9 +119,7 @@ export default function AddExam() {
     };
 
     const handleOnRemoveFile = data => {
-        
         console.log(data);
-      
     };
     const handleClick = () => {
         dispatch(
@@ -138,8 +128,7 @@ export default function AddExam() {
                 topic,
                 questions,
                 privatee,
-                expiryDate,
-                duration,
+
                 showSuccessMessage
             )
         );
@@ -255,53 +244,7 @@ export default function AddExam() {
                     <span className="black ml"> I Agree</span>
                 </label>
             </div>
-            <div className="mb black">
-                <Typography color="black" variant="h6">
-                    Expiration Date for this exam
-                </Typography>
-                <div style={{ marginTop: "10px" }}>
-                    {/* <DatePicker
-                        selected={selectedDate}
-                        onChange={handleDate}
-                        dateFormat="dd/MM/yyyy"
-                        className="DatePicker"
-                    /> */}
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DateTimePicker
-                            renderInput={props => <TextField {...props} />}
-                            label="DateTimePicker"
-                            value={value}
-                            onChange={newValue => {
-                                setValue(newValue);
-                                setExpiryDate(value);
-                                console.log(value);
-                            }}
-                        />
-                    </LocalizationProvider>
-                </div>
-            </div>
-            <div className="black mb">
-                <Typography color="black" variant="h6">
-                    Exam Duration (in minutes)
-                </Typography>
-            </div>
-            <div className="mb">
-                <TextField
-                    type="number"
-                    InputProps={{
-                        inputProps: {
-                            max: 100,
-                            min: 0
-                        }
-                    }}
-                    label="duration"
-                    size="md"
-                    value={duration}
-                    onChange={e => {
-                        setDuration(e.target.value);
-                    }}
-                />
-            </div>
+
             <div className="mb">
                 <CSVLink data={csvData} filename={"exam_template"}>
                     Download MCQ Exam Template
