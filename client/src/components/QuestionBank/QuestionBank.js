@@ -448,9 +448,13 @@ const QuestionBank = () => {
                         setOpenModal={setModalOpen}
                         message="test"
                         SQuestions={selectedQuestions}
-                        handleDelete={(id) =>
-                            console.log("alo", id, selectedQuestions)
-                        }
+                        handleDelete={(id) => {
+                            console.log("alo", id, selectedQuestions);
+                            const filtered = selectedQuestions.filter(
+                                (question) => question.id !== id
+                            );
+                            setSelectedQuestions(filtered);
+                        }}
                     />
                 )}
                 {openExam && (
