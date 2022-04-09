@@ -29,6 +29,7 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
             setTimeout(() => {
                 setRows((prevRows) => prevRows.filter((row) => row.id !== id));
             });
+            console.log(id);
             handleDelete(id);
         },
         []
@@ -294,8 +295,8 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
                         icon={<DeleteIcon />}
                         label="Delete"
                         onClick={() => {
-                            console.log(params);
-                            deleteQuestion(params.id);
+                            console.log(params.row.id);
+                            deleteQuestion(params.row.id);
                         }}
                     />
                 ]
