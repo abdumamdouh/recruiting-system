@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
 import "./QuestionsPopUp.scss";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -8,9 +9,10 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 
-function QuestionsPopUp({ setOpenModal, message, SQuestions }) {
+function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
     // const questions = useSelector((state) => state.bank.question.questions);
     console.log("hghgfh", SQuestions);
+    const [rows, setRows] = React.useState(SQuestions);
     function getChoices(params) {
         return `${params.value.join("*")}`;
     }
@@ -21,6 +23,16 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions }) {
             element.scrollWidth > element.clientWidth
         );
     }
+
+    const deleteQuestion = React.useCallback(
+        (id) => () => {
+            setTimeout(() => {
+                setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+            });
+            handleDelete(id);
+        },
+        []
+    );
 
     const GridCellExpand = React.memo(function GridCellExpand(props) {
         const { width, value } = props;
@@ -177,87 +189,120 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions }) {
          */
         value: PropTypes.string.isRequired
     };
-    const columns = [
-        {
-            field: "question",
-            headerName: "Question",
-            width: 150,
-            sortable: false,
-            filterable: false,
-            renderCell: renderCellExpand
-        },
-        {
-            field: "choices",
-            headerName: "Choices",
-            width: 110,
-            sortable: false,
-            filterable: false,
-            valueGetter: getChoices,
-            renderCell: renderCellExpand
-            // renderCell: (params) => (
-            //     // console.log(params.value);
-            //     <ul>
-            //         {params.value.map((choice) => {
-            //             console.log(params);
-            //             // params.value = choice;
-            //             return (
-            //                 <li
-            //                     onMouseEnter={() =>
-            //                         renderCellExpand({
-            //                             value: choice,
-            //                             defCol: {
-            //                                 computedWidth:
-            //                                     params.defCol.computedWidth
-            //                             }
-            //                         })
-            //                     }
-            //                 >
-            //                     {choice}
-            //                 </li>
-            //             );
-            //         })}
-            //     </ul>
-            // )
-        },
-        {
-            field: "answer",
-            headerName: "Answer",
-            description: "This column has a value getter and is not sortable.",
-            width: 160,
-            sortable: false,
-            filterable: false,
-            renderCell: renderCellExpand
-        },
-        {
-            field: "difficulty",
-            headerName: "Difficulty",
-            sortable: true,
-            filterable: false,
-            sortComparator: (a, b) => {
-                const difficulty = ["Easy", "Medium", "Hard", "Not specified"];
-                return difficulty.indexOf(a) - difficulty.indexOf(b);
+    const columns = React.useMemo(
+        () => [
+            {
+                field: "question",
+                headerName: "Question",
+                width: 150,
+                sortable: false,
+                filterable: false,
+                editable: true,
+                renderCell: renderCellExpand
             },
-            width: 160,
-            renderCell: (params) => {
-                // console.log(value);
-                if (params.value === "Easy") {
-                    return (
-                        <span style={{ color: "#027D6F" }}>{params.value}</span>
-                    );
-                } else if (params.value === "Medium") {
-                    return (
-                        <span style={{ color: "#FFC01E" }}>{params.value}</span>
-                    );
-                } else if (params.value === "Hard") {
-                    return (
-                        <span style={{ color: "#FF375F" }}>{params.value}</span>
-                    );
-                } else {
-                    return <span>{params.value}</span>;
+            {
+                field: "choices",
+                headerName: "Choices",
+                width: 110,
+                sortable: false,
+                filterable: false,
+                editable: true,
+                valueGetter: getChoices,
+                renderCell: renderCellExpand
+                // renderCell: (params) => (
+                //     // console.log(params.value);
+                //     <ul>
+                //         {params.value.map((choice) => {
+                //             console.log(params);
+                //             // params.value = choice;
+                //             return (
+                //                 <li
+                //                     onMouseEnter={() =>
+                //                         renderCellExpand({
+                //                             value: choice,
+                //                             defCol: {
+                //                                 computedWidth:
+                //                                     params.defCol.computedWidth
+                //                             }
+                //                         })
+                //                     }
+                //                 >
+                //                     {choice}
+                //                 </li>
+                //             );
+                //         })}
+                //     </ul>
+                // )
+            },
+            {
+                field: "answer",
+                headerName: "Answer",
+                description:
+                    "This column has a value getter and is not sortable.",
+                width: 160,
+                sortable: false,
+                filterable: false,
+                editable: true,
+                renderCell: renderCellExpand
+            },
+            {
+                field: "difficulty",
+                headerName: "Difficulty",
+                sortable: true,
+                filterable: false,
+                sortComparator: (a, b) => {
+                    const difficulty = [
+                        "Easy",
+                        "Medium",
+                        "Hard",
+                        "Not specified"
+                    ];
+                    return difficulty.indexOf(a) - difficulty.indexOf(b);
+                },
+                width: 160,
+                renderCell: (params) => {
+                    // console.log(value);
+                    if (params.value === "Easy") {
+                        return (
+                            <span style={{ color: "#027D6F" }}>
+                                {params.value}
+                            </span>
+                        );
+                    } else if (params.value === "Medium") {
+                        return (
+                            <span style={{ color: "#FFC01E" }}>
+                                {params.value}
+                            </span>
+                        );
+                    } else if (params.value === "Hard") {
+                        return (
+                            <span style={{ color: "#FF375F" }}>
+                                {params.value}
+                            </span>
+                        );
+                    } else {
+                        return <span>{params.value}</span>;
+                    }
                 }
+            },
+            {
+                field: "actions",
+                type: "actions",
+                width: 80,
+                getActions: (params) => [
+                    <GridActionsCellItem
+                        icon={<DeleteIcon />}
+                        label="Delete"
+                        onClick={() => {
+                            console.log(params);
+                            deleteQuestion(params.id);
+                        }}
+                    />
+                ]
             }
-        }
-    ];
+        ],
+        [deleteQuestion]
+    );
     return (
         <div className="question-overlay">
             <div className="modal-questionBackground">
