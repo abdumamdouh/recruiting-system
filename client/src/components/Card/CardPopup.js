@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./popup.scss";
-import DatePicker from "react-datepicker";
 import { useDispatch, useSelector } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
 import { Typography } from "@material-ui/core";
@@ -8,21 +7,37 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import TextField from "@mui/material/TextField";
+import { useHistory } from "react-router-dom";
+
+import Message from "../../components/modal/Message";
 import { pickExamAction } from "../../redux/actions/exam";
 function CardPopup({ setOpenModal, message, id, jobId }) {
+    const history = useHistory();
     const dispatch = useDispatch();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [expiryDate, setExpiryDate] = useState(new Date());
     const [duration, setDuration] = useState(0);
     const [value, setValue] = useState(new Date());
-    const handleDate = (date) => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const handleDate = date => {
         setSelectedDate(date);
         setExpiryDate(date);
+    };
+    const showSuccessMessage = () => {
+        history.push(`/dashboard/uploadedexams`);
     };
     const handleSubmit = () => {
         console.log(id);
         const MCQId = id;
-        dispatch(pickExamAction(jobId, MCQId, expiryDate, duration));
+        dispatch(
+            pickExamAction(
+                jobId,
+                MCQId,
+                expiryDate,
+                duration,
+                showSuccessMessage
+            )
+        );
     };
     return (
         <div className="overlay">
@@ -39,29 +54,33 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                     </div>
 
                     <div className="body">
+                        {modalOpen && (
+                            <Message
+                                setOpenModal={setModalOpen}
+                                message="choosed successfully!"
+                            />
+                        )}
                         <div className="mb black">
                             <Typography color="black" variant="h6">
                                 Add Expiration Date
                             </Typography>
                             <div style={{ marginTop: "10px" }}>
-                                {/* <DatePicker
-                                    className="DatePicker"
-                                    selected={selectedDate}
-                                    onChange={handleDate}
-                                    dateFormat="dd/MM/yyyy"
-                                /> */}
-                                                   <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DateTimePicker
-                            renderInput={props => <TextField {...props} />}
-                            label="DateTimePicker"
-                            value={value}
-                            onChange={newValue => {
-                                setValue(newValue);
-                                setExpiryDate(value);
-                                console.log(value);
-                            }}
-                        />
-                    </LocalizationProvider>
+                                <LocalizationProvider
+                                    dateAdapter={AdapterDateFns}
+                                >
+                                    <DateTimePicker
+                                        renderInput={props => (
+                                            <TextField {...props} />
+                                        )}
+                                        label="DateTimePicker"
+                                        value={value}
+                                        onChange={newValue => {
+                                            setValue(newValue);
+                                            setExpiryDate(value);
+                                            console.log(value);
+                                        }}
+                                    />
+                                </LocalizationProvider>
                             </div>
                         </div>
                     </div>
@@ -86,7 +105,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                                 label="duration"
                                 size="md"
                                 value={duration}
-                                onChange={(e) => {
+                                onChange={e => {
                                     setDuration(e.target.value);
                                 }}
                             />
@@ -106,7 +125,6 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                         >
                             Close
                         </button>
-                        {/* <button>Continue</button> */}
                     </div>
                 </div>
             </div>
