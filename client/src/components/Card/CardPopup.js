@@ -4,6 +4,9 @@ import DatePicker from "react-datepicker";
 import { useDispatch, useSelector } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
 import { Typography } from "@material-ui/core";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateTimePicker from "@mui/lab/DateTimePicker";
 import TextField from "@mui/material/TextField";
 import { pickExamAction } from "../../redux/actions/exam";
 function CardPopup({ setOpenModal, message, id, jobId }) {
@@ -11,6 +14,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [expiryDate, setExpiryDate] = useState(new Date());
     const [duration, setDuration] = useState(0);
+    const [value, setValue] = useState(new Date());
     const handleDate = (date) => {
         setSelectedDate(date);
         setExpiryDate(date);
@@ -40,12 +44,24 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                                 Add Expiration Date
                             </Typography>
                             <div style={{ marginTop: "10px" }}>
-                                <DatePicker
+                                {/* <DatePicker
                                     className="DatePicker"
                                     selected={selectedDate}
                                     onChange={handleDate}
                                     dateFormat="dd/MM/yyyy"
-                                />
+                                /> */}
+                                                   <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DateTimePicker
+                            renderInput={props => <TextField {...props} />}
+                            label="DateTimePicker"
+                            value={value}
+                            onChange={newValue => {
+                                setValue(newValue);
+                                setExpiryDate(value);
+                                console.log(value);
+                            }}
+                        />
+                    </LocalizationProvider>
                             </div>
                         </div>
                     </div>
