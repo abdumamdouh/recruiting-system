@@ -104,7 +104,7 @@ const SideBar = () => {
             <Link to="/dashboard/uploadedexams" className="link">
             <li className="sidebarListItem">
               <WorkOutline className="sidebarIcon" />
-              Uploaded/Choosed Exams
+              Assign Exams
             </li>
             </Link>
             <li className="sidebarListItem">

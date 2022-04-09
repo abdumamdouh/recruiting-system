@@ -86,7 +86,7 @@ export const getExamsAction = (pageNumber) => {
 }
 //pick exam from available exams
 
-export const pickExamAction = (jobId,MCQId, expiryDate,duration) => {
+export const pickExamAction = (jobId,MCQId, expiryDate,duration,showSuccessMessage) => {
     let mcq={jobId:jobId, MCQId: MCQId,expiryDate:expiryDate, duration:duration}
     console.log(mcq)
     return async (dispatch, getState) => {
@@ -111,6 +111,7 @@ export const pickExamAction = (jobId,MCQId, expiryDate,duration) => {
             );
             const data = await rawResponse
     dispatch({ type: PICK_EXAM_SUCCESS, payload: data });
+    if(data.status !==400) { showSuccessMessage()}
 } catch (error) {
     dispatch({
         type: PICK_EXAM_FAIL,
