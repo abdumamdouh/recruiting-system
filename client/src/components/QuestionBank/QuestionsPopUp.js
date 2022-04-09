@@ -296,7 +296,8 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
                         label="Delete"
                         onClick={() => {
                             console.log(params.row.id);
-                            deleteQuestion(params.row.id);
+                            // deleteQuestion(params.row.id);
+                            handleDelete(params.row.id);
                         }}
                     />
                 ]
