@@ -303,7 +303,7 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
                 ]
             }
         ],
-        [deleteQuestion]
+        [handleDelete]
     );
     return (
         <div className="question-overlay">
