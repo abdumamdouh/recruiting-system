@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 
-function QuestionsPopUp({ setOpenModal, message, SQuestions }) {
+function QuestionsPopUp({ setOpenModal, message, SQuestions, handleDelete }) {
     // const questions = useSelector((state) => state.bank.question.questions);
     console.log("hghgfh", SQuestions);
     const [rows, setRows] = React.useState(SQuestions);
@@ -28,6 +28,7 @@ function QuestionsPopUp({ setOpenModal, message, SQuestions }) {
             setTimeout(() => {
                 setRows((prevRows) => prevRows.filter((row) => row.id !== id));
             });
+            handleDelete();
         },
         []
     );

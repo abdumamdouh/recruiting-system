@@ -448,6 +448,7 @@ const QuestionBank = () => {
                         setOpenModal={setModalOpen}
                         message="test"
                         SQuestions={selectedQuestions}
+                        handleDelete={() => console.log("alo")}
                     />
                 )}
                 {openExam && (
