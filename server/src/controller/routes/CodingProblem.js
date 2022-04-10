@@ -168,10 +168,10 @@ router.post("/codingProblems",recruiterAuth, async (req, res) => {
 // compare output of the program with the correct output
 router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
     try {
+        // validate that the applicant can solve the problem
 
         // inject time measuring code
         req.body.code = inject(req.body.code,req.body.language)
-        // console.log(modifiedCode)
 
         // writing the coming code in the solutions directory
         writeCodeToFile(req.body.code,
@@ -200,8 +200,6 @@ router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
             
             // console.log(correct)
         })
-
-     
         //res.send(results)
     } catch (error) {
         res.send(error.message)
