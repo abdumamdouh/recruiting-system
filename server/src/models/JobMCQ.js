@@ -6,6 +6,10 @@ const MCQ = require("./MCQ");
 const JobMCQ = db.define(
     "JobMCQ",
     {
+        startDate: {
+            type: Sequelize.DATE,
+            allowNull: false
+        },
         expiryDate: {
             type: Sequelize.DATE,
             allowNull: false
