@@ -14,9 +14,9 @@ import {
     ASSIGN_TASK_TO_APPLICANTS_REQUEST,
     ASSIGN_TASK_TO_APPLICANTS_SUCCESS,
     ASSIGN_TASK_TO_APPLICANTS_FAIL,
-    ADD_QUESTION_FAIL,
-    ADD_QUESTION_SUCCESS,
-    ADD_QUESTION_REQUEST
+    CREATE_QUESTION_FAIL,
+    CREATE_QUESTION_SUCCESS,
+    CREATE_QUESTION_REQUEST
 } from "../types/index";
 const serverURL = "http://localhost:5000";
 export const createExamAction = (jobId,topic,questions,privatee,showSuccessMessage) => {
@@ -200,7 +200,7 @@ export const createQuestion = (question) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
-                type: ADD_QUESTION_REQUEST,
+                type: CREATE_QUESTION_REQUEST,
                 loading: true
             });
             const { userInfo } = getState().user;
@@ -218,10 +218,10 @@ export const createQuestion = (question) => {
                 }
             );
             const data = await rawResponse
-    dispatch({ type: ADD_QUESTION_SUCCESS, payload: data });
+    dispatch({ type: CREATE_QUESTION_SUCCESS, payload: data });
 } catch (error) {
     dispatch({
-        type: ADD_QUESTION_FAIL,
+        type: CREATE_QUESTION_FAIL,
         payload: error.response && error.response.data
     });
 }
