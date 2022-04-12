@@ -12,7 +12,8 @@ const JobMCQ = db.define(
         },
         expiryDate: {
             type: Sequelize.DATE,
-            allowNull: false
+            allowNull: false,
+            primaryKey: true
         },
         duration: {
             type: Sequelize.INTEGER(3),
