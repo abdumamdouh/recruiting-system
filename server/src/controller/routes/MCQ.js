@@ -23,6 +23,42 @@ const { includes } = require("lodash");
 const { is } = require("sequelize/lib/operators");
 
 const router = new express.Router();
+//Add Question
+
+router.post("/createQuestion", recruiterAuth, async (req, res) => {
+    try {
+
+
+     
+    } catch (error) {
+        res.status(400).send(
+            error.message
+                ? error.message
+                : error.errors[0].errors.errors[0].message
+        );
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
@@ -326,5 +362,9 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             : res.status(400).send(error.message);
     }
 });
+
+
+
+
 
 module.exports = router;
