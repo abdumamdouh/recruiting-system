@@ -16,8 +16,8 @@ import {
     ASSIGN_TASK_TO_APPLICANTS_FAIL
 } from "../types/index";
 const serverURL = "http://localhost:5000";
-export const createExamAction = (jobId,topic,questions,privatee, expiryDate,duration,showSuccessMessage) => {
-    let mcq={jobId:jobId,topic:topic,questions:questions, private: privatee, expiryDate:expiryDate, duration:duration}
+export const createExamAction = (jobId,topic,questions,privatee,showSuccessMessage) => {
+    let mcq={jobId:jobId,topic:topic,questions:questions, private: privatee}
     console.log(mcq)
     return async (dispatch, getState) => {
         try {
@@ -86,7 +86,7 @@ export const getExamsAction = (pageNumber) => {
 }
 //pick exam from available exams
 
-export const pickExamAction = (jobId,MCQId, expiryDate,duration) => {
+export const pickExamAction = (jobId,MCQId, expiryDate,duration,showSuccessMessage) => {
     let mcq={jobId:jobId, MCQId: MCQId,expiryDate:expiryDate, duration:duration}
     console.log(mcq)
     return async (dispatch, getState) => {
@@ -111,6 +111,7 @@ export const pickExamAction = (jobId,MCQId, expiryDate,duration) => {
             );
             const data = await rawResponse
     dispatch({ type: PICK_EXAM_SUCCESS, payload: data });
+    if(data.status !==400) { showSuccessMessage()}
 } catch (error) {
     dispatch({
         type: PICK_EXAM_FAIL,

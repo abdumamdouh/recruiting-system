@@ -25,8 +25,8 @@ const UploadedExams = () => {
                     <ul style={{ listStyle: "none" }}>
                         {" "}
                         <li key={m.MCQId}>
-                            <div class="row">
-                                <div className="column"> {m.MCQ.topic}</div>
+                            <div class="row" style={{ marginTop: "10px" }}>
+                                <div style={{ marginLeft: "40px" }}> Exam: {m.MCQ.topic}</div>
                                 <div class="column">
                                     {" "}
                                     <button

@@ -63,7 +63,7 @@ router.post("/createQuestion", recruiterAuth, async (req, res) => {
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic, expiryDate, duration, private } = req.body;
+        const { jobId, topic, private } = req.body;
         const recruiterId = req.recruiter.id;
         // let questions = await Promise.all(
         //     req.body.questions.map(async ({ options: choices, ...rest }) => {
@@ -80,8 +80,10 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         // );
         // console.log(expiryDate, duration);
         let questions = req.body.questions.map(
-            ({ options: choices, ...rest }) => ({
+            ({ options: choices, category, topic, ...rest }) => ({
                 choices,
+                category: category ? category : "Others",
+                topic: topic ? topic : req.body.topic,
                 ...rest
                 // MCQId: mcq.id
             })
@@ -89,7 +91,7 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         // console.log(questions);
         questions = await Question.bulkCreate(questions, { validate: true });
         const mcq = await MCQ.create({ topic, private, recruiterId });
-        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        // await mcq.addJob(jobId, { through: { expiryDate, duration } });
         await mcq.addQuestion(questions);
         res.status(201).send("The file is uploaded successfully");
     } catch (error) {
@@ -103,11 +105,10 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
 // Add MCQ from the question bank
 router.post("/createExam", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic, expiryDate, duration, private, questions } =
-            req.body;            
+        const { jobId, topic, private, questions } = req.body;
         const { id: recruiterId } = req.recruiter;
         const mcq = await MCQ.create({ topic, private, recruiterId });
-        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        // await mcq.addJob(jobId, { through: { expiryDate, duration } });
         await mcq.addQuestion(questions);
         res.status(201).send("The exam is created successfully.");
     } catch (error) {
@@ -118,10 +119,12 @@ router.post("/createExam", recruiterAuth, async (req, res) => {
 // Pick an availale MCQ exam to the job
 router.post("/pickMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, MCQId, expiryDate, duration } = req.body;
+        const { jobId, MCQId, startDate, expiryDate, duration } = req.body;
         const mcq = await MCQ.findByPk(MCQId);
 
-        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        await mcq.addJob(jobId, {
+            through: { startDate, expiryDate, duration }
+        });
 
         res.status(201).send("The MCQ is added successfully");
     } catch (error) {
@@ -216,7 +219,7 @@ router.get("/topics/:category", recruiterAuth, async (req, res) => {
 // get all questions related to this certain topic
 router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
     try {
-        const { category, topic } = req.body;
+        const { category, topic } = req.params;
         const questions = await Question.findAll({
             where: { category, topic },
             attributes: ["id", "question", "choices", "answer", "difficulty"]
@@ -242,6 +245,7 @@ router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
         // console.log(questions);
         res.status(200).send({ questions });
     } catch (error) {
+        console.log(error);
         res.status(500).send(error.message);
     }
 });

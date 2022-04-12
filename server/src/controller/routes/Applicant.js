@@ -2,7 +2,7 @@ const express = require("express");
 // const _ = require("lodash");
 const Applicant = require("../../models/Applicant");
 const Recruiter = require("../../models/Recruiter");
-
+const ApplyFor = require("../../models/ApplyFor");
 const applicantAuth = require("../middleware/applicantAuth");
 const recruiterAuth = require("../middleware/recruiterAuth");
 
@@ -33,14 +33,50 @@ router.post("/Applicant/Sign-up", async (req, res) => {
 
 // get my profile data
 router.post("/Applicant/me", applicantAuth, async (req, res) => {
-    res.status(200).send(req.applicant.getPublicApplicantData());
+    const profile = req.applicant.getPublicApplicantData();
+    const records = await ApplyFor.findAll({
+        where: { ApplicantId: req.applicant.id },
+        attributes: ["assigned"]
+    });
+    let hasAssessments = null;
+    if (records !== []) {
+        hasAssessments = records.some((record) => {
+            let { assigned } = record;
+            assigned = JSON.parse(assigned);
+            let hasAssessment = Object.keys(assigned).some(
+                (key) => assigned[key].length !== 0
+            );
+            return hasAssessment;
+        });
+    }
+    res.status(200).send({
+        ...profile,
+        ...(hasAssessments && { hasAssessments })
+    });
 });
 
 // Update Applicant profile
 router.patch("/Applicant/me/update", applicantAuth, async (req, res) => {
-    res.status(200).send(
-        await req.applicant.updatePublicApplicantData(req.body)
-    );
+    const profile = await req.applicant.updatePublicApplicantData(req.body);
+    const records = await ApplyFor.findAll({
+        where: { ApplicantId: req.applicant.id },
+        attributes: ["assigned"]
+    });
+    let hasAssessments = null;
+    if (records !== []) {
+        hasAssessments = records.some((record) => {
+            let { assigned } = record;
+            assigned = JSON.parse(assigned);
+            let hasAssessment = Object.keys(assigned).some(
+                (key) => assigned[key].length !== 0
+            );
+            return hasAssessment;
+        });
+    }
+    res.status(200).send({
+        ...profile,
+        ...(hasAssessments && { hasAssessments })
+    });
 });
 
 // get profile by id

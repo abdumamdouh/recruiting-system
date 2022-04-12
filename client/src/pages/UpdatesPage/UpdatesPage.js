@@ -35,7 +35,7 @@ const UpdatesPage = (props) => {
     //slice of state for udpates
     const [updates, setUpdates] = useState([]);
     //modal state
-    const [modalData, setModalData] = useState();
+    const [modalData, setModalData] = useState({});
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -103,7 +103,7 @@ const UpdatesPage = (props) => {
                                     {base64String === "" ? null : (
                                         <img
                                             // make img dynamic
-                                            src={base64String}
+                                            src={`data:image/jpeg;base64,${base64String}`}
                                             alt="logo"
                                             className="immg"
                                         />
@@ -234,16 +234,23 @@ const UpdatesPage = (props) => {
                             >
                                 MCQ Test
                             </Typography>
+                        
+                            {
+                            modalData.hasOwnProperty("topic")&&
+
                             <Typography
                                 id="modal-modal-description"
                                 sx={{ mt: 2 }}
                                 style={{ textAlign: "center" }}
                             >
+                            
                                 Now you will be redirect to a MCQ Test.the topic
                                 of the MCQ is <strong>{modalData.topic}</strong>{" "}
                                 and the duration is{" "}
                                 <strong>{modalData.duration}</strong> minutes.
                             </Typography>
+
+                            }
                             <div
                                 style={{
                                     display: "flex",
@@ -252,8 +259,9 @@ const UpdatesPage = (props) => {
                             >
                                 <Button
                                     variant="contained"
-                                    onClick={() =>
-                                        handleRedirection(modalData.id)
+                                    onClick={() => {
+                                        handleRedirection(modalData.MCQId)
+                                    }
                                     }
                                     style={{
                                         marginTop: "15px",

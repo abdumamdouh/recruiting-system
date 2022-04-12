@@ -135,7 +135,7 @@ export default function Job(props) {
     const handleCustomise = () => {
         // console.log("hello");
       //  history.push(`/customiseHiring/${props.id}`);
-        history.push(`/dashboard/${props.id}`);
+        history.push(`/dashboard/AddExam`);
     };
 
     const handleMCQ = () => {
@@ -309,14 +309,14 @@ export default function Job(props) {
                             >
                                 Save
                             </Button>
-                            <Button
+                            {/* <Button
                                 variant="contained"
                                 onClick={handleMCQ}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                                 color="secondary"
                             >
                                 Take MCQ exam
-                            </Button>
+                            </Button> */}
                         </>
                     ) : (
                         <>

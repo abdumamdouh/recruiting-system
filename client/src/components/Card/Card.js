@@ -3,21 +3,23 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 import { Typography } from "@material-ui/core";
 import TextField from "@mui/material/TextField";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import { pickExamAction } from "../../redux/actions/exam";
 import CardPopup from "./CardPopup";
 import "./Card.scss";
-const Card = (props) => {
+const Card = props => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const jobId = useSelector((state) => state.job.id);
+    const jobId = useSelector(state => state.job.id);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [expiryDate, setExpiryDate] = useState(new Date());
     const [duration, setDuration] = useState(0);
     const [choosed, setChoosed] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+
     //redirect to questions' page
     const handleClick = () => {
         history.push(`/dashboard/exam/${props.id}`);
@@ -27,7 +29,7 @@ const Card = (props) => {
         console.log("duration", duration);
         setChoosed(true);
     };
-    const handleDate = (date) => {
+    const handleDate = date => {
         setSelectedDate(date);
         setExpiryDate(date);
     };
@@ -89,11 +91,11 @@ const Card = (props) => {
                                     Expiration Date
                                 </Typography>
                                 <div style={{ marginTop: "10px" }}>
-                                    <DatePicker
+                                    {/* <DatePicker
                                         selected={selectedDate}
                                         onChange={handleDate}
                                         dateFormat="dd/MM/yyyy"
-                                    />
+                                    /> */}
                                 </div>
                             </div>
                             <div className="black mb">
@@ -113,7 +115,7 @@ const Card = (props) => {
                                     label="duration"
                                     size="md"
                                     value={duration}
-                                    onChange={(e) => {
+                                    onChange={e => {
                                         setDuration(e.target.value);
                                     }}
                                 />
