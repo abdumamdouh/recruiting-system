@@ -16,6 +16,7 @@ import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
 import QuestionsPopUp from "./QuestionsPopUp";
 import CustomizeExamPopup from "./CustomizeExamPopUp";
 import { Select } from "@mui/material";
+import AddQuestion from "./AddQuestion";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -29,6 +30,8 @@ const QuestionBank = () => {
     const [modalOpen, setModalOpen] = useState(false);
     //for opening create exam popup
     const [openExam, setOpenExam] = useState(false);
+    //for opening Add question one by one
+    const [openQuestion, setOpenQuestion] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [selectedQuestions, setSelectedQuestions] = useState([]);
     const [isDisabled, setDisabled] = useState(true);
@@ -45,6 +48,10 @@ const QuestionBank = () => {
     const openCustomizeExam = () => {
         setOpenExam(true);
     };
+    //Add Question one by one 
+    const addQuestion = () => {
+        setOpenQuestion(true);
+    }
     const enableButtons = () => {
         setDisabled(false);
     };
@@ -470,6 +477,7 @@ const QuestionBank = () => {
                         setSuccess={setSuccess}
                     />
                 )}
+                {openQuestion && (<AddQuestion setOpenQuestion={setOpenQuestion}/>)}
                 {/* 
                 <div>
 
@@ -504,7 +512,10 @@ const QuestionBank = () => {
 
 
                 </div> */}
-
+                <div>
+                <label >Add Question one by one</label>
+            <div>  <button className="btn btn-primary" onClick={addQuestion}> Add Question</button> </div>  
+                </div>
                 <label>Category</label>
                 <select
                     name="category"
@@ -525,7 +536,7 @@ const QuestionBank = () => {
                         );
                     })}
                 </select>
-
+                
                 {view !== "" ? (
                     <div>
                         <label>Topic</label>
