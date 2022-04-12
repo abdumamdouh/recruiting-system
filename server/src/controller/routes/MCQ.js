@@ -27,9 +27,9 @@ const router = new express.Router();
 
 router.post("/createQuestion", recruiterAuth, async (req, res) => {
     try {
-
-
-     
+        const {question}=req.body;
+        const record = await Question.create( question )
+        res.send(record);
     } catch (error) {
         res.status(400).send(
             error.message
