@@ -13,7 +13,10 @@ import {
     GET_JOB_EXAMS_FAIL,
     ASSIGN_TASK_TO_APPLICANTS_REQUEST,
     ASSIGN_TASK_TO_APPLICANTS_SUCCESS,
-    ASSIGN_TASK_TO_APPLICANTS_FAIL
+    ASSIGN_TASK_TO_APPLICANTS_FAIL,
+    ADD_QUESTION_FAIL,
+    ADD_QUESTION_SUCCESS,
+    ADD_QUESTION_REQUEST
 } from "../types/index";
 const serverURL = "http://localhost:5000";
 export const createExamAction = (jobId,topic,questions,privatee,showSuccessMessage) => {
