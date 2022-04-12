@@ -191,3 +191,39 @@ export const assignExamAction = (jobId,id,selectionModel, showSuccessMessage) =>
 }
 };
 };
+
+
+
+//ADD QUESTION
+
+export const createQuestion = (question) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: ADD_QUESTION_REQUEST,
+                loading: true
+            });
+            const { userInfo } = getState().user;
+            console.log(userInfo.token);
+            const rawResponse = await fetch(
+                `${serverURL}/createQuestion`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    },
+                    body: JSON.stringify(question)
+                }
+            );
+            const data = await rawResponse
+    dispatch({ type: ADD_QUESTION_SUCCESS, payload: data });
+} catch (error) {
+    dispatch({
+        type: ADD_QUESTION_FAIL,
+        payload: error.response && error.response.data
+    });
+}
+};
+};
