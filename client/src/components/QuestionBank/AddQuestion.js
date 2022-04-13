@@ -88,7 +88,7 @@ const AddQuestion = ({ setOpenQuestion }) => {
                     </div>
                 </div>
                 <div className="form-group">
-                    <label>Question</label>
+                    <label>Choices</label>
                     <div className="position-relative">
                         <div className="col-sm-8">
                             {inputFields.map((data, index) => {
@@ -133,11 +133,11 @@ const AddQuestion = ({ setOpenQuestion }) => {
                             <div className="row">
                                 <div className="col-sm-12">
                                     <button
-                                        className="btn btn-outline-success "
+                                        className="btn btn-primary"
                                         type="button"
                                         onClick={addInputField}
                                     >
-                                        Add New
+                                        Add Choice
                                     </button>
                                 </div>
                             </div>
