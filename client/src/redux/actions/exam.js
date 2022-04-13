@@ -18,6 +18,7 @@ import {
     CREATE_QUESTION_SUCCESS,
     CREATE_QUESTION_REQUEST
 } from "../types/index";
+import {getCategory} from './bank'
 const serverURL = "http://localhost:5000";
 export const createExamAction = (jobId,topic,questions,privatee,showSuccessMessage) => {
     let mcq={jobId:jobId,topic:topic,questions:questions, private: privatee}
@@ -196,7 +197,7 @@ export const assignExamAction = (jobId,id,selectionModel, showSuccessMessage) =>
 
 //ADD QUESTION
 
-export const createQuestion = (question) => {
+export const createQuestion = (question,chooseTopic,chooseQuestions) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
@@ -219,6 +220,9 @@ export const createQuestion = (question) => {
             );
             const data = await rawResponse
     dispatch({ type: CREATE_QUESTION_SUCCESS, payload: data });
+    dispatch(getCategory())
+    chooseTopic()
+    chooseQuestions()
 } catch (error) {
     dispatch({
         type: CREATE_QUESTION_FAIL,

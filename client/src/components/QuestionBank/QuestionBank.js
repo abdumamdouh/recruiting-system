@@ -477,7 +477,7 @@ const QuestionBank = () => {
                         setSuccess={setSuccess}
                     />
                 )}
-                {openQuestion && (<AddQuestion setOpenQuestion={setOpenQuestion}/>)}
+                {openQuestion && (<AddQuestion  view={view} setView={setView } topicProp={topic} setTopicProp={setTopic} setOpenQuestion={setOpenQuestion}/>)}
                 {/* 
                 <div>
 
@@ -545,6 +545,7 @@ const QuestionBank = () => {
                             onChange={bringquestions}
                             className="custom-select text-capitalize"
                             style={{ marginBottom: "1rem" }}
+                            defaultValue={topic}
                         >
                             <option>--Select topic--</option>
                             {bank.hasOwnProperty("topic") &&
@@ -554,6 +555,7 @@ const QuestionBank = () => {
                                             key={topic}
                                             value={topic}
                                             name="category"
+                                            
                                         >
                                             {topic}
                                         </option>

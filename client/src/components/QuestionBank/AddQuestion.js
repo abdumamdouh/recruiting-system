@@ -4,7 +4,8 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { updateApplicantAction } from "../../redux/actions/user";
 import {createQuestion} from "../../redux/actions/exam"
-const AddQuestion = ({ setOpenQuestion }) => {
+import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
+const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp }) => {
     const [completeQuestion, setCompleteQuestion] = useState({});
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
@@ -51,7 +52,16 @@ const AddQuestion = ({ setOpenQuestion }) => {
         setInputFields(list);
         console.log(inputFields)
     };
+    const chooseTopic =()=>{
+        if(view!== '')
+        { dispatch(getTopic(view, setView))}
+    }
+    const chooseQuestions =()=>{
+        console.log('topicc',topicProp)
 
+        if(topicProp!== '')
+        { dispatch(getQuestions(topicProp, view, setTopicProp))}
+    }
     const handleSubmit = e => {
         e.preventDefault();
         let completeQuestion = {
@@ -64,7 +74,10 @@ const AddQuestion = ({ setOpenQuestion }) => {
         };
         setCompleteQuestion(completeQuestion);
         console.log(completeQuestion);
-        dispatch(createQuestion(completeQuestion));
+        console.log('top',topicProp)
+         dispatch(createQuestion(completeQuestion,chooseTopic,chooseQuestions));
+        
+       
         setOpenQuestion(false);
     };
 
