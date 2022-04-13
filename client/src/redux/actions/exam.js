@@ -197,7 +197,6 @@ export const assignExamAction = (jobId,id,selectionModel, showSuccessMessage) =>
 //ADD QUESTION
 
 export const createQuestion = (question) => {
-    console.log("reduxxxxxxxxx",question)
     return async (dispatch, getState) => {
         try {
             dispatch({
