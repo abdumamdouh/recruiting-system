@@ -7,7 +7,11 @@ import {
     CHOOSE_TOPIC_FAIL,
     GET_QUESTIONS_REQUEST,
     GET_QUESTIONS_SUCCESS,
-    GET_QUESTIONS_FAIL
+    GET_QUESTIONS_FAIL,
+    CREATE_QUESTION_FAIL,
+    CREATE_QUESTION_SUCCESS,
+    CREATE_QUESTION_REQUEST
+    
     
 } from "../types";
 
@@ -64,7 +68,23 @@ const bankReducer = (state = {}, action) => {
         case GET_QUESTIONS_FAIL:
             return{
                 error: action.payload,
-            }    
+            } 
+            
+        case CREATE_QUESTION_REQUEST:
+            return state 
+
+        case CREATE_QUESTION_SUCCESS:
+            return state
+            
+
+        case CREATE_QUESTION_FAIL:
+            return{
+                error: action.payload,
+            }     
+
+
+
+
         default:
             return {};
     }
