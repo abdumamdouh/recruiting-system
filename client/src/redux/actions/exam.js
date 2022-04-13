@@ -89,8 +89,8 @@ export const getExamsAction = (pageNumber) => {
 }
 //pick exam from available exams
 
-export const pickExamAction = (jobId,MCQId, expiryDate,duration,showSuccessMessage) => {
-    let mcq={jobId:jobId, MCQId: MCQId,expiryDate:expiryDate, duration:duration}
+export const pickExamAction = (jobId,MCQId,startDate, expiryDate,duration,showSuccessMessage) => {
+    let mcq={jobId:jobId, MCQId: MCQId,startDate:startDate,expiryDate:expiryDate, duration:duration}
     console.log(mcq)
     return async (dispatch, getState) => {
         try {
