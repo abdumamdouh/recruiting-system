@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { updateApplicantAction } from "../../redux/actions/user";
+import {createQuestion} from "../../redux/actions/exam"
 const AddQuestion = ({ setOpenQuestion }) => {
     const [completeQuestion, setCompleteQuestion] = useState({});
     const [question, setQuestion] = useState("");
@@ -63,6 +64,7 @@ const AddQuestion = ({ setOpenQuestion }) => {
         };
         setCompleteQuestion(completeQuestion);
         console.log(completeQuestion);
+        dispatch(createQuestion(completeQuestion));
         setOpenQuestion(false);
     };
 
