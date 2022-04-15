@@ -38,6 +38,7 @@
         "react-scroll": "^1.8.4",
         "react-select": "^5.2.2",
         "react-slick": "^0.27.14",
+        "react-timecode": "^1.2.0",
         "react-timer-wrapper": "^0.4.1",
         "redux": "^4.0.5",
         "redux-devtools-extension": "^2.13.8",
