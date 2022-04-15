@@ -30,6 +30,7 @@ export default function AddExam() {
     const [questions, setQuestions] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [value, setValue] = useState(new Date());
+
     const csvData = [
         [
             "question",
@@ -133,6 +134,7 @@ export default function AddExam() {
     const handleOnRemoveFile = (data) => {
         console.log(data);
     };
+
     const handleClick = () => {
         dispatch(
             createExamAction(
@@ -146,9 +148,11 @@ export default function AddExam() {
             )
         );
     };
+
     const showSuccessMessage = () => {
         setModalOpen(true);
     };
+
     return (
         <div className="upload">
             <div className="container">
