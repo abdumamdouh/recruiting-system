@@ -10,83 +10,15 @@ import { useState } from "react";
 import { createExamAction } from "../../redux/actions/exam";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography } from "@material-ui/core";
-import Accordion from "@mui/material/Accordion";
 import Button from "@mui/material/Button";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import DatePicker from "react-datepicker";
-import { CSVLink } from "react-csv";
 import "react-datepicker/dist/react-datepicker.css";
 import Message from "../../components/modal/Message";
 export default function AddExam() {
     const [topic, setTopic] = useState("");
-    const [expanded, setExpanded] = useState(false);
-    const [checked, setChecked] = useState(false);
-    const [privatee, setPrivatee] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(new Date());
     const [expiryDate, setExpiryDate] = useState(new Date());
-    const [duration, setDuration] = useState(0);
     const [questions, setQuestions] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [value, setValue] = useState(new Date());
-
-    const csvData = [
-        [
-            "question",
-            "choice1",
-            "choice2",
-            "choice3",
-            "answer",
-            "category",
-            "topic",
-            "difficulty"
-        ],
-        [
-            "Which of the following module is not a built-in node module?",
-            "fsread",
-            "zlib",
-            "https",
-            "fsread",
-            "Software engineering",
-            "Backend",
-            "easy"
-        ],
-        [
-            "The Node.js modules can be exposed using:",
-            "expose",
-            "module",
-            "exports",
-            "exports",
-            "Software engineering",
-            "Backend",
-            "medium"
-        ],
-        [
-            "What is Callback?",
-            "The callback is a technique in which a method calls back the caller method.",
-            "The callback is an asynchronous equivalent for a function.",
-            "Both of the above.",
-            "The callback is an asynchronous equivalent for a function.",
-            "Software engineering",
-            "Backend",
-            "hard"
-        ]
-    ];
-
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
-
-    const handleCheckBox = () => {
-        setChecked(!checked);
-        setPrivatee(checked);
-    };
-
-    const handleDate = (date) => {
-        setSelectedDate(date);
-        setExpiryDate(date);
-    };
 
     const dispatch = useDispatch();
     const jobId = useSelector((state) => state.job.id);
@@ -141,9 +73,7 @@ export default function AddExam() {
                 jobId,
                 topic,
                 questions,
-                privatee,
                 expiryDate,
-                duration,
                 showSuccessMessage
             )
         );
@@ -163,6 +93,7 @@ export default function AddExam() {
                     />
                 )}
             </div>
+
             <Box
                 component="form"
                 sx={{
@@ -187,12 +118,6 @@ export default function AddExam() {
                     Expiration Date for this Task
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
-                    {/* <DatePicker
-                                    selected={selectedDate}
-                                    onChange={handleDate}
-                                    dateFormat="dd/MM/yyyy"
-                                    className="DatePicker"
-                                /> */}
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DateTimePicker
                             renderInput={(props) => <TextField {...props} />}
