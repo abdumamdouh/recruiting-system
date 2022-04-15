@@ -1,14 +1,18 @@
-import React, { Component } from "react";
+import React from "react";
+import { useState } from "react";
 import Timer from "react-timer-wrapper";
 import Timecode from "react-timecode";
-function Countdown({ time, duration }) {
-    function onTimerUpdate({ time, duration }) {
+
+const Countdown = ({ time, duration }) => {
+    const [timer, setTimer] = useState();
+    const [duration, setDuration] = useState();
+
+    const onTimerUpdate = ({ time, duration }) => {
         this.setState({
             time,
             duration
         });
     }
-    const { time, duration } = this.state;
 
     return (
         <div>
