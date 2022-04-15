@@ -162,51 +162,6 @@ export default function AddExam() {
                         message="uploaded successfully!"
                     />
                 )}
-                <Accordion
-                    expanded={expanded === "panel1"}
-                    onChange={handleChange("panel1")}
-                >
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                        sx={{
-                            backgroundColor: "#a3c2c2"
-                        }}
-                    >
-                        <Typography
-                            style={{ fontWeight: 600 }}
-                            sx={{ width: "33%", flexShrink: 0 }}
-                        >
-                            Uploading Exam instructions
-                        </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails
-                        sx={{
-                            backgroundColor: "#eff5f5"
-                        }}
-                    >
-                        <Typography
-                            style={{ fontWeight: 500, fontSize: "15px" }}
-                        >
-                            Add your questions in the form:
-                            question,choice1,choice2,choice3,answer
-                        </Typography>
-                        <Typography
-                            style={{ fontWeight: 500, fontSize: "15px" }}
-                        >
-                            you can add any number of choices between 3 and 5,
-                            but the first field MUST be question and the last
-                            field MUST be the correct answer
-                        </Typography>
-                        <Typography
-                            style={{ fontWeight: 500, fontSize: "15px" }}
-                        >
-                            Three Additional fields could be added as:
-                            question,choice1,choice2,choice3,answer,category,topic,difficulty
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
             </div>
             <Box
                 component="form"
@@ -217,11 +172,11 @@ export default function AddExam() {
                 autoComplete="off"
             >
                 <Typography className="black" variant="h6">
-                    Exam Topic
+                    Task Topic
                 </Typography>
                 <TextField
                     id="outlined-basic"
-                    label="Exam topic"
+                    label="Task topic"
                     variant="outlined"
                     onChange={(e) => setTopic(e.target.value)}
                 />
