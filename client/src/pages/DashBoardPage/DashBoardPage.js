@@ -7,10 +7,11 @@ import AvailableMCQs from "../AvailableExamsPage/AvailableMCQs";
 import ExamPage from "../ExamPage/ExamPage";
 import UploadedExams from "../UploadedExamsPage/UploadedExams";
 import AssignApplicantsPage from "../AssignApplicantsPage/AssignApplicantsPage";
-import AssignCandidatesPage from "../AssignCandidatesPage/AssignCandidatesPage"
+import AssignCandidatesPage from "../AssignCandidatesPage/AssignCandidatesPage";
 import CandidatesPage from "../CandidatesPage/CandidatesPage";
-import ApplicantPage from "../ApplicantPage/ApplicantPage"
-import QuestionBank from "../../components/QuestionBank/QuestionBank"
+import ApplicantPage from "../ApplicantPage/ApplicantPage";
+import QuestionBank from "../../components/QuestionBank/QuestionBank";
+import TaskPage from "../TaskPage/TaskPage";
 const DashBoardPage = () => {
     return (
         <Router>
@@ -40,10 +41,13 @@ const DashBoardPage = () => {
                             <CandidatesPage />
                         </Route>
                         <Route path="/dashboard/applicant/:ID">
-                          <ApplicantPage/>
+                            <ApplicantPage />
                         </Route>
                         <Route path="/dashboard/questionbank">
-                          <QuestionBank/>
+                            <QuestionBank />
+                        </Route>
+                        <Route path="/dashboard/task">
+                            <TaskPage />
                         </Route>
                     </Switch>
                 </div>
