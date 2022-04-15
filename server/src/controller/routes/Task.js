@@ -5,7 +5,8 @@ const db = require("../../db/db");
 const RecOrApp = require("../middleware/RecOrApp");
 const recruiterAuth = require('../middleware/recruiterAuth');
 const applicantAuth = require("../middleware/applicantAuth");
-const taskUploadmulter = require("../middleware/TaskUploadsMulter")
+const taskUploadmulter = require("../middleware/applicantTaskUploads")
+const recTaskUpload = require("../middleware/recruiterTaskUpload")
 
 const Task = require('../../models/Task');
 const ActiveTask = require('../../models/ActiveTask');
@@ -25,21 +26,25 @@ const router = new express.Router();
 //     "description":"Some discription",
 //     "deadline":"2/10/2022",
 //     "JobId":1,
-//     "uploadFormat":"zip-rar" (optional)
+//     "uploadFormat":"zip-rar"(default value) (optional)
 // }
-router.post('/createTask' , recruiterAuth ,async (req,res) => {
+router.post('/createTask' , recruiterAuth, recTaskUpload.single('task') ,async (req,res) => {
     try {
-        // craeting the task
+        req.body.data = JSON.parse(req.body.data) ;
+        // console.log(req.file.buffer) ;
+        
+        // creating the task
         const task = await Task.create({
-            description:req.body.description,
+            description:req.body.data.description,
             RecruiterId: req.recruiter.id ,
-            uploadFormat: req.recruiter.uploadFormat ? req.recruiter.uploadFormat:"zip-rar" 
+            uploadFormat: req.body.data.uploadFormat ? req.body.data.uploadFormat:"zip-rar",
+            additionalFile: req.file.buffer ? req.file.buffer:"" 
         })
         // adding it to the active tasks table
         await ActiveTask.create({
             TaskId:task.dataValues.id,
-            JobId:req.body.JobId,
-            deadline:req.body.deadline
+            JobId:req.body.data.JobId,
+            deadline:req.body.data.deadline
         })
         res.status(201).send("Task created successfully.");
     } catch (error) {
