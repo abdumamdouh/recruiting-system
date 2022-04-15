@@ -181,53 +181,18 @@ export default function AddExam() {
                     onChange={(e) => setTopic(e.target.value)}
                 />
             </Box>
-            <h4 style={{ color: "black", marginBottom: "20px" }}>
-                Upload MCQ Exam
-            </h4>
-            <div className="mb">
-                <CSVReader
-                    onDrop={handleOnDrop}
-                    onError={handleOnError}
-                    addRemoveButton
-                    config={{
-                        header: false
-                    }}
-                    onRemoveFile={handleOnRemoveFile}
-                >
-                    <span className="black">
-                        Drop CSV file here or click to upload.
-                    </span>
-                </CSVReader>
-            </div>
-            <div className="mb">
-                <Typography
-                    style={{ color: "black" }}
-                    variant="h6"
-                    color="black"
-                >
-                    Do you agree to use your exams as open source?
-                </Typography>
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={handleCheckBox}
-                    />
-                    <span className="black ml"> I Agree</span>
-                </label>
-            </div>
 
             <div className="mb black">
                 <Typography color="black" variant="h6">
-                    Expiration Date for this exam
+                    Expiration Date for this Task
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
                     {/* <DatePicker
-                        selected={selectedDate}
-                        onChange={handleDate}
-                        dateFormat="dd/MM/yyyy"
-                        className="DatePicker"
-                    /> */}
+                                    selected={selectedDate}
+                                    onChange={handleDate}
+                                    dateFormat="dd/MM/yyyy"
+                                    className="DatePicker"
+                                /> */}
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DateTimePicker
                             renderInput={(props) => <TextField {...props} />}
@@ -242,41 +207,35 @@ export default function AddExam() {
                     </LocalizationProvider>
                 </div>
             </div>
-            <div className="black mb">
-                <Typography color="black" variant="h6">
-                    Exam Duration (in minutes)
-                </Typography>
-            </div>
-            <div className="mb">
-                <TextField
-                    type="number"
-                    InputProps={{
-                        inputProps: {
-                            max: 100,
-                            min: 0
-                        }
-                    }}
-                    label="duration"
-                    size="md"
-                    value={duration}
-                    onChange={(e) => {
-                        setDuration(e.target.value);
-                    }}
-                />
+
+            <div>
+                <h4 style={{ color: "black", marginBottom: "20px" }}>
+                    Upload Additional Resources
+                </h4>
+                <div className="mb">
+                    <CSVReader
+                        onDrop={handleOnDrop}
+                        onError={handleOnError}
+                        addRemoveButton
+                        config={{
+                            header: false
+                        }}
+                        onRemoveFile={handleOnRemoveFile}
+                    >
+                        <span className="black">
+                            Drop Task file here or click to upload.
+                        </span>
+                    </CSVReader>
+                </div>
             </div>
 
-            <div className="mb">
-                <CSVLink data={csvData} filename={"exam_template"}>
-                    Download MCQ Exam Template
-                </CSVLink>
-            </div>
             <div className="mb">
                 <Button
                     style={{ marginBottom: "10px" }}
                     variant="contained"
                     onClick={handleClick}
                 >
-                    Upload MCQ Exam
+                    Upload Task
                 </Button>
             </div>
         </div>
