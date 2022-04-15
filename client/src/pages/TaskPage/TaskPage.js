@@ -15,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Message from "../../components/modal/Message";
 export default function AddExam() {
     const [topic, setTopic] = useState("");
+    const [description, setDescription] = useState("");
     const [expiryDate, setExpiryDate] = useState(new Date());
     const [questions, setQuestions] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
@@ -84,7 +85,7 @@ export default function AddExam() {
     };
 
     return (
-        <div className="upload">
+        <div>
             <div className="container">
                 {modalOpen && (
                     <Message
@@ -110,6 +111,27 @@ export default function AddExam() {
                     label="Task topic"
                     variant="outlined"
                     onChange={(e) => setTopic(e.target.value)}
+                />
+            </Box>
+
+            <Box
+                component="form"
+                sx={{
+                    "& > :not(style)": { m: 1, width: "65ch" }
+                }}
+                noValidate
+                autoComplete="off"
+            >
+                <Typography className="black" variant="h6">
+                    Task Description
+                </Typography>
+                <TextField
+                    id="outlined-multiline-static"
+                    label="Task Description"
+                    multiline
+                    rows={6}
+                    variant="outlined"
+                    onChange={(e) => setDescription(e.target.value)}
                 />
             </Box>
 
