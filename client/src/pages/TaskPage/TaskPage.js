@@ -30,8 +30,31 @@ export default function AddExam() {
         console.log(err);
     };
 
-    const handleClick = () => {
+    const handleClick = async () => {
         const task = { jobId, topic, expiryDate, description };
+        //
+        const formData = new FormData();
+        formData.append("File", selectedFile);
+        console.log(formData);
+
+        try {
+            const response = await fetch(`http://localhost:5000/getMCQ/1`, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + userInfo.token
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+            //TODO: condition for success
+            showSuccessMessage();
+        } catch (error) {
+            console.error("Error:", error);
+            handleOnError(error);
+        }
     };
 
     const showSuccessMessage = () => {
@@ -48,10 +71,9 @@ export default function AddExam() {
 
     //TODO: move handleSubmission to handleClick
     const handleSubmission = async () => {
-        const formData = new FormData();
-        formData.append("File", selectedFile);
-        console.log(formData);
-
+        // const formData = new FormData();
+        // formData.append("File", selectedFile);
+        // console.log(formData);
         // try {
         //     const response = await fetch(`http://localhost:5000/getMCQ/1`, {
         //         method: "POST",
@@ -209,9 +231,9 @@ export default function AddExam() {
                             <p>Select a file to show details</p>
                         )}
                         {/* TODO: move the handleSubmission into handleClick */}
-                        <div>
+                        {/* <div>
                             <button onClick={handleSubmission}>Submit</button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
