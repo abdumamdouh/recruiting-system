@@ -36,6 +36,7 @@ router.post('/createTask' , recruiterAuth, recTaskUpload.single('task') ,async (
         
         // creating the task
         const task = await Task.create({
+            topic:req.body.data.topic,
             description:req.body.data.description,
             RecruiterId: req.recruiter.id ,
             uploadFormat: req.body.data.uploadFormat ? req.body.data.uploadFormat:"zip-rar",
