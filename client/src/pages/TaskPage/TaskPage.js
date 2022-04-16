@@ -8,11 +8,30 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Typography } from "@material-ui/core";
-import { Button, Autocomplete } from "@mui/material";
+import { Button, Autocomplete, Chip } from "@mui/material";
 import "react-datepicker/dist/react-datepicker.css";
 import Message from "../../components/modal/Message";
 
 export default function AddExam() {
+    const availableOptions = [
+        "c",
+        "h",
+        "cpp",
+        "hpp",
+        "py",
+        "java",
+        "js",
+        "txt",
+        "docx",
+        "pdf",
+        "xslx",
+        "zip",
+        "rar",
+        "png",
+        "jpg",
+        "jpeg"
+    ];
+    const [option, setOption] = useState([]);
     const [topic, setTopic] = useState("");
     const [description, setDescription] = useState("");
     const [expiryDate, setExpiryDate] = useState(new Date());
@@ -170,18 +189,58 @@ export default function AddExam() {
                     variant="outlined"
                     onChange={(e) => setTopic(e.target.value)}
                 /> */}
-                <Autocomplete
+                {/* <Autocomplete
                     sx={{ marginTop: "10px", width: "15rem" }}
                     id="free-solo-demo"
                     freeSolo
-                    options={["cpp", "js"]}
+                    options={options}
+                    renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                            <Chip
+                                variant="outlined"
+                                label={option}
+                                {...getTagProps({ index })}
+                            />
+                        ))
+                    }
                     renderInput={(params) => (
                         <TextField
                             {...params}
                             label="Uploaded File Extension"
                         />
                     )}
-                />
+                /> */}
+                <div>
+                    <Autocomplete
+                        sx={{ marginTop: "10px", width: "15rem" }}
+                        value={option}
+                        onChange={(event, newValue) => {
+                            setOption(newValue);
+                        }}
+                        multiple
+                        id="tags-filled"
+                        options={availableOptions}
+                        freeSolo
+                        renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                                <Chip
+                                    variant="outlined"
+                                    label={option}
+                                    {...getTagProps({ index })}
+                                />
+                            ))
+                        }
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Uploaded File Extension"
+                                placeholder={
+                                    !option.length ? "example: cpp" : ""
+                                }
+                            />
+                        )}
+                    />
+                </div>
             </Box>
 
             <div>
