@@ -10,7 +10,7 @@ import { useState } from "react";
 import { createExamAction } from "../../redux/actions/exam";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography } from "@material-ui/core";
-import Button from "@mui/material/Button";
+import { Button, Autocomplete } from "@mui/material";
 import "react-datepicker/dist/react-datepicker.css";
 import Message from "../../components/modal/Message";
 export default function AddExam() {
@@ -185,12 +185,24 @@ export default function AddExam() {
                 >
                     Uploaded File Extension
                 </Typography>
-                <TextField
+                {/* <TextField
                     sx={{ marginTop: "10px" }}
                     id="outlined-static"
                     label="Uploaded File Extension"
                     variant="outlined"
                     onChange={(e) => setTopic(e.target.value)}
+                /> */}
+                <Autocomplete
+                    sx={{ marginTop: "10px", width: "15rem" }}
+                    id="free-solo-demo"
+                    freeSolo
+                    options={["cpp", "js"]}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="Uploaded File Extension"
+                        />
+                    )}
                 />
             </Box>
 
