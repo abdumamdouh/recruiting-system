@@ -49,29 +49,31 @@ export default function AddExam() {
             JobId: jobId,
             uploadFormat
         };
+
+        console.log(task);
         //
         const formData = new FormData();
         formData.append("File", selectedFile);
         console.log(formData);
 
-        try {
-            const response = await fetch(`http://localhost:5000/getMCQ/1`, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + userInfo.token
-                }
-            });
-            const data = await response.json();
-            console.log(data);
-            //TODO: condition for success
-            showSuccessMessage();
-        } catch (error) {
-            console.error("Error:", error);
-            handleOnError(error);
-        }
+        // try {
+        //     const response = await fetch(`http://localhost:5000/getMCQ/1`, {
+        //         method: "POST",
+        //         body: formData,
+        //         headers: {
+        //             Accept: "application/json",
+        //             "Content-Type": "application/json",
+        //             Authorization: "Bearer " + userInfo.token
+        //         }
+        //     });
+        //     const data = await response.json();
+        //     console.log(data);
+        //     //TODO: condition for success
+        //     showSuccessMessage();
+        // } catch (error) {
+        //     console.error("Error:", error);
+        //     handleOnError(error);
+        // }
     };
 
     const showSuccessMessage = () => {
@@ -218,6 +220,7 @@ export default function AddExam() {
                         <TextField
                             {...params}
                             label="Uploaded File Extension"
+                            onChange={(e) => setUploadFormat(e.target.value)}
                         />
                     )}
                 />
