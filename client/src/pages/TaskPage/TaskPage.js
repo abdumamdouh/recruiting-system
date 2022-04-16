@@ -18,7 +18,7 @@ export default function AddExam() {
     const [topic, setTopic] = useState("");
     const [description, setDescription] = useState("");
     const [expiryDate, setExpiryDate] = useState(new Date());
-    const [questions, setQuestions] = useState([]);
+
     const [modalOpen, setModalOpen] = useState(false);
     const [value, setValue] = useState(new Date());
     //file
@@ -38,9 +38,9 @@ export default function AddExam() {
             createExamAction(
                 jobId,
                 topic,
-                questions,
                 expiryDate,
-                showSuccessMessage
+                description,
+                selectedFile
             )
         );
     };
@@ -52,32 +52,34 @@ export default function AddExam() {
     //upload file
 
     const changeHandler = (event) => {
-        console.log("alo");
         setSelectedFile(event.target.files[0]);
         setIsFilePicked(true);
+        console.log(event.target.files[0]);
     };
 
     const handleSubmission = async () => {
         const formData = new FormData();
         formData.append("File", selectedFile);
-        try {
-            const response = await fetch(`http://localhost:5000/getMCQ/1`, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + userInfo.token
-                }
-            });
-            const data = await response.json();
-            console.log(data);
-            //TODO: condition for success
-            showSuccessMessage();
-        } catch (error) {
-            console.error("Error:", error);
-            handleOnError(error);
-        }
+        console.log(formData);
+
+        // try {
+        //     const response = await fetch(`http://localhost:5000/getMCQ/1`, {
+        //         method: "POST",
+        //         body: formData,
+        //         headers: {
+        //             Accept: "application/json",
+        //             "Content-Type": "application/json",
+        //             Authorization: "Bearer " + userInfo.token
+        //         }
+        //     });
+        //     const data = await response.json();
+        //     console.log(data);
+        //     //TODO: condition for success
+        //     showSuccessMessage();
+        // } catch (error) {
+        //     console.error("Error:", error);
+        //     handleOnError(error);
+        // }
     };
 
     return (
@@ -93,9 +95,6 @@ export default function AddExam() {
 
             <Box
                 component="form"
-                // sx={{
-                //     "& > :not(style)": { m: 1, width: "25ch" }
-                // }}
                 sx={{ marginBottom: "25px" }}
                 noValidate
                 autoComplete="off"
@@ -118,9 +117,6 @@ export default function AddExam() {
 
             <Box
                 component="form"
-                // sx={{
-                //     "& > :not(style)": { m: 1, width: "25ch" }
-                // }}
                 sx={{ marginBottom: "25px" }}
                 noValidate
                 autoComplete="off"
@@ -139,7 +135,6 @@ export default function AddExam() {
                     multiline
                     rows={6}
                     fullWidth
-                    // sx={{ width: "550px" }}
                     variant="outlined"
                     onChange={(e) => setDescription(e.target.value)}
                 />
@@ -167,9 +162,6 @@ export default function AddExam() {
 
             <Box
                 component="form"
-                // sx={{
-                //     "& > :not(style)": { m: 1, width: "25ch" }
-                // }}
                 sx={{ marginBottom: "25px" }}
                 noValidate
                 autoComplete="off"
@@ -195,21 +187,6 @@ export default function AddExam() {
                     Upload Additional Resources
                 </h4>
                 <div className="mb">
-                    {/*
-                    <CSVReader
-                        onDrop={handleOnDrop}
-                        onError={handleOnError}
-                        addRemoveButton
-                        config={{
-                            header: false
-                        }}
-                        onRemoveFile={handleOnRemoveFile}
-                    >
-                        <span className="black">
-                            Drop Task file here or click to upload.
-                        </span>
-                    </CSVReader>
-                    */}
                     <div>
                         <input
                             type="file"
