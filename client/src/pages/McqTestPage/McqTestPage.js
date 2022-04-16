@@ -433,6 +433,7 @@ const McqTestPage = (props) => {
         }
         // setMcqTaken(true);
     };
+
     return (
         <>
             {modalOpen && (
