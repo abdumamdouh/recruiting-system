@@ -469,17 +469,26 @@ const McqTestPage = (props) => {
                         }}
                         component="div"
                     >
-                        <Typography
-                            color="black"
-                            variant="h5"
+                        <div
                             style={{
-                                textAlign: "center",
-                                fontWeight: "800",
-                                fontSize: "35px"
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "spaceBetween"
                             }}
                         >
-                            {Mcq.topic}
-                        </Typography>
+                            <Typography
+                                color="black"
+                                variant="h5"
+                                style={{
+                                    textAlign: "center",
+                                    fontWeight: "800",
+                                    fontSize: "35px"
+                                }}
+                            >
+                                {Mcq.topic}
+                            </Typography>
+                            <Countdown time={0} duration={60} />
+                        </div>
 
                         <Divider style={{ margin: "20px 0" }} />
                         {/* {JSON.stringify(Mcq)} */}
