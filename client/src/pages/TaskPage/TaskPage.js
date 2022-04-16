@@ -13,6 +13,7 @@ import { Typography } from "@material-ui/core";
 import Button from "@mui/material/Button";
 import "react-datepicker/dist/react-datepicker.css";
 import Message from "../../components/modal/Message";
+
 export default function AddExam() {
     const [topic, setTopic] = useState("");
     const [description, setDescription] = useState("");
@@ -20,52 +21,16 @@ export default function AddExam() {
     const [questions, setQuestions] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [value, setValue] = useState(new Date());
+    //file
+    const [selectedFile, setSelectedFile] = useState();
+    const [isFilePicked, setIsFilePicked] = useState(false);
 
     const dispatch = useDispatch();
     const jobId = useSelector((state) => state.job.id);
-
-    const handleOnDrop = (data) => {
-        console.log(data);
-
-        let arr = [];
-        data.filter((d) => d.data.length !== 1).map((d) => arr.push(d.data));
-        const array = [...arr];
-        const length = array[0].length;
-        // arr = arr.slice(0, arr.length - 1);
-        console.log("data length", array[0].length);
-        if (
-            array[0].length === 5 ||
-            array[0].length === 6 ||
-            array[0].length === 7
-        ) {
-            let questions = arr.map((a, index) => ({
-                question: a[0],
-                options: a.slice(1, length - 1),
-                answer: a[length - 1]
-            }));
-            console.log("arr", questions);
-            setQuestions(questions);
-        } else {
-            let questions = arr.map((a, index) => ({
-                question: a[0],
-                options: a.slice(1, length - 4),
-                answer: a[length - 4],
-                category: a[length - 3],
-                topic: a[length - 2],
-                difficulty: a[length - 1]
-            }));
-
-            console.log("arr", questions);
-            setQuestions(questions);
-        }
-    };
+    const { userInfo } = useSelector((state) => state.user);
 
     const handleOnError = (err) => {
         console.log(err);
-    };
-
-    const handleOnRemoveFile = (data) => {
-        console.log(data);
     };
 
     const handleClick = () => {
@@ -82,6 +47,37 @@ export default function AddExam() {
 
     const showSuccessMessage = () => {
         setModalOpen(true);
+    };
+
+    //upload file
+
+    const changeHandler = (event) => {
+        console.log("alo");
+        setSelectedFile(event.target.files[0]);
+        setIsFilePicked(true);
+    };
+
+    const handleSubmission = async () => {
+        const formData = new FormData();
+        formData.append("File", selectedFile);
+        try {
+            const response = await fetch(`http://localhost:5000/getMCQ/1`, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + userInfo.token
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+            //TODO: condition for success
+            showSuccessMessage();
+        } catch (error) {
+            console.error("Error:", error);
+            handleOnError(error);
+        }
     };
 
     return (
@@ -160,6 +156,7 @@ export default function AddExam() {
                     Upload Additional Resources
                 </h4>
                 <div className="mb">
+                    {/*
                     <CSVReader
                         onDrop={handleOnDrop}
                         onError={handleOnError}
@@ -173,6 +170,30 @@ export default function AddExam() {
                             Drop Task file here or click to upload.
                         </span>
                     </CSVReader>
+                    */}
+                    <div>
+                        <input
+                            type="file"
+                            name="file"
+                            onChange={changeHandler}
+                        />
+                        {isFilePicked ? (
+                            <div>
+                                <p>Filename: {selectedFile.name}</p>
+                                <p>Filetype: {selectedFile.type}</p>
+                                <p>Size in bytes: {selectedFile.size}</p>
+                                <p>
+                                    lastModifiedDate:{" "}
+                                    {selectedFile.lastModifiedDate.toLocaleDateString()}
+                                </p>
+                            </div>
+                        ) : (
+                            <p>Select a file to show details</p>
+                        )}
+                        <div>
+                            <button onClick={handleSubmission}>Submit</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
