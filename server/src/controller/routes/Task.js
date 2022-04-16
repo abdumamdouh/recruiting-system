@@ -5,7 +5,8 @@ const db = require("../../db/db");
 const RecOrApp = require("../middleware/RecOrApp");
 const recruiterAuth = require('../middleware/recruiterAuth');
 const applicantAuth = require("../middleware/applicantAuth");
-const taskUploadmulter = require("../middleware/TaskUploadsMulter")
+const taskUploadmulter = require("../middleware/applicantTaskUploads")
+const recTaskUpload = require("../middleware/recruiterTaskUpload")
 
 const Task = require('../../models/Task');
 const ActiveTask = require('../../models/ActiveTask');
@@ -20,26 +21,31 @@ const router = new express.Router();
 // ************************************************************************************************
 
 // recruiter creates a new task
-// Accepted JSON:
-// {
+// Accepted body (form-data: key - value pairs):
+// task : pdf or docx file.
+// data : {
 //     "description":"Some discription",
 //     "deadline":"2/10/2022",
 //     "JobId":1,
-//     "uploadFormat":"zip-rar" (optional)
+//     "uploadFormat":"zip-rar"(default value) (optional)
 // }
-router.post('/createTask' , recruiterAuth ,async (req,res) => {
+router.post('/createTask' , recruiterAuth, recTaskUpload.single('task') ,async (req,res) => {
     try {
-        // craeting the task
+        req.body.data = JSON.parse(req.body.data) ;
+        // console.log(req.file.buffer) ;
+        
+        // creating the task
         const task = await Task.create({
-            description:req.body.description,
+            description:req.body.data.description,
             RecruiterId: req.recruiter.id ,
-            uploadFormat: req.recruiter.uploadFormat ? req.recruiter.uploadFormat:"zip-rar" 
+            uploadFormat: req.body.data.uploadFormat ? req.body.data.uploadFormat:"zip-rar",
+            additionalFile: req.file.buffer ? req.file.buffer:"" 
         })
         // adding it to the active tasks table
         await ActiveTask.create({
             TaskId:task.dataValues.id,
-            JobId:req.body.JobId,
-            deadline:req.body.deadline
+            JobId:req.body.data.JobId,
+            deadline:req.body.data.deadline
         })
         res.status(201).send("Task created successfully.");
     } catch (error) {
@@ -51,7 +57,8 @@ router.post('/createTask' , recruiterAuth ,async (req,res) => {
 // ****************************************************************************************************
 
 // applicants uploading there tasks
-// Accepted JSON: None, just the uploaded file 
+// Accepted body (form-data: key - value pairs)
+// task: task upload.
 router.post('/uploadTask/:TaskId/:JobId' , applicantAuth , taskUploadmulter.single('task'), async (req,res) => {
     try {
         // checking if you are authorized to deal with this task 
@@ -181,7 +188,7 @@ router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
             }
             let result = {}
             result.data = (await Task.findOne({
-                attributes:['description','uploadFormat'] ,
+                attributes:['description','uploadFormat','additionalFile'] ,
                 where:{
                    id:req.params.TaskId 
                 },
@@ -228,7 +235,7 @@ router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
             }
             let result = {}
             result.data = (await Task.findOne({
-                attributes:['description','uploadFormat'] ,
+                attributes:['description','uploadFormat','additionalFile'] ,
                 where:{
                    id:req.params.TaskId 
                 },
@@ -254,7 +261,12 @@ router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
 // {
 //     "data": {
 //         "description": "Some discription",
-//         "uploadFormat": "zip-rar"
+//         "uploadFormat": "zip-rar",
+//         "additionalFile": {
+//                              "type":"Buffer",
+//                              "data":[]
+//                           }
+// }
 //     },
 //     "deadline": "2022-02-09T22:00:00.000Z"
 // }
@@ -263,7 +275,11 @@ router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
 // {
 //     "data": {
 //         "description": "Some discription",
-//         "uploadFormat": "zip-rar"
+//         "uploadFormat": "zip-rar",
+//         "additionalFile": {
+//                              "type":"Buffer",
+//                              "data":[]
+//                           }
 //     },
 //     "deadline": "2022-02-09T22:00:00.000Z",
 //     "Uploaded_count": 1

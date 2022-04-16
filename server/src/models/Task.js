@@ -15,6 +15,10 @@ const Task = db.define('Task',{
     uploadFormat:{
         type: Sequelize.STRING ,
         defaultValue:"zip-rar"
+    },
+    additionalFile:{
+        type:Sequelize.BLOB('long'),
+        allowNull:false
     }
 });
 
