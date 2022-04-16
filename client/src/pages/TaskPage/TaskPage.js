@@ -1,5 +1,4 @@
 import "./TaskPage.scss";
-import { CSVReader } from "react-papaparse";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -7,8 +6,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 
 import { useState } from "react";
-import { createExamAction } from "../../redux/actions/exam";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Typography } from "@material-ui/core";
 import Button from "@mui/material/Button";
 import "react-datepicker/dist/react-datepicker.css";
@@ -25,7 +23,6 @@ export default function AddExam() {
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
 
-    const dispatch = useDispatch();
     const jobId = useSelector((state) => state.job.id);
     const { userInfo } = useSelector((state) => state.user);
 
@@ -34,15 +31,7 @@ export default function AddExam() {
     };
 
     const handleClick = () => {
-        dispatch(
-            createExamAction(
-                jobId,
-                topic,
-                expiryDate,
-                description,
-                selectedFile
-            )
-        );
+        const task = { jobId, topic, expiryDate, description };
     };
 
     const showSuccessMessage = () => {
@@ -57,6 +46,7 @@ export default function AddExam() {
         console.log(event.target.files[0]);
     };
 
+    //TODO: move handleSubmission to handleClick
     const handleSubmission = async () => {
         const formData = new FormData();
         formData.append("File", selectedFile);
@@ -206,6 +196,7 @@ export default function AddExam() {
                         ) : (
                             <p>Select a file to show details</p>
                         )}
+                        {/* TODO: move the handleSubmission into handleClick */}
                         <div>
                             <button onClick={handleSubmission}>Submit</button>
                         </div>
