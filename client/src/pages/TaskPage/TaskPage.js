@@ -93,39 +93,53 @@ export default function AddExam() {
 
             <Box
                 component="form"
-                sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" }
-                }}
+                // sx={{
+                //     "& > :not(style)": { m: 1, width: "25ch" }
+                // }}
+                sx={{ marginBottom: "25px" }}
                 noValidate
                 autoComplete="off"
             >
-                <Typography className="black" variant="h6">
+                <Typography
+                    className="black"
+                    variant="h6"
+                    sx={{ marginBottom: "10px" }}
+                >
                     Task Topic
                 </Typography>
                 <TextField
-                    id="outlined-basic"
-                    label="Task topic"
+                    id="outlined-static"
+                    label="Task Topic"
                     variant="outlined"
+                    sx={{ marginTop: "10px" }}
                     onChange={(e) => setTopic(e.target.value)}
                 />
             </Box>
 
             <Box
                 component="form"
-                sx={{
-                    "& > :not(style)": { m: 1, width: "65ch" }
-                }}
+                // sx={{
+                //     "& > :not(style)": { m: 1, width: "25ch" }
+                // }}
+                sx={{ marginBottom: "25px" }}
                 noValidate
                 autoComplete="off"
             >
-                <Typography className="black" variant="h6">
+                <Typography
+                    className="black"
+                    variant="h6"
+                    sx={{ marginBottom: "10px" }}
+                >
                     Task Description
                 </Typography>
                 <TextField
+                    sx={{ marginTop: "10px" }}
                     id="outlined-multiline-static"
                     label="Task Description"
                     multiline
                     rows={6}
+                    fullWidth
+                    // sx={{ width: "550px" }}
                     variant="outlined"
                     onChange={(e) => setDescription(e.target.value)}
                 />
@@ -150,6 +164,31 @@ export default function AddExam() {
                     </LocalizationProvider>
                 </div>
             </div>
+
+            <Box
+                component="form"
+                // sx={{
+                //     "& > :not(style)": { m: 1, width: "25ch" }
+                // }}
+                sx={{ marginBottom: "25px" }}
+                noValidate
+                autoComplete="off"
+            >
+                <Typography
+                    className="black"
+                    variant="h6"
+                    sx={{ marginBottom: "10px" }}
+                >
+                    Uploaded File Extension
+                </Typography>
+                <TextField
+                    sx={{ marginTop: "10px" }}
+                    id="outlined-static"
+                    label="Uploaded File Extension"
+                    variant="outlined"
+                    onChange={(e) => setTopic(e.target.value)}
+                />
+            </Box>
 
             <div>
                 <h4 style={{ color: "black", marginBottom: "20px" }}>
