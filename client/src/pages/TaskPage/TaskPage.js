@@ -16,6 +16,7 @@ export default function AddExam() {
     const [topic, setTopic] = useState("");
     const [description, setDescription] = useState("");
     const [expiryDate, setExpiryDate] = useState(new Date());
+    const [uploadFormat, setUploadFormat] = useState("");
 
     const [modalOpen, setModalOpen] = useState(false);
     const [value, setValue] = useState(new Date());
@@ -31,7 +32,23 @@ export default function AddExam() {
     };
 
     const handleClick = async () => {
-        const task = { jobId, topic, expiryDate, description };
+        /*
+        {
+            "topic":"Some topic",
+            "description":"Some discription",
+            "deadline":"2022-03-20 01:21:00",
+            "JobId":1,
+            "uploadFormat":"pdf"
+        } 
+        */
+
+        const task = {
+            topic,
+            description,
+            deadline: expiryDate,
+            JobId: jobId,
+            uploadFormat
+        };
         //
         const formData = new FormData();
         formData.append("File", selectedFile);
