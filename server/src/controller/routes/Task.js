@@ -21,8 +21,9 @@ const router = new express.Router();
 // ************************************************************************************************
 
 // recruiter creates a new task
-// Accepted JSON:
-// {
+// Accepted body (form-data: key - value pairs):
+// task : pdf or docx file.
+// data : {
 //     "description":"Some discription",
 //     "deadline":"2/10/2022",
 //     "JobId":1,
@@ -56,7 +57,8 @@ router.post('/createTask' , recruiterAuth, recTaskUpload.single('task') ,async (
 // ****************************************************************************************************
 
 // applicants uploading there tasks
-// Accepted JSON: None, just the uploaded file 
+// Accepted body (form-data: key - value pairs)
+// task: task upload.
 router.post('/uploadTask/:TaskId/:JobId' , applicantAuth , taskUploadmulter.single('task'), async (req,res) => {
     try {
         // checking if you are authorized to deal with this task 
@@ -186,7 +188,7 @@ router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
             }
             let result = {}
             result.data = (await Task.findOne({
-                attributes:['description','uploadFormat'] ,
+                attributes:['description','uploadFormat','additionalFile'] ,
                 where:{
                    id:req.params.TaskId 
                 },
@@ -233,7 +235,7 @@ router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
             }
             let result = {}
             result.data = (await Task.findOne({
-                attributes:['description','uploadFormat'] ,
+                attributes:['description','uploadFormat','additionalFile'] ,
                 where:{
                    id:req.params.TaskId 
                 },
@@ -259,7 +261,12 @@ router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
 // {
 //     "data": {
 //         "description": "Some discription",
-//         "uploadFormat": "zip-rar"
+//         "uploadFormat": "zip-rar",
+//         "additionalFile": {
+//                              "type":"Buffer",
+//                              "data":[]
+//                           }
+// }
 //     },
 //     "deadline": "2022-02-09T22:00:00.000Z"
 // }
@@ -268,7 +275,11 @@ router.get('/:JobId/:TaskId' , RecOrApp , async (req,res) =>{
 // {
 //     "data": {
 //         "description": "Some discription",
-//         "uploadFormat": "zip-rar"
+//         "uploadFormat": "zip-rar",
+//         "additionalFile": {
+//                              "type":"Buffer",
+//                              "data":[]
+//                           }
 //     },
 //     "deadline": "2022-02-09T22:00:00.000Z",
 //     "Uploaded_count": 1
