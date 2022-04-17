@@ -197,7 +197,7 @@ export const assignExamAction = (jobId,id,selectionModel, showSuccessMessage) =>
 
 //ADD QUESTION
 
-export const createQuestion = (question,chooseTopic,chooseQuestions) => {
+export const createQuestion = (question,chooseTopic,chooseQuestions,selectedQuestions,setSelectedQuestions) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
@@ -218,11 +218,13 @@ export const createQuestion = (question,chooseTopic,chooseQuestions) => {
                     body: JSON.stringify(question)
                 }
             );
-            const data = await rawResponse
+            const data = await rawResponse.json();
+
     dispatch({ type: CREATE_QUESTION_SUCCESS, payload: data });
     dispatch(getCategory())
     chooseTopic()
     chooseQuestions()
+    setSelectedQuestions(selectedQuestions.concat([data]))
 } catch (error) {
     dispatch({
         type: CREATE_QUESTION_FAIL,
