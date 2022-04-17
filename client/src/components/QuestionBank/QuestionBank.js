@@ -40,7 +40,7 @@ const QuestionBank = () => {
 
     useEffect(() => {
         dispatch(getCategory());
-        console.log("execcc");
+       // console.log("execcc");
     }, [forchange]);
     const openQuestions = () => {
         setModalOpen(true);
@@ -59,12 +59,12 @@ const QuestionBank = () => {
 
     const bank = useSelector((state) => state.bank);
 
-    console.log("imm bannnnnnnnnnk  ", bank);
+    //console.log("imm bannnnnnnnnnk  ", bank);
     // const selectedQuestions = [];
     const html = (text) => {
         const e1 = document.createElement("ul");
         e1.innerHTML = text;
-        console.log(e1.textContent);
+        //console.log(e1.textContent);
         return e1;
     };
 
@@ -456,15 +456,15 @@ const QuestionBank = () => {
                         message="test"
                         SQuestions={selectedQuestions}
                         handleDelete={(id) => {
-                            console.log("alo", id);
+                            //console.log("alo", id);
                             const filtered = selectedQuestions.filter(
                                 (question) => question.id !== id
                             );
                             const filteredID = questions.filter(
                                 (i) => i !== id
                             );
-                            console.log("alo", selectedQuestions);
-                            console.log("alo", filtered);
+                           // console.log("alo", selectedQuestions);
+                            //console.log("alo", filtered);
                             setSelectedQuestions(filtered);
                             setQuestions(filteredID);
                         }}
@@ -594,7 +594,7 @@ const QuestionBank = () => {
                                 if (selectedQuestions.includes(params.row)) {
                                     // <SnackBar setOpen={true} />;
                                     setisDoubleClick(true);
-                                    console.log("error");
+                                   // console.log("error");
                                 } else {
                                     enableButtons();
                                     const hambola = [
@@ -603,10 +603,10 @@ const QuestionBank = () => {
                                     ];
                                     setSelectedQuestions(hambola);
                                     questions.push(params.row.id);
-                                    console.log("selec", selectedQuestions);
+                                    //console.log("selec", selectedQuestions);
                                     setQuestions(questions);
-                                    console.log("questions", questions);
-                                    console.log(selectedQuestions);
+                                   // console.log("questions", questions);
+                                    //console.log(selectedQuestions);
                                 }
                             }}
                         />
