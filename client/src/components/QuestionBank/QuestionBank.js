@@ -610,13 +610,16 @@ const QuestionBank = () => {
                                 }
                             }}
                         />
-                        <div className="footer" style={{ marginTop: "20px" }}>
+                      
+                    </>
+                )}
+                <div className="footer" style={{ marginTop: "20px" }}>
                             <button
                                 style={{ marginBottom: "20px" }}
                                 className="btn btn-primary ml"
                                 // id="submitBtn"
                                 onClick={openQuestions}
-                                disabled={isDisabled}
+                                disabled={!selectedQuestions.length}
                             >
                                 Preview Questions
                             </button>
@@ -625,13 +628,11 @@ const QuestionBank = () => {
                                 className="btn btn-primary ml"
                                 // id="submitBtn"
                                 onClick={openCustomizeExam}
-                                disabled={isDisabled}
+                                disabled={!selectedQuestions.length}
                             >
                                 Create Exam
                             </button>
                         </div>
-                    </>
-                )}
 
                 {/* <div className={classes.list}> */}
                 {/* {questions.map(question => (

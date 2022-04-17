@@ -9,10 +9,12 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Typography } from "@material-ui/core";
 import { Button, Autocomplete, Chip } from "@mui/material";
+import LoadingButton from '@mui/lab/LoadingButton';
 import "react-datepicker/dist/react-datepicker.css";
 import Message from "../../components/modal/Message";
-
+import styled from "@emotion/styled";
 export default function AddExam() {
+    const Input = styled("input")({ display: "none" });
     const availableOptions = [
         "c",
         "h",
@@ -299,31 +301,17 @@ export default function AddExam() {
                     Upload Additional Resources
                 </h4>
                 <div className="mb">
-                    <div>
-                        <input
+                <label htmlFor="contained-button-file">
+                        <Input
+                            accept=".pdf, .docx"
+                            id="contained-button-file"
                             type="file"
-                            name="file"
                             onChange={changeHandler}
-                            accept={".pdf, .docx"}
                         />
-                        {isFilePicked ? (
-                            <div>
-                                <p>Filename: {selectedFile.name}</p>
-                                <p>Filetype: {selectedFile.type}</p>
-                                <p>Size in bytes: {selectedFile.size}</p>
-                                <p>
-                                    lastModifiedDate:{" "}
-                                    {selectedFile.lastModifiedDate.toLocaleDateString()}
-                                </p>
-                            </div>
-                        ) : (
-                            <p>Select a file to show details</p>
-                        )}
-                        {/* TODO: move the handleSubmission into handleClick */}
-                        {/* <div>
-                            <button onClick={handleSubmission}>Submit</button>
-                        </div> */}
-                    </div>
+                        <Button variant="contained" component="span">
+                            Upload File
+                        </Button>
+                    </label>
                 </div>
             </div>
 
