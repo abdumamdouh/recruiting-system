@@ -7,7 +7,11 @@ import {
     CHOOSE_TOPIC_FAIL,
     GET_QUESTIONS_REQUEST,
     GET_QUESTIONS_SUCCESS,
-    GET_QUESTIONS_FAIL
+    GET_QUESTIONS_FAIL,
+    CREATE_QUESTION_FAIL,
+    CREATE_QUESTION_SUCCESS,
+    CREATE_QUESTION_REQUEST
+    
     
 } from "../types";
 
@@ -20,9 +24,12 @@ const bankReducer = (state = {}, action) => {
                 ...state }
 
         case CHOOSE_CATEGORY_SUCCESS:
-            return {
-                category:action.payload  
-            }
+            return state.hasOwnProperty("createdQuestion")?{
+                category:action.payload,
+                createdQuestion:state.createdQuestion
+            }     :{
+                category:action.payload,
+            }    
 
         case CHOOSE_CATEGORY_FAIL:
             return{
@@ -31,14 +38,17 @@ const bankReducer = (state = {}, action) => {
             
             // choosing topic
         case CHOOSE_TOPIC_REQUEST:
+           return state
            
-        console.log("reducer state",state)
-            return state
         case CHOOSE_TOPIC_SUCCESS:
-            console.log("bank reducer: ",action.payload)
-            return {
-                topic:action.payload,    
-                category:state.category
+            //console.log("bank reducer: ",action.payload)
+            return state.hasOwnProperty("createdQuestion")?{
+                category:state.category,
+                topic:action.payload,
+                createdQuestion:state.createdQuestion
+            }     :{
+                category:state.category,
+                topic:action.payload
             }    
 
         case CHOOSE_TOPIC_FAIL:
@@ -55,7 +65,12 @@ const bankReducer = (state = {}, action) => {
             return state 
 
         case GET_QUESTIONS_SUCCESS:
-            return {
+            return state.hasOwnProperty("createdQuestion")?{
+                question:action.payload,    
+                category:state.category,
+                topic:state.topic,
+                createdQuestion:state.createdQuestion
+            }     :{
                 question:action.payload,    
                 category:state.category,
                 topic:state.topic
@@ -64,7 +79,25 @@ const bankReducer = (state = {}, action) => {
         case GET_QUESTIONS_FAIL:
             return{
                 error: action.payload,
-            }    
+            } 
+            
+        case CREATE_QUESTION_REQUEST:
+            return state 
+
+        case CREATE_QUESTION_SUCCESS:
+            console.log("from reuxxxxx",action.payload)
+            return {...state,
+            createdQuestion:action.payload}
+            
+
+        case CREATE_QUESTION_FAIL:
+            return{
+                error: action.payload,
+            }     
+
+
+
+
         default:
             return {};
     }

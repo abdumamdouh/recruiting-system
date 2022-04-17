@@ -13,8 +13,12 @@ import {
     GET_JOB_EXAMS_FAIL,
     ASSIGN_TASK_TO_APPLICANTS_REQUEST,
     ASSIGN_TASK_TO_APPLICANTS_SUCCESS,
-    ASSIGN_TASK_TO_APPLICANTS_FAIL
+    ASSIGN_TASK_TO_APPLICANTS_FAIL,
+    CREATE_QUESTION_FAIL,
+    CREATE_QUESTION_SUCCESS,
+    CREATE_QUESTION_REQUEST
 } from "../types/index";
+import {getCategory} from './bank'
 const serverURL = "http://localhost:5000";
 export const createExamAction = (jobId,topic,questions,privatee,showSuccessMessage) => {
     let mcq={jobId:jobId,topic:topic,questions:questions, private: privatee}
@@ -86,8 +90,8 @@ export const getExamsAction = (pageNumber) => {
 }
 //pick exam from available exams
 
-export const pickExamAction = (jobId,MCQId, expiryDate,duration,showSuccessMessage) => {
-    let mcq={jobId:jobId, MCQId: MCQId,expiryDate:expiryDate, duration:duration}
+export const pickExamAction = (jobId,MCQId,startDate, expiryDate,duration,showSuccessMessage) => {
+    let mcq={jobId:jobId, MCQId: MCQId,startDate:startDate,expiryDate:expiryDate, duration:duration}
     console.log(mcq)
     return async (dispatch, getState) => {
         try {
@@ -183,6 +187,47 @@ export const assignExamAction = (jobId,id,selectionModel, showSuccessMessage) =>
 } catch (error) {
     dispatch({
         type: ASSIGN_TASK_TO_APPLICANTS_FAIL,
+        payload: error.response && error.response.data
+    });
+}
+};
+};
+
+
+
+//ADD QUESTION
+
+export const createQuestion = (question,chooseTopic,chooseQuestions,selectedQuestions,setSelectedQuestions) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: CREATE_QUESTION_REQUEST,
+                loading: true
+            });
+            const { userInfo } = getState().user;
+            console.log(userInfo.token);
+            const rawResponse = await fetch(
+                `${serverURL}/createQuestion`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    },
+                    body: JSON.stringify(question)
+                }
+            );
+            const data = await rawResponse.json();
+
+    dispatch({ type: CREATE_QUESTION_SUCCESS, payload: data });
+    dispatch(getCategory())
+    chooseTopic()
+    chooseQuestions()
+    setSelectedQuestions(selectedQuestions.concat([data]))
+} catch (error) {
+    dispatch({
+        type: CREATE_QUESTION_FAIL,
         payload: error.response && error.response.data
     });
 }

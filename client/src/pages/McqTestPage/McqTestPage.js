@@ -15,6 +15,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 
+import Countdown from "./Countdown";
+import MyTimer from "./MyTimer";
 import Message from "../../components/modal/Message";
 
 import { useState } from "react";
@@ -432,6 +434,11 @@ const McqTestPage = (props) => {
         }
         // setMcqTaken(true);
     };
+
+    //TODO: replace the hardcoded value with the duration from the API
+    const time = new Date();
+    time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
+
     return (
         <>
             {modalOpen && (
@@ -467,17 +474,26 @@ const McqTestPage = (props) => {
                         }}
                         component="div"
                     >
-                        <Typography
-                            color="black"
-                            variant="h5"
+                        <div
                             style={{
-                                textAlign: "center",
-                                fontWeight: "800",
-                                fontSize: "35px"
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "spaceBetween"
                             }}
                         >
-                            {Mcq.topic}
-                        </Typography>
+                            <Typography
+                                color="black"
+                                variant="h5"
+                                style={{
+                                    textAlign: "center",
+                                    fontWeight: "800",
+                                    fontSize: "35px"
+                                }}
+                            >
+                                {Mcq.topic}
+                            </Typography>
+                            <MyTimer expiryTimestamp={time} />
+                        </div>
 
                         <Divider style={{ margin: "20px 0" }} />
                         {/* {JSON.stringify(Mcq)} */}

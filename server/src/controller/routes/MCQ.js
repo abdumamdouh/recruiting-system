@@ -23,6 +23,42 @@ const { includes } = require("lodash");
 const { is } = require("sequelize/lib/operators");
 
 const router = new express.Router();
+//Add Question
+
+router.post("/createQuestion", recruiterAuth, async (req, res) => {
+    try {
+        const question=req.body;
+        const record = await Question.create( question )
+        res.send(record);
+    } catch (error) {
+        res.status(400).send(
+            error.message
+                ? error.message
+                : error.errors[0].errors.errors[0].message
+        );
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
@@ -68,8 +104,7 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
 // Add MCQ from the question bank
 router.post("/createExam", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic, private, questions } =
-            req.body;
+        const { jobId, topic, private, questions } = req.body;
         const { id: recruiterId } = req.recruiter;
         const mcq = await MCQ.create({ topic, private, recruiterId });
         // await mcq.addJob(jobId, { through: { expiryDate, duration } });
@@ -83,10 +118,12 @@ router.post("/createExam", recruiterAuth, async (req, res) => {
 // Pick an availale MCQ exam to the job
 router.post("/pickMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, MCQId, expiryDate, duration } = req.body;
+        const { jobId, MCQId, startDate, expiryDate, duration } = req.body;
         const mcq = await MCQ.findByPk(MCQId);
 
-        await mcq.addJob(jobId, { through: { expiryDate, duration } });
+        await mcq.addJob(jobId, {
+            through: { startDate, expiryDate, duration }
+        });
 
         res.status(201).send("The MCQ is added successfully");
     } catch (error) {
@@ -207,7 +244,7 @@ router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
         // console.log(questions);
         res.status(200).send({ questions });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).send(error.message);
     }
 });
@@ -328,5 +365,9 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             : res.status(400).send(error.message);
     }
 });
+
+
+
+
 
 module.exports = router;
