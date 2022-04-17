@@ -60,7 +60,7 @@ export default function AddExam() {
             "uploadFormat":"pdf"
         } 
         */
-
+        console.log(jobId);
         const task = {
             topic,
             description,
@@ -88,7 +88,7 @@ export default function AddExam() {
                 headers: {
                     Accept: "multipart/form-data",
                     // "Content-Type": "application/json",
-                    "Content-Type": "multipart/form-data",
+                    // "Content-Type": "multipart/form-data",
                     Authorization: "Bearer " + userInfo.token
                 }
             });

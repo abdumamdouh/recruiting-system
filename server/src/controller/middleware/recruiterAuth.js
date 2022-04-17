@@ -26,6 +26,7 @@ const recruiterAuth = async (req, res, next) => {
         }
         req.token = token;
         req.recruiter = recruiter;
+        console.log(req.body);
         next();
     } catch (e) {
         console.log(req.body);
