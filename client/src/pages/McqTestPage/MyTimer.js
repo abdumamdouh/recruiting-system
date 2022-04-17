@@ -40,3 +40,5 @@ function MyTimer({ expiryTimestamp }) {
         </div>
     );
 }
+
+export default MyTimer;
