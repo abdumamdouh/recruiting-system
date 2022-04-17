@@ -16,6 +16,7 @@ import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
 import QuestionsPopUp from "./QuestionsPopUp";
 import CustomizeExamPopup from "./CustomizeExamPopUp";
 import { Select } from "@mui/material";
+import AddQuestion from "./AddQuestion";
 // import { Formik, Form } from "formik";
 // import SelectWrapper from "../Forms/SelectWrapper";
 // import ButtonWrapper from "../Forms/ButtonWrapper";
@@ -29,6 +30,8 @@ const QuestionBank = () => {
     const [modalOpen, setModalOpen] = useState(false);
     //for opening create exam popup
     const [openExam, setOpenExam] = useState(false);
+    //for opening Add question one by one
+    const [openQuestion, setOpenQuestion] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [selectedQuestions, setSelectedQuestions] = useState([]);
     const [isDisabled, setDisabled] = useState(true);
@@ -37,7 +40,7 @@ const QuestionBank = () => {
 
     useEffect(() => {
         dispatch(getCategory());
-        console.log("execcc");
+       // console.log("execcc");
     }, [forchange]);
     const openQuestions = () => {
         setModalOpen(true);
@@ -45,6 +48,10 @@ const QuestionBank = () => {
     const openCustomizeExam = () => {
         setOpenExam(true);
     };
+    //Add Question one by one 
+    const addQuestion = () => {
+        setOpenQuestion(true);
+    }
     const enableButtons = () => {
         setDisabled(false);
     };
@@ -52,12 +59,12 @@ const QuestionBank = () => {
 
     const bank = useSelector((state) => state.bank);
 
-    console.log("imm bannnnnnnnnnk  ", bank);
+    //console.log("imm bannnnnnnnnnk  ", bank);
     // const selectedQuestions = [];
     const html = (text) => {
         const e1 = document.createElement("ul");
         e1.innerHTML = text;
-        console.log(e1.textContent);
+        //console.log(e1.textContent);
         return e1;
     };
 
@@ -449,15 +456,15 @@ const QuestionBank = () => {
                         message="test"
                         SQuestions={selectedQuestions}
                         handleDelete={(id) => {
-                            console.log("alo", id);
+                            //console.log("alo", id);
                             const filtered = selectedQuestions.filter(
                                 (question) => question.id !== id
                             );
                             const filteredID = questions.filter(
                                 (i) => i !== id
                             );
-                            console.log("alo", selectedQuestions);
-                            console.log("alo", filtered);
+                           // console.log("alo", selectedQuestions);
+                            //console.log("alo", filtered);
                             setSelectedQuestions(filtered);
                             setQuestions(filteredID);
                         }}
@@ -470,6 +477,7 @@ const QuestionBank = () => {
                         setSuccess={setSuccess}
                     />
                 )}
+                {openQuestion && (<AddQuestion  setSuccess={setSuccess} selectedQuestions={selectedQuestions} setSelectedQuestions={setSelectedQuestions} view={view} setView={setView } topicProp={topic} setTopicProp={setTopic} setOpenQuestion={setOpenQuestion}/>)}
                 {/* 
                 <div>
 
@@ -504,7 +512,10 @@ const QuestionBank = () => {
 
 
                 </div> */}
-
+                <div>
+                <label >Add Question one by one</label>
+            <div>  <button className="btn btn-primary" onClick={addQuestion}> Add Question</button> </div>  
+                </div>
                 <label>Category</label>
                 <select
                     name="category"
@@ -525,7 +536,7 @@ const QuestionBank = () => {
                         );
                     })}
                 </select>
-
+                
                 {view !== "" ? (
                     <div>
                         <label>Topic</label>
@@ -534,6 +545,7 @@ const QuestionBank = () => {
                             onChange={bringquestions}
                             className="custom-select text-capitalize"
                             style={{ marginBottom: "1rem" }}
+                            defaultValue={topic}
                         >
                             <option>--Select topic--</option>
                             {bank.hasOwnProperty("topic") &&
@@ -543,6 +555,7 @@ const QuestionBank = () => {
                                             key={topic}
                                             value={topic}
                                             name="category"
+                                            
                                         >
                                             {topic}
                                         </option>
@@ -581,7 +594,7 @@ const QuestionBank = () => {
                                 if (selectedQuestions.includes(params.row)) {
                                     // <SnackBar setOpen={true} />;
                                     setisDoubleClick(true);
-                                    console.log("error");
+                                   // console.log("error");
                                 } else {
                                     enableButtons();
                                     const hambola = [
@@ -590,10 +603,10 @@ const QuestionBank = () => {
                                     ];
                                     setSelectedQuestions(hambola);
                                     questions.push(params.row.id);
-                                    console.log("selec", selectedQuestions);
+                                    //console.log("selec", selectedQuestions);
                                     setQuestions(questions);
-                                    console.log("questions", questions);
-                                    console.log(selectedQuestions);
+                                   // console.log("questions", questions);
+                                    //console.log(selectedQuestions);
                                 }
                             }}
                         />

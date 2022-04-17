@@ -16,13 +16,12 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
     const dispatch = useDispatch();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [expiryDate, setExpiryDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(new Date());
     const [duration, setDuration] = useState(0);
     const [value, setValue] = useState(new Date());
+    const [dateValue, setDateValue] = useState(new Date());
     const [modalOpen, setModalOpen] = useState(false);
-    const handleDate = date => {
-        setSelectedDate(date);
-        setExpiryDate(date);
-    };
+    
     const showSuccessMessage = () => {
         history.push(`/dashboard/uploadedexams`);
     };
@@ -33,6 +32,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
             pickExamAction(
                 jobId,
                 MCQId,
+                startDate,
                 expiryDate,
                 duration,
                 showSuccessMessage
@@ -62,7 +62,33 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                         )}
                         <div className="mb black">
                             <Typography color="black" variant="h6">
-                                Add Expiration Date
+                                Start Date
+                            </Typography>
+                            <div style={{ marginTop: "10px" }}>
+                                <LocalizationProvider
+                                    dateAdapter={AdapterDateFns}
+                                >
+                                    <DateTimePicker
+                                        renderInput={props => (
+                                            <TextField {...props} />
+                                        )}
+                                        label="DateTimePicker"
+                                        value={dateValue}
+                                        onChange={newValue => {
+                                            setDateValue(newValue);
+                                            setStartDate(newValue);
+                                            console.log(newValue);
+                                        }}
+                                    />
+                                </LocalizationProvider>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div className="body">
+                    <div className="mb black">
+                            <Typography color="black" variant="h6">
+                                End Date
                             </Typography>
                             <div style={{ marginTop: "10px" }}>
                                 <LocalizationProvider
