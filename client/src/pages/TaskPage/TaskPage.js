@@ -53,16 +53,18 @@ export default function AddExam() {
         console.log(task);
         //
         const formData = new FormData();
-        formData.append("File", selectedFile);
+        formData.append("file", selectedFile);
+        formData.append("data", task);
         console.log(formData);
 
         // try {
-        //     const response = await fetch(`http://localhost:5000/getMCQ/1`, {
+        //     const response = await fetch(`localhost:5000/createTask`, {
         //         method: "POST",
         //         body: formData,
         //         headers: {
         //             Accept: "application/json",
         //             "Content-Type": "application/json",
+        // //             "Content-Type": "application/x-www-form-urlencoded",
         //             Authorization: "Bearer " + userInfo.token
         //         }
         //     });
