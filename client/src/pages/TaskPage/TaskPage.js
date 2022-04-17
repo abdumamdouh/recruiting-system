@@ -35,7 +35,7 @@ export default function AddExam() {
     const [topic, setTopic] = useState("");
     const [description, setDescription] = useState("");
     const [expiryDate, setExpiryDate] = useState(new Date());
-    const [uploadFormat, setUploadFormat] = useState("");
+    // const [uploadFormat, setUploadFormat] = useState("");
 
     const [modalOpen, setModalOpen] = useState(false);
     const [value, setValue] = useState(new Date());
@@ -72,29 +72,33 @@ export default function AddExam() {
         console.log(task);
         //
         const formData = new FormData();
-        formData.append("file", selectedFile);
+        formData.append("task", selectedFile);
         formData.append("data", task);
         console.log(formData);
 
-        // try {
-        //     const response = await fetch(`localhost:5000/createTask`, {
-        //         method: "POST",
-        //         body: formData,
-        //         headers: {
-        //             Accept: "application/json",
-        //             "Content-Type": "application/json",
-        // //             "Content-Type": "application/x-www-form-urlencoded",
-        //             Authorization: "Bearer " + userInfo.token
-        //         }
-        //     });
-        //     const data = await response.json();
-        //     console.log(data);
-        //     //TODO: condition for success
-        //     showSuccessMessage();
-        // } catch (error) {
-        //     console.error("Error:", error);
-        //     handleOnError(error);
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + " - " + pair[1]);
         // }
+
+        try {
+            const response = await fetch(`localhost:5000/createTask`, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    Accept: "application/json",
+                    // "Content-Type": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    Authorization: "Bearer " + userInfo.token
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+            //TODO: condition for success
+            showSuccessMessage();
+        } catch (error) {
+            console.error("Error:", error);
+            handleOnError(error);
+        }
     };
 
     const showSuccessMessage = () => {
