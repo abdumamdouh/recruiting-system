@@ -6,7 +6,7 @@ import Message from "../../components/modal/Message";
 import { updateApplicantAction } from "../../redux/actions/user";
 import {createQuestion} from "../../redux/actions/exam"
 import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
-const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSelectedQuestions,selectedQuestions }) => {
+const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSelectedQuestions,selectedQuestions,setSuccess }) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [completeQuestion, setCompleteQuestion] = useState({});
     const [question, setQuestion] = useState("");
@@ -88,6 +88,7 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
             console.log('selected', selectedQuestions)
              dispatch(createQuestion(completeQuestion,chooseTopic,chooseQuestions));
             setOpenQuestion(false);
+            setSuccess(true)
         }
         
        

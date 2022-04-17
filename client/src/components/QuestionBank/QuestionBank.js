@@ -477,7 +477,7 @@ const QuestionBank = () => {
                         setSuccess={setSuccess}
                     />
                 )}
-                {openQuestion && (<AddQuestion selectedQuestions={selectedQuestions} setSelectedQuestions={setSelectedQuestions} view={view} setView={setView } topicProp={topic} setTopicProp={setTopic} setOpenQuestion={setOpenQuestion}/>)}
+                {openQuestion && (<AddQuestion  setSuccess={setSuccess} selectedQuestions={selectedQuestions} setSelectedQuestions={setSelectedQuestions} view={view} setView={setView } topicProp={topic} setTopicProp={setTopic} setOpenQuestion={setOpenQuestion}/>)}
                 {/* 
                 <div>
 
