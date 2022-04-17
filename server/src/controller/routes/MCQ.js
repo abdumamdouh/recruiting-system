@@ -88,7 +88,6 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
                 // MCQId: mcq.id
             })
         );
-        // console.log(questions);
         questions = await Question.bulkCreate(questions, { validate: true });
         const mcq = await MCQ.create({ topic, private, recruiterId });
         // await mcq.addJob(jobId, { through: { expiryDate, duration } });
