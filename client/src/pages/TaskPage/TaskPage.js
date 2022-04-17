@@ -66,7 +66,7 @@ export default function AddExam() {
             description,
             deadline: expiryDate,
             JobId: jobId,
-            uploadFormat
+            uploadFormat: option.join("-")
         };
 
         console.log(task);
@@ -257,6 +257,8 @@ export default function AddExam() {
                         sx={{ marginTop: "10px", width: "15rem" }}
                         value={option}
                         onChange={(event, newValue) => {
+                            // console.log(newValue);
+                            // console.log(option);
                             setOption(newValue);
                         }}
                         multiple
@@ -295,6 +297,7 @@ export default function AddExam() {
                             type="file"
                             name="file"
                             onChange={changeHandler}
+                            accept={".pdf, .docx"}
                         />
                         {isFilePicked ? (
                             <div>
