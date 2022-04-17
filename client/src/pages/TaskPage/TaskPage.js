@@ -81,17 +81,18 @@ export default function AddExam() {
         // }
 
         try {
-            const response = await fetch(`localhost:5000/createTask`, {
+            console.log(userInfo.token);
+            const response = await fetch(`http://localhost:5000/createTask`, {
                 method: "POST",
-                body: formData,
+                body: JSON.stringify(formData),
                 headers: {
-                    Accept: "application/json",
+                    Accept: "application/x-www-form-urlencoded",
                     // "Content-Type": "application/json",
                     "Content-Type": "application/x-www-form-urlencoded",
                     Authorization: "Bearer " + userInfo.token
                 }
             });
-            const data = await response.json();
+            const data = await response;
             console.log(data);
             //TODO: condition for success
             showSuccessMessage();
