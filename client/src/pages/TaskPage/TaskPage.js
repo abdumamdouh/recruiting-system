@@ -84,9 +84,9 @@ export default function AddExam() {
             console.log(userInfo.token);
             const response = await fetch(`http://localhost:5000/createTask`, {
                 method: "POST",
-                body: JSON.stringify(formData),
+                body: formData,
                 headers: {
-                    Accept: "application/json",
+                    Accept: "multipart/form-data",
                     // "Content-Type": "application/json",
                     "Content-Type": "multipart/form-data",
                     Authorization: "Bearer " + userInfo.token
