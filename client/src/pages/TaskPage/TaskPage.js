@@ -73,7 +73,7 @@ export default function AddExam() {
         //
         const formData = new FormData();
         formData.append("task", selectedFile);
-        formData.append("data", task);
+        formData.append("data", JSON.stringify(task));
         console.log(formData);
 
         // for (let pair of formData.entries()) {
@@ -86,9 +86,9 @@ export default function AddExam() {
                 method: "POST",
                 body: JSON.stringify(formData),
                 headers: {
-                    Accept: "application/x-www-form-urlencoded",
+                    Accept: "application/json",
                     // "Content-Type": "application/json",
-                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Content-Type": "multipart/form-data",
                     Authorization: "Bearer " + userInfo.token
                 }
             });
