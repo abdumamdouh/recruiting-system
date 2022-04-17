@@ -16,6 +16,7 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 
 import Countdown from "./Countdown";
+import MyTimer from "./MyTimer";
 import Message from "../../components/modal/Message";
 
 import { useState } from "react";
@@ -434,6 +435,10 @@ const McqTestPage = (props) => {
         // setMcqTaken(true);
     };
 
+    //TODO: replace the hardcoded value with the duration from the API
+    const time = new Date();
+    time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
+
     return (
         <>
             {modalOpen && (
@@ -487,7 +492,7 @@ const McqTestPage = (props) => {
                             >
                                 {Mcq.topic}
                             </Typography>
-                            <Countdown time={0} duration={60} />
+                            <MyTimer expiryTimestamp={time} />
                         </div>
 
                         <Divider style={{ margin: "20px 0" }} />
