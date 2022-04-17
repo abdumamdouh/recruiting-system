@@ -40,7 +40,7 @@ const QuestionBank = () => {
 
     useEffect(() => {
         dispatch(getCategory());
-       // console.log("execcc");
+        // console.log("execcc");
     }, [forchange]);
     const openQuestions = () => {
         setModalOpen(true);
@@ -48,10 +48,10 @@ const QuestionBank = () => {
     const openCustomizeExam = () => {
         setOpenExam(true);
     };
-    //Add Question one by one 
+    //Add Question one by one
     const addQuestion = () => {
         setOpenQuestion(true);
-    }
+    };
     const enableButtons = () => {
         setDisabled(false);
     };
@@ -463,7 +463,7 @@ const QuestionBank = () => {
                             const filteredID = questions.filter(
                                 (i) => i !== id
                             );
-                           // console.log("alo", selectedQuestions);
+                            // console.log("alo", selectedQuestions);
                             //console.log("alo", filtered);
                             setSelectedQuestions(filtered);
                             setQuestions(filteredID);
@@ -477,7 +477,18 @@ const QuestionBank = () => {
                         setSuccess={setSuccess}
                     />
                 )}
-                {openQuestion && (<AddQuestion  setSuccess={setSuccess} selectedQuestions={selectedQuestions} setSelectedQuestions={setSelectedQuestions} view={view} setView={setView } topicProp={topic} setTopicProp={setTopic} setOpenQuestion={setOpenQuestion}/>)}
+                {openQuestion && (
+                    <AddQuestion
+                        setSuccess={setSuccess}
+                        selectedQuestions={selectedQuestions}
+                        setSelectedQuestions={setSelectedQuestions}
+                        view={view}
+                        setView={setView}
+                        topicProp={topic}
+                        setTopicProp={setTopic}
+                        setOpenQuestion={setOpenQuestion}
+                    />
+                )}
                 {/* 
                 <div>
 
@@ -513,9 +524,22 @@ const QuestionBank = () => {
 
                 </div> */}
                 <div>
-                <label >Add Question one by one</label>
-            <div>  <button className="btn btn-primary" onClick={addQuestion}> Add Question</button> </div>  
+                    <h4 style={{ marginTop: "1.2rem" }}>
+                        Add Question one by one
+                    </h4>
+                    <div>
+                        {" "}
+                        <button
+                            className="btn btn-primary"
+                            onClick={addQuestion}
+                            style={{ marginBottom: "10px" }}
+                        >
+                            {" "}
+                            Add Question
+                        </button>{" "}
+                    </div>
                 </div>
+                <h4>Choose from the questions bank.</h4>
                 <label>Category</label>
                 <select
                     name="category"
@@ -536,7 +560,7 @@ const QuestionBank = () => {
                         );
                     })}
                 </select>
-                
+
                 {view !== "" ? (
                     <div>
                         <label>Topic</label>
@@ -555,7 +579,6 @@ const QuestionBank = () => {
                                             key={topic}
                                             value={topic}
                                             name="category"
-                                            
                                         >
                                             {topic}
                                         </option>
@@ -594,7 +617,7 @@ const QuestionBank = () => {
                                 if (selectedQuestions.includes(params.row)) {
                                     // <SnackBar setOpen={true} />;
                                     setisDoubleClick(true);
-                                   // console.log("error");
+                                    // console.log("error");
                                 } else {
                                     enableButtons();
                                     const hambola = [
@@ -605,34 +628,33 @@ const QuestionBank = () => {
                                     questions.push(params.row.id);
                                     //console.log("selec", selectedQuestions);
                                     setQuestions(questions);
-                                   // console.log("questions", questions);
+                                    // console.log("questions", questions);
                                     //console.log(selectedQuestions);
                                 }
                             }}
                         />
-                      
                     </>
                 )}
                 <div className="footer" style={{ marginTop: "20px" }}>
-                            <button
-                                style={{ marginBottom: "20px" }}
-                                className="btn btn-primary ml"
-                                // id="submitBtn"
-                                onClick={openQuestions}
-                                disabled={!selectedQuestions.length}
-                            >
-                                Preview Questions
-                            </button>
-                            <button
-                                style={{ marginBottom: "20px" }}
-                                className="btn btn-primary ml"
-                                // id="submitBtn"
-                                onClick={openCustomizeExam}
-                                disabled={!selectedQuestions.length}
-                            >
-                                Create Exam
-                            </button>
-                        </div>
+                    <button
+                        style={{ marginBottom: "20px" }}
+                        className="btn btn-primary ml"
+                        // id="submitBtn"
+                        onClick={openQuestions}
+                        disabled={!selectedQuestions.length}
+                    >
+                        Preview Questions
+                    </button>
+                    <button
+                        style={{ marginBottom: "20px" }}
+                        className="btn btn-primary ml"
+                        // id="submitBtn"
+                        onClick={openCustomizeExam}
+                        disabled={!selectedQuestions.length}
+                    >
+                        Create Exam
+                    </button>
+                </div>
 
                 {/* <div className={classes.list}> */}
                 {/* {questions.map(question => (

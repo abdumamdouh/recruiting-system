@@ -3,10 +3,34 @@ import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Message from "../../components/modal/Message";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { updateApplicantAction } from "../../redux/actions/user";
-import {createQuestion} from "../../redux/actions/exam"
+import { createQuestion } from "../../redux/actions/exam";
 import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
-const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSelectedQuestions,selectedQuestions,setSuccess }) => {
+const AddQuestion = ({
+    setOpenQuestion,
+    view,
+    setView,
+    topicProp,
+    setTopicProp,
+    setSelectedQuestions,
+    selectedQuestions,
+    setSuccess
+}) => {
+    const theme = createTheme({
+        components: {
+            // Name of the component
+            MuiTextField: {
+                styleOverrides: {
+                    // Name of the slot
+                    root: {
+                        // Some CSS
+                        color: "green"
+                    }
+                }
+            }
+        }
+    });
     const [modalOpen, setModalOpen] = useState(false);
     const [completeQuestion, setCompleteQuestion] = useState({});
     const [question, setQuestion] = useState("");
@@ -14,26 +38,28 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
     const [category, setCategory] = useState("");
     const [difficulty, setDifficulty] = useState("Easy");
     const [topic, setTopic] = useState("");
-    const[completeQuestionWId,setCompleteQuestionWId]=useState({})
+    const [completeQuestionWId, setCompleteQuestionWId] = useState({});
     const difficulties = [
         {
             value: "Easy",
-            label: "Easy"
+            label: "Easy",
+            color: "#027D6F"
         },
 
         {
             value: "Medium",
-            label: "Medium"
+            label: "Medium",
+            color: "#FFC01E"
         },
         {
             value: "Hard",
-            label: "Hard"
+            label: "Hard",
+            color: "#FF375F"
         }
     ];
 
     const dispatch = useDispatch();
-    const [inputFields, setInputFields] = useState([
-    ]);
+    const [inputFields, setInputFields] = useState([]);
 
     const addInputField = () => {
         setInputFields([
@@ -43,7 +69,7 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
             }
         ]);
     };
-    const removeInputFields = index => {
+    const removeInputFields = (index) => {
         const rows = [...inputFields];
         rows.splice(index, 1);
         setInputFields(rows);
@@ -53,19 +79,21 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
         const list = [...inputFields];
         list[index][name] = value;
         setInputFields(list);
-        console.log(inputFields)
+        console.log(inputFields);
     };
-    const chooseTopic =()=>{
-        if(view!== '')
-        { dispatch(getTopic(view, setView))}
-    }
-    const chooseQuestions =()=>{
-        console.log('topicc',topicProp)
+    const chooseTopic = () => {
+        if (view !== "") {
+            dispatch(getTopic(view, setView));
+        }
+    };
+    const chooseQuestions = () => {
+        console.log("topicc", topicProp);
 
-        if(topicProp!== '')
-        { dispatch(getQuestions(topicProp, view, setTopicProp))}
-    }
-    const handleSubmit = e => {
+        if (topicProp !== "") {
+            dispatch(getQuestions(topicProp, view, setTopicProp));
+        }
+    };
+    const handleSubmit = (e) => {
         e.preventDefault();
         let completeQuestion = {
             question: question,
@@ -73,35 +101,43 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
             difficulty: difficulty,
             answer: answer,
             topic: topic,
-            choices:inputFields.map(a=>a['choice'])
+            choices: inputFields.map((a) => a["choice"])
         };
         setCompleteQuestion(completeQuestion);
         console.log(completeQuestion);
-        console.log('top',topicProp)
-        if((completeQuestion.question == '') || (completeQuestion.choices==[]) || completeQuestion.answer == '' || completeQuestion.topic == '' || completeQuestion.category=='')
-        { 
-            setModalOpen(true)
-        }
-        else
-        {   
+        console.log("top", topicProp);
+        if (
+            completeQuestion.question === "" ||
+            completeQuestion.choices === [] ||
+            completeQuestion.answer === "" ||
+            completeQuestion.topic === "" ||
+            completeQuestion.category === ""
+        ) {
+            setModalOpen(true);
+        } else {
             // setSelectedQuestions([...selectedQuestions, completeQuestion])
-            console.log('selected', selectedQuestions)
-             dispatch(createQuestion(completeQuestion,chooseTopic,chooseQuestions,selectedQuestions,setSelectedQuestions));
+            console.log("selected", selectedQuestions);
+            dispatch(
+                createQuestion(
+                    completeQuestion,
+                    chooseTopic,
+                    chooseQuestions,
+                    selectedQuestions,
+                    setSelectedQuestions
+                )
+            );
             setOpenQuestion(false);
-            setSuccess(true)
+            setSuccess(true);
         }
-        
-       
-        
     };
 
     return (
-        <div className="edit_profile">
+        <div className="edit_profile" style={{ zIndex: 200 }}>
             {/* <button className="btn btn-danger btn_close"
                 onClick={() => setOnEdit(false)}>
                     Close
                 </button> */}
-                {modalOpen && (
+            {modalOpen && (
                 <Message
                     setOpenModal={setModalOpen}
                     message="Make sure to fill all fields first"
@@ -117,7 +153,7 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
                             multiline
                             maxRows={4}
                             value={question}
-                            onChange={e => setQuestion(e.target.value)}
+                            onChange={(e) => setQuestion(e.target.value)}
                         />
                     </div>
                 </div>
@@ -133,7 +169,7 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
                                             <div className="form-group">
                                                 <input
                                                     type="text"
-                                                    onChange={evnt =>
+                                                    onChange={(evnt) =>
                                                         handleChange(
                                                             index,
                                                             evnt
@@ -146,8 +182,7 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
                                                 />
                                             </div>
                                         </div>
-                                       
-                                     
+
                                         <div className="col">
                                             {inputFields.length !== 1 ? (
                                                 <button
@@ -186,7 +221,7 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
                             id="outlined-basic"
                             label="Category"
                             variant="outlined"
-                            onChange={e => setCategory(e.target.value)}
+                            onChange={(e) => setCategory(e.target.value)}
                         />
                     </div>
                 </div>
@@ -197,30 +232,35 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
                             id="outlined-basic"
                             label="Topic"
                             variant="outlined"
-                            onChange={e => setTopic(e.target.value)}
+                            onChange={(e) => setTopic(e.target.value)}
                         />
                     </div>
                 </div>
                 <div className="form-group">
-                    <label>Difficulty</label>
+                    <label style={{ marginBottom: "0.6rem" }}>Difficulty</label>
                     <div className="position-relative">
                         <div>
-                            <TextField
-                                id="outlined-select"
-                                select
-                                label="diff"
-                                value={difficulty}
-                                onChange={e => setDifficulty(e.target.value)}
-                            >
-                                {difficulties.map(option => (
-                                    <MenuItem
-                                        key={option.value}
-                                        value={option.value}
-                                    >
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            <ThemeProvider theme={theme}>
+                                <TextField
+                                    id="outlined-select"
+                                    select
+                                    label="Difficulty"
+                                    value={difficulty}
+                                    onChange={(e) =>
+                                        setDifficulty(e.target.value)
+                                    }
+                                >
+                                    {difficulties.map((option) => (
+                                        <MenuItem
+                                            key={option.value}
+                                            value={option.value}
+                                            sx={{ color: option.color }}
+                                        >
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </ThemeProvider>
                         </div>
                     </div>
                 </div>
@@ -232,7 +272,7 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
                             id="outlined-basic"
                             label="Answer"
                             variant="outlined"
-                            onChange={e => setAnswer(e.target.value)}
+                            onChange={(e) => setAnswer(e.target.value)}
                         />
                     </div>
                 </div>

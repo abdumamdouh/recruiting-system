@@ -9,7 +9,6 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Typography } from "@material-ui/core";
 import { Button, Autocomplete, Chip } from "@mui/material";
-import LoadingButton from '@mui/lab/LoadingButton';
 import "react-datepicker/dist/react-datepicker.css";
 import Message from "../../components/modal/Message";
 import styled from "@emotion/styled";
@@ -232,6 +231,12 @@ export default function AddExam() {
                 >
                     Uploaded File Extension
                 </Typography>
+                <sm style={{ fontSize: 15, color: "#827F7E" }}>
+                    <em>
+                        Restrict applicants for this job to a certain file
+                        upload format.
+                    </em>
+                </sm>
                 {/* <TextField
                     sx={{ marginTop: "10px" }}
                     id="outlined-static"
@@ -297,11 +302,57 @@ export default function AddExam() {
             </Box>
 
             <div>
-                <h4 style={{ color: "black", marginBottom: "20px" }}>
-                    Upload Additional Resources
+                <h4
+                    style={{
+                        color: "black",
+                        display: "inline",
+                        marginBottom: "5px"
+                    }}
+                >
+                    Upload Additional Resources{" "}
                 </h4>
-                <div className="mb">
-                <label htmlFor="contained-button-file">
+                <span style={{ fontSize: 20, color: "#827F7E" }}>
+                    (Optional)
+                </span>
+                <sm
+                    style={{
+                        display: "block",
+                        fontSize: 15,
+                        color: "#827F7E"
+                    }}
+                >
+                    <em>
+                        Explain more details about the task through uploading a
+                        docx or pdf file.
+                    </em>
+                </sm>
+                <div className="mb" style={{ marginTop: "5px" }}>
+                    {/* <div>
+                        <input
+                            type="file"
+                            name="file"
+                            onChange={changeHandler}
+                            accept={".pdf, .docx"}
+                        />
+                        {isFilePicked ? (
+                            <div>
+                                <p>Filename: {selectedFile.name}</p>
+                                <p>Filetype: {selectedFile.type}</p>
+                                <p>Size in bytes: {selectedFile.size}</p>
+                                <p>
+                                    lastModifiedDate:{" "}
+                                    {selectedFile.lastModifiedDate.toLocaleDateString()}
+                                </p>
+                            </div>
+                        ) : (
+                            <p>Select a file to show details</p>
+                        )} */}
+                    {/* TODO: move the handleSubmission into handleClick */}
+                    {/* <div>
+                            <button onClick={handleSubmission}>Submit</button>
+                        </div>
+                        </div> */}
+                    <label htmlFor="contained-button-file">
                         <Input
                             accept=".pdf, .docx"
                             id="contained-button-file"
@@ -309,9 +360,16 @@ export default function AddExam() {
                             onChange={changeHandler}
                         />
                         <Button variant="contained" component="span">
-                            Upload File
+                            Upload file
                         </Button>
                     </label>
+                    {isFilePicked ? (
+                        <span style={{ marginLeft: 10, color: "#827F7E" }}>
+                            {selectedFile.name}
+                        </span>
+                    ) : (
+                        ""
+                    )}
                 </div>
             </div>
 
