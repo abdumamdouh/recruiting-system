@@ -532,7 +532,7 @@ const QuestionBank = () => {
                         <button
                             className="btn btn-primary"
                             onClick={addQuestion}
-                            style={{ marginBottom: "10px" }}
+                            style={{ marginTop: "5px", marginBottom: "10px" }}
                         >
                             {" "}
                             Add Question

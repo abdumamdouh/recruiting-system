@@ -100,7 +100,7 @@ function CustomizeExamPopup({
                             <div className="row">
                                 <div className="column">
                                     <Typography className="black" variant="h6">
-                                        Exam Topic
+                                        Exam Title
                                     </Typography>
                                 </div>
 
@@ -108,7 +108,7 @@ function CustomizeExamPopup({
                                     {" "}
                                     <TextField
                                         id="outlined-basic"
-                                        label="Exam topic"
+                                        label="Exam title"
                                         variant="outlined"
                                         onChange={(e) =>
                                             setTopic(e.target.value)
@@ -118,7 +118,7 @@ function CustomizeExamPopup({
                             </div>
                         </Box>
                     </div>
-                    <div className="body">
+                    {/* <div className="body">
                         <div className="mb black row">
                             <div className="column">
                                 <Typography color="black" variant="h6">
@@ -148,7 +148,7 @@ function CustomizeExamPopup({
                                 </LocalizationProvider>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="body">
                         <div className="mb row">
                             <div className="column">
@@ -179,7 +179,7 @@ function CustomizeExamPopup({
                             </div>
                         </div>
                     </div>
-                    <div className="body">
+                    {/* <div className="body">
                         <div className="black mb">
                             <Typography color="black" variant="h6">
                                 Exam Duration
@@ -205,7 +205,7 @@ function CustomizeExamPopup({
                                 }}
                             />
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="footer">
                         <button id="submitBtn" onClick={handleCreate}>

@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Message from "../../components/modal/Message";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { updateApplicantAction } from "../../redux/actions/user";
 import { createQuestion } from "../../redux/actions/exam";
 import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
@@ -17,20 +16,6 @@ const AddQuestion = ({
     selectedQuestions,
     setSuccess
 }) => {
-    const theme = createTheme({
-        components: {
-            // Name of the component
-            MuiTextField: {
-                styleOverrides: {
-                    // Name of the slot
-                    root: {
-                        // Some CSS
-                        color: "green"
-                    }
-                }
-            }
-        }
-    });
     const [modalOpen, setModalOpen] = useState(false);
     const [completeQuestion, setCompleteQuestion] = useState({});
     const [question, setQuestion] = useState("");
@@ -240,27 +225,33 @@ const AddQuestion = ({
                     <label style={{ marginBottom: "0.6rem" }}>Difficulty</label>
                     <div className="position-relative">
                         <div>
-                            <ThemeProvider theme={theme}>
-                                <TextField
-                                    id="outlined-select"
-                                    select
-                                    label="Difficulty"
-                                    value={difficulty}
-                                    onChange={(e) =>
-                                        setDifficulty(e.target.value)
+                            <TextField
+                                id="outlined-select"
+                                select
+                                InputProps={{
+                                    style: {
+                                        color:
+                                            difficulty === "Easy"
+                                                ? "#027D6F"
+                                                : difficulty === "Medium"
+                                                ? "#FFC01E"
+                                                : "#FF375F"
                                     }
-                                >
-                                    {difficulties.map((option) => (
-                                        <MenuItem
-                                            key={option.value}
-                                            value={option.value}
-                                            sx={{ color: option.color }}
-                                        >
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </ThemeProvider>
+                                }}
+                                label="Difficulty"
+                                value={difficulty}
+                                onChange={(e) => setDifficulty(e.target.value)}
+                            >
+                                {difficulties.map((option) => (
+                                    <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                        sx={{ color: option.color }}
+                                    >
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                         </div>
                     </div>
                 </div>

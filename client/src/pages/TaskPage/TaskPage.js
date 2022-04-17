@@ -162,11 +162,11 @@ export default function AddExam() {
                     variant="h6"
                     sx={{ marginBottom: "10px" }}
                 >
-                    Task Topic
+                    Task Title
                 </Typography>
                 <TextField
                     id="outlined-static"
-                    label="Task Topic"
+                    label="Task Title"
                     variant="outlined"
                     sx={{ marginTop: "10px" }}
                     onChange={(e) => setTopic(e.target.value)}
@@ -200,7 +200,7 @@ export default function AddExam() {
 
             <div className="mb black">
                 <Typography color="black" variant="h6">
-                    Expiration Date for this Task
+                    Deadline for this Task
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
