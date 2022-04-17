@@ -86,7 +86,7 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSe
         {   
             // setSelectedQuestions([...selectedQuestions, completeQuestion])
             console.log('selected', selectedQuestions)
-             dispatch(createQuestion(completeQuestion,chooseTopic,chooseQuestions));
+             dispatch(createQuestion(completeQuestion,chooseTopic,chooseQuestions,selectedQuestions,setSelectedQuestions));
             setOpenQuestion(false);
             setSuccess(true)
         }
