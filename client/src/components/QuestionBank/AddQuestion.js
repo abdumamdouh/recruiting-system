@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
+import Message from "../../components/modal/Message";
 import { updateApplicantAction } from "../../redux/actions/user";
 import {createQuestion} from "../../redux/actions/exam"
 import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
-const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp }) => {
+const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp,setSelectedQuestions,selectedQuestions }) => {
+    const [modalOpen, setModalOpen] = useState(false);
     const [completeQuestion, setCompleteQuestion] = useState({});
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const [category, setCategory] = useState("");
     const [difficulty, setDifficulty] = useState("Easy");
     const [topic, setTopic] = useState("");
+    const[completeQuestionWId,setCompleteQuestionWId]=useState({})
     const difficulties = [
         {
             value: "Easy",
@@ -75,10 +78,20 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp }) =>
         setCompleteQuestion(completeQuestion);
         console.log(completeQuestion);
         console.log('top',topicProp)
-         dispatch(createQuestion(completeQuestion,chooseTopic,chooseQuestions));
+        if((completeQuestion.question == '') || (completeQuestion.choices==[]) || completeQuestion.answer == '' || completeQuestion.topic == '' || completeQuestion.category=='')
+        { 
+            setModalOpen(true)
+        }
+        else
+        {   
+            // setSelectedQuestions([...selectedQuestions, completeQuestion])
+            console.log('selected', selectedQuestions)
+             dispatch(createQuestion(completeQuestion,chooseTopic,chooseQuestions));
+            setOpenQuestion(false);
+        }
         
        
-        setOpenQuestion(false);
+        
     };
 
     return (
@@ -87,7 +100,12 @@ const AddQuestion = ({ setOpenQuestion,view,setView,topicProp,setTopicProp }) =>
                 onClick={() => setOnEdit(false)}>
                     Close
                 </button> */}
-
+                {modalOpen && (
+                <Message
+                    setOpenModal={setModalOpen}
+                    message="Make sure to fill all fields first"
+                />
+            )}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Question</label>
