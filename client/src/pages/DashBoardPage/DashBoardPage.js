@@ -4,6 +4,7 @@ import AddExam from "../../components/MCQExam/AddExam";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./DashBoardPage.scss";
 import AvailableMCQs from "../AvailableExamsPage/AvailableMCQs";
+import AvailableTasks from "../AvailableTasksPage/AvailableTasks";
 import ExamPage from "../ExamPage/ExamPage";
 import UploadedExams from "../UploadedExamsPage/UploadedExams";
 import AssignApplicantsPage from "../AssignApplicantsPage/AssignApplicantsPage";
@@ -24,6 +25,9 @@ const DashBoardPage = () => {
                         </Route>
                         <Route path="/dashboard/availableMCQs">
                             <AvailableMCQs />
+                        </Route>
+                        <Route path="/dashboard/availableTasks">
+                            <AvailableTasks />
                         </Route>
                         <Route path="/dashboard/exam/:id">
                             <ExamPage />
