@@ -1,6 +1,7 @@
 import React from "react";
-
+import { useHistory } from "react-router-dom";
 function TaskCard({ description, number }) {
+    const history = useHistory();
     return (
         <div>
             <div class="card">
@@ -8,9 +9,14 @@ function TaskCard({ description, number }) {
                 <div class="card-body">
                     <h5 class="card-title">Description:</h5>
                     <p class="card-text">{description}</p>
-                    <a href="#" class="btn btn-primary">
-                        choose Task
-                    </a>
+                    <button href="#" className="btn btn-primary">
+                       Assign Task to Applicants
+                    </button>
+                   <div>
+                   <button href="#" className="mt-3 btn btn-primary">
+                       Assign Task to Candidates
+                    </button>
+                   </div>
                 </div>
             </div>
         </div>
