@@ -1,11 +1,7 @@
 import "./AssignedTaskPage.scss";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DateTimePicker from "@mui/lab/DateTimePicker";
 import { Typography } from "@material-ui/core";
-import { Button, Autocomplete, Chip } from "@mui/material";
+import { Button } from "@mui/material";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "@emotion/styled";
 
@@ -16,38 +12,14 @@ import { useParams } from "react-router-dom";
 import Message from "../../components/modal/Message";
 
 export default function AddExam() {
-
-     //ID of the task
-     const { ID } = useParams();
+    //ID of the task
+    const { ID } = useParams();
 
     const Input = styled("input")({ display: "none" });
-    const availableOptions = [
-        "c",
-        "h",
-        "cpp",
-        "hpp",
-        "py",
-        "java",
-        "js",
-        "txt",
-        "docx",
-        "pdf",
-        "xslx",
-        "zip",
-        "rar",
-        "png",
-        "jpg",
-        "jpeg"
-    ];
 
-    const [option, setOption] = useState([]);
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [expiryDate, setExpiryDate] = useState(new Date());
     // const [uploadFormat, setUploadFormat] = useState("");
 
     const [modalOpen, setModalOpen] = useState(false);
-    const [value, setValue] = useState(new Date());
     //file
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
@@ -67,7 +39,7 @@ export default function AddExam() {
     //         "deadline":"2022-03-20 01:21:00",
     //         "JobId":1,
     //         "uploadFormat":"pdf"
-    //     } 
+    //     }
     //     */
     //     console.log(jobId);
 
@@ -110,7 +82,6 @@ export default function AddExam() {
     //         console.error("Error:", error);
     //         handleOnError(error);
     //     }
-
 
     // };
 
@@ -175,13 +146,6 @@ export default function AddExam() {
                 >
                     Task Title
                 </Typography>
-                <TextField
-                    id="outlined-static"
-                    label="Task Title"
-                    variant="outlined"
-                    sx={{ marginTop: "10px" }}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
             </Box>
 
             <Box
@@ -197,120 +161,13 @@ export default function AddExam() {
                 >
                     Task Description
                 </Typography>
-                <TextField
-                    sx={{ marginTop: "10px" }}
-                    id="outlined-multiline-static"
-                    label="Task Description"
-                    multiline
-                    rows={6}
-                    fullWidth
-                    variant="outlined"
-                    onChange={(e) => setDescription(e.target.value)}
-                />
             </Box>
 
             <div className="mb black">
                 <Typography color="black" variant="h6">
                     Deadline for this Task
                 </Typography>
-                <div style={{ marginTop: "10px" }}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DateTimePicker
-                            renderInput={(props) => <TextField {...props} />}
-                            label="DateTimePicker"
-                            value={value}
-                            onChange={(newValue) => {
-                                setValue(newValue);
-                                setExpiryDate(value);
-                                console.log(value);
-                            }}
-                        />
-                    </LocalizationProvider>
-                </div>
             </div>
-
-            <Box
-                component="form"
-                sx={{ marginBottom: "25px" }}
-                noValidate
-                autoComplete="off"
-            >
-                <Typography
-                    className="black"
-                    variant="h6"
-                    sx={{ marginBottom: "10px" }}
-                >
-                    Uploaded File Extension
-                </Typography>
-                <small style={{ fontSize: 15, color: "#827F7E" }}>
-                    <em>
-                        Restrict applicants for this job to a certain file
-                        upload format.
-                    </em>
-                </small>
-                {/* <TextField
-                    sx={{ marginTop: "10px" }}
-                    id="outlined-static"
-                    label="Uploaded File Extension"
-                    variant="outlined"
-                    onChange={(e) => setTitle(e.target.value)}
-                /> */}
-                {/* <Autocomplete
-                    sx={{ marginTop: "10px", width: "15rem" }}
-                    id="free-solo-demo"
-                    freeSolo
-                    options={options}
-                    renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                            <Chip
-                                variant="outlined"
-                                label={option}
-                                {...getTagProps({ index })}
-                            />
-                        ))
-                    }
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Uploaded File Extension"
-                            onChange={(e) => setUploadFormat(e.target.value)}
-                        />
-                    )}
-                /> */}
-                <div>
-                    <Autocomplete
-                        sx={{ marginTop: "10px", width: "15rem" }}
-                        value={option}
-                        onChange={(event, newValue) => {
-                            // console.log(newValue);
-                            // console.log(option);
-                            setOption(newValue);
-                        }}
-                        multiple
-                        id="tags-filled"
-                        options={availableOptions}
-                        freeSolo
-                        renderTags={(value, getTagProps) =>
-                            value.map((option, index) => (
-                                <Chip
-                                    variant="outlined"
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                />
-                            ))
-                        }
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Uploaded File Extension"
-                                placeholder={
-                                    !option.length ? "example: cpp" : ""
-                                }
-                            />
-                        )}
-                    />
-                </div>
-            </Box>
 
             <div>
                 <h4
@@ -325,44 +182,8 @@ export default function AddExam() {
                 <span style={{ fontSize: 20, color: "#827F7E" }}>
                     (Optional)
                 </span>
-                <small
-                    style={{
-                        display: "block",
-                        fontSize: 15,
-                        color: "#827F7E"
-                    }}
-                >
-                    <em>
-                        Explain more details about the task through uploading a
-                        docx or pdf file.
-                    </em>
-                </small>
+
                 <div className="mb" style={{ marginTop: "5px" }}>
-                    {/* <div>
-                        <input
-                            type="file"
-                            name="file"
-                            onChange={changeHandler}
-                            accept={".pdf, .docx"}
-                        />
-                        {isFilePicked ? (
-                            <div>
-                                <p>Filename: {selectedFile.name}</p>
-                                <p>Filetype: {selectedFile.type}</p>
-                                <p>Size in bytes: {selectedFile.size}</p>
-                                <p>
-                                    lastModifiedDate:{" "}
-                                    {selectedFile.lastModifiedDate.toLocaleDateString()}
-                                </p>
-                            </div>
-                        ) : (
-                            <p>Select a file to show details</p>
-                        )} */}
-                    {/* TODO: move the handleSubmission into handleClick */}
-                    {/* <div>
-                            <button onClick={handleSubmission}>Submit</button>
-                        </div>
-                        </div> */}
                     <label htmlFor="contained-button-file">
                         <Input
                             accept=".pdf, .docx, .zip, .rar"
