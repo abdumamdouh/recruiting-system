@@ -33,7 +33,7 @@ export default function AddExam() {
         "jpeg"
     ];
     const [option, setOption] = useState([]);
-    const [topic, setTopic] = useState("");
+    const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [expiryDate, setExpiryDate] = useState(new Date());
     // const [uploadFormat, setUploadFormat] = useState("");
@@ -54,7 +54,7 @@ export default function AddExam() {
     const handleClick = async () => {
         /*
         {
-            "topic":"Some topic",
+            "title":"Some title",
             "description":"Some discription",
             "deadline":"2022-03-20 01:21:00",
             "JobId":1,
@@ -63,7 +63,7 @@ export default function AddExam() {
         */
         console.log(jobId);
         const task = {
-            topic,
+            title,
             description,
             deadline: expiryDate,
             JobId: jobId,
@@ -169,7 +169,7 @@ export default function AddExam() {
                     label="Task Title"
                     variant="outlined"
                     sx={{ marginTop: "10px" }}
-                    onChange={(e) => setTopic(e.target.value)}
+                    onChange={(e) => setTitle(e.target.value)}
                 />
             </Box>
 
@@ -242,7 +242,7 @@ export default function AddExam() {
                     id="outlined-static"
                     label="Uploaded File Extension"
                     variant="outlined"
-                    onChange={(e) => setTopic(e.target.value)}
+                    onChange={(e) => setTitle(e.target.value)}
                 /> */}
                 {/* <Autocomplete
                     sx={{ marginTop: "10px", width: "15rem" }}
@@ -354,7 +354,7 @@ export default function AddExam() {
                         </div> */}
                     <label htmlFor="contained-button-file">
                         <Input
-                            accept=".pdf, .docx"
+                            accept=".pdf, .docx, .zip, .rar"
                             id="contained-button-file"
                             type="file"
                             onChange={changeHandler}
