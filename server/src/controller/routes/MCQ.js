@@ -42,6 +42,7 @@ router.post("/createQuestion", recruiterAuth, async (req, res) => {
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
+        console.log(req.body);
         const { title, isPrivate } = req.body;
         const recruiterId = req.recruiter.id;
         // let questions = await Promise.all(
@@ -129,7 +130,7 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
             where: {
                 [Op.or]: [
                     {
-                        private: {
+                        isPrivate: {
                             [Op.eq]: false
                         }
                     },
