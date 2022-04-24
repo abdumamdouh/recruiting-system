@@ -8,7 +8,7 @@ const Task = db.define('Task',{
         autoIncrement:true ,
         allowNull: false
     },
-    topic:{
+    title:{
         type: Sequelize.STRING(5000),
         allowNull: false  
     },
