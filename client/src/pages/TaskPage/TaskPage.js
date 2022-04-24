@@ -61,6 +61,16 @@ export default function AddExam() {
             "uploadFormat":"pdf"
         } 
         */
+        //Check if selected options are in the avaialble options or not
+
+        let validOption = true;
+        option.forEach((option) => {
+            if (!availableOptions.includes(option)) {
+                validOption = false;
+                return;
+            }
+        });
+
         console.log(jobId);
         const task = {
             title,
