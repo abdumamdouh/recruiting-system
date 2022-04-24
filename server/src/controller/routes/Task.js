@@ -164,7 +164,7 @@ router.get(
 router.get("/allTasks", recruiterAuth, async (req, res) => {
     try {
         const tasks = await Task.findAll({
-            attributes: ["description", "uploadFormat"],
+            attributes: ["id","description", "uploadFormat"],
             where: {
                 RecruiterId: req.recruiter.id
             }
