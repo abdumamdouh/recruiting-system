@@ -7,9 +7,10 @@ import ReactPaginate from "react-paginate";
 import Stack from "@mui/material/Stack";
 import Skeleton from "@mui/material/Skeleton";
 const AvailableTasks = () => {
+    const {id} = useSelector(state => state.job)
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getTasksAction());
+        dispatch(getTasksAction(id));
     }, [dispatch]);
     const { tasks } = useSelector(state => state);
 
@@ -23,11 +24,14 @@ const AvailableTasks = () => {
     // };
 
     if (tasks !== undefined) {
-        var tasksArray = Object.values(tasks);
+        const {relatedToThisJob } = tasks
+        console.log('related', relatedToThisJob)
+        const {createdPrevByYou} = tasks
         return (
             <div>
+            <h6>Tasks Related to this Job</h6>
                 <div className="card-container">
-                    {tasksArray.map((m, index) => (
+                    {relatedToThisJob.map((m, index) => (
                         <ul
                             style={{
                                 listStyle: "none",
@@ -45,6 +49,35 @@ const AvailableTasks = () => {
                                 <TaskCard
                                     id={m.id}
                                     description={m.description}
+                                    title={m.title}
+                                    number={index}
+                                />{" "}
+                                {/* <TaskCard  Count={Count} number={(pageNumber-1)*4+(index+1)} id={m.id} owned={m.recruiterId == RecruiterId? true:false} Rec={RecruiterId} questions={m.questions}/>{" "} */}
+                            </li>{" "}
+                        </ul>
+                    ))}
+                </div>
+            <h6>Tasks Created Previously by you </h6>
+                <div className="card-container">
+                    {createdPrevByYou.map((m, index) => (
+                        <ul
+                            style={{
+                                listStyle: "none",
+                                padding: "10px",
+                                margin: "10px auto"
+                            }}
+                            className="examul"
+                        >
+                            {" "}
+                            <li
+                                key={index}
+                                style={{ marginLeft: "30px" }}
+                                className="examli"
+                            >
+                                <TaskCard
+                                    id={m.id}
+                                    description={m.description}
+                                    title={m.title}
                                     number={index}
                                 />{" "}
                                 {/* <TaskCard  Count={Count} number={(pageNumber-1)*4+(index+1)} id={m.id} owned={m.recruiterId == RecruiterId? true:false} Rec={RecruiterId} questions={m.questions}/>{" "} */}

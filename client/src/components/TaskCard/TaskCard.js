@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-function TaskCard({ description, number,id }) {
+function TaskCard({ description, number,id,title }) {
     const history = useHistory();
     const jobId = useSelector(state => state.job.id);
     const handleAssign = id => {
@@ -18,7 +18,7 @@ function TaskCard({ description, number,id }) {
             <div class="card">
                 <div class="card-header">Task {number + 1}</div>
                 <div class="card-body">
-                    <h5 class="card-title">Description:</h5>
+                    <h5 class="card-title">{title}</h5>
                     <p class="card-text">{description}</p>
                     <button href="#" className="btn btn-primary"
                      onClick={() => handleAssign(id)}>
