@@ -20,6 +20,7 @@ import CustomiseHiringPage from "./pages/CustomiseHiringPage/CustomiseHiringPage
 import AddExam from "./components/MCQExam/AddExam";
 import McqTestPage from "./pages/McqTestPage/McqTestPage";
 import UpdatesPage from "./pages/UpdatesPage/UpdatesPage";
+import AssignedTaskPage from "./pages/AssignedTaskPage/AssignedTaskPage";
 // components
 import Layout from "./components/layout/Layout";
 // import HelloWorld from "./components/HelloWorld";
@@ -132,6 +133,13 @@ const App = () => {
                         path="/updates"
                         component={UpdatesPage}
                         name="updates"
+                    />
+
+                    <ProtectedRoute
+                        exact
+                        path="/job/task/:ID"
+                        component={AssignedTaskPage}
+                        name="taskApplicantView"
                     />
 
                     <Route
