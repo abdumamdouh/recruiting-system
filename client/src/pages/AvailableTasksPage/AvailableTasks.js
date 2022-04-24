@@ -24,7 +24,7 @@ const AvailableTasks = () => {
     //     dispatch(getExamsAction(selected + 1));
     // };
 
-    if (tasks !== undefined) {
+    if (Object.entries(tasks).length !== 0) {
         const {relatedToThisJob } = tasks
         console.log('related', relatedToThisJob)
         const {createdPrevByYou} = tasks
