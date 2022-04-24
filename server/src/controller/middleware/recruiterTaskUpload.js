@@ -10,7 +10,7 @@ const recTaskUpload = multer({
         // Note !!!
         // validation on the file extension can be done 
         // in the frontend and save db query overhead
-        const allowedTypes = ['pdf','docx'];
+        const allowedTypes = ['pdf','docx','rar','zip'];
         const fileExtension = file.originalname.substring(file.originalname.lastIndexOf('.')+1, file.originalname.length)
         // console.log(allowedTypes,fileExtension)
         if(!allowedTypes.includes(fileExtension)) {

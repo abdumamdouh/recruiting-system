@@ -8,18 +8,13 @@ import Message from '../../components/modal/Message'
 const AssignApplicantsPage = () => {
     const dispatch = useDispatch();
     const job = useSelector(state=>state.job)
+    const user = useSelector(state=>state.user)
     const jobId= job.id
     const [selectionModel, setSelectionModel] = React.useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     //mcqId
     const { id } = useParams();
-    const handleApplicants=(params)=>{
-        console.log(job.applicants)
-        console.log('r', rows)
-        console.log(params.id)
-        console.log('roww', params.row)
-        console.log('ss', id)
-    }
+    
     const rows = [...job.applicants];
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
@@ -43,6 +38,22 @@ const AssignApplicantsPage = () => {
         dispatch(assignExamAction(jobId,id,selectionModel,showSuccessMessage))
 
     }
+    const handleAssignTask = async()=>{
+        let task={jobId:jobId, task:{ TaskId: id,applicants:selectionModel}}
+        const rawResponse = await fetch(
+            `http://localhost:5000/assignTasks`,
+            {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + user.userInfo.token
+                },
+                body: JSON.stringify(task)
+            }
+        );
+        const data = await rawResponse;
+    }
     return (
         <div style={{ height: 400, width: '100%' }}>
           {modalOpen && (
@@ -62,7 +73,8 @@ const AssignApplicantsPage = () => {
   }}
   selectionModel={selectionModel}
       />
-        <button className="btn btn-primary" style={{marginTop: '20px'}} onClick={handleAllApplicants}> Assign Exam to  Applicants</button>
+        <button className="btn btn-primary" style={{marginTop: '20px'}} onClick={handleAllApplicants}> Assign MCQ to  Applicants</button>
+        <button className="btn btn-primary" style={{marginTop: '20px',marginLeft: '20px'}} onClick={handleAssignTask}> Assign Task to  Applicants</button>
     </div>
     );
 }

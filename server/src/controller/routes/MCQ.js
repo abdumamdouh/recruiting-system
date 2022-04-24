@@ -80,6 +80,7 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         );
     }
 });
+
 // Add MCQ from the question bank
 router.post("/createExam", recruiterAuth, async (req, res) => {
     try {
