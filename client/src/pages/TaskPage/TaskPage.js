@@ -33,7 +33,7 @@ export default function AddExam() {
         "jpeg"
     ];
     const [option, setOption] = useState([]);
-    const [topic, setTopic] = useState("");
+    const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [expiryDate, setExpiryDate] = useState(new Date());
     // const [uploadFormat, setUploadFormat] = useState("");
@@ -63,7 +63,7 @@ export default function AddExam() {
         */
         console.log(jobId);
         const task = {
-            topic,
+            title,
             description,
             deadline: expiryDate,
             JobId: jobId,
@@ -169,7 +169,7 @@ export default function AddExam() {
                     label="Task Title"
                     variant="outlined"
                     sx={{ marginTop: "10px" }}
-                    onChange={(e) => setTopic(e.target.value)}
+                    onChange={(e) => setTitle(e.target.value)}
                 />
             </Box>
 
