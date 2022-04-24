@@ -1,11 +1,12 @@
 import "./TaskPage.scss";
+import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
-
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Typography } from "@material-ui/core";
@@ -14,6 +15,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import Message from "../../components/modal/Message";
 import styled from "@emotion/styled";
 export default function AddExam() {
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
     const Input = styled("input")({ display: "none" });
     const availableOptions = [
         "c",
