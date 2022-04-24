@@ -9,11 +9,17 @@ import { Button, Autocomplete, Chip } from "@mui/material";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "@emotion/styled";
 
+//Hooks
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import Message from "../../components/modal/Message";
 
 export default function AddExam() {
+
+     //ID of the task
+     const { ID } = useParams();
+
     const Input = styled("input")({ display: "none" });
     const availableOptions = [
         "c",
@@ -33,7 +39,7 @@ export default function AddExam() {
         "jpg",
         "jpeg"
     ];
-    
+
     const [option, setOption] = useState([]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -53,57 +59,60 @@ export default function AddExam() {
         console.log(err);
     };
 
-    const handleClick = async () => {
-        /*
-        {
-            "title":"Some title",
-            "description":"Some discription",
-            "deadline":"2022-03-20 01:21:00",
-            "JobId":1,
-            "uploadFormat":"pdf"
-        } 
-        */
-        console.log(jobId);
-        const task = {
-            title,
-            description,
-            deadline: expiryDate,
-            JobId: jobId,
-            uploadFormat: option.join("-")
-        };
+    // const handleClick = async () => {
+    //     /*
+    //     {
+    //         "title":"Some title",
+    //         "description":"Some discription",
+    //         "deadline":"2022-03-20 01:21:00",
+    //         "JobId":1,
+    //         "uploadFormat":"pdf"
+    //     } 
+    //     */
+    //     console.log(jobId);
 
-        console.log(task);
-        //
-        const formData = new FormData();
-        formData.append("task", selectedFile);
-        formData.append("data", JSON.stringify(task));
-        console.log(formData);
+    //     const task = {
+    //         title,
+    //         description,
+    //         deadline: expiryDate,
+    //         JobId: jobId,
+    //         uploadFormat: option.join("-")
+    //     };
 
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0] + " - " + pair[1]);
-        // }
+    //     console.log(task);
+    //     //
+    //     const formData = new FormData();
+    //     formData.append("task", selectedFile);
+    //     formData.append("data", JSON.stringify(task));
+    //     console.log(formData);
 
-        try {
-            console.log(userInfo.token);
-            const response = await fetch(`http://localhost:5000/createTask`, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    Accept: "multipart/form-data",
-                    // "Content-Type": "application/json",
-                    // "Content-Type": "multipart/form-data",
-                    Authorization: "Bearer " + userInfo.token
-                }
-            });
-            const data = await response;
-            console.log(data);
-            //TODO: condition for success
-            showSuccessMessage();
-        } catch (error) {
-            console.error("Error:", error);
-            handleOnError(error);
-        }
-    };
+    //     // for (let pair of formData.entries()) {
+    //     //     console.log(pair[0] + " - " + pair[1]);
+    //     // }
+
+    //     try {
+    //         console.log(userInfo.token);
+    //         const response = await fetch(`http://localhost:5000/createTask`, {
+    //             method: "POST",
+    //             body: formData,
+    //             headers: {
+    //                 Accept: "multipart/form-data",
+    //                 // "Content-Type": "application/json",
+    //                 // "Content-Type": "multipart/form-data",
+    //                 Authorization: "Bearer " + userInfo.token
+    //             }
+    //         });
+    //         const data = await response;
+    //         console.log(data);
+    //         //TODO: condition for success
+    //         showSuccessMessage();
+    //     } catch (error) {
+    //         console.error("Error:", error);
+    //         handleOnError(error);
+    //     }
+
+
+    // };
 
     const showSuccessMessage = () => {
         setModalOpen(true);
