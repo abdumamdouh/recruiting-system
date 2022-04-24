@@ -8,12 +8,12 @@ const MCQ = db.define("MCQ", {
         autoIncrement: true,
         allowNull: false
     },
-    topic: {
+    title: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: false
     },
-    private: {
+    isPrivate: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         unique: false
