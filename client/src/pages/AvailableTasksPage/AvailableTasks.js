@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getTasksAction } from "../../redux/actions/task";
+import { getTaskAction } from "../../redux/actions/task";
 import { useDispatch, useSelector } from "react-redux";
 import TaskCard from "../../components/TaskCard/TaskCard";
 import "./AvailableTasks.scss";
@@ -8,9 +8,10 @@ import Stack from "@mui/material/Stack";
 import Skeleton from "@mui/material/Skeleton";
 const AvailableTasks = () => {
     const {id} = useSelector(state => state.job)
+    console.log('jobid', id)
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getTasksAction(id));
+        dispatch(getTaskAction(id));
     }, [dispatch]);
     const { tasks } = useSelector(state => state);
 

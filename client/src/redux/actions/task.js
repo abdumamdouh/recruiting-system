@@ -3,7 +3,7 @@ import {GET_TASKS_REQUEST,GET_TASKS_SUCCESS,GET_TASKS_FAIL} from "../types/index
 const serverURL = "http://localhost:5000";
 
 //get all tasks
-export const getTasksAction = (id) => {
+export const getTaskAction = (id) => {
     const JobId = id
     return async (dispatch, getState) => {
         try {
