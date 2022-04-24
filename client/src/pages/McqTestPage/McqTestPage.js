@@ -437,7 +437,7 @@ const McqTestPage = (props) => {
 
     //TODO: replace the hardcoded value with the duration from the API
     const time = new Date();
-    time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
+    time.setSeconds(time.getSeconds() + Mcq.duration * 60); // 10 minutes timer
 
     return (
         <>
@@ -478,21 +478,22 @@ const McqTestPage = (props) => {
                             style={{
                                 display: "flex",
                                 flexDirection: "row",
-                                justifyContent: "spaceBetween"
+                                justifyContent: "spaceBetween",
+                                alignSelf: "center"
                             }}
                         >
                             <Typography
                                 color="black"
                                 variant="h5"
                                 style={{
-                                    textAlign: "center",
+                                    textAlign: "right",
                                     fontWeight: "800",
-                                    fontSize: "35px"
+                                    fontSize: "3rem"
                                 }}
                             >
                                 {Mcq.topic}
                             </Typography>
-                            <MyTimer expiryTimestamp={time} />
+                            {Mcq.duration && <MyTimer expiryTimestamp={time} />}
                         </div>
 
                         <Divider style={{ margin: "20px 0" }} />
