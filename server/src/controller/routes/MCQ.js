@@ -23,12 +23,12 @@ const { includes } = require("lodash");
 const { is } = require("sequelize/lib/operators");
 
 const router = new express.Router();
-//Add Question
 
+// Add Question
 router.post("/createQuestion", recruiterAuth, async (req, res) => {
     try {
-        const question=req.body;
-        const record = await Question.create( question )
+        const question = req.body;
+        const record = await Question.create(question);
         res.send(record);
     } catch (error) {
         res.status(400).send(
@@ -38,27 +38,6 @@ router.post("/createQuestion", recruiterAuth, async (req, res) => {
         );
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
@@ -249,7 +228,7 @@ router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
     }
 });
 
-// get shuffled mcq questions by JobId
+// get shuffled mcq questions by MCQId
 router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
     try {
         const job = await MCQ.findByPk(req.params.id, {
@@ -274,12 +253,19 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
             return res.status(406).send("You took exam already.");
         }
         let mcq = await MCQ.findByPk(req.params.id, {
-            include: {
-                model: Question,
-                as: "questions",
-                attributes: ["id", "question", "choices"],
-                through: { attributes: [] }
-            },
+            include: [
+                {
+                    model: Question,
+                    as: "questions",
+                    attributes: ["id", "question", "choices"],
+                    through: { attributes: [] }
+                },
+                {
+                    model: Job,
+                    attributes: ["id"],
+                    through: { attributes: ["duration"] }
+                }
+            ],
             attributes: ["id", "topic"]
         });
         mcq = JSON.parse(JSON.stringify(mcq));
@@ -288,6 +274,8 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
         mcq.questions.forEach((question) => {
             question.choices = _.shuffle(question.choices);
         });
+        mcq.duration = mcq.Jobs[0].JobMCQ.duration;
+        _.unset(mcq, "Jobs");
         // console.log(mcq.questions);
         res.status(200).send(mcq);
     } catch (error) {
@@ -365,9 +353,5 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
             : res.status(400).send(error.message);
     }
 });
-
-
-
-
 
 module.exports = router;
