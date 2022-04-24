@@ -40,26 +40,6 @@ router.post("/createQuestion", recruiterAuth, async (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
@@ -101,6 +81,7 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         );
     }
 });
+
 // Add MCQ from the question bank
 router.post("/createExam", recruiterAuth, async (req, res) => {
     try {
