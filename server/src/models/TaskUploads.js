@@ -37,10 +37,18 @@ const TaskUploads = db.define('TaskUploads',{
     uploadedTask:{
         type:Sequelize.BLOB('long'),
         allowNull:false
+    },
+    score:{
+        type: Sequelize.INTEGER,
+        min: 1 ,
+        max: 100
+    }, 
+    feedback:{
+        type: Sequelize.STRING(5000)
     }
 });
 
 // Job.belongsToMany(Task, { through: TaskUploads });
 // Task.belongsToMany(Job, { through: TaskUploads });
-
+ 
 module.exports = TaskUploads ;
