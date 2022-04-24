@@ -493,7 +493,7 @@ const McqTestPage = (props) => {
                             >
                                 {Mcq.topic}
                             </Typography>
-                            {Mcq.duration && <MyTimer expiryTimestamp={time} handleOnExpire={() => console.log("alooo")} />}
+                            {Mcq.duration && <MyTimer expiryTimestamp={time} handleOnExpire={handleSubmit} />}
                         </div>
 
                         <Divider style={{ margin: "20px 0" }} />

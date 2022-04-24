@@ -388,7 +388,7 @@ export default function AddExam() {
                 <Button
                     style={{ marginBottom: "10px" }}
                     variant="contained"
-                    onClick={handleClick}
+                    // onClick={handleClick}
                 >
                     Upload Task
                 </Button>
