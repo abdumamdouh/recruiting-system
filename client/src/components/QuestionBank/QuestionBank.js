@@ -12,7 +12,7 @@ import SnackBar from "./SnackBar";
 import classes from "./QuestionBank.module.scss";
 import Question from "./Question";
 import ReactPaginate from "react-paginate";
-import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
+import { getTopic, getSubtopic, getQuestions } from "../../redux/actions/bank";
 import QuestionsPopUp from "./QuestionsPopUp";
 import CustomizeExamPopup from "./CustomizeExamPopUp";
 import { Select } from "@mui/material";
@@ -39,7 +39,7 @@ const QuestionBank = () => {
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
-        dispatch(getCategory());
+        dispatch(getTopic());
         // console.log("execcc");
     }, [forchange]);
     const openQuestions = () => {
@@ -242,7 +242,7 @@ const QuestionBank = () => {
     const [pageNumber, setPageNumber] = useState(1);
     const [view, setView] = useState("");
 
-    const [topic, setTopic] = useState("");
+    const [subtopic, setSubtopic] = useState("");
 
     const changePage = ({ selected }) => {
         setPageNumber(selected + 1);
@@ -335,7 +335,7 @@ const QuestionBank = () => {
         {
             internalId: 1,
             category: "s",
-            topic: "Snow",
+            subtopic: "Snow",
             question: "Jon",
             choices: ["dsd", "sdd", "fdfd", "ffgf"],
             answer: "dsd",
@@ -344,7 +344,7 @@ const QuestionBank = () => {
         {
             internalId: 2,
             category: "s",
-            topic: "Snow",
+            subtopic: "Snow",
             question: "Jon",
             choices: ["dsd", "sdd", "fdfd", "ffgf"],
             answer: "dsd",
@@ -353,7 +353,7 @@ const QuestionBank = () => {
         {
             internalId: 3,
             category: "s",
-            topic: "Snow",
+            subtopic: "Snow",
             question: "Jon",
             choices: ["dsd", "sdd", "fdfd", "ffgf"],
             answer: "dsd",
@@ -362,7 +362,7 @@ const QuestionBank = () => {
         {
             internalId: 4,
             category: "s",
-            topic: "Snow",
+            subtopic: "Snow",
             question: "Jon",
             choices: ["dsd", "sdd", "fdfd", "ffgf"],
             answer: "dsd",
@@ -371,7 +371,7 @@ const QuestionBank = () => {
         {
             internalId: 5,
             category: "s",
-            topic: "Snow",
+            subtopic: "Snow",
             question: "Jon",
             choices: ["dsd", "sdd", "fdfd", "ffgf"],
             answer: "dsd",
@@ -380,7 +380,7 @@ const QuestionBank = () => {
         {
             internalId: 6,
             category: "s",
-            topic: "Snow",
+            subtopic: "Snow",
             question: "Jon",
             choices: ["dsd", "sdd", "fdfd", "ffgf"],
             answer: "dsd",
@@ -389,7 +389,7 @@ const QuestionBank = () => {
         {
             internalId: 7,
             category: "s",
-            topic: "Snow",
+            subtopic: "Snow",
             question: "Jon",
             choices: ["dsd", "sdd", "fdfd", "ffgf"],
             answer: "dsd",
@@ -398,7 +398,7 @@ const QuestionBank = () => {
         {
             internalId: 8,
             category: "s",
-            topic: "Snow",
+            subtopic: "Snow",
             question: "Jon",
             choices: ["dsd", "sdd", "fdfd", "ffgf"],
             answer: "dsd",
@@ -407,7 +407,7 @@ const QuestionBank = () => {
         {
             internalId: 9,
             category: "s",
-            topic: "Snow",
+            subtopic: "Snow",
             question: "Jon",
             choices: ["dsd", "sdd", "fdfd", "ffgf"],
             answer: "dsd",
@@ -420,22 +420,20 @@ const QuestionBank = () => {
 
     const filtervalues = {
         category: "",
-        topic: ""
+        subtopic: ""
     };
 
     const handleView = (e) => {
-        dispatch(getTopic(e.target.value, setView));
-
+        dispatch(getSubtopic(e.target.value, setView));
         setView(e.target.value);
     };
 
     const bringquestions = (e) => {
-        dispatch(getQuestions(e.target.value, view, setTopic));
-
-        setTopic(e.target.value);
+        dispatch(getQuestions(e.target.value, view, setSubtopic));
+        setSubtopic(e.target.value);
     };
 
-    if (bank.hasOwnProperty("category")) {
+    if (bank.hasOwnProperty("topic")) {
         return (
             <div style={{ height: 400 }}>
                 <SnackBar
@@ -484,8 +482,8 @@ const QuestionBank = () => {
                         setSelectedQuestions={setSelectedQuestions}
                         view={view}
                         setView={setView}
-                        topicProp={topic}
-                        setTopicProp={setTopic}
+                        subtopicProp={subtopic}
+                        setSubtopicProp={setSubtopic}
                         setOpenQuestion={setOpenQuestion}
                     />
                 )}
@@ -540,22 +538,18 @@ const QuestionBank = () => {
                     </div>
                 </div>
                 <h4>Choose from the questions bank.</h4>
-                <label>Category</label>
+                <label>Topic</label>
                 <select
-                    name="category"
+                    name="topic"
                     onChange={handleView}
                     className="custom-select text-capitalize"
                     style={{ marginBottom: "0.5rem" }}
                 >
-                    <option>--Select category--</option>
-                    {bank.category.categories.map((category) => {
+                    <option>--Select topic--</option>
+                    {bank.topic.topics.map((topic) => {
                         return (
-                            <option
-                                key={category}
-                                value={category}
-                                name="category"
-                            >
-                                {category}
+                            <option key={topic} value={topic} name="topic">
+                                {topic}
                             </option>
                         );
                     })}
@@ -563,24 +557,24 @@ const QuestionBank = () => {
 
                 {view !== "" ? (
                     <div>
-                        <label>Topic</label>
+                        <label>Subtopic</label>
                         <select
-                            name="topic"
+                            name="subtopic"
                             onChange={bringquestions}
                             className="custom-select text-capitalize"
                             style={{ marginBottom: "1rem" }}
-                            defaultValue={topic}
+                            // defaultValue={subtopic}
                         >
-                            <option>--Select topic--</option>
-                            {bank.hasOwnProperty("topic") &&
-                                bank.topic.topics.map((topic) => {
+                            <option>--Select Subtopic--</option>
+                            {bank.hasOwnProperty("subtopic") &&
+                                bank.subtopic.subtopics.map((subtopic) => {
                                     return (
                                         <option
-                                            key={topic}
-                                            value={topic}
-                                            name="category"
+                                            key={subtopic}
+                                            value={subtopic}
+                                            name="subtopic"
                                         >
-                                            {topic}
+                                            {subtopic}
                                         </option>
                                     );
                                 })}
