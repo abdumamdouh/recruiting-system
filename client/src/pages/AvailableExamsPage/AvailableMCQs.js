@@ -9,14 +9,12 @@ import Skeleton from "@mui/material/Skeleton";
 
 const AvailableMCQs = () => {
     const dispatch = useDispatch();
-    const { RecruiterId } = useSelector(state => state.job);
+    const { RecruiterId } = useSelector((state) => state.job);
     useEffect(() => {
         dispatch(getExamsAction(1));
     }, [dispatch]);
-    const { MCQs } = useSelector(state => state.exam);
-    const { Count } = useSelector(state => state.exam);
-
-    
+    const { MCQs } = useSelector((state) => state.exam);
+    const { Count } = useSelector((state) => state.exam);
 
     const [pageNumber, setPageNumber] = useState(1);
 
@@ -45,12 +43,12 @@ const AvailableMCQs = () => {
                                 className="examli"
                             >
                                 <Card
-                                    topic={m.topic}
+                                    title={m.title}
                                     Count={Count}
                                     number={(pageNumber - 1) * 4 + (index + 1)}
                                     id={m.id}
                                     owned={
-                                        m.recruiterId == RecruiterId
+                                        m.recruiterId === RecruiterId
                                             ? true
                                             : false
                                     }
