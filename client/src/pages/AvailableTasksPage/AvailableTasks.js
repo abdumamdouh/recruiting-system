@@ -43,6 +43,7 @@ const AvailableTasks = () => {
                                 className="examli"
                             >
                                 <TaskCard
+                                    id={m.id}
                                     description={m.description}
                                     number={index}
                                 />{" "}

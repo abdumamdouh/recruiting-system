@@ -1,7 +1,18 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-function TaskCard({ description, number }) {
+import { useDispatch, useSelector } from "react-redux";
+
+function TaskCard({ description, number,id }) {
     const history = useHistory();
+    const jobId = useSelector(state => state.job.id);
+    const handleAssign = id => {
+        console.log("ay 7aga");
+        history.push(`/dashboard/uploadedexams/assignapplicants/${id}`);
+    };
+    const handleAssignCanidate = id => {
+        console.log("ay 7aga");
+        history.push(`/dashboard/uploadedexams/assigncandidates/${id}`);
+    };
     return (
         <div>
             <div class="card">
@@ -9,11 +20,13 @@ function TaskCard({ description, number }) {
                 <div class="card-body">
                     <h5 class="card-title">Description:</h5>
                     <p class="card-text">{description}</p>
-                    <button href="#" className="btn btn-primary">
+                    <button href="#" className="btn btn-primary"
+                     onClick={() => handleAssign(id)}>
                        Assign Task to Applicants
                     </button>
                    <div>
-                   <button href="#" className="mt-3 btn btn-primary">
+                   <button href="#" className="mt-3 btn btn-primary"
+                    onClick={() => handleAssignCanidate(id)}>
                        Assign Task to Candidates
                     </button>
                    </div>

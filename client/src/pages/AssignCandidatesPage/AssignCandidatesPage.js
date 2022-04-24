@@ -10,6 +10,7 @@ const CandidatesPage = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const job = useSelector(state => state.job);
+    const user = useSelector(state=>state.user)
     const jobId = job.id;
     const [selectionModel, setSelectionModel] = React.useState([]);
     const [modalOpen, setModalOpen] = useState(false);
@@ -31,7 +32,22 @@ const CandidatesPage = () => {
     const filteredApplicants = copyApplicants.filter(
         applicant => applicant.score !== 0
     );
-
+    const handleAssignTask = async()=>{
+        let task={jobId:jobId, task:{ TaskId: id,applicants:selectionModel}}
+        const rawResponse = await fetch(
+            `http://localhost:5000/assignTasks`,
+            {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + user.userInfo.token
+                },
+                body: JSON.stringify(task)
+            }
+        );
+        const data = await rawResponse;
+    }
     const rows = [...filteredApplicants];
     const columns = [
         { field: "id", headerName: "ID", width: 70 },
@@ -87,8 +103,9 @@ const CandidatesPage = () => {
                 onClick={handleAllApplicants}
             >
                 {" "}
-                Assign Exam to Candidates
+                Assign MCQ to Candidates
             </button>
+            <button className="btn btn-primary" style={{marginTop: '20px',marginLeft: '20px'}} onClick={handleAssignTask}> Assign Task to  Candidates</button>
         </div>
     );
 };
