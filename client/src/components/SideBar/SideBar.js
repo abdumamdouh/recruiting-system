@@ -83,7 +83,7 @@ const SideBar = () => {
                                 Coding Problem
                             </li>
                         </Link>
-                        <Link to="/products" className="link">
+                        <Link to="/dashboard/availableTasks" className="link">
                             <li className="sidebarListItem">
                                 <AssignmentIcon className="sidebarIcon" />
                                 Task

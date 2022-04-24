@@ -54,7 +54,7 @@ const AddQuestion = ({
             }
         ]);
     };
-    const removeInputFields = (index) => {
+    const removeInputFields = index => {
         const rows = [...inputFields];
         rows.splice(index, 1);
         setInputFields(rows);
@@ -78,7 +78,7 @@ const AddQuestion = ({
             dispatch(getQuestions(topicProp, view, setTopicProp));
         }
     };
-    const handleSubmit = (e) => {
+    const handleSubmit = e => {
         e.preventDefault();
         let completeQuestion = {
             question: question,
@@ -86,7 +86,7 @@ const AddQuestion = ({
             difficulty: difficulty,
             answer: answer,
             topic: topic,
-            choices: inputFields.map((a) => a["choice"])
+            choices: inputFields.map(a => a["choice"])
         };
         setCompleteQuestion(completeQuestion);
         console.log(completeQuestion);
@@ -94,9 +94,7 @@ const AddQuestion = ({
         if (
             completeQuestion.question === "" ||
             completeQuestion.choices === [] ||
-            completeQuestion.answer === "" ||
-            completeQuestion.topic === "" ||
-            completeQuestion.category === ""
+            completeQuestion.answer === "" 
         ) {
             setModalOpen(true);
         } else {
@@ -138,7 +136,7 @@ const AddQuestion = ({
                             multiline
                             maxRows={4}
                             value={question}
-                            onChange={(e) => setQuestion(e.target.value)}
+                            onChange={e => setQuestion(e.target.value)}
                         />
                     </div>
                 </div>
@@ -154,7 +152,7 @@ const AddQuestion = ({
                                             <div className="form-group">
                                                 <input
                                                     type="text"
-                                                    onChange={(evnt) =>
+                                                    onChange={evnt =>
                                                         handleChange(
                                                             index,
                                                             evnt
@@ -200,24 +198,24 @@ const AddQuestion = ({
                 </div>
 
                 <div className="form-group">
-                    <label>Category</label>
+                    <label>Category  (optional)</label>
                     <div className="position-relative">
                         <TextField
                             id="outlined-basic"
                             label="Category"
                             variant="outlined"
-                            onChange={(e) => setCategory(e.target.value)}
+                            onChange={e => setCategory(e.target.value)}
                         />
                     </div>
                 </div>
                 <div className="form-group">
-                    <label>Topic</label>
+                    <label>Topic (optional)</label>
                     <div className="position-relative">
                         <TextField
                             id="outlined-basic"
                             label="Topic"
                             variant="outlined"
-                            onChange={(e) => setTopic(e.target.value)}
+                            onChange={e => setTopic(e.target.value)}
                         />
                     </div>
                 </div>
@@ -240,9 +238,9 @@ const AddQuestion = ({
                                 }}
                                 label="Difficulty"
                                 value={difficulty}
-                                onChange={(e) => setDifficulty(e.target.value)}
+                                onChange={e => setDifficulty(e.target.value)}
                             >
-                                {difficulties.map((option) => (
+                                {difficulties.map(option => (
                                     <MenuItem
                                         key={option.value}
                                         value={option.value}
@@ -255,16 +253,28 @@ const AddQuestion = ({
                         </div>
                     </div>
                 </div>
-
                 <div className="form-group">
-                    <label>Answer</label>
+                    <label style={{ marginBottom: "0.6rem" }}>Answer</label>
                     <div className="position-relative">
-                        <TextField
-                            id="outlined-basic"
-                            label="Answer"
-                            variant="outlined"
-                            onChange={(e) => setAnswer(e.target.value)}
-                        />
+                        <div>
+                            <TextField
+                                id="outlined-select"
+                                select
+                                style={{ minWidth: 120 }}
+                                label="Answer"
+                                value={answer}
+                                onChange={e => setAnswer(e.target.value)}
+                            >
+                                {inputFields.map(option => (
+                                    <MenuItem
+                                        key={option.choice}
+                                        value={option.choice}
+                                    >
+                                        {option.choice}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </div>
                     </div>
                 </div>
 
