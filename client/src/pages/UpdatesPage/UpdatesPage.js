@@ -113,7 +113,7 @@ const UpdatesPage = (props) => {
                                             <p>
                                                 <strong>Title:</strong>
                                             </p>{" "}
-                                            <p>{update.title}</p>
+                                            <p>{update.jobTitle}</p>
                                             <p>
                                                 <strong>Company:</strong>
                                             </p>{" "}
@@ -137,7 +137,7 @@ const UpdatesPage = (props) => {
                                                             <div>
                                                                 <OverlayTrigger
                                                                     key={
-                                                                        obj.topic
+                                                                        obj.title
                                                                     }
                                                                     placement="auto-start"
                                                                     delay={{
@@ -147,7 +147,7 @@ const UpdatesPage = (props) => {
                                                                     overlay={
                                                                         <Popover
                                                                             id={
-                                                                                obj.topic
+                                                                                obj.title
                                                                             }
                                                                         >
                                                                             <Popover.Header as="h3">
@@ -179,7 +179,7 @@ const UpdatesPage = (props) => {
                                                                 >
                                                                     <li
                                                                         key={
-                                                                            obj.topic
+                                                                            obj.title
                                                                         }
                                                                         class="nav-item"
                                                                     >
@@ -193,7 +193,7 @@ const UpdatesPage = (props) => {
                                                                             className="redirect"
                                                                         >
                                                                             {
-                                                                                obj.topic
+                                                                                obj.title
                                                                             }
                                                                         </span>
                                                                     </li>
@@ -234,23 +234,20 @@ const UpdatesPage = (props) => {
                             >
                                 MCQ Test
                             </Typography>
-                        
-                            {
-                            modalData.hasOwnProperty("topic")&&
 
-                            <Typography
-                                id="modal-modal-description"
-                                sx={{ mt: 2 }}
-                                style={{ textAlign: "center" }}
-                            >
-                            
-                                Now you will be redirect to a MCQ Test.the topic
-                                of the MCQ is <strong>{modalData.topic}</strong>{" "}
-                                and the duration is{" "}
-                                <strong>{modalData.duration}</strong> minutes.
-                            </Typography>
-
-                            }
+                            {modalData.hasOwnProperty("title") && (
+                                <Typography
+                                    id="modal-modal-description"
+                                    sx={{ mt: 2 }}
+                                    style={{ textAlign: "center" }}
+                                >
+                                    Now you will be redirect to a MCQ Test with
+                                    title <strong>{modalData.title}</strong> and
+                                    its duration is{" "}
+                                    <strong>{modalData.duration}</strong>{" "}
+                                    minutes.
+                                </Typography>
+                            )}
                             <div
                                 style={{
                                     display: "flex",
@@ -260,9 +257,8 @@ const UpdatesPage = (props) => {
                                 <Button
                                     variant="contained"
                                     onClick={() => {
-                                        handleRedirection(modalData.MCQId)
-                                    }
-                                    }
+                                        handleRedirection(modalData.MCQId);
+                                    }}
                                     style={{
                                         marginTop: "15px",
                                         marginRight: "15px"
