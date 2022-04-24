@@ -25,7 +25,7 @@ import { useSelector } from "react-redux";
 
 let MCQQ = {
     jobId: 1,
-    topic: "ana ba7b rouby",
+    title: "ana ba7b rouby",
     questions: [
         {
             question: "sdasjjkvdasdad",
@@ -491,7 +491,7 @@ const McqTestPage = (props) => {
                                     fontSize: "3rem"
                                 }}
                             >
-                                {Mcq.topic}
+                                {Mcq.title}
                             </Typography>
                             {Mcq.duration && <MyTimer expiryTimestamp={time} handleOnExpire={handleSubmit} />}
                         </div>
