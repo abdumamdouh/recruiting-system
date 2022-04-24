@@ -26,10 +26,8 @@ const recruiterAuth = async (req, res, next) => {
         }
         req.token = token;
         req.recruiter = recruiter;
-        console.log(req.body);
         next();
     } catch (e) {
-        console.log(req.body);
         res.status(401).send({ error: "Please Authenticate" }); //401 auth failed
     }
 };

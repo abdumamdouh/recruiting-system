@@ -231,12 +231,12 @@ export default function AddExam() {
                 >
                     Uploaded File Extension
                 </Typography>
-                <sm style={{ fontSize: 15, color: "#827F7E" }}>
+                <small style={{ fontSize: 15, color: "#827F7E" }}>
                     <em>
                         Restrict applicants for this job to a certain file
                         upload format.
                     </em>
-                </sm>
+                </small>
                 {/* <TextField
                     sx={{ marginTop: "10px" }}
                     id="outlined-static"
@@ -314,7 +314,7 @@ export default function AddExam() {
                 <span style={{ fontSize: 20, color: "#827F7E" }}>
                     (Optional)
                 </span>
-                <sm
+                <small
                     style={{
                         display: "block",
                         fontSize: 15,
@@ -325,7 +325,7 @@ export default function AddExam() {
                         Explain more details about the task through uploading a
                         docx or pdf file.
                     </em>
-                </sm>
+                </small>
                 <div className="mb" style={{ marginTop: "5px" }}>
                     {/* <div>
                         <input

@@ -20,10 +20,10 @@ import { CSVLink } from "react-csv";
 import "react-datepicker/dist/react-datepicker.css";
 import Message from "../modal/Message";
 export default function AddExam() {
-    const [topic, setTopic] = useState("");
+    const [title, setTitle] = useState("");
     const [expanded, setExpanded] = useState(false);
     const [checked, setChecked] = useState(false);
-    const [privatee, setPrivatee] = useState(false);
+    const [isPrivate, setIsPrivate] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const csvData = [
@@ -33,8 +33,8 @@ export default function AddExam() {
             "choice2",
             "choice3",
             "answer",
-            "category",
             "topic",
+            "subtopic",
             "difficulty"
         ],
         [
@@ -45,7 +45,7 @@ export default function AddExam() {
             "fsread",
             "Software engineering",
             "Backend",
-            "easy"
+            "Easy"
         ],
         [
             "The Node.js modules can be exposed using:",
@@ -55,7 +55,7 @@ export default function AddExam() {
             "exports",
             "Software engineering",
             "Backend",
-            "medium"
+            "Medium"
         ],
         [
             "What is Callback?",
@@ -65,24 +65,24 @@ export default function AddExam() {
             "The callback is an asynchronous equivalent for a function.",
             "Software engineering",
             "Backend",
-            "hard"
+            "Hard"
         ]
     ];
-    const handleChange = panel => (event, isExpanded) => {
+    const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
     const handleCheckBox = () => {
         setChecked(!checked);
-        setPrivatee(checked);
+        setIsPrivate(checked);
     };
-   
+
     const dispatch = useDispatch();
-    const jobId = useSelector(state => state.job.id);
-    const handleOnDrop = data => {
+    const jobId = useSelector((state) => state.job.id);
+    const handleOnDrop = (data) => {
         console.log(data);
 
         let arr = [];
-        data.filter(d => d.data.length !== 1).map(d => arr.push(d.data));
+        data.filter((d) => d.data.length !== 1).map((d) => arr.push(d.data));
         const array = [...arr];
         const length = array[0].length;
         // arr = arr.slice(0, arr.length - 1);
@@ -104,8 +104,8 @@ export default function AddExam() {
                 question: a[0],
                 options: a.slice(1, length - 4),
                 answer: a[length - 4],
-                category: a[length - 3],
-                topic: a[length - 2],
+                topic: a[length - 3],
+                subtopic: a[length - 2],
                 difficulty: a[length - 1]
             }));
 
@@ -114,20 +114,20 @@ export default function AddExam() {
         }
     };
 
-    const handleOnError = err => {
+    const handleOnError = (err) => {
         console.log(err);
     };
 
-    const handleOnRemoveFile = data => {
+    const handleOnRemoveFile = (data) => {
         console.log(data);
     };
     const handleClick = () => {
         dispatch(
             createExamAction(
                 jobId,
-                topic,
+                title,
                 questions,
-                privatee,
+                isPrivate,
 
                 showSuccessMessage
             )
@@ -172,21 +172,22 @@ export default function AddExam() {
                         <Typography
                             style={{ fontWeight: 500, fontSize: "15px" }}
                         >
-                            Add your questions in the form:
-                            question,choice1,choice2,choice3,answer
+                            Add your questions in the form: question, choice1,
+                            choice2, choice3, answer.
                         </Typography>
                         <Typography
                             style={{ fontWeight: 500, fontSize: "15px" }}
                         >
-                            you can add any number of choices between 3 and 5,
+                            You can add any number of choices between 3 and 5,
                             but the first field MUST be question and the last
-                            field MUST be the correct answer
+                            field MUST be the correct answer.
                         </Typography>
                         <Typography
                             style={{ fontWeight: 500, fontSize: "15px" }}
                         >
-                            Three Additional fields could be added as:
-                            question,choice1,choice2,choice3,answer,category,topic,difficulty
+                            Three Additional fields could be added as: question,
+                            choice1, choice2, choice3, answer, topic, subtopic,
+                            difficulty.
                         </Typography>
                     </AccordionDetails>
                 </Accordion>
@@ -200,13 +201,13 @@ export default function AddExam() {
                 autoComplete="off"
             >
                 <Typography className="black" variant="h6">
-                    Exam Topic
+                    Exam Title
                 </Typography>
                 <TextField
                     id="outlined-basic"
-                    label="Exam topic"
+                    label="Exam title"
                     variant="outlined"
-                    onChange={e => setTopic(e.target.value)}
+                    onChange={(e) => setTitle(e.target.value)}
                 />
             </Box>
             <h4 style={{ color: "black", marginBottom: "20px" }}>
@@ -214,6 +215,7 @@ export default function AddExam() {
             </h4>
             <div className="mb">
                 <CSVReader
+                    accept=".csv"
                     onDrop={handleOnDrop}
                     onError={handleOnError}
                     addRemoveButton

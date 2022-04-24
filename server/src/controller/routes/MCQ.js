@@ -42,7 +42,8 @@ router.post("/createQuestion", recruiterAuth, async (req, res) => {
 // Add MCQ exam via csv file
 router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic, private } = req.body;
+        console.log(req.body);
+        const { title, isPrivate } = req.body;
         const recruiterId = req.recruiter.id;
         // let questions = await Promise.all(
         //     req.body.questions.map(async ({ options: choices, ...rest }) => {
@@ -59,16 +60,16 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
         // );
         // console.log(expiryDate, duration);
         let questions = req.body.questions.map(
-            ({ options: choices, category, topic, ...rest }) => ({
+            ({ options: choices, topic, subtopic, ...rest }) => ({
                 choices,
-                category: category ? category : "Others",
-                topic: topic ? topic : req.body.topic,
+                topic: topic || "Others",
+                subtopic: subtopic || title,
                 ...rest
                 // MCQId: mcq.id
             })
         );
         questions = await Question.bulkCreate(questions, { validate: true });
-        const mcq = await MCQ.create({ topic, private, recruiterId });
+        const mcq = await MCQ.create({ title, isPrivate, recruiterId });
         // await mcq.addJob(jobId, { through: { expiryDate, duration } });
         await mcq.addQuestion(questions);
         res.status(201).send("The file is uploaded successfully");
@@ -84,9 +85,9 @@ router.post("/uploadMCQ", recruiterAuth, async (req, res) => {
 // Add MCQ from the question bank
 router.post("/createExam", recruiterAuth, async (req, res) => {
     try {
-        const { jobId, topic, private, questions } = req.body;
+        const { title, isPrivate, questions } = req.body;
         const { id: recruiterId } = req.recruiter;
-        const mcq = await MCQ.create({ topic, private, recruiterId });
+        const mcq = await MCQ.create({ title, isPrivate, recruiterId });
         // await mcq.addJob(jobId, { through: { expiryDate, duration } });
         await mcq.addQuestion(questions);
         res.status(201).send("The exam is created successfully.");
@@ -114,7 +115,7 @@ router.post("/pickMCQ", recruiterAuth, async (req, res) => {
 // get all public mcq questions
 router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
     try {
-        const pageNumber = req.params.pageNumber;
+        const { pageNumber } = req.params;
         // console.log(pageNumber);
         const results = await MCQ.findAndCountAll({
             include: {
@@ -123,13 +124,13 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
                 attributes: ["id", "question", "choices", "answer"]
                 // through: { attributes: [] }
             },
-            attributes: ["id", "topic", "recruiterId"],
+            attributes: ["id", "title", "recruiterId"],
             offset: (pageNumber - 1) * 4,
             limit: 4,
             where: {
                 [Op.or]: [
                     {
-                        private: {
+                        isPrivate: {
                             [Op.eq]: false
                         }
                     },
@@ -152,41 +153,16 @@ router.get("/getAllMCQs/:pageNumber", recruiterAuth, async (req, res) => {
     }
 });
 
-// get all categories of the questions
-router.get("/categories", recruiterAuth, async (req, res) => {
+// get all topics of the questions
+router.get("/topics", recruiterAuth, async (req, res) => {
     try {
-        let categories = await Question.findAll({
-            attributes: [
-                [
-                    Sequelize.fn("DISTINCT", Sequelize.col("category")),
-                    "category"
-                ]
-            ]
-        });
-        if (!categories) {
-            return res.status(404).send("No categories yet in the database.");
-        }
-        categories = categories.map(({ category }) => category);
-        res.status(200).send({ categories });
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
-
-// get all topics related to this certain category
-router.get("/topics/:category", recruiterAuth, async (req, res) => {
-    try {
-        const { category } = req.params;
         let topics = await Question.findAll({
-            where: { category },
             attributes: [
                 [Sequelize.fn("DISTINCT", Sequelize.col("topic")), "topic"]
             ]
         });
         if (!topics) {
-            return res
-                .status(404)
-                .send("No topics yet related to this category.");
+            return res.status(404).send("No topics yet in the database.");
         }
         topics = topics.map(({ topic }) => topic);
         res.status(200).send({ topics });
@@ -195,18 +171,43 @@ router.get("/topics/:category", recruiterAuth, async (req, res) => {
     }
 });
 
-// get all questions related to this certain topic
-router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
+// get all subtopics related to this certain topic
+router.get("/subtopics/:topic", recruiterAuth, async (req, res) => {
     try {
-        const { category, topic } = req.params;
+        const { topic } = req.params;
+        let subtopics = await Question.findAll({
+            where: { topic },
+            attributes: [
+                [
+                    Sequelize.fn("DISTINCT", Sequelize.col("subtopic")),
+                    "subtopic"
+                ]
+            ]
+        });
+        if (!subtopics) {
+            return res
+                .status(404)
+                .send("No subtopics yet related to this topic.");
+        }
+        subtopics = subtopics.map(({ subtopic }) => subtopic);
+        res.status(200).send({ subtopics });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// get all questions related to this certain subtopic
+router.get("/questions/:topic/:subtopic", recruiterAuth, async (req, res) => {
+    try {
+        const { topic, subtopic } = req.params;
         const questions = await Question.findAll({
-            where: { category, topic },
+            where: { topic, subtopic },
             attributes: ["id", "question", "choices", "answer", "difficulty"]
         });
         if (!questions) {
             return res
                 .status(404)
-                .send("No questions yet related to this certain topic.");
+                .send("No questions yet related to this certain subtopic.");
         }
         // console.log(questions[0].choices);
         questions.forEach((question) => {
@@ -224,7 +225,6 @@ router.get("/questions/:category/:topic", recruiterAuth, async (req, res) => {
         // console.log(questions);
         res.status(200).send({ questions });
     } catch (error) {
-        console.log(error);
         res.status(500).send(error.message);
     }
 });
@@ -267,7 +267,7 @@ router.get("/getMCQ/:id", applicantAuth, async (req, res) => {
                     through: { attributes: ["duration"] }
                 }
             ],
-            attributes: ["id", "topic"]
+            attributes: ["id", "title"]
         });
         mcq = JSON.parse(JSON.stringify(mcq));
         mcq.questions = _.shuffle(mcq.questions);

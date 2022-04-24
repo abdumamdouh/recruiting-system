@@ -18,9 +18,9 @@ function CustomizeExamPopup({
     setSuccess
 }) {
     const state = useSelector((state) => state);
-    const [topic, setTopic] = useState("");
+    const [title, setTitle] = useState("");
     const [checked, setChecked] = useState(false);
-    const [privatee, setPrivatee] = useState(false);
+    const [isPrivate, setIsPrivate] = useState(false);
     const dispatch = useDispatch();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [expiryDate, setExpiryDate] = useState(new Date());
@@ -30,8 +30,8 @@ function CustomizeExamPopup({
 
     const handleCheckBox = () => {
         setChecked(!checked);
-        setPrivatee(checked);
-        console.log("dddd", privatee);
+        setIsPrivate(checked);
+        console.log("dddd", isPrivate);
         console.log(checked);
         console.log("jj", jobId);
     };
@@ -44,9 +44,9 @@ function CustomizeExamPopup({
         try {
             let mcq = {
                 jobId: jobId,
-                topic: topic,
+                title: title,
                 questions: questions,
-                private: privatee,
+                isPrivate: isPrivate,
                 expiryDate: expiryDate,
                 duration: duration
             };
@@ -111,7 +111,7 @@ function CustomizeExamPopup({
                                         label="Exam title"
                                         variant="outlined"
                                         onChange={(e) =>
-                                            setTopic(e.target.value)
+                                            setTitle(e.target.value)
                                         }
                                     />
                                 </div>

@@ -5,13 +5,13 @@ import MenuItem from "@mui/material/MenuItem";
 import Message from "../../components/modal/Message";
 import { updateApplicantAction } from "../../redux/actions/user";
 import { createQuestion } from "../../redux/actions/exam";
-import { getCategory, getTopic, getQuestions } from "../../redux/actions/bank";
+import { getTopic, getSubtopic, getQuestions } from "../../redux/actions/bank";
 const AddQuestion = ({
     setOpenQuestion,
     view,
     setView,
-    topicProp,
-    setTopicProp,
+    subtopicProp,
+    setSubtopicProp,
     setSelectedQuestions,
     selectedQuestions,
     setSuccess
@@ -20,9 +20,9 @@ const AddQuestion = ({
     const [completeQuestion, setCompleteQuestion] = useState({});
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
-    const [category, setCategory] = useState("");
-    const [difficulty, setDifficulty] = useState("Easy");
     const [topic, setTopic] = useState("");
+    const [difficulty, setDifficulty] = useState("Easy");
+    const [subtopic, setSubtopic] = useState("");
     const [completeQuestionWId, setCompleteQuestionWId] = useState({});
     const difficulties = [
         {
@@ -54,7 +54,7 @@ const AddQuestion = ({
             }
         ]);
     };
-    const removeInputFields = index => {
+    const removeInputFields = (index) => {
         const rows = [...inputFields];
         rows.splice(index, 1);
         setInputFields(rows);
@@ -66,35 +66,35 @@ const AddQuestion = ({
         setInputFields(list);
         console.log(inputFields);
     };
-    const chooseTopic = () => {
+    const chooseSubtopic = () => {
         if (view !== "") {
             dispatch(getTopic(view, setView));
         }
     };
     const chooseQuestions = () => {
-        console.log("topicc", topicProp);
+        console.log("topicc", subtopicProp);
 
-        if (topicProp !== "") {
-            dispatch(getQuestions(topicProp, view, setTopicProp));
+        if (subtopicProp !== "") {
+            dispatch(getQuestions(subtopicProp, view, setSubtopicProp));
         }
     };
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         let completeQuestion = {
             question: question,
-            category: category,
+            topic: topic,
             difficulty: difficulty,
             answer: answer,
-            topic: topic,
-            choices: inputFields.map(a => a["choice"])
+            subtopic: subtopic,
+            choices: inputFields.map((a) => a["choice"])
         };
         setCompleteQuestion(completeQuestion);
         console.log(completeQuestion);
-        console.log("top", topicProp);
+        console.log("top", subtopicProp);
         if (
             completeQuestion.question === "" ||
             completeQuestion.choices === [] ||
-            completeQuestion.answer === "" 
+            completeQuestion.answer === ""
         ) {
             setModalOpen(true);
         } else {
@@ -103,7 +103,7 @@ const AddQuestion = ({
             dispatch(
                 createQuestion(
                     completeQuestion,
-                    chooseTopic,
+                    chooseSubtopic,
                     chooseQuestions,
                     selectedQuestions,
                     setSelectedQuestions
@@ -136,7 +136,7 @@ const AddQuestion = ({
                             multiline
                             maxRows={4}
                             value={question}
-                            onChange={e => setQuestion(e.target.value)}
+                            onChange={(e) => setQuestion(e.target.value)}
                         />
                     </div>
                 </div>
@@ -152,7 +152,7 @@ const AddQuestion = ({
                                             <div className="form-group">
                                                 <input
                                                     type="text"
-                                                    onChange={evnt =>
+                                                    onChange={(evnt) =>
                                                         handleChange(
                                                             index,
                                                             evnt
@@ -198,24 +198,30 @@ const AddQuestion = ({
                 </div>
 
                 <div className="form-group">
-                    <label>Category  (optional)</label>
-                    <div className="position-relative">
-                        <TextField
-                            id="outlined-basic"
-                            label="Category"
-                            variant="outlined"
-                            onChange={e => setCategory(e.target.value)}
-                        />
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label>Topic (optional)</label>
+                    <label>
+                        Topic{" "}
+                        <span style={{ color: "#827F7E" }}>(Optional)</span>
+                    </label>
                     <div className="position-relative">
                         <TextField
                             id="outlined-basic"
                             label="Topic"
                             variant="outlined"
-                            onChange={e => setTopic(e.target.value)}
+                            onChange={(e) => setTopic(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label>
+                        Subtopic{" "}
+                        <span style={{ color: "#827F7E" }}>(Optional)</span>
+                    </label>
+                    <div className="position-relative">
+                        <TextField
+                            id="outlined-basic"
+                            label="Subtopic"
+                            variant="outlined"
+                            onChange={(e) => setSubtopic(e.target.value)}
                         />
                     </div>
                 </div>
@@ -238,9 +244,9 @@ const AddQuestion = ({
                                 }}
                                 label="Difficulty"
                                 value={difficulty}
-                                onChange={e => setDifficulty(e.target.value)}
+                                onChange={(e) => setDifficulty(e.target.value)}
                             >
-                                {difficulties.map(option => (
+                                {difficulties.map((option) => (
                                     <MenuItem
                                         key={option.value}
                                         value={option.value}
@@ -263,9 +269,9 @@ const AddQuestion = ({
                                 style={{ minWidth: 120 }}
                                 label="Answer"
                                 value={answer}
-                                onChange={e => setAnswer(e.target.value)}
+                                onChange={(e) => setAnswer(e.target.value)}
                             >
-                                {inputFields.map(option => (
+                                {inputFields.map((option) => (
                                     <MenuItem
                                         key={option.choice}
                                         value={option.choice}
