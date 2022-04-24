@@ -10,10 +10,10 @@ import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import { pickExamAction } from "../../redux/actions/exam";
 import CardPopup from "./CardPopup";
 import "./Card.scss";
-const Card = props => {
+const Card = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const jobId = useSelector(state => state.job.id);
+    const jobId = useSelector((state) => state.job.id);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [expiryDate, setExpiryDate] = useState(new Date());
     const [duration, setDuration] = useState(0);
@@ -29,7 +29,7 @@ const Card = props => {
         console.log("duration", duration);
         setChoosed(true);
     };
-    const handleDate = date => {
+    const handleDate = (date) => {
         setSelectedDate(date);
         setExpiryDate(date);
     };
@@ -66,7 +66,7 @@ const Card = props => {
                         )}
                     </div>
                     <h6 className="card-subtitle mb-2 mt-2 text-muted">
-                        Exam topic: {props.topic}
+                        Exam title: {props.title}
                     </h6>
                     <p className="card-text">
                         Number of questions: {props.questions.length}{" "}
@@ -115,7 +115,7 @@ const Card = props => {
                                     label="duration"
                                     size="md"
                                     value={duration}
-                                    onChange={e => {
+                                    onChange={(e) => {
                                         setDuration(e.target.value);
                                     }}
                                 />
