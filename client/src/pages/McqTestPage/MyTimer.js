@@ -2,10 +2,10 @@ import React from "react";
 import { useTimer } from "react-timer-hook";
 import "./MyTimer.scss";
 
-function MyTimer({ expiryTimestamp }) {
+function MyTimer({ expiryTimestamp, handleOnExpire }) {
     const { seconds, minutes, hours } = useTimer({
         expiryTimestamp,
-        onExpire: () => console.warn("onExpire called")
+        onExpire: handleOnExpire,
     });
 
     return (
