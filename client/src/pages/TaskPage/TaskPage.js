@@ -1,6 +1,7 @@
 import "./TaskPage.scss";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { Snackbar, Alert } from "@mui/material";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DateTimePicker from "@mui/lab/DateTimePicker";
@@ -32,6 +33,7 @@ export default function AddExam() {
         "jpg",
         "jpeg"
     ];
+    const [open, setOpen] = useState(false);
     const [option, setOption] = useState([]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -51,6 +53,14 @@ export default function AddExam() {
         console.log(err);
     };
 
+    const handleClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        setOpen(false);
+    };
+
     const handleClick = async () => {
         /*
         {
@@ -63,13 +73,10 @@ export default function AddExam() {
         */
         //Check if selected options are in the avaialble options or not
 
-        let validOption = true;
-        option.forEach((option) => {
-            if (!availableOptions.includes(option)) {
-                validOption = false;
-                return;
-            }
-        });
+        if (!option.length) {
+            setOpen(true);
+            return;
+        }
 
         console.log(jobId);
         const task = {
@@ -152,6 +159,22 @@ export default function AddExam() {
 
     return (
         <div>
+            {!option.length && (
+                <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={handleClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity="error"
+                        sx={{ width: "100%" }}
+                    >
+                        Invalid extension!
+                    </Alert>
+                </Snackbar>
+            )}
             <div className="container">
                 {modalOpen && (
                     <Message
