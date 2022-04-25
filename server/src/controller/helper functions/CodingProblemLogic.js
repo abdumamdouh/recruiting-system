@@ -109,7 +109,7 @@ const testCode = async function (code,langauge,timeOut,inputs,outputs,index,numO
         case'cpp':
         try {
             // compilex example
-            var envData = { OS : "windows" , cmd : "g++"};
+            var envData = { OS : "windows" , cmd : "g++" ,options:{timeout:timeOut}};
             compiler.compileCPPWithInput(envData , code , stringInput , function (data) {
                 index.advance() ;   //index++
                 // console.log(data)

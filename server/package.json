@@ -15,6 +15,7 @@
     "@babel/preset-env": "^7.15.8",
     "@sequelize/core": "^7.0.0-alpha.10",
     "bcryptjs": "^2.4.3",
+    "compilex": "^0.7.4",
     "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
     "dotenv": "^10.0.0",
