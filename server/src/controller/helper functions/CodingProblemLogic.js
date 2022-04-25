@@ -1,5 +1,6 @@
 
 var compiler = require('compilex');
+const { count } = require('console');
 var options = {stats : true}; 
 compiler.init(options);
 const fs = require('fs')
@@ -14,31 +15,33 @@ const fs = require('fs')
 //     } while (currentDate - date < milliseconds);
 // }
 
-const removeReturnStatment = function(code,start,end) {
+const injectBeforeReturnStatment = function(code,start,end) {
     let temp = ''
+    // 40
+    const secondClk = '__measuringExecutionTimeAM2 = clock() ;\n'
+    // 104
+    const printStmt = `cout<<" "<<(double(__measuringExecutionTimeAM2-__measuringExecutionTimeAM1)/CLOCKS_PER_SEC)<<" "<<endl;\n`
 
     for (let i = start ; i<end ;i++){
         temp+=code[i];
-
         if (temp.length === 6 ){
             if (temp === 'return'){
-                const index = i-5 ;
-                while (i<code.length && code[i] != ';'){
-                    i++ ;
-                }
-                return code.slice(0,index) + code.slice(i+1) ;
-            } else {
-                temp = temp.slice(1)
+                code = code.slice(0,i-6) + secondClk + printStmt + code.slice(i-6) ;
+                i+=150 ;
+                end+150 ;
             }
+            temp = temp.slice(1);
         }
     }
+    return code ;
 }
-
 
 const inject = function (code , language) {
     code = '#include <time.h>\n' + code.slice(0)
     const t1 = '\ndouble __measuringExecutionTimeAM1 = clock();\n'
-    const t2 = '\ndouble __measuringExecutionTimeAM2 = clock();\n'
+    const t2 = '\ndouble __measuringExecutionTimeAM2 ;\n'
+    const secondClk = '__measuringExecutionTimeAM2 = clock() ;\n'
+    const printStmt = `cout<<" "<<(double(__measuringExecutionTimeAM2-__measuringExecutionTimeAM1)/CLOCKS_PER_SEC)<<" "<<endl;`
 
     if (language == 'cpp'){
         const mainStart = code.search('main')
@@ -51,7 +54,7 @@ const inject = function (code , language) {
             if (code[i] === '{'){
                 st.push(code[i]);
                 start = i+1 ;
-                code = code.slice(0,i+1) + t1 + code.slice(i+1)
+                code = code.slice(0,i+1) + t1 + t2 + code.slice(i+1)
                 break ;
             }
         }
@@ -66,11 +69,8 @@ const inject = function (code , language) {
             }
 
             if (st.length === 0){ 
-                code = code.slice(0,i) + t2 + '}\n';
-                // code += `cout<<" "<<(double(__measuringExecutionTimeAM2-__measuringExecutionTimeAM1)/CLOCKS_PER_SEC)<<" ";}`
-
-                // i+145 is the new index of the } related to the main function
-                code = removeReturnStatment(code,mainStart,i+145)
+                code = code.slice(0,i) + secondClk + '\n' + printStmt + code.slice(i);
+                code = injectBeforeReturnStatment(code,mainStart,i)
                 break;
             }
         }
@@ -113,7 +113,7 @@ const testCode = async function (code,langauge,timeOut,inputs,outputs,index,numO
             compiler.compileCPPWithInput(envData , code , stringInput , function (data) {
                 index.advance() ;   //index++
                 // console.log(data)
-                
+                // console.log(data)
                 if (data.output === outputs){
                     //storing outputs of testcases in finalResult object which is passed from the route
                     finalResult[`testCase${index.value}`]="PASSED" 
