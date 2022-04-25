@@ -31,7 +31,7 @@ const router = new express.Router();
 router.post(
     "/createTask",
     recruiterAuth,
-    recTaskUpload.single("task"),
+    recTaskUpload.single("task"), 
     async (req, res) => {
         try {
             // console.log(req.file);
@@ -238,6 +238,7 @@ router.get("/:JobId/allTasks", recruiterAuth, async (req, res) => {
 //     "relatedToThisJob": [
 //         {
 //             "title": "some title",
+//             "description": "Shit",
 //             "uploadFormat": "pdf",
 //             "id": 4,
 //             "createdAt": "2022-04-24T11:48:22.000Z"
@@ -246,18 +247,21 @@ router.get("/:JobId/allTasks", recruiterAuth, async (req, res) => {
 //     "createdPrevByYou": [
 //         {
 //             "title": "some title",
+//             "description": "Some discription",
 //             "uploadFormat": "pdf",
 //             "id": 1,
 //             "createdAt": "2022-04-24T11:46:51.000Z"
 //         },
 //         {
 //             "title": "some title",
+//             "description": "Shit",
 //             "uploadFormat": "pdf",
 //             "id": 2,
 //             "createdAt": "2022-04-24T11:47:15.000Z"
 //         },
 //         {
 //             "title": "some title",
+//             "description": "Shit",
 //             "uploadFormat": "pdf",
 //             "id": 3,
 //             "createdAt": "2022-04-24T11:48:14.000Z"
