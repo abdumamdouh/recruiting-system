@@ -11,6 +11,7 @@ import uploadedExamReducer from "./reducers/uploadedExams";
 import assignedExamReducer from "./reducers/assignedExams";
 import bankReducer from "./reducers/bank";
 import taskReducer from "./reducers/task";
+import taskSubmissionReducer from "./reducers/taskSubmission"; 
 const persistConfig = {
   key: "root",
   storage,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   assignedEXam: assignedExamReducer,
   bank:bankReducer,
   tasks: taskReducer,
+  taskSubmissionReducer: taskSubmissionReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);
