@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 function TaskCard({ description, number,id,title }) {
     const history = useHistory();
-    const jobId = useSelector(state => state.job.id);
+    const TaskId = id
+    const JobId = useSelector(state => state.job.id);
     const handleAssign = id => {
         console.log("ay 7aga");
         history.push(`/dashboard/uploadedexams/assignapplicants/${id}`);
@@ -12,6 +13,10 @@ function TaskCard({ description, number,id,title }) {
     const handleAssignCanidate = id => {
         console.log("ay 7aga");
         history.push(`/dashboard/uploadedexams/assigncandidates/${id}`);
+    };
+    const handleReviewSubmission = id => {
+        console.log("ay 7aga");
+        history.push(`/dashboard/uploadedexams/reviewsubmissions/${id}`);
     };
     return (
         <div>
@@ -24,10 +29,15 @@ function TaskCard({ description, number,id,title }) {
                      onClick={() => handleAssign(id)}>
                        Assign Task to Applicants
                     </button>
-                   <div>
-                   <button href="#" className="mt-3 btn btn-primary"
+                    <button href="#" className="ml-3 btn btn-primary"
                     onClick={() => handleAssignCanidate(id)}>
                        Assign Task to Candidates
+                    </button>
+                   <div>
+                  
+                   <button href="#" className="mt-3 btn btn-primary"
+                    onClick={() => handleReviewSubmission(id)}>
+                      Review Task Submissions
                     </button>
                    </div>
                 </div>
