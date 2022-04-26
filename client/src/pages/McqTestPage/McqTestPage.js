@@ -358,7 +358,7 @@ const McqTestPage = (props) => {
     const [modalOpen, setModalOpen] = useState(false);
     // const [time, setTime] = useState(JSON.parse(localStorage.getItem("time")) || new Date());
     
-    const time = new Date(localStorage.getItem("time")) || new Date();
+    const time = new Date(JSON.parse(localStorage.getItem("time"))) || new Date();
     time.setSeconds(time.getSeconds() + Mcq.duration * 60); // 10 minutes timer
 
     const { userInfo } = useSelector((state) => state.user);
