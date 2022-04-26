@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Message from "../../components/modal/Message";
 
-export default function AddExam() {
+export default function Task() {
     //ID of the task
     const { ID } = useParams();
 
@@ -141,10 +141,10 @@ export default function AddExam() {
             >
                 <Typography
                     className="black"
-                    variant="h6"
-                    sx={{ marginBottom: "10px" }}
+                    variant="h3"
+                    sx={{ marginBottom: "10px", fontWeight: 800 }}
                 >
-                    Task Title
+                    Task
                 </Typography>
             </Box>
 
@@ -156,7 +156,7 @@ export default function AddExam() {
             >
                 <Typography
                     className="black"
-                    variant="h6"
+                    // variant="h6"
                     sx={{ marginBottom: "10px" }}
                 >
                     Task Description
