@@ -356,6 +356,7 @@ const McqTestPage = (props) => {
     const [Mcq, setMcq] = useState([]);
     //pop up message state
     const [modalOpen, setModalOpen] = useState(false);
+    const [time, setTime] = useState(JSON.parse(localStorage.getItem("time")) || new Date());
 
     const { userInfo } = useSelector((state) => state.user);
 
@@ -384,6 +385,11 @@ const McqTestPage = (props) => {
             }
         };
         getQuestion();
+
+        const McqTime = time;
+        McqTime.setSeconds(time.getSeconds() + Mcq.duration * 60); // 10 minutes timer
+        setTime(McqTime);
+        if(localStorage.getItem("time") === null) localStorage.setItem("time", JSON.stringify(McqTime));
     }, []);
 
     let McqAnswers = {};
@@ -436,8 +442,10 @@ const McqTestPage = (props) => {
     };
 
     //TODO: replace the hardcoded value with the duration from the API
+    /*
     const time = new Date();
     time.setSeconds(time.getSeconds() + Mcq.duration * 60); // 10 minutes timer
+*/
 
     return (
         <>
