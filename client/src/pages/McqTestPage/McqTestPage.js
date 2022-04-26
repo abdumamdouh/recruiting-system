@@ -394,6 +394,7 @@ const McqTestPage = (props) => {
                 console.log(error);
             }
         };
+        localStorage.removeItem("time");
         getQuestion();
         // if (localStorage.getItem("time") !== null) {
         //     console.log(localStorage.getItem("time"));
@@ -461,6 +462,7 @@ const McqTestPage = (props) => {
         localStorage.removeItem("time");
         handleSubmit();
     };
+
     if (Mcq.duration !== undefined) {
         let time = new Date();
         time.setSeconds(time.getSeconds() + Mcq.duration * 60);
@@ -653,7 +655,7 @@ const McqTestPage = (props) => {
                             <Button
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
-                                onClick={deleteTime}
+                                onClick={handleSubmit}
                             >
                                 Submit
                             </Button>
