@@ -360,8 +360,8 @@ const McqTestPage = (props) => {
     
     // const time = new Date(JSON.parse(sessionStorage.getItem("time"))) || new Date();
     let time = new Date();
-    if(sessionStorage.getItem('time') !== null) time = new Date(JSON.parse(sessionStorage.getItem("time")));
     time.setSeconds(time.getSeconds() + Mcq.duration * 60); // 10 minutes timer
+    if(sessionStorage.getItem('time') !== null) time = new Date(JSON.parse(sessionStorage.getItem("time")));
 
     const { userInfo } = useSelector((state) => state.user);
 
