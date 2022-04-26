@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "file-type": "^10.11.0",
     "multer": "^1.4.4",
     "nodemon": "^2.0.15",
     "react-notification-popup": "^0.1.2",
