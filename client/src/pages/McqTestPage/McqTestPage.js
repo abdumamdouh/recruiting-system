@@ -394,7 +394,7 @@ const McqTestPage = (props) => {
                 console.log(error);
             }
         };
-        localStorage.removeItem("time");
+        
         getQuestion();
         // if (localStorage.getItem("time") !== null) {
         //     console.log(localStorage.getItem("time"));
@@ -424,6 +424,8 @@ const McqTestPage = (props) => {
         // setMcqTaken(true);
         // setModalOpen(true)
 
+        //remove time from loccal storage
+        localStorage.removeItem("time");
         try {
             console.log(McqAnswers);
             console.log(JSON.stringify(McqAnswers));
