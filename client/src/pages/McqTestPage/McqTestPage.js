@@ -358,7 +358,7 @@ const McqTestPage = (props) => {
     const [modalOpen, setModalOpen] = useState(false);
     // const [time, setTime] = useState(JSON.parse(localStorage.getItem("time")) || new Date());
     
-    const time = JSON.parse(localStorage.getItem("time")) || new Date();
+    const time = localStorage.getItem("time") || new Date();
     time.setSeconds(time.getSeconds() + Mcq.duration * 60); // 10 minutes timer
 
     const { userInfo } = useSelector((state) => state.user);
@@ -388,7 +388,7 @@ const McqTestPage = (props) => {
             }
         };
         getQuestion();
-        if(localStorage.getItem("time") === null) localStorage.setItem("time", JSON.stringify(time));
+        if(localStorage.getItem("time") === 'null') localStorage.setItem("time", time);
         console.log(time);
     }, []);
 
