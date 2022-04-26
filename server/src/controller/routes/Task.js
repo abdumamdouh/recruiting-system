@@ -1,5 +1,6 @@
 const express = require("express");
 const db = require("../../db/db");
+const fileType = require('file-type');
 
 const RecOrApp = require("../middleware/RecOrApp");
 const recruiterAuth = require("../middleware/recruiterAuth");
@@ -281,7 +282,7 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 attributes: ["RecruiterId"],
                 where: {
                     id: req.params.JobId
-                },
+                }, 
                 raw: true
             });
             if (req.recruiter.id !== record.RecruiterId) {
@@ -295,7 +296,8 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 },
                 raw: true
             });
-
+            const buffer = result.data.additionalFile
+            result.data.type = fileType(buffer); 
             result.deadline = (
                 await ActiveTask.findOne({
                     attributes: ["deadline"],
@@ -344,7 +346,8 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 },
                 raw: true
             });
-
+            const buffer = result.data.additionalFile
+            result.data.type = fileType(buffer); 
             result.deadline = (
                 await ActiveTask.findOne({
                     attributes: ["deadline"],
@@ -358,7 +361,7 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
             res.send(result);
         }
     } catch (error) {
-        res.send(error.message);
+        res.status(403).send(error.message);
     }
 });
 // Returned JSON:
@@ -370,9 +373,12 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
 //         "additionalFile": {
 //                              "type":"Buffer",
 //                              "data":[]
-//                           }
-// }
-//     },
+//                           },
+//          "type": {
+//              "ext": "pdf",
+//              "mime": "application/pdf"
+//          }
+//      },
 //     "deadline": "2022-02-09T22:00:00.000Z"
 // }
 
@@ -386,6 +392,10 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
 //                              "data":[]
 //                           }
 //     },
+//          "type": {
+//              "ext": "pdf",
+//              "mime": "application/pdf"
+//          }
 //     "deadline": "2022-02-09T22:00:00.000Z",
 //     "Uploaded_count": 1
 // }

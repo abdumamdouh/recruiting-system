@@ -31,59 +31,45 @@ export default function AddExam() {
         console.log(err);
     };
 
-    // const handleClick = async () => {
-    //     /*
-    //     {
-    //         "title":"Some title",
-    //         "description":"Some discription",
-    //         "deadline":"2022-03-20 01:21:00",
-    //         "JobId":1,
-    //         "uploadFormat":"pdf"
-    //     }
-    //     */
-    //     console.log(jobId);
+    const handleClick = async () => {
+        // console.log(jobId);
 
-    //     const task = {
-    //         title,
-    //         description,
-    //         deadline: expiryDate,
-    //         JobId: jobId,
-    //         uploadFormat: option.join("-")
-    //     };
+        // const task = {
+        //     title,
+        //     description,
+        //     deadline: expiryDate,
+        //     JobId: jobId,
+        //     uploadFormat: option.join("-")
+        // };
 
-    //     console.log(task);
-    //     //
-    //     const formData = new FormData();
-    //     formData.append("task", selectedFile);
-    //     formData.append("data", JSON.stringify(task));
-    //     console.log(formData);
+        // console.log(task);
+        //
+        // const formData = new FormData();
+        // formData.append("task", selectedFile);
+        // formData.append("data", JSON.stringify(task));
+        // console.log(formData);
 
-    //     // for (let pair of formData.entries()) {
-    //     //     console.log(pair[0] + " - " + pair[1]);
-    //     // }
 
-    //     try {
-    //         console.log(userInfo.token);
-    //         const response = await fetch(`http://localhost:5000/createTask`, {
-    //             method: "POST",
-    //             body: formData,
-    //             headers: {
-    //                 Accept: "multipart/form-data",
-    //                 // "Content-Type": "application/json",
-    //                 // "Content-Type": "multipart/form-data",
-    //                 Authorization: "Bearer " + userInfo.token
-    //             }
-    //         });
-    //         const data = await response;
-    //         console.log(data);
-    //         //TODO: condition for success
-    //         showSuccessMessage();
-    //     } catch (error) {
-    //         console.error("Error:", error);
-    //         handleOnError(error);
-    //     }
+        try {
+            console.log(userInfo.token);
+            const response = await fetch(`http://localhost:5000/${3}/${1}`, {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + userInfo.token
+                }
+            });
+            const data = await response;
+            console.log(data.body);
+            //TODO: condition for success
+            showSuccessMessage();
+        } catch (error) {
+            console.error("Error:", error);
+            handleOnError(error);
+        }
 
-    // };
+    };
 
     const showSuccessMessage = () => {
         setModalOpen(true);
@@ -169,6 +155,9 @@ export default function AddExam() {
                 </Typography>
             </div>
 
+            <div> 
+                    <a href="#">Download helper files</a>
+            </div>
             <div>
                 <h4
                     style={{
@@ -177,12 +166,8 @@ export default function AddExam() {
                         marginBottom: "5px"
                     }}
                 >
-                    Upload Additional Resources{" "}
+                    Your submissions{" "}
                 </h4>
-                <span style={{ fontSize: 20, color: "#827F7E" }}>
-                    (Optional)
-                </span>
-
                 <div className="mb" style={{ marginTop: "5px" }}>
                     <label htmlFor="contained-button-file">
                         <Input
@@ -192,7 +177,7 @@ export default function AddExam() {
                             onChange={changeHandler}
                         />
                         <Button variant="contained" component="span">
-                            Upload file
+                            Upload task
                         </Button>
                     </label>
                     {isFilePicked ? (
@@ -209,9 +194,9 @@ export default function AddExam() {
                 <Button
                     style={{ marginBottom: "10px" }}
                     variant="contained"
-                    // onClick={handleClick}
+                    onClick={handleClick}
                 >
-                    Upload Task
+                    Submit
                 </Button>
             </div>
         </div>
