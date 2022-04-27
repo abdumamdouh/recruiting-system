@@ -35,7 +35,7 @@ export default function Task() {
                 console.log(userInfo.token);
                 const response = await fetch(
                     //TODO: make it dynamic
-                    `http://localhost:5000/${3}/${1}`,
+                    `http://localhost:5000/${1}/${1}`,
                     {
                         method: "GET",
                         headers: {
@@ -45,11 +45,11 @@ export default function Task() {
                         }
                     }
                 );
-                const data = await response;
-                console.log(data.body);
-                setTask(data.body);
+                const data = await response.json();
+                console.log(data);
+                setTask(data);
                 //TODO: condition for success
-                showSuccessMessage();
+                // showSuccessMessage();
             } catch (error) {
                 console.error("Error:", error);
                 handleOnError(error);
@@ -78,7 +78,7 @@ export default function Task() {
             const response = await fetch(
                 //TODO make it dynamic
                 // /uploadTask/:TaskId/:JobId
-                `http://localhost:5000/uploadTask/${3}/${1}`,
+                `http://localhost:5000/uploadTask/${1}/${1}`,
                 {
                     method: "POST",
                     body: formData,
@@ -139,6 +139,7 @@ export default function Task() {
 
     return (
         <div>
+            {JSON.stringify(task)}
             <div className="container">
                 {modalOpen && (
                     <Message
@@ -174,13 +175,13 @@ export default function Task() {
                     // variant="h6"
                     sx={{ marginBottom: "10px" }}
                 >
-                    Task Description
+                    {task.data.description}
                 </Typography>
             </Box>
 
             <div className="mb black">
                 <Typography color="black" variant="h6">
-                    Deadline for this Task
+                    {task.deadline}
                 </Typography>
             </div>
 
