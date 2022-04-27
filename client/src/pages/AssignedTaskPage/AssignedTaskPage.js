@@ -23,6 +23,7 @@ export default function Task() {
     //file
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
+    const [task, setTask] = useState();
 
     const jobId = useSelector((state) => state.job.id);
     const { userInfo } = useSelector((state) => state.user);
