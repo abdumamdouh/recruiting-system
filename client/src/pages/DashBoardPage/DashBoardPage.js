@@ -36,10 +36,10 @@ const DashBoardPage = () => {
                         <Route exact path="/dashboard/uploadedexams">
                             <UploadedExams />
                         </Route>
-                        <Route path="/dashboard/uploadedexams/assignapplicants/:id">
+                        <Route path="/dashboard/uploadedexams/assignapplicants/:t/:id">
                             <AssignApplicantsPage />
                         </Route>
-                        <Route path="/dashboard/uploadedexams/assigncandidates/:id">
+                        <Route path="/dashboard/uploadedexams/assigncandidates/:t/:id">
                             <AssignCandidatesPage />
                         </Route>
                         <Route path="/dashboard/candidates">
