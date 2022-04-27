@@ -394,7 +394,7 @@ const McqTestPage = (props) => {
                 console.log(error);
             }
         };
-        
+
         getQuestion();
         // if (localStorage.getItem("time") !== null) {
         //     console.log(localStorage.getItem("time"));
@@ -465,7 +465,7 @@ const McqTestPage = (props) => {
         handleSubmit();
     };
 
-    if (Mcq.duration !== undefined) {
+    if (Mcq.duration !== undefined && !McqTaken) {
         let time = new Date();
         time.setSeconds(time.getSeconds() + Mcq.duration * 60);
         if (localStorage.getItem("time") !== null) {
@@ -671,7 +671,15 @@ const McqTestPage = (props) => {
         return (
             <>
                 {McqTaken ? (
-                    <h1>You have submitted the MCQ exam successfully.</h1>
+                    <>
+                        {modalOpen && (
+                            <Message
+                                setOpenModal={setModalOpen}
+                                message="Submitted Successfully!"
+                            />
+                        )}
+                        <h1>You have submitted the MCQ exam successfully.</h1>
+                    </>
                 ) : (
                     <Stack spacing={1}>
                         <Skeleton variant="text" />
