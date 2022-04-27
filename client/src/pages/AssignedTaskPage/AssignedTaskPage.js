@@ -161,7 +161,7 @@ export default function Task() {
                     variant="h3"
                     sx={{ marginBottom: "10px", fontWeight: 800 }}
                 >
-                    Task
+                    {task?.data.title}
                 </Typography>
             </Box>
 
