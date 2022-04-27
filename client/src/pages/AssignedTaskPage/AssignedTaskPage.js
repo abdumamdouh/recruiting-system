@@ -176,13 +176,13 @@ export default function Task() {
                     // variant="h6"
                     sx={{ marginBottom: "10px" }}
                 >
-                    {task.data.description}
+                    {task?.data.description}
                 </Typography>
             </Box>
 
             <div className="mb black">
                 <Typography color="black" variant="h6">
-                    {task.deadline}
+                    {moment(task?.deadline).format("MMMM Do YYYY, h:mm:ss a")}
                 </Typography>
             </div>
 
