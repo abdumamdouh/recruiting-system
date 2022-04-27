@@ -2680,6 +2680,11 @@
   dependencies:
     "flat-cache" "^3.0.4"
 
+"file-type@^10.11.0":
+  "integrity" "sha512-uzk64HRpUZyTGZtVuvrjP0FYxzQrBf4rojot6J65YMEbwBLB0CWm0CLojVpwpmFmxcE/lkvYICgfcGozbBq6rw=="
+  "resolved" "https://registry.npmjs.org/file-type/-/file-type-10.11.0.tgz"
+  "version" "10.11.0"
+
 "filename-regex@^2.0.0":
   "integrity" "sha1-wcS5vuPglyXdsQa3XB4wH+LxiyY="
   "resolved" "https://registry.npmjs.org/filename-regex/-/filename-regex-2.0.1.tgz"

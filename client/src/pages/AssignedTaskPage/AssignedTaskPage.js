@@ -6,12 +6,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import styled from "@emotion/styled";
 
 //Hooks
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Message from "../../components/modal/Message";
 
-export default function AddExam() {
+export default function Task() {
     //ID of the task
     const { ID } = useParams();
 
@@ -23,52 +23,81 @@ export default function AddExam() {
     //file
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
+    const [task, setTask] = useState();
 
     const jobId = useSelector((state) => state.job.id);
     const { userInfo } = useSelector((state) => state.user);
+
+    useEffect(() => {
+        const fetchTask = async () => {
+            console.log("zepy");
+            try {
+                console.log(userInfo.token);
+                const response = await fetch(
+                    //TODO: make it dynamic
+                    `http://localhost:5000/${3}/${1}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + userInfo.token
+                        }
+                    }
+                );
+                const data = await response;
+                console.log(data.body);
+                setTask(data.body);
+                //TODO: condition for success
+                showSuccessMessage();
+            } catch (error) {
+                console.error("Error:", error);
+                handleOnError(error);
+            }
+        };
+        fetchTask();
+    }, []);
 
     const handleOnError = (err) => {
         console.log(err);
     };
 
     const handleClick = async () => {
-        // console.log(jobId);
+        console.log(jobId);
 
-        // const task = {
-        //     title,
-        //     description,
-        //     deadline: expiryDate,
-        //     JobId: jobId,
-        //     uploadFormat: option.join("-")
-        // };
+        const formData = new FormData();
+        formData.append("task", selectedFile);
+        console.log(formData);
 
-        // console.log(task);
-        //
-        // const formData = new FormData();
-        // formData.append("task", selectedFile);
-        // formData.append("data", JSON.stringify(task));
-        // console.log(formData);
-
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + " - " + pair[1]);
+        }
 
         try {
             console.log(userInfo.token);
-            const response = await fetch(`http://localhost:5000/${3}/${1}`, {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + userInfo.token
+            const response = await fetch(
+                //TODO make it dynamic
+                // /uploadTask/:TaskId/:JobId
+                `http://localhost:5000/uploadTask/${3}/${1}`,
+                {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        Accept: "multipart/form-data",
+                        // "Content-Type": "application/json",
+                        // "Content-Type": "multipart/form-data",
+                        Authorization: "Bearer " + userInfo.token
+                    }
                 }
-            });
+            );
             const data = await response;
-            console.log(data.body);
+            console.log(data);
             //TODO: condition for success
             showSuccessMessage();
         } catch (error) {
             console.error("Error:", error);
             handleOnError(error);
         }
-
     };
 
     const showSuccessMessage = () => {
@@ -127,10 +156,10 @@ export default function AddExam() {
             >
                 <Typography
                     className="black"
-                    variant="h6"
-                    sx={{ marginBottom: "10px" }}
+                    variant="h3"
+                    sx={{ marginBottom: "10px", fontWeight: 800 }}
                 >
-                    Task Title
+                    Task
                 </Typography>
             </Box>
 
@@ -142,7 +171,7 @@ export default function AddExam() {
             >
                 <Typography
                     className="black"
-                    variant="h6"
+                    // variant="h6"
                     sx={{ marginBottom: "10px" }}
                 >
                     Task Description
@@ -155,8 +184,8 @@ export default function AddExam() {
                 </Typography>
             </div>
 
-            <div> 
-                    <a href="#">Download helper files</a>
+            <div>
+                <a href="#">Download helper files</a>
             </div>
             <div>
                 <h4
