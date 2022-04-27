@@ -31,12 +31,11 @@ export default function Task() {
 
     useEffect(() => {
         const fetchTask = async () => {
-            console.log("zepy");
             try {
                 console.log(userInfo.token);
                 const response = await fetch(
                     //TODO: make it dynamic
-                    `http://localhost:5000/${1}/${1}`,
+                    `http://localhost:5000/${1}/${5}`,
                     {
                         method: "GET",
                         headers: {
@@ -112,32 +111,6 @@ export default function Task() {
         setIsFilePicked(true);
         console.log(event.target.files[0]);
     };
-
-    //TODO: move handleSubmission to handleClick
-    const handleSubmission = async () => {
-        // const formData = new FormData();
-        // formData.append("File", selectedFile);
-        // console.log(formData);
-        // try {
-        //     const response = await fetch(`http://localhost:5000/getMCQ/1`, {
-        //         method: "POST",
-        //         body: formData,
-        //         headers: {
-        //             Accept: "application/json",
-        //             "Content-Type": "application/json",
-        //             Authorization: "Bearer " + userInfo.token
-        //         }
-        //     });
-        //     const data = await response.json();
-        //     console.log(data);
-        //     //TODO: condition for success
-        //     showSuccessMessage();
-        // } catch (error) {
-        //     console.error("Error:", error);
-        //     handleOnError(error);
-        // }
-    };
-
     return (
         <div>
             {JSON.stringify(task)}
@@ -182,12 +155,21 @@ export default function Task() {
 
             <div className="mb black">
                 <Typography color="black" variant="h6">
-                    {moment(task?.deadline).format("MMMM Do YYYY, h:mm:ss a")}
+                    {moment
+                        .parseZone(task?.deadline)
+                        .utc("-02:00")
+                        .format("dddd, Do [of] MMMM YYYY [at] h:mm a")}
                 </Typography>
             </div>
 
             <div>
-                <a href="#">Download helper files</a>
+                {task?.data.additionalFile ? (
+                    <a download={`helper.${task?.data.type}`}>
+                        Download helper files
+                    </a>
+                ) : (
+                    ""
+                )}
             </div>
             <div>
                 <h4
@@ -197,12 +179,14 @@ export default function Task() {
                         marginBottom: "5px"
                     }}
                 >
-                    Your submissions{" "}
+                    Your Submission{" "}
                 </h4>
                 <div className="mb" style={{ marginTop: "5px" }}>
                     <label htmlFor="contained-button-file">
                         <Input
-                            accept=".pdf, .docx, .zip, .rar"
+                            accept={`.${task?.data.uploadFormat
+                                .split("-")
+                                .join(", .")}`}
                             id="contained-button-file"
                             type="file"
                             onChange={changeHandler}
