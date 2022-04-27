@@ -344,7 +344,7 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
             }
             let result = {};
             result.data = await Task.findOne({
-                attributes: ["description", "uploadFormat", "additionalFile"],
+                attributes: ["title","description", "uploadFormat", "additionalFile"],
                 where: {
                     id: req.params.TaskId
                 },
