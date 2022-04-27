@@ -296,11 +296,12 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 },
                 raw: true
             });
-            if (result.data.additionalFile.data !== undefined ) {
+            // console.log(Buffer.byteLength(result.data.additionalFile))
+            if (Buffer.byteLength(result.data.additionalFile)) {
                 const buffer = result.data.additionalFile
                 result.data.type = fileType(buffer); 
-            } else{
-                delete result.data.additionalFile
+            } else{ 
+                delete result.data.additionalFile 
             }
             result.deadline = (
                 await ActiveTask.findOne({
@@ -350,7 +351,7 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 },
                 raw: true
             });
-            if (result.data.additionalFile.data !== undefined ) {
+            if (Buffer.byteLength(result.data.additionalFile)) {
                 const buffer = result.data.additionalFile
                 result.data.type = fileType(buffer); 
             } else{
