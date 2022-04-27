@@ -67,7 +67,7 @@ router.post(
 // ****************************************************************************************************
 
 // applicants uploading there tasks
-// Accepted body (form-data: key - value pairs)
+// Accepted body (form-data: task - value pairs)
 // task: task upload.
 router.post(
     "/uploadTask/:TaskId/:JobId",
@@ -296,8 +296,12 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 },
                 raw: true
             });
-            const buffer = result.data.additionalFile
-            result.data.type = fileType(buffer); 
+            if (result.data.additionalFile.data !== undefined ) {
+                const buffer = result.data.additionalFile
+                result.data.type = fileType(buffer); 
+            } else{
+                delete result.data.additionalFile
+            }
             result.deadline = (
                 await ActiveTask.findOne({
                     attributes: ["deadline"],
@@ -346,8 +350,12 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 },
                 raw: true
             });
-            const buffer = result.data.additionalFile
-            result.data.type = fileType(buffer); 
+            if (result.data.additionalFile.data !== undefined ) {
+                const buffer = result.data.additionalFile
+                result.data.type = fileType(buffer); 
+            } else{
+                delete result.data.additionalFile
+            }
             result.deadline = (
                 await ActiveTask.findOne({
                     attributes: ["deadline"],
