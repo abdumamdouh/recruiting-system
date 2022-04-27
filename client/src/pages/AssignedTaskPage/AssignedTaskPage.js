@@ -78,7 +78,7 @@ export default function Task() {
             const response = await fetch(
                 //TODO make it dynamic
                 // /uploadTask/:TaskId/:JobId
-                `http://localhost:5000/uploadTask/${1}/${1}`,
+                `http://localhost:5000/uploadTask/${1}/${5}`,
                 {
                     method: "POST",
                     body: formData,
@@ -111,9 +111,20 @@ export default function Task() {
         setIsFilePicked(true);
         console.log(event.target.files[0]);
     };
+    const download = (event) => {
+        const a = event.target;
+        const blob = new Blob([task.data.additionalFile.data], {
+            type: task.data.type.mime
+        });
+        const url = URL.createObjectURL(blob);
+        a.setAttribute("href", url);
+        a.setAttribute("download", `helper.${task?.data.type.ext}`);
+        a.click();
+        // URL.revokeObjectURL(url);
+    };
     return (
         <div>
-            {JSON.stringify(task)}
+            {/* {JSON.stringify(task)} */}
             <div className="container">
                 {modalOpen && (
                     <Message
@@ -164,7 +175,7 @@ export default function Task() {
 
             <div>
                 {task?.data.additionalFile ? (
-                    <a download={`helper.${task?.data.type}`}>
+                    <a href="#" onClick={download}>
                         Download helper files
                     </a>
                 ) : (
