@@ -342,7 +342,7 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
             if (!assignedObj.tasks.includes(Number(req.params.TaskId))) {
                 throw new Error("You are not assigned this task.");
             }
-            let result = {};
+            let result = {}; 
             result.data = await Task.findOne({
                 attributes: ["title","description", "uploadFormat", "additionalFile"],
                 where: {
