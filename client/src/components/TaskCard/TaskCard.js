@@ -6,13 +6,14 @@ function TaskCard({ description, number,id,title }) {
     const history = useHistory();
     const TaskId = id
     const JobId = useSelector(state => state.job.id);
+    const t ='task'
     const handleAssign = id => {
         console.log("ay 7aga");
-        history.push(`/dashboard/uploadedexams/assignapplicants/${id}`);
+        history.push(`/dashboard/uploadedexams/assignapplicants/${t}/${id}`);
     };
     const handleAssignCanidate = id => {
         console.log("ay 7aga");
-        history.push(`/dashboard/uploadedexams/assigncandidates/${id}`);
+        history.push(`/dashboard/uploadedexams/assigncandidates/${t}/${id}`);
     };
     const handleReviewSubmission = id => {
         console.log("ay 7aga");
