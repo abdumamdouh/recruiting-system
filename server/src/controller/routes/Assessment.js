@@ -82,17 +82,21 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                     description: everyMCQ[0].Jobs[0].description,
                     company: everyMCQ[0].Jobs[0].Recruiter.company,
                     avatar: everyMCQ[0].Jobs[0].Recruiter.avatar,
-                    MCQ: everyMCQ.map(({ id, title, Jobs }) => ({
-                        MCQId: id,
-                        title,
-                        expiryDate: Jobs[0].JobMCQ.expiryDate,
-                        duration: Jobs[0].JobMCQ.duration
-                    })),
-                    task: everyTask.map(({ id, title, Jobs }) => ({
-                        taskId: id,
-                        title,
-                        deadline: Jobs[0].ActiveTask.deadline
-                    }))
+                    ...(everyMCQ.length && {
+                        MCQ: everyMCQ.map(({ id, title, Jobs }) => ({
+                            MCQId: id,
+                            title,
+                            expiryDate: Jobs[0].JobMCQ.expiryDate,
+                            duration: Jobs[0].JobMCQ.duration
+                        }))
+                    }),
+                    ...(everyTask.length && {
+                        task: everyTask.map(({ id, title, Jobs }) => ({
+                            taskId: id,
+                            title,
+                            deadline: Jobs[0].ActiveTask.deadline
+                        }))
+                    })
                 };
                 return jobAssessments;
             })
