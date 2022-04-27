@@ -76,7 +76,7 @@ export default function Task() {
             const response = await fetch(
                 //TODO make it dynamic
                 // /uploadTask/:TaskId/:JobId
-                `http://localhost:5000/uploadTask/:TaskId/:JobId`,
+                `http://localhost:5000/uploadTask/${3}/${1}`,
                 {
                     method: "POST",
                     body: formData,
