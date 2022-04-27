@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import styled from "@emotion/styled";
 
 //Hooks
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Message from "../../components/modal/Message";
@@ -27,13 +27,41 @@ export default function Task() {
     const jobId = useSelector((state) => state.job.id);
     const { userInfo } = useSelector((state) => state.user);
 
+    useEffect(() => {
+        const fetchTask = async () => {
+            console.log("zepy");
+            try {
+                console.log(userInfo.token);
+                const response = await fetch(
+                    //TODO: make it dynamic
+                    `http://localhost:5000/${3}/${1}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + userInfo.token
+                        }
+                    }
+                );
+                const data = await response;
+                console.log(data.body);
+                //TODO: condition for success
+                showSuccessMessage();
+            } catch (error) {
+                console.error("Error:", error);
+                handleOnError(error);
+            }
+        };
+        fetchTask();
+    }, []);
+
     const handleOnError = (err) => {
         console.log(err);
     };
 
     const handleClick = async () => {
         // console.log(jobId);
-
         // const task = {
         //     title,
         //     description,
@@ -41,34 +69,12 @@ export default function Task() {
         //     JobId: jobId,
         //     uploadFormat: option.join("-")
         // };
-
         // console.log(task);
         //
         // const formData = new FormData();
         // formData.append("task", selectedFile);
         // formData.append("data", JSON.stringify(task));
         // console.log(formData);
-
-
-        try {
-            console.log(userInfo.token);
-            const response = await fetch(`http://localhost:5000/${3}/${1}`, {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + userInfo.token
-                }
-            });
-            const data = await response;
-            console.log(data.body);
-            //TODO: condition for success
-            showSuccessMessage();
-        } catch (error) {
-            console.error("Error:", error);
-            handleOnError(error);
-        }
-
     };
 
     const showSuccessMessage = () => {
@@ -155,8 +161,8 @@ export default function Task() {
                 </Typography>
             </div>
 
-            <div> 
-                    <a href="#">Download helper files</a>
+            <div>
+                <a href="#">Download helper files</a>
             </div>
             <div>
                 <h4
