@@ -47,6 +47,7 @@ export default function Task() {
                 );
                 const data = await response;
                 console.log(data.body);
+                setTask(data.body);
                 //TODO: condition for success
                 showSuccessMessage();
             } catch (error) {
