@@ -300,8 +300,9 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
             if (Buffer.byteLength(result.data.additionalFile)) {
                 const buffer = result.data.additionalFile
                 result.data.type = fileType(buffer); 
-            } else{ 
+            } else { 
                 delete result.data.additionalFile 
+            }
             result.deadline = (
                 await ActiveTask.findOne({
                     attributes: ["deadline"],
@@ -321,9 +322,9 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 },
                 raw: true
             });
-
             res.send(result);
-        } else if (req.applicant) {
+        } 
+        else if (req.applicant) {
             // checking if you are authorized to deal with this task
             const assigned = await ApplyFor.findOne({
                 attributes: ["assigned"],
