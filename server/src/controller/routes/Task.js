@@ -302,7 +302,6 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 result.data.type = fileType(buffer); 
             } else{ 
                 delete result.data.additionalFile 
-            }
             result.deadline = (
                 await ActiveTask.findOne({
                     attributes: ["deadline"],
