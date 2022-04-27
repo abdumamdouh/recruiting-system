@@ -296,12 +296,12 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 },
                 raw: true
             });
-            if (result.data.additionalFile.data !== undefined ) {
+            // console.log(Buffer.byteLength(result.data.additionalFile))
+            if (Buffer.byteLength(result.data.additionalFile)) {
                 const buffer = result.data.additionalFile
                 result.data.type = fileType(buffer); 
-            } else{
-                delete result.data.additionalFile
-            }
+            } else{ 
+                delete result.data.additionalFile 
             result.deadline = (
                 await ActiveTask.findOne({
                     attributes: ["deadline"],
@@ -342,15 +342,15 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
             if (!assignedObj.tasks.includes(Number(req.params.TaskId))) {
                 throw new Error("You are not assigned this task.");
             }
-            let result = {};
+            let result = {}; 
             result.data = await Task.findOne({
-                attributes: ["description", "uploadFormat", "additionalFile"],
+                attributes: ["title","description", "uploadFormat", "additionalFile"],
                 where: {
                     id: req.params.TaskId
                 },
                 raw: true
             });
-            if (result.data.additionalFile.data !== undefined ) {
+            if (Buffer.byteLength(result.data.additionalFile)) {
                 const buffer = result.data.additionalFile
                 result.data.type = fileType(buffer); 
             } else{
