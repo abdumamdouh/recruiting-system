@@ -78,7 +78,9 @@ export default function Task() {
             const response = await fetch(
                 //TODO make it dynamic
                 // /uploadTask/:TaskId/:JobId
+
                 `http://localhost:5000/uploadTask/${4}/${8}`,
+
                 {
                     method: "POST",
                     body: formData,
@@ -113,12 +115,14 @@ export default function Task() {
     };
     const download = (event) => {
         const a = event.target;
+
         const array = new Uint8Array(task.data.additionalFile.data);
         const blob = new Blob([array] , {type: task.data.type.mime}  );
         const url = window.URL.createObjectURL(blob);
         a.setAttribute("href", url);
         a.setAttribute("download", `helper.${task?.data.type.ext}`);
         // a.click();
+
     };
     return (
         <div>
