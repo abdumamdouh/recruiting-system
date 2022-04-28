@@ -8,6 +8,8 @@ const JobMCQ = require("../../models/JobMCQ");
 const Requirment = require("../../models/Requirment");
 const ApplyFor = require("../../models/ApplyFor");
 const ActiveTask = require("../../models/ActiveTask")
+const TaskUpload = require("../../models/TaskUploads")
+
 
 
 const Sequelize = require("sequelize");
@@ -20,6 +22,7 @@ const applicantAuth = require("../middleware/applicantAuth");
 const RecOrApp = require("../middleware/RecOrApp");
 const { where } = require("sequelize");
 const { object } = require("joi");
+const Task = require("../../models/Task");
 
 const router = new express.Router();
 
@@ -393,6 +396,53 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
             res.send("Task assigned successfully.");
         } else {
         }
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+router.get("/report/:id", recruiterAuth, async (req, res) => {
+    try {
+        const jobId = req.params.id;
+        const applicantsApplied = ApplyFor.count({
+            where: {
+                jobId: jobId
+            }
+        })
+
+        // Candidates = 50%
+
+        const average_MCQS_score = await db.query( "SELECT MCQId, AVG(score) AS average_MCQ_score FROM `gp-db`.mcqstats GROUP BY MCQId;" );
+
+        const mcqs = await JobMCQ.findAndCountAll({
+            include: {
+                model: MCQ,
+                attributes: ["topic"]
+            },
+            attributes: ["MCQId"],
+            where: {
+                jobId: jobId,
+            }
+        });
+        const tasks = await TaskUpload.findAndCountAll({
+            include: {
+                model: Task,
+                attributes: ["topic"]
+            },
+            attributes: ["TaskId"],
+            where: {
+                jobId: jobId,
+            }
+        });
+
+        res.send({
+            applicantsAppliedCount: applicantsApplied,
+            avgMCQsScore: average_MCQS_score,
+            MCQs: mcqs.rows,
+            MCQSCount: mcqs.count,
+            tasks: tasks.rows,
+            tasksCount: tasks.count
+        });
     } catch (error) {
         res.status(400).send(error.message);
     }
