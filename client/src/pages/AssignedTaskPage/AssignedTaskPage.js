@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Message from "../../components/modal/Message";
+import MyTimer from "./MyTimer";
 
 export default function Task() {
     //ID of the task
@@ -35,7 +36,7 @@ export default function Task() {
                 console.log(userInfo.token);
                 const response = await fetch(
                     //TODO: make it dynamic
-                    `http://localhost:5000/${4}/${8}`,
+                    `http://localhost:5000/${1}/${5}`,
                     {
                         method: "GET",
                         headers: {
@@ -79,7 +80,7 @@ export default function Task() {
                 //TODO make it dynamic
                 // /uploadTask/:TaskId/:JobId
 
-                `http://localhost:5000/uploadTask/${4}/${8}`,
+                `http://localhost:5000/uploadTask/${1}/${5}`,
 
                 {
                     method: "POST",
@@ -115,117 +116,145 @@ export default function Task() {
     };
     const download = (event) => {
         const a = event.target;
-
         const array = new Uint8Array(task.data.additionalFile.data);
-        const blob = new Blob([array] , {type: task.data.type.mime}  );
+        const blob = new Blob([array], { type: task.data.type.mime });
         const url = window.URL.createObjectURL(blob);
         a.setAttribute("href", url);
         a.setAttribute("download", `helper.${task?.data.type.ext}`);
         // a.click();
-
+        // URL.revokeObjectURL(url);
     };
+    const t = new Date(task?.deadline);
+    t.setHours(t.getHours() - 2);
+    t.setSeconds(0);
+    // console.log(t);
     return (
-        <div>
-            {/* {JSON.stringify(task)} */}
-            <div className="container">
-                {modalOpen && (
-                    <Message
-                        setOpenModal={setModalOpen}
-                        message="uploaded successfully!"
-                    />
-                )}
-            </div>
-
-            <Box
-                component="form"
-                sx={{ marginBottom: "25px" }}
-                noValidate
-                autoComplete="off"
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                marginLeft: "2.5rem",
+                width: "100%"
+            }}
+        >
+            <div
+                style={{
+                    width: "60%",
+                    // justifyContent: "flex-end",
+                    flexDirection: "column"
+                }}
             >
-                <Typography
-                    className="black"
-                    variant="h3"
-                    sx={{ marginBottom: "10px", fontWeight: 800 }}
-                >
-                    {task?.data.title}
-                </Typography>
-            </Box>
-
-            <Box
-                component="form"
-                sx={{ marginBottom: "25px" }}
-                noValidate
-                autoComplete="off"
-            >
-                <Typography
-                    className="black"
-                    // variant="h6"
-                    sx={{ marginBottom: "10px" }}
-                >
-                    {task?.data.description}
-                </Typography>
-            </Box>
-
-            <div className="mb black">
-                <Typography color="black" variant="h6">
-                    {moment
-                        .parseZone(task?.deadline)
-                        .utc("-02:00")
-                        .format("dddd, Do [of] MMMM YYYY [at] h:mm a")}
-                </Typography>
-            </div>
-
-            <div>
-                {task?.data.additionalFile ? (
-                    <a href="#" onClick={download}>
-                        Download helper files
-                    </a>
-                ) : (
-                    ""
-                )}
-            </div>
-            <div>
-                <h4
-                    style={{
-                        color: "black",
-                        display: "inline",
-                        marginBottom: "5px"
-                    }}
-                >
-                    Your Submission{" "}
-                </h4>
-                <div className="mb" style={{ marginTop: "5px" }}>
-                    <label htmlFor="contained-button-file">
-                        <Input
-                            accept={`.${task?.data.uploadFormat
-                                .split("-")
-                                .join(", .")}`}
-                            id="contained-button-file"
-                            type="file"
-                            onChange={changeHandler}
+                {/* {JSON.stringify(task)} */}
+                <div className="container">
+                    {modalOpen && (
+                        <Message
+                            setOpenModal={setModalOpen}
+                            message="uploaded successfully!"
                         />
-                        <Button variant="contained" component="span">
-                            Upload task
-                        </Button>
-                    </label>
-                    {isFilePicked ? (
-                        <span style={{ marginLeft: 10, color: "#827F7E" }}>
-                            {selectedFile.name}
-                        </span>
-                    ) : (
-                        ""
                     )}
                 </div>
-            </div>
 
-            <div className="mb">
-                <Button
-                    style={{ marginBottom: "10px" }}
-                    variant="contained"
-                    onClick={handleClick}
+                <Box
+                    component="form"
+                    sx={{ marginBottom: "25px" }}
+                    noValidate
+                    autoComplete="off"
                 >
-                    Submit
-                </Button>
+                    <Typography
+                        className="black"
+                        variant="h3"
+                        sx={{ marginBottom: "10px", fontWeight: 800 }}
+                    >
+                        {task?.data.title}
+                    </Typography>
+                </Box>
+
+                <Box
+                    component="form"
+                    sx={{ marginBottom: "25px" }}
+                    noValidate
+                    autoComplete="off"
+                >
+                    <Typography
+                        className="black"
+                        // variant="h6"
+                        sx={{ marginBottom: "10px" }}
+                    >
+                        {task?.data.description}
+                    </Typography>
+                </Box>
+
+                <div className="mb black">
+                    <Typography color="black" variant="h6">
+                        {moment
+                            .parseZone(task?.deadline)
+                            .utc("-02:00")
+                            .format("dddd, Do [of] MMMM YYYY [at] h:mm a")}
+                    </Typography>
+                </div>
+                <div className="mb black">
+                    {task?.deadline && <MyTimer expiryTimestamp={t} />}
+                </div>
+                {task?.data.additionalFile && (
+                    <div className="mb">
+                        <a href="#" onClick={download}>
+                            Download helper files
+                        </a>
+                    </div>
+                )}
+                <div className="mb">
+                    <h4
+                        style={{
+                            color: "black",
+                            // display: "inline",
+                            marginBottom: "20px"
+                        }}
+                    >
+                        Your Submission{" "}
+                    </h4>
+                    <div className="mb">
+                        <label htmlFor="contained-button-file">
+                            <Input
+                                accept={`.${task?.data.uploadFormat
+                                    .split("-")
+                                    .join(", .")}`}
+                                id="contained-button-file"
+                                type="file"
+                                onChange={changeHandler}
+                            />
+                            <Button
+                                variant="contained"
+                                component="span"
+                                sx={{ width: 135 }}
+                            >
+                                Upload task
+                            </Button>
+                        </label>
+                        {isFilePicked ? (
+                            <span style={{ marginLeft: 10, color: "#827F7E" }}>
+                                {selectedFile.name}
+                            </span>
+                        ) : (
+                            ""
+                        )}
+                        <small style={{ display: "block", color: "#827F7E" }}>
+                            <strong>Allowed format:</strong>{" "}
+                            {`.${task?.data.uploadFormat
+                                .split("-")
+                                .join(", .")}`}
+                        </small>
+                    </div>
+                </div>
+
+                <div className="mb">
+                    <Button
+                        // sx={{ width: 135 }}
+                        variant="contained"
+                        onClick={handleClick}
+                    >
+                        Submit
+                    </Button>
+                </div>
             </div>
         </div>
     );
