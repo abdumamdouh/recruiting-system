@@ -10,7 +10,7 @@ const TaskReviewPage = () => {
     const TaskId = id
 
     useEffect(() => {
-        dispatch(getTaskSubmissionsAction(TaskId,JobId));
+        dispatch(getTaskSubmissionsAction(JobId,TaskId));
     }, [dispatch]);
     return (
         <div>
