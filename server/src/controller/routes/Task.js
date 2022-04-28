@@ -15,6 +15,7 @@ const Job = require("../../models/Job");
 const ApplyFor = require("../../models/ApplyFor");
 
 const { response } = require("express");
+const Applicant = require("../../models/Applicant");
 
 const router = new express.Router();
 
@@ -158,6 +159,12 @@ router.get(
                     const buffer = solutions[i].uploadedTask ;
                     solutions[i].dataValues.type = fileType(buffer); 
                 }
+                solutions[i].dataValues.applicantName = await Applicant.findOne({
+                    attributes: ["firstName","lastName"],
+                    where:{
+                        id:solutions[i].ApplicantId
+                    }
+                })
             }
             res.send(solutions);
         } catch (error) {
@@ -179,20 +186,11 @@ router.get(
 //         "type": {
 //             "ext": "pdf",
 //             "mime": "application/pdf"
-//         }
-//     },{
-//         "ApplicantId": 1,
-//         "uploadedTask": {
-//             "type": "Buffer",
-//             "data": []
 //         },
-//         "createdAt": "2022-04-28T14:18:17.000Z",
-//         "score": null,
-//         "feedback": null,
-//         "type": {
-//             "ext": "pdf",
-//             "mime": "application/pdf"
-//         }
+//           "applicantName": {
+//                      "firstName": "Marwan",
+//                      "lastName": "Emad"
+//                    }
 //     }
 // ]
 
