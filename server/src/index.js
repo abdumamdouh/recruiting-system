@@ -11,6 +11,7 @@ const ApplyFor = require("./models/ApplyFor");
 const CodingProblemBank = require("./models/CodingProblemBank");
 const TestCases = require("./models/TestCases")
 const ActiveCodingProblem = require("./models/ActiveCodingProbelms");
+const CodingProblemStat = require("./models/CodingProblemStats")
 
 //requiring db relations
 const Relations = require("./models/Relations");
@@ -48,6 +49,7 @@ ApplyFor.sync();
 CodingProblemBank.sync();
 TestCases.sync();
 ActiveCodingProblem.sync();
+CodingProblemStat.sync(force=true);
 
 // iniallizing server on port 5000
 app.listen(PORT, () => {
