@@ -41,7 +41,8 @@ const CodingProblemStat = db.define(
         },
 
         results:{
-            type:Sequelize.JSON
+            type:Sequelize.JSON,
+            allowNull:false
         }
     }
 
