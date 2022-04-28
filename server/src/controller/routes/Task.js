@@ -70,7 +70,7 @@ router.post(
 // Accepted body (form-data: task - value pairs)
 // task: task upload.
 router.post(
-    "/uploadTask/:TaskId/:JobId",
+    "/uploadTask/:JobId/:TaskId",
     applicantAuth,
     taskUploadmulter.single("task"),
     async (req, res) => {
@@ -90,7 +90,7 @@ router.post(
             assignedObj = JSON.parse(assigned.assigned);
             // console.log(assignedObj.tasks,req.params.TaskId)
 
-            if (!assignedObj.tasks.includes(Number(req.params.TaskId))) {
+            if (!assignedObj.tasks.includes(req.params.TaskId)) {
                 throw new Error("You are not assigned this task.");
             }
             await TaskUploads.create({

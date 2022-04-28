@@ -14,7 +14,8 @@ const AssignApplicantsPage = () => {
     const [modalOpen, setModalOpen] = useState(false);
     //mcqId
     const { id } = useParams();
-    
+    const {t} = useParams();
+    console.log(t)
     const rows = [...job.applicants];
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
@@ -73,8 +74,8 @@ const AssignApplicantsPage = () => {
   }}
   selectionModel={selectionModel}
       />
-        <button className="btn btn-primary" style={{marginTop: '20px'}} onClick={handleAllApplicants}> Assign MCQ to  Applicants</button>
-        <button className="btn btn-primary" style={{marginTop: '20px',marginLeft: '20px'}} onClick={handleAssignTask}> Assign Task to  Applicants</button>
+    {t === 'MCQ' &&     <button className="btn btn-primary" style={{marginTop: '20px'}} onClick={handleAllApplicants}> Assign MCQ to  Applicants</button>}
+       {t === 'task' &&  <button className="btn btn-primary" style={{marginTop: '20px',marginLeft: '20px'}} onClick={handleAssignTask}> Assign Task to  Applicants</button>}
     </div>
     );
 }
