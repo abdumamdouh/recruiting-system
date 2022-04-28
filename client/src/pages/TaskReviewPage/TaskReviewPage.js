@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import moment from "moment";
 import Stack from "@mui/material/Stack";
 import Skeleton from "@mui/material/Skeleton";
-import { getTaskSubmissionsAction } from "../../redux/actions/task";
+import { getTaskSubmissionsAction,setTaskMarkAction } from "../../redux/actions/task";
 import Message from "../../components/modal/Message";
 const TaskReviewPage = () => {
     const history = useHistory();
@@ -20,9 +20,13 @@ const TaskReviewPage = () => {
     const [submissionData,setSubmissionData] = useState([])
     const {userInfo} = useSelector(state => state.user)
     const [showTaskMark, setShowTaskMark] = useState(false);
-    const [feedBack, setFeedBack] = useState("");
+    const [feedBack, setFeedBack] = useState("N/A");
     const [ApplicantId,setApplicantId]=useState()
     const [score,setScore] = useState(0)
+    const {Marks} = useSelector(state => state.marks)
+    const markk = Marks
+    const[returnedScore,setReturnedScore] =useState()
+    console.log('sss',markk)
     useEffect(() => {
         dispatch(getTaskSubmissionsAction(JobId, TaskId));
         setSubmissionData(submissions) 
@@ -42,43 +46,16 @@ const TaskReviewPage = () => {
         setShowTaskMark(true);
         setApplicantId(id)
     };
-    const submitMark = async() => {
+    const submitMark = () => {
         
         const Marks = [{
             applicantId:ApplicantId,
             score: score,
             feedback: feedBack
         }];
-        const body ={JobId,TaskId,Marks}
-        try {
-            console.log(userInfo.token);
-            const rawResponse = await fetch(`http://localhost:5000/setTaskMark`, {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + userInfo.token
-                },
-                body: JSON.stringify(body)
-            });
-            const data = await rawResponse;
-            console.log(data);
-            //TODO: condition for success
-            if(data.status ===200){ 
-                setShowTaskMark(false)
-                setScore(0)
-                setFeedBack('')
-                dispatch(getTaskSubmissionsAction(JobId, TaskId));
-                setSubmissionData(submissions) 
-                showSuccessMessage()
-            }
-           
-        } catch (error) {
-            console.error("Error:", error);
-        }
-        console.log(JobId)
-        console.log(TaskId)
-        console.log(Marks);
+        dispatch(setTaskMarkAction(JobId, TaskId,Marks,showSuccessMessage))
+        
+        setShowTaskMark(false)
         
     }
     let data =
@@ -94,7 +71,8 @@ const TaskReviewPage = () => {
                   feedback: s.feedback !== null ? s.feedback : "_______",
                   score: s.score !== null ? s.score : "_______",
                   uploadedTask: s.uploadedTask.data,
-                  type: s.type
+                  type: s.type,
+                  Name: s.applicantName.firstName + s.applicantName.lastName
               }))
             : null;
     console.log("arr", data);
@@ -104,7 +82,8 @@ const TaskReviewPage = () => {
     const [modalOpen, setModalOpen] = useState(false);
 
     const columns = [
-        { field: "id", headerName: "ID", width: 40 },
+        // { field: "id", headerName: "ID", width: 40 },
+        { field: "Name", headerName: "Name", width: 120 },
         { field: "createdAt", headerName: "Submitted At", width: 160 },
         { field: "score", headerName: "Score", width: 70 },
         { field: "feedback", headerName: "Feedback", width: 130 },
