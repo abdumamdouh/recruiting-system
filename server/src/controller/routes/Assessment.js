@@ -51,6 +51,7 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                     include: [
                         {
                             model: Job,
+                            where: { id: job.JobId },
                             attributes: ["id", "title", "description"],
                             include: [
                                 {
@@ -63,12 +64,14 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                     ]
                 });
                 everyMCQ = JSON.parse(JSON.stringify(everyMCQ));
+                // console.log(everyMCQ);
                 let everyTask = await Task.findAll({
                     where: { id: job.assigned.tasks },
                     attributes: ["id", "title"],
                     include: [
                         {
                             model: Job,
+                            where: { id: job.JobId },
                             attributes: ["id"],
                             through: { attributes: ["deadline"] }
                         }
