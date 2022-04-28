@@ -1,5 +1,6 @@
 const express = require("express");
 const CodingProblemBank = require("../../models/CodingProblemBank")
+const CodingProblemStats = require("../../models/CodingProblemStats")
 const TestCases = require("../../models/TestCases")
 const ActiveCodingProblem = require("../../models/ActiveCodingProbelms")
 const ApplyFor = require("../../models/ApplyFor")
@@ -194,15 +195,21 @@ router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
         
         results.forEach(async testCase =>{
             // call back to be called when the last test is executed
-            const cb =()=>{  
-                res.send(finalResult)
+            const cb =async()=>{  
+                console.log(finalResult)
+                await CodingProblemStats.create({
+                    applicantId:req.applicant.id,
+                    jobId:req.body.jobId,
+                    codingProblemId:req.body.codingProblemId,
+                    results:finalResult
+                })
             }
             const numOfTests=results.length
             const correct = await testCode(req.body.code,req.body.language,5,testCase.inputs,testCase.outputs,index,numOfTests,finalResult,cb,specs)
             
             // console.log(correct)
         })
-        //res.send(results)
+        res.send("submitted successfully")
     } catch (error) {
         res.send(error.message)
     }
