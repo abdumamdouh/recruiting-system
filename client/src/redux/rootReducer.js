@@ -28,7 +28,7 @@ const rootReducer = combineReducers({
   assignedEXam: assignedExamReducer,
   bank:bankReducer,
   tasks: taskReducer,
-  taskSubmissionReducer: taskSubmissionReducer,
+  taskSubmissions: taskSubmissionReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

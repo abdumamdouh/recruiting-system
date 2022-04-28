@@ -460,10 +460,6 @@ const McqTestPage = (props) => {
     const time = new Date();
     time.setSeconds(time.getSeconds() + Mcq.duration * 60); // 10 minutes timer
 */
-    const deleteTime = () => {
-        localStorage.removeItem("time");
-        handleSubmit();
-    };
 
     if (Mcq.duration !== undefined && !McqTaken) {
         let time = new Date();
@@ -533,7 +529,7 @@ const McqTestPage = (props) => {
                                 {Mcq.duration && (
                                     <MyTimer
                                         expiryTimestamp={time}
-                                        // handleOnExpire={handleSubmit}
+                                        handleOnExpire={handleSubmit}
                                     />
                                 )}
                             </div>

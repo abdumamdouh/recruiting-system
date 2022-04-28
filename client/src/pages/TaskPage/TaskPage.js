@@ -26,6 +26,7 @@ export default function AddExam() {
         "hpp",
         "py",
         "java",
+        "jar",
         "js",
         "txt",
         "docx",
