@@ -1,5 +1,6 @@
 const express = require("express");
 const db = require("../../db/db");
+const fileType = require("file-type");
 
 const RecOrApp = require("../middleware/RecOrApp");
 const recruiterAuth = require("../middleware/recruiterAuth");
@@ -27,11 +28,11 @@ const router = new express.Router();
 //     "deadline":"2/10/2022",
 //     "JobId":1,
 //     "uploadFormat":"zip-rar"(default value) (optional)
-// } 
+// }
 router.post(
     "/createTask",
     recruiterAuth,
-    recTaskUpload.single("task"), 
+    recTaskUpload.single("task"),
     async (req, res) => {
         try {
             // console.log(req.file);
@@ -66,10 +67,10 @@ router.post(
 // ****************************************************************************************************
 
 // applicants uploading there tasks
-// Accepted body (form-data: key - value pairs)
+// Accepted body (form-data: task - value pairs)
 // task: task upload.
 router.post(
-    "/uploadTask/:TaskId/:JobId",
+    "/uploadTask/:JobId/:TaskId",
     applicantAuth,
     taskUploadmulter.single("task"),
     async (req, res) => {
@@ -89,7 +90,7 @@ router.post(
             assignedObj = JSON.parse(assigned.assigned);
             // console.log(assignedObj.tasks,req.params.TaskId)
 
-            if (!assignedObj.tasks.includes(Number(req.params.TaskId))) {
+            if (!assignedObj.tasks.includes(req.params.TaskId)) {
                 throw new Error("You are not assigned this task.");
             }
             await TaskUploads.create({
@@ -138,13 +139,18 @@ router.get(
                     TaskId: req.params.TaskId
                 }
             });
+            for(let i = 0 ; i <solutions.length ; i++){
+                if (Buffer.byteLength(solutions[i].uploadedTask)) {
+                    const buffer = solutions[i].uploadedTask ;
+                    solutions[i].dataValues.type = fileType(buffer); 
+                }
+            }
             res.send(solutions);
         } catch (error) {
             res.status(400).send(error.message);
         }
     }
 );
-
 // retruned JSON:
 // [
 //     {
@@ -153,15 +159,42 @@ router.get(
 //             "type": "Buffer",
 //             "data": []
 //         },
-//         "createdAt": "2022-03-13T11:08:37.000Z"
+//         "createdAt": "2022-04-28T14:18:17.000Z",
+//         "score": null,
+//         "feedback": null,
+//         "type": {
+//             "ext": "pdf",
+//             "mime": "application/pdf"
+//         }
+//     },{
+//         "ApplicantId": 1,
+//         "uploadedTask": {
+//             "type": "Buffer",
+//             "data": []
+//         },
+//         "createdAt": "2022-04-28T14:18:17.000Z",
+//         "score": null,
+//         "feedback": null,
+//         "type": {
+//             "ext": "pdf",
+//             "mime": "application/pdf"
+//         }
 //     }
 // ]
 
 // ************************************************************************************************
 // recruiter can give score and feedback to a certain task upload
-// Accepted JSON: {
+// Accepted JSON: {   "JobId":1,
+//     "TaskId":1,
+//     "Marks":[
+//         {
+//             "applicantId":1,
+//             "score": 4,
+//             "feedback":"Some feedback"
+//         }
+//     ]
 // }
-router.post('/setTaskMark' , recruiterAuth , async(req,res) => {
+router.post("/setTaskMark", recruiterAuth, async (req, res) => {
     try {
         // checking if you're the one who posted this job or not
         const result = await Job.findOne({
@@ -175,26 +208,26 @@ router.post('/setTaskMark' , recruiterAuth , async(req,res) => {
             throw new Error("You are not authorized to view this job");
         }
 
-        req.body.Marks.forEach(Mark => {
+        req.body.Marks.forEach((Mark) => {
             TaskUploads.update(
                 {
-                    score:Mark.score,
+                    score: Mark.score,
                     feedback: Mark.feedback
                 },
                 {
-                    where:{
-                        JobId:req.body.JobId,
+                    where: {
+                        JobId: req.body.JobId,
                         TaskId: req.body.TaskId,
                         ApplicantId: Mark.applicantId
                     }
                 }
-            )
+            );
         });
-        res.send() ;
+        res.send();
     } catch (error) {
-        res.send(error.message)
+        res.send(error.message);
     }
-})
+});
 
 // ************************************************************************************************
 
@@ -207,27 +240,36 @@ router.get("/:JobId/allTasks", recruiterAuth, async (req, res) => {
             where: {
                 JobId: req.params.JobId
             },
-            raw:true
+            raw: true
         });
- 
+
         const allTasks = await Task.findAll({
-            attributes: ["title","description", "uploadFormat","id","createdAt"],
+            attributes: [
+                "title",
+                "description",
+                "uploadFormat",
+                "id",
+                "createdAt"
+            ],
             where: {
                 RecruiterId: req.recruiter.id
             }
         });
         const tasks = {
-            relatedToThisJob:[],
-            createdPrevByYou:[]
-        }
-        allTasks.forEach((task) =>{
-           
-            if(taskIds.find( element => element.TaskId === task.dataValues.id) !== undefined){
-                tasks.relatedToThisJob.push(task)
+            relatedToThisJob: [],
+            createdPrevByYou: []
+        };
+        allTasks.forEach((task) => {
+            if (
+                taskIds.find(
+                    (element) => element.TaskId === task.dataValues.id
+                ) !== undefined
+            ) {
+                tasks.relatedToThisJob.push(task);
             } else {
                 tasks.createdPrevByYou.push(task);
             }
-        })
+        });
         res.send(tasks);
     } catch (error) {
         res.status(400).send(error.message);
@@ -289,13 +331,24 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
             }
             let result = {};
             result.data = await Task.findOne({
-                attributes: ["title","description", "uploadFormat", "additionalFile"],
+                attributes: [
+                    "title",
+                    "description",
+                    "uploadFormat",
+                    "additionalFile"
+                ],
                 where: {
                     id: req.params.TaskId
                 },
                 raw: true
             });
-
+            // console.log(Buffer.byteLength(result.data.additionalFile))
+            if (Buffer.byteLength(result.data.additionalFile)) {
+                const buffer = result.data.additionalFile;
+                result.data.type = fileType(buffer);
+            } else {
+                delete result.data.additionalFile;
+            }
             result.deadline = (
                 await ActiveTask.findOne({
                     attributes: ["deadline"],
@@ -315,7 +368,6 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 },
                 raw: true
             });
-
             res.send(result);
         } else if (req.applicant) {
             // checking if you are authorized to deal with this task
@@ -330,21 +382,29 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
             if (!assigned) {
                 throw new Error("You did not apply for this job.");
             }
-            assignedObj = JSON.parse(assigned.assigned);
-            // console.log(assignedObj.tasks,req.params.TaskId)
-
-            if (!assignedObj.tasks.includes(Number(req.params.TaskId))) {
+            const assignedObj = JSON.parse(assigned.assigned);
+            if (!assignedObj.tasks.includes(req.params.TaskId)) {
                 throw new Error("You are not assigned this task.");
             }
             let result = {};
             result.data = await Task.findOne({
-                attributes: ["description", "uploadFormat", "additionalFile"],
+                attributes: [
+                    "title",
+                    "description",
+                    "uploadFormat",
+                    "additionalFile"
+                ],
                 where: {
                     id: req.params.TaskId
                 },
                 raw: true
             });
-
+            if (Buffer.byteLength(result.data.additionalFile)) {
+                const buffer = result.data.additionalFile;
+                result.data.type = fileType(buffer);
+            } else {
+                delete result.data.additionalFile;
+            }
             result.deadline = (
                 await ActiveTask.findOne({
                     attributes: ["deadline"],
@@ -358,7 +418,7 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
             res.send(result);
         }
     } catch (error) {
-        res.send(error.message);
+        res.status(403).send(error.message);
     }
 });
 // Returned JSON:
@@ -370,9 +430,12 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
 //         "additionalFile": {
 //                              "type":"Buffer",
 //                              "data":[]
-//                           }
-// }
-//     },
+//                           },
+//          "type": {
+//              "ext": "pdf",
+//              "mime": "application/pdf"
+//          }
+//      },
 //     "deadline": "2022-02-09T22:00:00.000Z"
 // }
 
@@ -386,6 +449,10 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
 //                              "data":[]
 //                           }
 //     },
+//          "type": {
+//              "ext": "pdf",
+//              "mime": "application/pdf"
+//          }
 //     "deadline": "2022-02-09T22:00:00.000Z",
 //     "Uploaded_count": 1
 // }

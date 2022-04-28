@@ -7,16 +7,15 @@ const UploadedExams = () => {
     const history = useHistory();
     const jobId = useSelector(state => state.job.id);
     const { MCQs } = useSelector(state => state.uploadedExams);
+    const t = 'MCQ'
     useEffect(() => {
         dispatch(getJobExamsAction(jobId));
     }, [dispatch]);
     const handleAssign = id => {
-        console.log("ay 7aga");
-        history.push(`/dashboard/uploadedexams/assignapplicants/${id}`);
+        history.push(`/dashboard/uploadedexams/assignapplicants/${t}/${id}`);
     };
     const handleAssignCanidate = id => {
-        console.log("ay 7aga");
-        history.push(`/dashboard/uploadedexams/assigncandidates/${id}`);
+        history.push(`/dashboard/uploadedexams/assigncandidates/${t}/${id}`);
     };
     if (MCQs !== undefined) {
         return (
@@ -26,7 +25,7 @@ const UploadedExams = () => {
                         {" "}
                         <li key={m.MCQId}>
                             <div class="row" style={{ marginTop: "10px" }}>
-                                <div style={{ marginLeft: "40px" }}> Exam: {m.MCQ.topic}</div>
+                                <div style={{ marginLeft: "40px" }}> Exam: {m.MCQ.title}</div>
                                 <div class="column">
                                     {" "}
                                     <button

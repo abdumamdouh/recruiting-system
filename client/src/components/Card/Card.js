@@ -25,8 +25,6 @@ const Card = (props) => {
         history.push(`/dashboard/exam/${props.id}`);
     };
     const handleChooseExam = () => {
-        console.log("date", expiryDate);
-        console.log("duration", duration);
         setChoosed(true);
     };
     const handleDate = (date) => {
@@ -34,7 +32,6 @@ const Card = (props) => {
         setExpiryDate(date);
     };
     const handleSubmit = () => {
-        console.log(props.id);
         const MCQId = props.id;
         dispatch(pickExamAction(jobId, MCQId, expiryDate, duration));
     };

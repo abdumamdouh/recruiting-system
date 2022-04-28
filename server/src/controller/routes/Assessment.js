@@ -4,6 +4,8 @@ const Applicant = require("../../models/Applicant");
 const Recruiter = require("../../models/Recruiter");
 const Job = require("../../models/Job");
 const MCQ = require("../../models/MCQ");
+const Task = require("../../models/Task");
+const ActiveTask = require("../../models/ActiveTask");
 const JobMCQ = require("../../models/JobMCQ");
 const Requirment = require("../../models/Requirment");
 const ApplyFor = require("../../models/ApplyFor");
@@ -61,19 +63,40 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                     ]
                 });
                 everyMCQ = JSON.parse(JSON.stringify(everyMCQ));
-                // console.log(everyMCQ[0]);
+                let everyTask = await Task.findAll({
+                    where: { id: job.assigned.tasks },
+                    attributes: ["id", "title"],
+                    include: [
+                        {
+                            model: Job,
+                            attributes: ["id"],
+                            through: { attributes: ["deadline"] }
+                        }
+                    ]
+                });
+                everyTask = JSON.parse(JSON.stringify(everyTask));
+                // console.log(everyTask[0].Jobs);
                 const jobAssessments = {
                     jobId: everyMCQ[0].Jobs[0].id,
                     jobTitle: everyMCQ[0].Jobs[0].title,
                     description: everyMCQ[0].Jobs[0].description,
                     company: everyMCQ[0].Jobs[0].Recruiter.company,
                     avatar: everyMCQ[0].Jobs[0].Recruiter.avatar,
-                    MCQ: everyMCQ.map(({ id, title, Jobs }) => ({
-                        MCQId: id,
-                        title,
-                        expiryDate: Jobs[0].JobMCQ.expiryDate,
-                        duration: Jobs[0].JobMCQ.duration
-                    }))
+                    ...(everyMCQ.length && {
+                        MCQ: everyMCQ.map(({ id, title, Jobs }) => ({
+                            MCQId: id,
+                            title,
+                            expiryDate: Jobs[0].JobMCQ.expiryDate,
+                            duration: Jobs[0].JobMCQ.duration
+                        }))
+                    }),
+                    ...(everyTask.length && {
+                        task: everyTask.map(({ id, title, Jobs }) => ({
+                            taskId: id,
+                            title,
+                            deadline: Jobs[0].ActiveTask.deadline
+                        }))
+                    })
                 };
                 return jobAssessments;
             })

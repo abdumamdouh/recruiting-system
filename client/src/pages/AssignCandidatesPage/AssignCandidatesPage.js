@@ -16,6 +16,7 @@ const CandidatesPage = () => {
     const [modalOpen, setModalOpen] = useState(false);
     //mcqId
     const { id } = useParams();
+    const {t} = useParams()
     const handleApplicants = params => {
         console.log(job.applicants);
         console.log("r", rows);
@@ -69,10 +70,6 @@ const CandidatesPage = () => {
         setModalOpen(true);
     };
     const handleAllApplicants = () => {
-        console.log(job.applicants);
-        console.log("selection", selectionModel);
-        console.log("jobID", jobId);
-        console.log("filter", filteredApplicants);
         dispatch(
             assignExamAction(jobId, id, selectionModel, showSuccessMessage)
         );
@@ -97,15 +94,15 @@ const CandidatesPage = () => {
                 selectionModel={selectionModel}
             />
   
-            <button
+           {t === 'MCQ' &&  <button
                 className="btn btn-primary"
                 style={{ marginTop: "20px" }}
                 onClick={handleAllApplicants}
             >
                 {" "}
                 Assign MCQ to Candidates
-            </button>
-            <button className="btn btn-primary" style={{marginTop: '20px',marginLeft: '20px'}} onClick={handleAssignTask}> Assign Task to  Candidates</button>
+            </button>}
+           {t === 'task' &&  <button className="btn btn-primary" style={{marginTop: '20px',marginLeft: '20px'}} onClick={handleAssignTask}> Assign Task to  Candidates</button>}
         </div>
     );
 };

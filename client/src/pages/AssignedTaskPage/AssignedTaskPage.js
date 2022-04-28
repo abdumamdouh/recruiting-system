@@ -4,14 +4,16 @@ import { Typography } from "@material-ui/core";
 import { Button } from "@mui/material";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "@emotion/styled";
+import moment from "moment";
 
 //Hooks
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Message from "../../components/modal/Message";
+import MyTimer from "./MyTimer";
 
-export default function AddExam() {
+export default function Task() {
     //ID of the task
     const { ID } = useParams();
 
@@ -23,67 +25,83 @@ export default function AddExam() {
     //file
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
+    const [task, setTask] = useState();
 
     const jobId = useSelector((state) => state.job.id);
     const { userInfo } = useSelector((state) => state.user);
+
+    useEffect(() => {
+        const fetchTask = async () => {
+            try {
+                console.log(userInfo.token);
+                const response = await fetch(
+                    //TODO: make it dynamic
+                    `http://localhost:5000/${1}/${5}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + userInfo.token
+                        }
+                    }
+                );
+                const data = await response.json();
+                console.log(data);
+                setTask(data);
+                //TODO: condition for success
+                // showSuccessMessage();
+            } catch (error) {
+                console.error("Error:", error);
+                handleOnError(error);
+            }
+        };
+        fetchTask();
+    }, []);
 
     const handleOnError = (err) => {
         console.log(err);
     };
 
-    // const handleClick = async () => {
-    //     /*
-    //     {
-    //         "title":"Some title",
-    //         "description":"Some discription",
-    //         "deadline":"2022-03-20 01:21:00",
-    //         "JobId":1,
-    //         "uploadFormat":"pdf"
-    //     }
-    //     */
-    //     console.log(jobId);
+    const handleClick = async () => {
+        console.log(jobId);
 
-    //     const task = {
-    //         title,
-    //         description,
-    //         deadline: expiryDate,
-    //         JobId: jobId,
-    //         uploadFormat: option.join("-")
-    //     };
+        const formData = new FormData();
+        formData.append("task", selectedFile);
+        console.log(formData);
 
-    //     console.log(task);
-    //     //
-    //     const formData = new FormData();
-    //     formData.append("task", selectedFile);
-    //     formData.append("data", JSON.stringify(task));
-    //     console.log(formData);
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + " - " + pair[1]);
+        }
 
-    //     // for (let pair of formData.entries()) {
-    //     //     console.log(pair[0] + " - " + pair[1]);
-    //     // }
+        try {
+            console.log(userInfo.token);
+            const response = await fetch(
+                //TODO make it dynamic
+                // /uploadTask/:TaskId/:JobId
 
-    //     try {
-    //         console.log(userInfo.token);
-    //         const response = await fetch(`http://localhost:5000/createTask`, {
-    //             method: "POST",
-    //             body: formData,
-    //             headers: {
-    //                 Accept: "multipart/form-data",
-    //                 // "Content-Type": "application/json",
-    //                 // "Content-Type": "multipart/form-data",
-    //                 Authorization: "Bearer " + userInfo.token
-    //             }
-    //         });
-    //         const data = await response;
-    //         console.log(data);
-    //         //TODO: condition for success
-    //         showSuccessMessage();
-    //     } catch (error) {
-    //         console.error("Error:", error);
-    //         handleOnError(error);
-    //     }
+                `http://localhost:5000/uploadTask/${1}/${5}`,
 
-    // };
+                {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        Accept: "multipart/form-data",
+                        // "Content-Type": "application/json",
+                        // "Content-Type": "multipart/form-data",
+                        Authorization: "Bearer " + userInfo.token
+                    }
+                }
+            );
+            const data = await response;
+            console.log(data);
+            //TODO: condition for success
+            showSuccessMessage();
+        } catch (error) {
+            console.error("Error:", error);
+            handleOnError(error);
+        }
+    };
 
     const showSuccessMessage = () => {
         setModalOpen(true);
@@ -96,123 +114,158 @@ export default function AddExam() {
         setIsFilePicked(true);
         console.log(event.target.files[0]);
     };
-
-    //TODO: move handleSubmission to handleClick
-    const handleSubmission = async () => {
-        // const formData = new FormData();
-        // formData.append("File", selectedFile);
-        // console.log(formData);
-        // try {
-        //     const response = await fetch(`http://localhost:5000/getMCQ/1`, {
-        //         method: "POST",
-        //         body: formData,
-        //         headers: {
-        //             Accept: "application/json",
-        //             "Content-Type": "application/json",
-        //             Authorization: "Bearer " + userInfo.token
-        //         }
-        //     });
-        //     const data = await response.json();
-        //     console.log(data);
-        //     //TODO: condition for success
-        //     showSuccessMessage();
-        // } catch (error) {
-        //     console.error("Error:", error);
-        //     handleOnError(error);
-        // }
+    const download = (event) => {
+        const a = event.target;
+        const array = new Uint8Array(task.data.additionalFile.data);
+        const blob = new Blob([array], { type: task.data.type.mime });
+        const url = window.URL.createObjectURL(blob);
+        a.setAttribute("href", url);
+        a.setAttribute("download", `helper.${task?.data.type.ext}`);
+        // a.click();
+        // URL.revokeObjectURL(url);
     };
-
+    const t = new Date(task?.deadline);
+    t.setHours(t.getHours() - 2);
+    t.setSeconds(0);
+    // console.log(t);
     return (
-        <div>
-            <div className="container">
-                {modalOpen && (
-                    <Message
-                        setOpenModal={setModalOpen}
-                        message="uploaded successfully!"
-                    />
-                )}
-            </div>
-
-            <Box
-                component="form"
-                sx={{ marginBottom: "25px" }}
-                noValidate
-                autoComplete="off"
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                marginLeft: "2.5rem",
+                width: "100%"
+            }}
+        >
+            <div
+                style={{
+                    width: "60%",
+                    // justifyContent: "flex-end",
+                    flexDirection: "column"
+                }}
             >
-                <Typography
-                    className="black"
-                    variant="h6"
-                    sx={{ marginBottom: "10px" }}
-                >
-                    Task Title
-                </Typography>
-            </Box>
-
-            <Box
-                component="form"
-                sx={{ marginBottom: "25px" }}
-                noValidate
-                autoComplete="off"
-            >
-                <Typography
-                    className="black"
-                    variant="h6"
-                    sx={{ marginBottom: "10px" }}
-                >
-                    Task Description
-                </Typography>
-            </Box>
-
-            <div className="mb black">
-                <Typography color="black" variant="h6">
-                    Deadline for this Task
-                </Typography>
-            </div>
-
-            <div>
-                <h4
-                    style={{
-                        color: "black",
-                        display: "inline",
-                        marginBottom: "5px"
-                    }}
-                >
-                    Upload Additional Resources{" "}
-                </h4>
-                <span style={{ fontSize: 20, color: "#827F7E" }}>
-                    (Optional)
-                </span>
-
-                <div className="mb" style={{ marginTop: "5px" }}>
-                    <label htmlFor="contained-button-file">
-                        <Input
-                            accept=".pdf, .docx, .zip, .rar"
-                            id="contained-button-file"
-                            type="file"
-                            onChange={changeHandler}
+                {/* {JSON.stringify(task)} */}
+                <div className="container">
+                    {modalOpen && (
+                        <Message
+                            setOpenModal={setModalOpen}
+                            message="uploaded successfully!"
                         />
-                        <Button variant="contained" component="span">
-                            Upload file
-                        </Button>
-                    </label>
-                    {isFilePicked ? (
-                        <span style={{ marginLeft: 10, color: "#827F7E" }}>
-                            {selectedFile.name}
-                        </span>
-                    ) : (
-                        ""
                     )}
                 </div>
-            </div>
 
-            <div className="mb">
-                <Button
-                    style={{ marginBottom: "10px" }}
-                    variant="contained"
-                    // onClick={handleClick}
+                <Box
+                    component="form"
+                    sx={{ marginBottom: "25px" }}
+                    noValidate
+                    autoComplete="off"
                 >
-                    Upload Task
-                </Button>
+                    <Typography
+                        className="black"
+                        variant="h3"
+                        sx={{ marginBottom: "10px", fontWeight: 800 }}
+                    >
+                        {task?.data.title}
+                    </Typography>
+                </Box>
+
+                <Box
+                    component="form"
+                    sx={{ marginBottom: "25px" }}
+                    noValidate
+                    autoComplete="off"
+                >
+                    <Typography
+                        className="black"
+                        // variant="h6"
+                        sx={{ marginBottom: "10px" }}
+                    >
+                        {task?.data.description}
+                    </Typography>
+                </Box>
+
+                <div className="mb black">
+                    <span
+                        style={{
+                            fontSize: "1.25rem"
+                        }}
+                    >
+                        <strong>Deadline: </strong>
+                    </span>
+                    <span
+                        style={{
+                            fontSize: "1.25rem"
+                        }}
+                    >
+                        {moment
+                            .parseZone(task?.deadline)
+                            .utc("-02:00")
+                            .format("dddd, Do [of] MMMM YYYY [at] h:mm a")}
+                    </span>
+                </div>
+                <div className="mb black">
+                    {task?.deadline && <MyTimer expiryTimestamp={t} />}
+                </div>
+                {task?.data.additionalFile && (
+                    <div className="mb">
+                        <a href="#" onClick={download}>
+                            Download helper files
+                        </a>
+                    </div>
+                )}
+                <div className="mb">
+                    <h4
+                        style={{
+                            color: "black",
+                            // display: "inline",
+                            marginBottom: "20px"
+                        }}
+                    >
+                        Your Submission{" "}
+                    </h4>
+                    <div className="mb">
+                        <label htmlFor="contained-button-file">
+                            <Input
+                                accept={`.${task?.data.uploadFormat
+                                    .split("-")
+                                    .join(", .")}`}
+                                id="contained-button-file"
+                                type="file"
+                                onChange={changeHandler}
+                            />
+                            <Button
+                                variant="contained"
+                                component="span"
+                                sx={{ width: 135 }}
+                            >
+                                Upload task
+                            </Button>
+                        </label>
+                        {isFilePicked ? (
+                            <span style={{ marginLeft: 10, color: "#827F7E" }}>
+                                {selectedFile.name}
+                            </span>
+                        ) : (
+                            ""
+                        )}
+                        <small style={{ display: "block", color: "#827F7E" }}>
+                            <strong>Allowed format:</strong>{" "}
+                            {`.${task?.data.uploadFormat
+                                .split("-")
+                                .join(", .")}`}
+                        </small>
+                    </div>
+                </div>
+
+                <div className="mb">
+                    <Button
+                        // sx={{ width: 135 }}
+                        variant="contained"
+                        onClick={handleClick}
+                    >
+                        Submit
+                    </Button>
+                </div>
             </div>
         </div>
     );

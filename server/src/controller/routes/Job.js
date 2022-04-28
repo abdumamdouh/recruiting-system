@@ -275,7 +275,7 @@ router.get("/getAllTasks/:id", recruiterAuth, async (req, res) => {
         const mcqs = await JobMCQ.findAndCountAll({
             include: {
                 model: MCQ,
-                attributes: ["topic"]
+                attributes: ["title"]
             },
             attributes: ["MCQId", "expiryDate"],
             where: {

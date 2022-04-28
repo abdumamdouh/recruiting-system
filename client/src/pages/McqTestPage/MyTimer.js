@@ -1,3 +1,4 @@
+import zIndex from "@mui/material/styles/zIndex";
 import React from "react";
 import { useTimer } from "react-timer-hook";
 import "./MyTimer.scss";
@@ -5,7 +6,7 @@ import "./MyTimer.scss";
 function MyTimer({ expiryTimestamp, handleOnExpire }) {
     const { seconds, minutes, hours } = useTimer({
         expiryTimestamp,
-        onExpire: handleOnExpire,
+        onExpire: handleOnExpire
     });
 
     return (
@@ -15,7 +16,8 @@ function MyTimer({ expiryTimestamp, handleOnExpire }) {
                 position: "fixed",
                 right: "0%",
                 bottom: "0%",
-                margin: "10px"
+                margin: "10px",
+                zIndex: 200
             }}
         >
             <small>Remaining Time</small>
