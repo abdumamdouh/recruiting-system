@@ -78,6 +78,10 @@ const UpdatesPage = (props) => {
         setModalData(obj);
         handleOpen();
     };
+    const handleTask = (TaskID)=>{
+        console.log(TaskID);
+        history.push(`/job/task/${TaskID}`)
+    }
     return (
         <div className="c">
             {!userInfo.hasOwnProperty("hasAssessments") ? (
@@ -265,8 +269,8 @@ const UpdatesPage = (props) => {
                                                                         {/*redirect*/}
                                                                         <span
                                                                             onClick={() =>
-                                                                                handleMCQ(
-                                                                                    obj
+                                                                                handleTask(
+                                                                                    obj.taskId
                                                                                 )
                                                                             }
                                                                             className="redirect"

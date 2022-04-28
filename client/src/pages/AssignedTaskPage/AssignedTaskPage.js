@@ -10,13 +10,14 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Message from "../../components/modal/Message";
 import MyTimer from "./MyTimer";
 
 export default function Task() {
+    const history = useHistory();
     //ID of the task
-    const { ID } = useParams();
-
+    const { TaskID } = useParams();
     const Input = styled("input")({ display: "none" });
 
     // const [uploadFormat, setUploadFormat] = useState("");
@@ -27,8 +28,8 @@ export default function Task() {
     const [isFilePicked, setIsFilePicked] = useState(false);
     const [task, setTask] = useState();
 
-    const jobId = useSelector((state) => state.job.id);
-    const { userInfo } = useSelector((state) => state.user);
+    const jobId = useSelector(state => state.job.id);
+    const { userInfo } = useSelector(state => state.user);
 
     useEffect(() => {
         const fetchTask = async () => {
@@ -36,7 +37,7 @@ export default function Task() {
                 console.log(userInfo.token);
                 const response = await fetch(
                     //TODO: make it dynamic
-                    `http://localhost:5000/${1}/${5}`,
+                    `http://localhost:5000/${jobId}/${TaskID}`,
                     {
                         method: "GET",
                         headers: {
@@ -59,7 +60,7 @@ export default function Task() {
         fetchTask();
     }, []);
 
-    const handleOnError = (err) => {
+    const handleOnError = err => {
         console.log(err);
     };
 
@@ -80,7 +81,7 @@ export default function Task() {
                 //TODO make it dynamic
                 // /uploadTask/:TaskId/:JobId
 
-                `http://localhost:5000/uploadTask/${1}/${5}`,
+                `http://localhost:5000/uploadTask/${jobId}/${TaskID}`,
 
                 {
                     method: "POST",
@@ -94,9 +95,13 @@ export default function Task() {
                 }
             );
             const data = await response;
-            console.log(data);
-            //TODO: condition for success
-            showSuccessMessage();
+
+            if (data.status === 201) {
+                showSuccessMessage();
+                setTimeout(() => {
+                    history.push("/");
+                }, 3000);
+            }
         } catch (error) {
             console.error("Error:", error);
             handleOnError(error);
@@ -109,12 +114,12 @@ export default function Task() {
 
     //upload file
 
-    const changeHandler = (event) => {
+    const changeHandler = event => {
         setSelectedFile(event.target.files[0]);
         setIsFilePicked(true);
         console.log(event.target.files[0]);
     };
-    const download = (event) => {
+    const download = event => {
         const a = event.target;
         const array = new Uint8Array(task.data.additionalFile.data);
         const blob = new Blob([array], { type: task.data.type.mime });
