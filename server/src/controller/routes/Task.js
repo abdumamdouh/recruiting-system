@@ -196,7 +196,8 @@ router.get(
 
 // ************************************************************************************************
 // recruiter can give score and feedback to a certain task upload
-// Accepted JSON: {   "JobId":1,
+// Accepted JSON: {
+//     "JobId":1,
 //     "TaskId":1,
 //     "Marks":[
 //         {
@@ -235,7 +236,7 @@ router.post("/setTaskMark", recruiterAuth, async (req, res) => {
                 }
             );
         });
-        res.send();
+        res.send(req.body);
     } catch (error) {
         res.send(error.message);
     }
