@@ -84,12 +84,13 @@ router.post(
                 },
                 raw: true
             });
+            // console.log(assigned)
             if (!assigned) {
                 throw new Error("You did not apply for this job");
             }
             assignedObj = JSON.parse(assigned.assigned);
-            // console.log(assignedObj.tasks,req.params.TaskId)
-
+            
+            //\"2\"
             if (!assignedObj.tasks.includes(req.params.TaskId)) {
                 throw new Error("You are not assigned this task.");
             }
@@ -99,6 +100,18 @@ router.post(
                 uploadedTask: req.file.buffer,
                 ApplicantId: req.applicant.id
             });
+
+            // removing the task id from the assigned tasks after submission 
+            const deletedIndex = assignedObj.tasks.indexOf(req.params.TaskId.toString())
+            assignedObj.tasks.splice(deletedIndex,1)
+            await ApplyFor.update({
+                assigned:assignedObj
+            },{
+                where:{
+                    JobId: req.params.JobId,
+                    ApplicantId: req.applicant.id
+                }
+            })
             res.status(201).send("Task uploaded successfully.");
         } catch (error) {
             // console.log(error);
@@ -106,6 +119,7 @@ router.post(
         }
     }
 );
+
 // returned JSON:
 // 1-) "You did not apply for this job"
 // 2-) "You are not assigned this task."
