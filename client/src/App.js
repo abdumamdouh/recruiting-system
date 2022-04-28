@@ -137,7 +137,7 @@ const App = () => {
 
                     <ProtectedRoute
                         exact
-                        path="/job/task/:ID"
+                        path="/job/task/:TaskID"
                         component={AssignedTaskPage}
                         name="taskApplicantView"
                     />
