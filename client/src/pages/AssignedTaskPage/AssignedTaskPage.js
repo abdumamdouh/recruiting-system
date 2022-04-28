@@ -185,12 +185,23 @@ export default function Task() {
                 </Box>
 
                 <div className="mb black">
-                    <Typography color="black" variant="h6">
+                    <span
+                        style={{
+                            fontSize: "1.25rem"
+                        }}
+                    >
+                        <strong>Deadline: </strong>
+                    </span>
+                    <span
+                        style={{
+                            fontSize: "1.25rem"
+                        }}
+                    >
                         {moment
                             .parseZone(task?.deadline)
                             .utc("-02:00")
                             .format("dddd, Do [of] MMMM YYYY [at] h:mm a")}
-                    </Typography>
+                    </span>
                 </div>
                 <div className="mb black">
                     {task?.deadline && <MyTimer expiryTimestamp={t} />}
