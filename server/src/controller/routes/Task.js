@@ -115,39 +115,42 @@ router.post(
 
 // recruiter can see all of a certain task details
 // Accepted JSON: None
-router.get("*/:JobId/:TaskId/taskDetails", recruiterAuth, async (req, res) => {
-    try {
-        // checking if you're the one who posted this job or not
-        const result = await Job.findOne({
-            attributes: ["RecruiterId"],
-            where: {
-                id: req.params.JobId
-            },
-            raw: true
-        });
-        if (req.recruiter.id !== result.RecruiterId) {
-            throw new Error("You are not authorized to view this job");
-        }
-        // getting all tasks uploaded by the applicants
-        const solutions = await TaskUploads.findAll({
-            attributes: [
-                "ApplicantId",
-                "uploadedTask",
-                "createdAt",
-                "score",
-                "feedback"
-            ],
-            where: {
-                JobId: req.params.JobId,
-                TaskId: req.params.TaskId
+router.get(
+    "*/:JobId/:TaskId/taskDetails",
+    recruiterAuth,
+    async (req, res) => {
+        try {
+            // checking if you're the one who posted this job or not
+            const result = await Job.findOne({
+                attributes: ["RecruiterId"],
+                where: {
+                    id: req.params.JobId
+                },
+                raw: true
+            });
+            if (req.recruiter.id !== result.RecruiterId) {
+                throw new Error("You are not authorized to view this job");
             }
-        });
-        res.send(solutions);
-    } catch (error) {
-        res.status(400).send(error.message);
+            // getting all tasks uploaded by the applicants
+            const solutions = await TaskUploads.findAll({
+                attributes: ["ApplicantId", "uploadedTask", "createdAt","score","feedback"],
+                where: {
+                    JobId: req.params.JobId,
+                    TaskId: req.params.TaskId
+                }
+            });
+            for(let i = 0 ; i <solutions.length ; i++){
+                if (Buffer.byteLength(solutions[i].uploadedTask)) {
+                    const buffer = solutions[i].uploadedTask ;
+                    solutions[i].dataValues.type = fileType(buffer); 
+                }
+            }
+            res.send(solutions);
+        } catch (error) {
+            res.status(400).send(error.message);
+        }
     }
-});
-
+);
 // retruned JSON:
 // [
 //     {
@@ -156,13 +159,40 @@ router.get("*/:JobId/:TaskId/taskDetails", recruiterAuth, async (req, res) => {
 //             "type": "Buffer",
 //             "data": []
 //         },
-//         "createdAt": "2022-03-13T11:08:37.000Z"
+//         "createdAt": "2022-04-28T14:18:17.000Z",
+//         "score": null,
+//         "feedback": null,
+//         "type": {
+//             "ext": "pdf",
+//             "mime": "application/pdf"
+//         }
+//     },{
+//         "ApplicantId": 1,
+//         "uploadedTask": {
+//             "type": "Buffer",
+//             "data": []
+//         },
+//         "createdAt": "2022-04-28T14:18:17.000Z",
+//         "score": null,
+//         "feedback": null,
+//         "type": {
+//             "ext": "pdf",
+//             "mime": "application/pdf"
+//         }
 //     }
 // ]
 
 // ************************************************************************************************
 // recruiter can give score and feedback to a certain task upload
-// Accepted JSON: {
+// Accepted JSON: {   "JobId":1,
+//     "TaskId":1,
+//     "Marks":[
+//         {
+//             "applicantId":1,
+//             "score": 4,
+//             "feedback":"Some feedback"
+//         }
+//     ]
 // }
 router.post("/setTaskMark", recruiterAuth, async (req, res) => {
     try {
@@ -353,11 +383,7 @@ router.get("/:JobId/:TaskId", RecOrApp, async (req, res) => {
                 throw new Error("You did not apply for this job.");
             }
             const assignedObj = JSON.parse(assigned.assigned);
-            // console.log(assignedObj);
-            // console.log(assignedObj.tasks,req.params.TaskId)
-
             if (!assignedObj.tasks.includes(req.params.TaskId)) {
-                // console.log(req.params.TaskId, assignedObj);
                 throw new Error("You are not assigned this task.");
             }
             let result = {};
