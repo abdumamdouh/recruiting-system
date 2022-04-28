@@ -17,11 +17,17 @@ const TaskReviewPage = () => {
     const JobId = job.id;
     const TaskId = id;
     const submissions = useSelector(state => state.taskSubmissions);
+    const [submissionData,setSubmissionData] = useState([])
     const {userInfo} = useSelector(state => state.user)
     const [showTaskMark, setShowTaskMark] = useState(false);
     const [feedBack, setFeedBack] = useState("");
     const [ApplicantId,setApplicantId]=useState()
     const [score,setScore] = useState(0)
+    useEffect(() => {
+        dispatch(getTaskSubmissionsAction(JobId, TaskId));
+        setSubmissionData(submissions) 
+        console.log('ssub', submissionData)
+    }, [dispatch]);
     const download = (event, uploadedTask, type) => {
         const a = event.target;
         console.log(event.target);
@@ -58,10 +64,15 @@ const TaskReviewPage = () => {
             const data = await rawResponse;
             console.log(data);
             //TODO: condition for success
-            if(data.status ===200){ showSuccessMessage();}
-            setShowTaskMark(false)
-            setScore(0)
-            setFeedBack('')
+            if(data.status ===200){ 
+                setShowTaskMark(false)
+                setScore(0)
+                setFeedBack('')
+                dispatch(getTaskSubmissionsAction(JobId, TaskId));
+                setSubmissionData(submissions) 
+                showSuccessMessage()
+            }
+           
         } catch (error) {
             console.error("Error:", error);
         }
@@ -87,7 +98,7 @@ const TaskReviewPage = () => {
               }))
             : null;
     console.log("arr", data);
-
+   
     const rows = data !== null ? [...data] : null;
     const [selectionModel, setSelectionModel] = React.useState([]);
     const [modalOpen, setModalOpen] = useState(false);
@@ -134,9 +145,7 @@ const TaskReviewPage = () => {
     const showSuccessMessage = () => {
         setModalOpen(true);
     };
-    useEffect(() => {
-        dispatch(getTaskSubmissionsAction(JobId, TaskId));
-    }, [dispatch]);
+   
     if (rows !== null) {
         return (
             <div style={{ height: 400, width: "100%" }}>
