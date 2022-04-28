@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import moment from "moment";
 import { useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./UpdatePage.scss";
@@ -124,7 +125,9 @@ const UpdatesPage = (props) => {
                                             <p>{update.description}</p>
                                             <p>
                                                 <strong>
-                                                    {update.MCQ.length > 1
+                                                    {update.MCQ.length +
+                                                        update.task.length >
+                                                    1
                                                         ? "Assessments"
                                                         : "Assessment"}
                                                     :
@@ -158,12 +161,16 @@ const UpdatesPage = (props) => {
                                                                                     Expiry
                                                                                     Date:
                                                                                 </strong>{" "}
-                                                                                {obj.expiryDate.substring(
-                                                                                    0,
-                                                                                    obj.expiryDate.search(
-                                                                                        "T"
+                                                                                {moment
+                                                                                    .parseZone(
+                                                                                        obj.expiryDate
                                                                                     )
-                                                                                )}
+                                                                                    .utc(
+                                                                                        "-02:00"
+                                                                                    )
+                                                                                    .format(
+                                                                                        "DD-MM-YYYY [at] hh:mm a"
+                                                                                    )}
                                                                                 <br></br>
                                                                                 <strong>
                                                                                     Duration:
@@ -173,6 +180,78 @@ const UpdatesPage = (props) => {
                                                                                 }{" "}
                                                                                 minutes
                                                                                 <br></br>
+                                                                            </Popover.Body>
+                                                                        </Popover>
+                                                                    }
+                                                                >
+                                                                    <li
+                                                                        key={
+                                                                            obj.title
+                                                                        }
+                                                                        class="nav-item"
+                                                                    >
+                                                                        {/*redirect*/}
+                                                                        <span
+                                                                            onClick={() =>
+                                                                                handleMCQ(
+                                                                                    obj
+                                                                                )
+                                                                            }
+                                                                            className="redirect"
+                                                                        >
+                                                                            {
+                                                                                obj.title
+                                                                            }
+                                                                        </span>
+                                                                    </li>
+                                                                </OverlayTrigger>
+                                                            </div>
+                                                        </>
+                                                    ))}
+                                                    {update.task.map((obj) => (
+                                                        <>
+                                                            <div>
+                                                                <OverlayTrigger
+                                                                    key={
+                                                                        obj.title
+                                                                    }
+                                                                    placement="auto-start"
+                                                                    delay={{
+                                                                        show: 250,
+                                                                        hide: 400
+                                                                    }}
+                                                                    overlay={
+                                                                        <Popover
+                                                                            id={
+                                                                                obj.title
+                                                                            }
+                                                                        >
+                                                                            <Popover.Header as="h3">
+                                                                                Task
+                                                                            </Popover.Header>
+                                                                            <Popover.Body>
+                                                                                <strong>
+                                                                                    Deadline:
+                                                                                </strong>{" "}
+                                                                                {moment
+                                                                                    .parseZone(
+                                                                                        obj.deadline
+                                                                                    )
+                                                                                    .utc(
+                                                                                        "-02:00"
+                                                                                    )
+                                                                                    .format(
+                                                                                        "DD-MM-YYYY [at] hh:mm a"
+                                                                                    )}
+                                                                                <br></br>
+                                                                                {/* <strong>
+                                                                                    Duration:
+                                                                                </strong>{" "}
+                                                                                {
+                                                                                    obj.duration
+                                                                                }{" "}
+                                                                                minutes
+                                                                                <br></br> */}
                                                                             </Popover.Body>
                                                                         </Popover>
                                                                     }
