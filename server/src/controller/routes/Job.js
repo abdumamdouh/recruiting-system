@@ -3,10 +3,16 @@ const _ = require("lodash");
 const Applicant = require("../../models/Applicant");
 const Recruiter = require("../../models/Recruiter");
 const Job = require("../../models/Job");
+const MCQ = require("../../models/MCQ");
+const JobMCQ = require("../../models/JobMCQ");
 const Requirment = require("../../models/Requirment");
 const ApplyFor = require("../../models/ApplyFor");
+const ActiveTask = require("../../models/ActiveTask")
+
+
 const Sequelize = require("sequelize");
 const db = require("../../db/db");
+const Op = require("Sequelize").Op;
 
 // requiring applicant and recruiter authentication
 const recruiterAuth = require("../middleware/recruiterAuth");
@@ -43,7 +49,7 @@ router.post("/Feed", async (req, res) => {
             include: [
                 {
                     model: Recruiter,
-                    attributes: ["company"],
+                    attributes: ["company", "avatar"],
                     // INNER JOIN
                     required: true
                 }
@@ -77,7 +83,7 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                 include: [
                     {
                         model: Recruiter,
-                        attributes: ["company"],
+                        attributes: ["company", "avatar"],
                         // INNER JOIN
                         required: true
                     },
@@ -92,13 +98,26 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                     id: req.params.id
                 }
             });
+
+            const appliedForTheJob = await ApplyFor.findOne({
+                where: {
+                    JobId: req.params.id,
+                    ApplicantId: req.applicant.id
+                }
+            });
+            if (appliedForTheJob) {
+                job.dataValues.applied = true;
+            } else {
+                job.dataValues.applied = false;
+            }
+            // console.log(job);
             res.send(job);
         } else if (req.recruiter) {
             const job = await Job.findOne({
                 include: [
                     {
                         model: Recruiter,
-                        attributes: ["company"],
+                        attributes: ["company", "avatar"],
                         // INNER JOIN
                         required: true
                     },
@@ -115,54 +134,10 @@ router.get("/jobs/:id", RecOrApp, async (req, res) => {
                 }
             });
             if (job) {
-                // get applicants(Names,IDs) applied for that job
-                const [results, metadata] = await db.query(
-                    "SELECT A.userName,A.id FROM ApplyFors AS AF INNER JOIN Applicants AS A ON AF.ApplicantId = A.id WHERE AF.JobId=?",
-                    {
-                        replacements: [job.id]
-                    }
-                );
 
-                // calculate the score of each applicant and append it to each applicant
-                for (let index = 0; index < results.length; index++) {
-                    const a = results[index];
-                    let aScore = 0;
-                    const applicantA = await Applicant.findOne({
-                        where: {
-                            id: a.id
-                        }
-                    });
-
-                    for (
-                        let index = 0;
-                        index < applicantA.qualifications.length;
-                        index++
-                    ) {
-                        const qualification = applicantA.qualifications[index];
-                        const requirmentObj = await job.Requirments.find(
-                            (req) => {
-                                return req.name == Object.keys(qualification);
-                            }
-                        );
-
-                        if (requirmentObj) {
-                            aScore =
-                                aScore +
-                                requirmentObj.weight *
-                                    Object.values(qualification)[0];
-                        }
-                    }
-                    results[index].score = aScore;
-                }
-
-                // sort the applicants by the score
-                results.sort((a, b) => {
-                    return b.score - a.score;
-                });
-                console.log(results);
-                job.dataValues.applicants = results;
-
+                job.dataValues.applicants = await applicantScores(job);
                 res.send(job);
+
             } else {
                 throw new Error("You are not authorized to view this job");
             }
@@ -181,7 +156,7 @@ router.post("/recruiter/myjobs", recruiterAuth, async (req, res) => {
             include: [
                 {
                     model: Recruiter,
-                    attributes: ["company"],
+                    attributes: ["company", "avatar"],
                     // INNER JOIN
                     required: true
                 }
@@ -242,20 +217,25 @@ router.patch("/jobs/:id", recruiterAuth, async (req, res) => {
         Object.keys(req.body).forEach(
             (title) => (job[title] = req.body[title])
         );
-        Requirment.destroy({ where: { JobId: job.id }, force: true });
-        const requirements = req.body.stack.map((requirment) => ({
-            name: Object.keys(requirment)[0],
-            weight: Object.values(requirment)[0],
-            JobId: job.id
-        }));
+        if (req.body.stack.length) {
+        
+            Requirment.destroy({ where: { JobId: job.id }, force: true });
+            const requirements = req.body.stack.map((requirment) => ({
+                name: Object.keys(requirment)[0],
+                weight: Object.values(requirment)[0],
+                JobId: job.id
+            }));
+            Requirment.bulkCreate(requirements);
+            _.set(
+                job.dataValues,
+                "stack",
+                requirements.map((requirement) =>
+                    _.omit(requirement, ["JobId"])
+                )
+            );
+        }
         // console.log(requirements);
         await job.save();
-        Requirment.bulkCreate(requirements);
-        _.set(
-            job.dataValues,
-            "stack",
-            requirements.map((requirement) => _.omit(requirement, ["JobId"]))
-        );
         res.send(job);
     } catch (error) {
         res.status(400).send(error.message);
@@ -278,6 +258,140 @@ router.post("/jobs/applyFor/:id", applicantAuth, async (req, res) => {
         } else {
             const jobApply = await ApplyFor.create(job);
             res.send("Applied for the job successfully");
+        }
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+// get all availale tasks of the job
+router.get("/getAllTasks/:id", recruiterAuth, async (req, res) => {
+    try {
+        const jobId = req.params.id;
+
+        const mcqs = await JobMCQ.findAndCountAll({
+            include: {
+                model: MCQ,
+                attributes: ["title"]
+            },
+            attributes: ["MCQId", "expiryDate"],
+            where: {
+                jobId: jobId,
+                expiryDate: {
+                    [Op.gt]: new Date()
+                }
+            }
+        });
+
+        res.send({
+            MCQs: mcqs.rows,
+            Count: mcqs.count
+        });
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+// assign the diffrent tasks of the job to applicants
+router.post("/assignTasks", recruiterAuth, async (req, res) => {
+    try {
+        const jobId = req.body.jobId;
+
+        if (req.body.MCQ) {
+            const mcq = req.body.MCQ;
+            const MCQId = mcq.MCQId;
+
+            const mcqRecord = await MCQ.findByPk(MCQId);
+            if(!mcqRecord) {
+                throw new Error("This MCQ id is invalid");
+            }
+
+            const jobRecord = await Job.findByPk(jobId);
+            if(!jobRecord) {
+                throw new Error("This Job id is invalid");
+            } else if ( jobRecord.RecruiterId !== req.recruiter.id ) {
+                throw new Error("You are not authorized to view this job");
+            }
+
+            const applicants = await ApplyFor.findAll({
+                // attributes: ["assigned"],
+                where: {
+                    jobId: jobId,
+                    ApplicantId: {
+                        [Op.in]: mcq.applicants
+                    }
+                }
+            });
+            if(!applicants.length) {
+                throw new Error("Applicants are not applied for this job");
+            } else if (applicants.length !== mcq.applicants.length) {
+                throw new Error("Applicants are not applied for this job");
+            } else {
+                applicants.forEach(async (applicant) => {
+                    const assigned = JSON.parse(applicant.dataValues.assigned);
+    
+                    // console.log(assigned)
+                    assigned.MCQs.push(MCQId);
+                    assigned.MCQs = assigned.MCQs.filter(
+                        (v, i, a) => a.indexOf(v) === i
+                    );
+                    applicant.assigned = JSON.stringify(assigned);
+                    // console.log(typeof applicant)
+                    await applicant.save();
+                });
+            }
+
+            res.send("MCQ Assigned");
+        } else if (req.body.codingProblem) {
+            const codingProblems = req.body.codingProblem;
+        } else if (req.body.task) {
+            const task = req.body.task;
+            const TaskId = task.TaskId;
+
+            const taskRecord = await ActiveTask.findOne({
+                where: {
+                    TaskId:TaskId}
+            });
+            if(!taskRecord) {
+                throw new Error("This task is not Active");
+            }
+
+            const jobRecord = await Job.findByPk(jobId);
+            if(!jobRecord) {
+                throw new Error("This Job id is invalid");
+            } else if ( jobRecord.RecruiterId !== req.recruiter.id ) {
+                throw new Error("You are not authorized to view this job");
+            }
+
+            const applicants = await ApplyFor.findAll({
+                // attributes: ["assigned"],
+                where: {
+                    jobId: jobId,
+                    ApplicantId: {
+                        [Op.in]: task.applicants
+                    }
+                }
+            });
+            if(!applicants.length) {
+                throw new Error("No applicants applied for this job");
+            } else if (applicants.length !== task.applicants.length) {
+                throw new Error("No applicants applied for this job");
+            } else {
+                applicants.forEach(async (applicant) => {
+                    const assigned = JSON.parse(applicant.dataValues.assigned);
+    
+                    // console.log(assigned)
+                    assigned.tasks.push(TaskId);
+                    assigned.tasks = assigned.tasks.filter(
+                        (v, i, a) => a.indexOf(v) === i
+                    );
+                    applicant.assigned = JSON.stringify(assigned);
+                    // console.log(typeof applicant)
+                    await applicant.save();
+                });
+            }
+            res.send("Task assigned successfully.");
+        } else {
         }
     } catch (error) {
         res.status(400).send(error.message);

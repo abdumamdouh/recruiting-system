@@ -16,7 +16,8 @@ import ReplyAllOutlinedIcon from "@mui/icons-material/ReplyAllOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import EditJob from "../EditJob/EditJob"
+import EditJob from "../EditJob/EditJob";
+import Message from "../modal/Message";
 import "./job.scss";
 const modalStyle = {
     position: "absolute",
@@ -35,7 +36,10 @@ export default function Job(props) {
 
     //for EditJob
     const [onEdit, setOnEdit] = useState(false);
-
+    //pop up message state
+    const [modalOpen, setModalOpen] = useState(false);
+    //check applicant applied or not 
+    
     //pull out the props
     const {
         description,
@@ -50,7 +54,7 @@ export default function Job(props) {
         employees,
         // company,
         Recruiter,
-        
+        applied
     } = props.job;
 
     //handle state of modal in case of Recruiter
@@ -67,15 +71,13 @@ export default function Job(props) {
     const state = useSelector((state) => state);
     const { type } = state.user.userInfo;
     // console.log(type);
-    
-    const copyApplicants = (type === "Recruiter"&& props.job.applicants!== undefined) ? [...props.job.applicants] : null;
+    const [applyFor,setApplyFor]=useState(false)
+    const copyApplicants =
+        type === "Recruiter" && props.job.applicants !== undefined
+            ? [...props.job.applicants]
+            : null;
 
     const handleApply = async () => {
-        // console.log("apply");
-        // console.log(props.id);
-        // console.log(state.user.userInfo.token);
-        alert("Applied Successfully!");
-
         try {
             const rawResponse = await fetch(
                 `http://localhost:5000/jobs/applyFor/${props.id}`,
@@ -89,6 +91,11 @@ export default function Job(props) {
                 }
             );
             const data = await rawResponse;
+
+          if(data.status===200){
+              setModalOpen(true)
+              setApplyFor(true)
+          }
             console.log(data);
         } catch (error) {
             console.log(error.message);
@@ -127,7 +134,13 @@ export default function Job(props) {
 
     const handleCustomise = () => {
         // console.log("hello");
-        history.push(`/customiseHiring/${props.id}`);
+      //  history.push(`/customiseHiring/${props.id}`);
+        history.push(`/dashboard/AddExam`);
+    };
+
+    const handleMCQ = () => {
+        // console.log("hello");
+        history.push(`/job/exam/${props.job.id}`);
     };
 
     return (
@@ -138,8 +151,10 @@ export default function Job(props) {
             sx={{ overflow: "auto" }}
         >
             <CssBaseline />
+
+      {modalOpen && <Message setOpenModal={setModalOpen} message='Applied successfully!' />}
             {/* applicants info in case of Recruiter */}
-            {(type === "Recruiter"&& props.job.applicants!== undefined )? (
+            {type === "Recruiter" && props.job.applicants !== undefined ? (
                 <Modal
                     open={show}
                     onClose={close}
@@ -157,17 +172,19 @@ export default function Job(props) {
                         </Typography>
                         <p style={{ color: "white" }}>
                             {" "}
-
-                            {(copyApplicants.length = Math.ceil(props.job.applicants.length/2))}{" "}
-
+                            {
+                                (copyApplicants.length = Math.ceil(
+                                    props.job.applicants.length / 2
+                                ))
+                            }{" "}
                         </p>
                         <div className="row">
                             <div className="col">Name</div>
-                            <div className="col">Score</div>
+                            <div className="col">Result</div>
                         </div>
                         {/* map through the applicants */}
 
-                        {copyApplicants.map((applicant) => (
+                        {copyApplicants.filter(applicant=>applicant.score!==0).map((applicant) => (
                             <>
                                 <div className="row" key={applicant.id}>
                                     <div
@@ -183,7 +200,7 @@ export default function Job(props) {
                                             {applicant.userName}
                                         </a>
                                     </div>
-                                    <div className="col">{applicant.score}</div>
+                                    <div className="col">{applicant.score}%</div>
                                 </div>
                                 <Divider />
                             </>
@@ -209,18 +226,18 @@ export default function Job(props) {
                         </Typography>
                         {/* map through the applicants */}
 
-                        { props.job.applicants!== undefined && props.job.applicants.map(applicant => (
-
-                            <div key={applicant.id}>
-                                <Typography
-                                    id="modal-modal-description"
-                                    sx={{ mt: 2 }}
-                                >
-                                    {applicant.userName}
-                                </Typography>
-                                <Divider />
-                            </div>
-                        ))}
+                        {props.job.applicants !== undefined &&
+                            props.job.applicants.map((applicant) => (
+                                <div key={applicant.id}>
+                                    <Typography
+                                        id="modal-modal-description"
+                                        sx={{ mt: 2 }}
+                                    >
+                                        {applicant.userName}
+                                    </Typography>
+                                    <Divider />
+                                </div>
+                            ))}
                     </Box>
                 </Modal>
             ) : null}
@@ -242,10 +259,11 @@ export default function Job(props) {
                 <Typography color="black">
                     <LocationOnOutlinedIcon />
                     {` ${place} - ${workPlaceType}.`}{" "}
-                    <Typography variant="caption" display="inline" color="gray">
+                    {/* <Typography variant="caption" display="inline" color="gray">
                         {`${period} day ago.`}
-                    </Typography>
-                    {(type === "Recruiter" && props.job.applicants!== undefined) ? (
+                    </Typography> */}
+                    {type === "Recruiter" &&
+                    props.job.applicants !== undefined ? (
                         <Typography
                             variant="caption"
                             display="inline"
@@ -268,14 +286,22 @@ export default function Job(props) {
                 <div>
                     {type === "Applicant" ? (
                         <>
-                            <Button
+                        { (applied ||applyFor)?   <Button
+                                variant="contained"
+                              //  endIcon={<ReplyAllOutlinedIcon />}
+                                sx={{ mt: 3, mb: 2 }}
+                                disabled
+                                //onClick={handleApply}
+                            >
+                                Applied
+                            </Button>: <Button
                                 variant="contained"
                                 endIcon={<ReplyAllOutlinedIcon />}
                                 sx={{ mt: 3, mb: 2 }}
                                 onClick={handleApply}
                             >
                                 Apply
-                            </Button>
+                            </Button>}
                             <Button
                                 variant="outlined"
                                 onClick={() => console.log("hello")}
@@ -283,6 +309,14 @@ export default function Job(props) {
                             >
                                 Save
                             </Button>
+                            {/* <Button
+                                variant="contained"
+                                onClick={handleMCQ}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                                color="secondary"
+                            >
+                                Take MCQ exam
+                            </Button> */}
                         </>
                     ) : (
                         <>
@@ -309,10 +343,9 @@ export default function Job(props) {
                                 onClick={() => console.log("hello")}
                                 sx={{ mt: 3, mb: 2, ml: 1 }}
                                 size="small"
-                                onClick={()=>setOnEdit(true)}
+                                onClick={() => setOnEdit(true)}
                             >
                                 Edit
-                               
                             </Button>
                             <Button
                                 variant="contained"
@@ -347,7 +380,8 @@ export default function Job(props) {
                     Requirments
                 </Typography>
 
-                {(type === "Recruiter" &&  props.job.Requirments!==undefined)&&
+                {type === "Recruiter" &&
+                    props.job.Requirments !== undefined &&
                     props.job.Requirments.map((r, i) => (
                         <Typography
                             key={uuidv4()}
@@ -361,7 +395,8 @@ export default function Job(props) {
                             {r.weight === 4 && `- ${r.name}, Expert`}
                         </Typography>
                     ))}
-                {(type === "Recruiter" &&  props.job.stack!==undefined)&&
+                {type === "Recruiter" &&
+                    props.job.stack !== undefined &&
                     props.job.stack.map((r, i) => (
                         <Typography
                             key={uuidv4()}
@@ -375,7 +410,8 @@ export default function Job(props) {
                             {r.weight === 4 && `- ${r.name}, Expert`}
                         </Typography>
                     ))}
-                {(type === "Applicant" &&   props.job.Requirments!==undefined)&&
+                {type === "Applicant" &&
+                    props.job.Requirments !== undefined &&
                     props.job.Requirments.map((r, i) => (
                         <Typography
                             key={uuidv4()}
@@ -387,7 +423,7 @@ export default function Job(props) {
                         </Typography>
                     ))}
 
-                <Divider />
+              
 
                 {/* <Typography
                     variant="h6"
@@ -426,10 +462,10 @@ export default function Job(props) {
                 </Typography> */}
                 {type === "Recruiter" && (
                     <div>
-                        <Divider />
+                        {/* <Divider />
                         <Typography variant="h6" color="black">
                             Screening results
-                        </Typography>
+                        </Typography> */}
                         {/* <div className="row">
                             <div className="column left">
                                 <Typography variant="h8" color="black">
@@ -454,7 +490,7 @@ export default function Job(props) {
                                 />
                             </div>
                         </div> */}
-                        <Button
+                        {/* <Button
                             variant="contained"
                             onClick={showCandidates}
                             sx={{ mt: 3, mb: 2, ml: 1 }}
@@ -462,7 +498,7 @@ export default function Job(props) {
                             size="small"
                         >
                             Show Candidates
-                        </Button>
+                        </Button> */}
                         {onEdit && (
                             <EditJob setOnEdit={setOnEdit} job={props.job} />
                         )}

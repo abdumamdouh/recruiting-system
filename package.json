@@ -4,7 +4,11 @@
     "compile-run": "^2.3.4",
     "compilex": "^0.7.0",
     "csvtojson": "^2.0.10",
+
+    "file-type": "^10.11.0",
     "multer": "^1.4.4",
+    "nodemon": "^2.0.15",
+    "react-notification-popup": "^0.1.2",
     "uuid": "^8.3.2"
   }
 }

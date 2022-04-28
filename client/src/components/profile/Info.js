@@ -3,13 +3,15 @@ import EditProfile from "./EditProfile";
 import EditQualifications from "./EditQualifications";
 import { useSelector,useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 import { getApplicantProfileAction,getRecruiterProfileAction } from "../../redux/actions/user";
 import './info.scss'
+import Message from "../../components/modal/Message";
 
 const Info = props => {
 
     const dispatch = useDispatch();
-
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         if(userInfo.type==="Applicant")
@@ -29,11 +31,58 @@ const Info = props => {
     const changeRoute = () => {
         history.push(`/createjob`);
     };
-
-
-
+    //for uploading photo
+    const [file, setFile] = useState(null);
+    const [fileName, setFileName] = useState("");
+    const saveFile = e => {
+        setFile(e.target.files[0]);
+        setFileName(e.target.files[0].name);
+    };
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const formData = new FormData();
+    formData.append('avatar', file);
+    formData.append('fileName', fileName);
+    console.log(fileName)
+    console.log(file)
+    console.log(formData)
+    const config={
+        headers: {
+            'content-type': 'multipart/form-data',
+            'Authorization': `Basic ${userInfo.token}` 
+        }
+    }
+    try {
+        const rawResponse = await fetch(
+            'http://localhost:5000/Recruiter/me/avatar',
+            {
+                method: "POST",
+                headers: {
+                   
+                    Authorization: "Bearer " + userInfo.token
+                },
+                body: formData
+            }
+        );
+        //const res = await axios.post("http://localhost:5000/Recruiter/me/avatar", formData,config);
+        console.log(rawResponse.status)
+        if(rawResponse.status == 200)
+        {
+            setModalOpen(true);
+        }
+    } catch (ex) {
+        console.log(ex);
+    }
+       
+    };
     return (
         <>
+         {modalOpen && (
+                <Message
+                    setOpenModal={setModalOpen}
+                    message="image uploaded successfully!"
+                />
+            )}
             <div className="card" style={{ width: "50rem", height: "80%" }}>
                 <div className="card-header">Turing</div>
                 <div className="list-group list-group-flush">
@@ -92,7 +141,7 @@ const Info = props => {
                     </li>
                 )}
 
-                {(userInfo.type === 'Applicant' && qual.length!==0)&&
+                {(userInfo.type === 'Applicant' && userInfo.hasOwnProperty('yearsOfExperience') )&&
                 (
                     <li
                         className="list-group-item"
@@ -104,7 +153,7 @@ const Info = props => {
                            <div class="column"> <h6 className="md">Level</h6> 
                             </div>
                             </div>
-                            {qual.length!==0 &&qual.map(q => (
+                            {!userInfo.qualifications.hasOwnProperty('programmingLanguages') &&userInfo.qualifications.map(q => (
                            <div className= "row">
                            <div class="column">  <span className="card-text" style={{'color': '#33415c'}}> {Object.keys(q)}</span> </div> 
                            <div class="column"> 
@@ -120,17 +169,40 @@ const Info = props => {
                 )}
 
                 {userInfo.company !== undefined && (
-                    <li className="list-group-item" style={{'borderBottom': '0px'}}>
+                    <li className="list-group-item" >
                         {" "}
                         <h4 className="card-title" style={{'color': '#001233'}}>Company</h4>
                         <p className="card-text" style={{'color': '#33415c'}}> {userInfo.company}</p>
                     </li>
                 )}
+                {userInfo.type === "Recruiter" && (
+                            
+                            <li className="list-group-item" >
+                        {" "}
+                        <h4 className="card-title" style={{'color': '#001233'}}>Add Company logo</h4>
+                        <input type="file" name="avatar" onChange={saveFile} />
+                            <button
+                                style={{
+                                    display: "inline-block",
+                                    
+                                    "color": "#023e7d",
+                                    'border': '1px solid'
+                                }}
+                                className="btn inline"
+                                type="submit"
+                                onClick={handleSubmit}
+                            >
+                                Upload
+                            </button>
+                    </li>
+                            
+                            
+                        )}
 
                 {
                     <li
                         className="list-group-item"
-                        style={{ "border-bottom": "0px" }}
+                        style={{ "borderBottom": "0px" }}
                     >
                         <button
                             style={{ marginBottom: "10px", marginTop: "5px", "color": "#023e7d",
@@ -168,6 +240,7 @@ const Info = props => {
                                 Create job post
                             </button>
                         )}
+                        
                     </li>
                 }
                 {onEdit && <EditProfile setOnEdit={setOnEdit} />}

@@ -1,0 +1,16 @@
+.container{
+ margin:0px;
+ padding:0px;
+display:flex;
+}
+
+.others{
+    flex:4;
+    height: calc(100vh - 200px);
+    justify-content:space-between;
+}
+@media (min-width: 1200px) {
+    .container{
+        max-width: 970px;
+    }
+}

@@ -1,21 +1,27 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import classes from "./Feed.module.scss"
-import {NavLink, useHistory} from 'react-router-dom'
+import { useHistory} from 'react-router-dom'
+import {  useSelector } from "react-redux";
 import Button from "@mui/material/Button";
 
 const JobPost = ({job}) => {
     const history = useHistory()
-
+  
     const handleRedirect = ()=>{
         history.push(`/feed/job/${job.id}`);
     }
+    const avatar =job.Recruiter.avatar!==null?job.Recruiter.avatar: null
+    const base64String = job.Recruiter.avatar!==null?btoa(String.fromCharCode(...new Uint8Array(avatar.data))): '';
     //console.log(job)
     return(
         <div className={classes.job} onClick={handleRedirect}>
+     { job.Recruiter.avatar!==null &&
+       
             <img
-            src={'./mentor.png'}
+            src={`data:image/jpeg;base64,${base64String}`}
             alt='logo'
-            className={classes.image}/>
+            className={classes.image}/>}
+    
             <div className={classes.jobInfo}>
                 <div>
                     <span>{job.title}</span>

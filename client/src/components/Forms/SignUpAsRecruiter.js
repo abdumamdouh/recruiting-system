@@ -6,8 +6,6 @@ import { Alert } from '@mui/material';
 import classes from "./common.module.scss";
 
 import { registerRecruiterAction } from "../../redux/actions/user";
-import FileUpload from './FileUpload'
-
 const RegisterAsRecruiter = props => {
     const initialValues = {
         firstName: "",
@@ -186,7 +184,7 @@ const RegisterAsRecruiter = props => {
                     <label className={classes.error}>{errors.position}</label>
                 )}
                 <div style={{margin: '20px'}}>
-                <FileUpload />
+               
                 </div>
                 <button
                     className={classes.SubmitButton}

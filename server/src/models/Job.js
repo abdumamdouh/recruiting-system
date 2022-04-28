@@ -15,7 +15,7 @@ const Job = db.define("Job", {
         allowNull: false
     },
     description: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(5000),
         allowNull: false,
         unique: false
     },
@@ -109,5 +109,67 @@ Job.prototype.addRequirments = async function (requirments) {
         });
     });
 };
+
+applicantScores = async function (job) {
+    // get applicants(Names,IDs) applied for that job
+    const [results, metadata] = await db.query(
+        "SELECT A.userName,A.id FROM ApplyFors AS AF INNER JOIN Applicants AS A ON AF.ApplicantId = A.id WHERE AF.JobId=?",
+        {
+            replacements: [job.id]
+        }
+    );  
+
+
+    // Formula => Requirments[75%] + yearsOfExperience[25%]  
+
+    let maxScore = 0;
+    job.Requirments.forEach((requirement) => {
+        maxScore = maxScore + requirement.weight * 4;
+    });
+    const maxYearsOfExperienceFactor = ( 50 * job.yearsOfExperience  ) / (maxScore / 3);
+    const maxYearsOfExperience = maxScore / 3;
+
+
+    // calculate the score of each applicant and append it to each applicant
+    for (let index = 0; index < results.length; index++) {
+        const a = results[index];
+        let aScore = 0;
+        const applicantA = await Applicant.findOne({
+            where: {
+                id: a.id
+            }
+        });
+
+        for (
+            let index = 0;
+            index < applicantA.qualifications.length;
+            index++
+        ) {
+            const qualification = applicantA.qualifications[index];
+            const requirmentObj = await job.Requirments.find(
+                (req) => {
+                    return req.name == Object.keys(qualification);
+                }
+            );
+
+            if (requirmentObj) {
+                aScore =
+                    aScore +
+                    requirmentObj.weight *
+                        Object.values(qualification)[0];
+            }
+        }
+
+        const applicantYearsOfExperienceScore = ( applicantA.yearsOfExperience * job.yearsOfExperience ) / maxYearsOfExperienceFactor;
+
+        results[index].score = Math.ceil( ( ( aScore + applicantYearsOfExperienceScore ) / ( maxScore + maxYearsOfExperience) ) * 100);
+    }
+
+    // sort the applicants by the score
+    results.sort((a, b) => {
+        return b.score - a.score;
+    });
+    return results;  
+}
 
 module.exports = Job;

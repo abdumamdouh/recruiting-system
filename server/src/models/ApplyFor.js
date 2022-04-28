@@ -1,36 +1,40 @@
-const Sequelize = require('sequelize')
-const validator = require('validator')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const db = require('../db/db')
+const Sequelize = require("sequelize");
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const db = require("../db/db");
 
-const Job = require('./Job')
-const Applicant = require('./Applicant')
+const Job = require("./Job");
+const Applicant = require("./Applicant");
 
-const ApplyFor = db.define('ApplyFor',{
+const ApplyFor = db.define("ApplyFor", {
     JobId: {
         type: Sequelize.INTEGER,
         references: {
-            model: 'Jobs', 
-            key: 'id'
+            model: "Jobs",
+            key: "id"
         },
         primaryKey: true,
-        onDelete: 'cascade'
+        onDelete: "cascade"
     },
     ApplicantId: {
         type: Sequelize.INTEGER,
         references: {
-            model: 'Applicants', 
-            key: 'id'
+            model: "Applicants",
+            key: "id"
         },
         primaryKey: true,
-        onDelete: 'cascade'
+        onDelete: "cascade"
     },
-    status: {
-        type: Sequelize.STRING,
+    assigned: {
+        type: Sequelize.JSON,
         allowNull: false,
-        defaultValue: "pending"
+        defaultValue: JSON.stringify({
+            MCQs: [],
+            tasks: [],
+            codingProblems: []
+        })
     }
 });
 
-module.exports = ApplyFor ;
+module.exports = ApplyFor;

@@ -5,9 +5,13 @@ import storage from "redux-persist/lib/storage";
 import userReducer from "./reducers/user";
 import jobsReducer from "./reducers/jobs";
 import jobReducer from "./reducers/job";
-// import productsReducer from "./reducers/products";
-// import sidebarReducer from "./reducers/sideBar";
-
+import examReducer from './reducers/exam'
+import choosenExamReducer from './reducers/exam'
+import uploadedExamReducer from "./reducers/uploadedExams";
+import assignedExamReducer from "./reducers/assignedExams";
+import bankReducer from "./reducers/bank";
+import taskReducer from "./reducers/task";
+import taskSubmissionReducer from "./reducers/taskSubmission"; 
 const persistConfig = {
   key: "root",
   storage,
@@ -18,6 +22,13 @@ const rootReducer = combineReducers({
   user: userReducer,
   jobs: jobsReducer,
   job: jobReducer,
+  exam:examReducer,
+  choosenExam:choosenExamReducer,
+  uploadedExams: uploadedExamReducer,
+  assignedEXam: assignedExamReducer,
+  bank:bankReducer,
+  tasks: taskReducer,
+  taskSubmissions: taskSubmissionReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

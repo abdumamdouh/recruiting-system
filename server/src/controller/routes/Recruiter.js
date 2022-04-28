@@ -1,7 +1,7 @@
 const express = require('express')
+const multer = require('multer')
 const Applicant = require('../../models/Applicant')
 const Recruiter = require('../../models/Recruiter')
-
 const recruiterAuth = require('../middleware/recruiterAuth') 
 
 
@@ -37,5 +37,41 @@ router.post('/Recruiter/me' , recruiterAuth, async (req,res) => {
 router.patch('/Recruiter/me/update' , recruiterAuth, async (req,res) => {
     res.status(200).send(await req.recruiter.updatePublicRecruiterData( req.body ))
 })
+
+
+const upload = multer({
+    limits: {
+        fileSize: 1000000
+    }, 
+    fileFilter(req, file, cb) {
+        if( !file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Please upload a Image file'))
+        }
+        cb(undefined, true)
+
+    }
+})
+
+// Update recruiter's avatar
+router.post('/Recruiter/me/avatar', recruiterAuth, upload.single('avatar'), async (req, res) => {
+    await req.recruiter.saveAvatar(req.file.buffer)
+    console.log(req.file.buffer)
+    res.send('Updated successfully')
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message })
+})
+
+// Get recruiter's avatar
+router.get('/Recruiter/me/avatar', recruiterAuth, async (req, res) => {
+    res.send(req.recruiter.avatar)
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message })
+})
+
+
+
+
+
+
 
 module.exports = router
