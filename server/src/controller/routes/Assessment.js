@@ -71,6 +71,7 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                     include: [
                         {
                             model: Job,
+                            where: { id: job.JobId },
                             attributes: ["id"],
                             through: { attributes: ["deadline"] }
                         }
