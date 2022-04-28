@@ -182,6 +182,8 @@ router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
         
         // testing code correctness 
         const [results, metadata] = await db.query(`SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.body.codingProblemId}`);
+        const [specs, Metadata] = await db.query(`SELECT timeConstraint,memoryConstraint FROM codingproblembanks WHERE id=${req.body.codingProblemId}`);
+            console.log(specs)
         //to store the result of each test case
         let finalResult={};
         const index ={
@@ -196,7 +198,7 @@ router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
                 res.send(finalResult)
             }
             const numOfTests=results.length
-            const correct = await testCode(req.body.code,req.body.language,5,testCase.inputs,testCase.outputs,index,numOfTests,finalResult,cb)
+            const correct = await testCode(req.body.code,req.body.language,5,testCase.inputs,testCase.outputs,index,numOfTests,finalResult,cb,specs)
             
             // console.log(correct)
         })
