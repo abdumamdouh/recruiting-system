@@ -70,10 +70,6 @@ const CandidatesPage = () => {
         setModalOpen(true);
     };
     const handleAllApplicants = () => {
-        console.log(job.applicants);
-        console.log("selection", selectionModel);
-        console.log("jobID", jobId);
-        console.log("filter", filteredApplicants);
         dispatch(
             assignExamAction(jobId, id, selectionModel, showSuccessMessage)
         );
