@@ -37,12 +37,12 @@ const injectBeforeReturnStatment = function(code,start,end) {
 }
 
 const inject = function (code , language) {
-    code = '#include <time.h>\n' + code.slice(0)
+    code = '#include <time.h>\n#include <windows.h>\n#include <Psapi.h>\n' + code.slice(0)
     const t1 = '\ndouble __measuringExecutionTimeAM1 = clock();\n'
     const t2 = '\ndouble __measuringExecutionTimeAM2 ;\n'
     const secondClk = '__measuringExecutionTimeAM2 = clock() ;\n'
-    const printStmt = `cout<<" "<<(double(__measuringExecutionTimeAM2-__measuringExecutionTimeAM1)/CLOCKS_PER_SEC)<<" "<<endl;`
-
+    const printStmt = `cout<<" "<<(double(__measuringExecutionTimeAM2-__measuringExecutionTimeAM1)/CLOCKS_PER_SEC);`
+    const PMC = `PROCESS_MEMORY_COUNTERS_EX pmc;\n      GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc)); \n    SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;\n    cout << virtualMemUsedByMe<<\" \";\n`;
     if (language == 'cpp'){
         const mainStart = code.search('main')
         // stack to get the last '}'
@@ -54,7 +54,7 @@ const inject = function (code , language) {
             if (code[i] === '{'){
                 st.push(code[i]);
                 start = i+1 ;
-                code = code.slice(0,i+1) + t1 + t2 + code.slice(i+1)
+                code = code.slice(0,i+1) +PMC+ t1 + t2 + code.slice(i+1)
                 break ;
             }
         }
@@ -88,7 +88,7 @@ const writeCodeToFile = function (code,jobId,applicantId,codingProblemId,languag
     })
 }
 
-const testCode = async function (code,langauge,timeOut,inputs,outputs,index,numOfTests,finalResult,cb){
+const testCode = async function (code,langauge,timeOut,inputs,outputs,index,numOfTests,finalResult,cb,specs){
     let result ;
     let stringInput = '' ;
     inputs = JSON.parse(inputs)
@@ -112,11 +112,45 @@ const testCode = async function (code,langauge,timeOut,inputs,outputs,index,numO
             var envData = { OS : "windows" , cmd : "g++" ,options:{timeout:timeOut}};
             compiler.compileCPPWithInput(envData , code , stringInput , function (data) {
                 index.advance() ;   //index++
-                // console.log(data)
-                // console.log(data)
-                if (data.output === outputs){
+                //console.log(data)
+
+                const values=data.output.split(" ");
+                
+                const valuesObj={
+                    memory:values[0],
+                    output:values.slice(1,values.length-1).join(" "),
+                    time:values[values.length-1]
+                }
+
+                
+                console.log(valuesObj);
+
+
+                if (valuesObj.output=== outputs){
                     //storing outputs of testcases in finalResult object which is passed from the route
-                    finalResult[`testCase${index.value}`]="PASSED" 
+                    finalResult[`testCase${index.value}`]={result:"PASSED"} 
+
+                    if(Number(valuesObj.memory/1e6)<specs[0].memoryConstraint)
+                    {
+                        finalResult[`testCase${index.value}`]={...finalResult[`testCase${index.value}`],
+                        memoryConsumption:`${Number(valuesObj.memory)} PASSED`} 
+                    }
+                    else{
+                        finalResult[`testCase${index.value}`]={...finalResult[`testCase${index.value}`],
+                        memoryConsumption:`${Number(valuesObj.memory)} FAIL`} 
+                    }
+
+                    if(Number(valuesObj.time)<specs[0].timeConstraint)
+                    {
+                        finalResult[`testCase${index.value}`]={...finalResult[`testCase${index.value}`],
+                        timeConsumption:`${Number(valuesObj.time)} PASSED`} 
+                    }
+                    else{
+                        finalResult[`testCase${index.value}`]={...finalResult[`testCase${index.value}`],
+                        timeConsumption:`${Number(valuesObj.time)} FAIL`} 
+                    }
+
+
                 } else {
                     finalResult[`testCase${index.value}`]="FAILED"
                 }   
