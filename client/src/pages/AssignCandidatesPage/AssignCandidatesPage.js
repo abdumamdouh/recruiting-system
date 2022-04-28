@@ -48,6 +48,9 @@ const CandidatesPage = () => {
             }
         );
         const data = await rawResponse;
+        if(data.status ===200){
+            showSuccessMessage()
+        }
     }
     const rows = [...filteredApplicants];
     const columns = [
