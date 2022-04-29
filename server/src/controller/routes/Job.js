@@ -416,29 +416,35 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         // Candidates = 50%
 
         
-        const mcqs = await JobMCQ.findAndCountAll({
-            include: {
-                model: MCQ,
-                attributes: ["title"],
-            },
-            attributes: ["MCQId"],
-            where: {
-                jobId: jobId
+        // const mcqs = await JobMCQ.findAndCountAll({
+        //     include: {
+        //         model: MCQ,
+        //         attributes: ["title"],
+        //     },
+        //     attributes: ["MCQId"],
+        //     where: {
+        //         jobId: jobId
+        //     }
+        // });
+
+        // const mcqResults = await MCQStat.findAll({
+        //     attributes: ["applicantId","MCQId", "score"],
+        //     where: {
+        //         jobId: jobId
+        //     }
+
+        // }) 
+
+        const mcqResults = await db.query(
+            "SELECT A.userName, M.title, MS.score  FROM mcqstats AS MS INNER JOIN Applicants AS A ON MS.ApplicantId = A.id INNER JOIN mcqs AS M ON MS.MCQId = M.id WHERE MS.JobId=?;",
+            {
+                replacements: [jobId],
+                type: db.QueryTypes.SELECT
             }
-        });
+        );
 
-        const mcqResults = await MCQStat.findAll({
-            attributes: ["applicantId","MCQId", "score"],
-            where: {
-                jobId: jobId
-            }
-
-        }) 
-
-
-
-        const average_MCQS_score = await db.query( "SELECT MCQId, AVG(score) AS average_MCQ_score FROM `gp-db`.mcqstats GROUP BY MCQId;" );
-
+        const average_MCQS_score = await db.query( "SELECT MCQId, AVG(score) AS average_MCQ_score FROM mcqstats GROUP BY MCQId;", {type: db.QueryTypes.SELECT});
+        console.log(average_MCQS_score)
         // const tasks = await TaskUploads.findAndCountAll({
         //     include: {
         //         model: Task,
@@ -464,8 +470,8 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             taskResults: taskResults,
             applicantsAppliedCount: applicantsApplied,
             avgMCQsScore: average_MCQS_score,
-            MCQs: mcqs.rows,
-            MCQSCount: mcqs.count,
+            // MCQs: mcqs.rows,
+            // MCQSCount: mcqs.count,
             // tasks: tasks.rows,
             // tasksCount: tasks.count
         });
