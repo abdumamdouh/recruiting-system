@@ -1,10 +1,12 @@
 import "./AssignedTaskPage.scss";
+import React from "react";
 import Box from "@mui/material/Box";
 import { Typography } from "@material-ui/core";
-import { Button } from "@mui/material";
+import { Button, Snackbar, Modal } from "@mui/material";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "@emotion/styled";
 import moment from "moment";
+import MuiAlert from "@mui/material/Alert";
 
 //Hooks
 import { useEffect, useState } from "react";
@@ -22,14 +24,17 @@ export default function Task() {
 
     // const [uploadFormat, setUploadFormat] = useState("");
 
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
     const [modalOpen, setModalOpen] = useState(false);
     //file
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
     const [task, setTask] = useState();
-
-    const jobId = useSelector(state => state.job.id);
-    const { userInfo } = useSelector(state => state.user);
+    const [open, setOpen] = useState(false);
+    const jobId = useSelector((state) => state.job.id);
+    const { userInfo } = useSelector((state) => state.user);
 
     useEffect(() => {
         const fetchTask = async () => {
@@ -51,7 +56,7 @@ export default function Task() {
                 console.log(data);
                 setTask(data);
                 //TODO: condition for success
-                // showSuccessMessage();
+                // showModal();
             } catch (error) {
                 console.error("Error:", error);
                 handleOnError(error);
@@ -60,13 +65,25 @@ export default function Task() {
         fetchTask();
     }, []);
 
-    const handleOnError = err => {
+    const handleOnError = (err) => {
         console.log(err);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        setOpen(false);
     };
 
     const handleClick = async () => {
         console.log(jobId);
-
+        setModalOpen(false);
+        if (!isFilePicked) {
+            setOpen(true);
+            return;
+        }
         const formData = new FormData();
         formData.append("task", selectedFile);
         console.log(formData);
@@ -97,10 +114,11 @@ export default function Task() {
             const data = await response;
 
             if (data.status === 201) {
-                showSuccessMessage();
-                setTimeout(() => {
-                    history.push("/");
-                }, 3000);
+                localStorage.setItem(
+                    "message",
+                    "The task is submitted successfully."
+                );
+                history.push("/");
             }
         } catch (error) {
             console.error("Error:", error);
@@ -108,18 +126,19 @@ export default function Task() {
         }
     };
 
-    const showSuccessMessage = () => {
+    const showModal = () => {
         setModalOpen(true);
     };
 
+    const handleCloseModal = () => setModalOpen(false);
     //upload file
 
-    const changeHandler = event => {
+    const changeHandler = (event) => {
         setSelectedFile(event.target.files[0]);
         setIsFilePicked(true);
         console.log(event.target.files[0]);
     };
-    const download = event => {
+    const download = (event) => {
         const a = event.target;
         const array = new Uint8Array(task.data.additionalFile.data);
         const blob = new Blob([array], { type: task.data.type.mime });
@@ -142,6 +161,22 @@ export default function Task() {
                 width: "100%"
             }}
         >
+            {!isFilePicked && (
+                <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={handleClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity="error"
+                        sx={{ width: "100%" }}
+                    >
+                        No File is uploaded!
+                    </Alert>
+                </Snackbar>
+            )}
             <div
                 style={{
                     width: "60%",
@@ -152,10 +187,77 @@ export default function Task() {
                 {/* {JSON.stringify(task)} */}
                 <div className="container">
                     {modalOpen && (
-                        <Message
-                            setOpenModal={setModalOpen}
-                            message="uploaded successfully!"
-                        />
+                        <Modal
+                            open={modalOpen}
+                            onClose={handleCloseModal}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box
+                                sx={{
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                    width: 400,
+                                    bgcolor: "background.paper",
+                                    border: "2px solid #000",
+                                    boxShadow: 24,
+                                    p: 4
+                                }}
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column"
+                                }}
+                            >
+                                <Typography
+                                    id="modal-modal-title"
+                                    variant="h6"
+                                    component="h2"
+                                    style={{
+                                        color: "black",
+                                        fontWeight: 600,
+                                        fontSize: "1.75rem"
+                                    }}
+                                >
+                                    Are you sure you want to submit?
+                                </Typography>
+
+                                <Typography
+                                    id="modal-modal-description"
+                                    sx={{ mt: 2 }}
+                                    style={{ textAlign: "center" }}
+                                >
+                                    (No turning back after clicking Submit)
+                                </Typography>
+
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "center"
+                                    }}
+                                >
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleClick}
+                                        style={{
+                                            marginTop: "15px",
+                                            marginRight: "15px"
+                                        }}
+                                    >
+                                        Submit
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={handleCloseModal}
+                                        style={{ marginTop: "15px" }}
+                                    >
+                                        Exit
+                                    </Button>
+                                </div>
+                            </Box>
+                        </Modal>
                     )}
                 </div>
 
@@ -266,7 +368,7 @@ export default function Task() {
                     <Button
                         // sx={{ width: 135 }}
                         variant="contained"
-                        onClick={handleClick}
+                        onClick={showModal}
                     >
                         Submit
                     </Button>
