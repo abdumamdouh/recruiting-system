@@ -54,6 +54,9 @@ const AssignApplicantsPage = () => {
             }
         );
         const data = await rawResponse;
+        if(data.status ===200){
+            showSuccessMessage()
+        }
     }
     return (
         <div style={{ height: 400, width: '100%' }}>

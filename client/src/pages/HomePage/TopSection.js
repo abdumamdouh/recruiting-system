@@ -1,9 +1,10 @@
 import React from "react";
 import { Element, scroller } from "react-scroll";
-
+import MuiAlert from "@mui/material/Alert";
+import { Snackbar } from "@mui/material";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-
+import { useState, useEffect } from "react";
 import BackgroundImg from "../../assets/images/company_team.jpg";
 import { Logo } from "../../components/Logo/Logo";
 import { Marginer } from "../../components/Marginer/Marginer";
@@ -43,7 +44,22 @@ const DownArrowContainer = styled.div`
 
 export function TopSection(props) {
     const history = useHistory();
-
+    useEffect(() => {
+        if (localStorage.getItem("message")) {
+            setOpen(true);
+        }
+    }, []);
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+    const [open, setOpen] = useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpen(false);
+        localStorage.removeItem("message");
+    };
     const handleApplicant = () => {
         history.push("/signup-applicant");
     };
@@ -57,28 +73,45 @@ export function TopSection(props) {
     };
 
     return (
-        <Element name="topSection">
-            <TopContainer>
-                <BackgroundFilter>
-                    <Marginer direction="vertical" margin="3em" />
-                    <Logo />
-                    <Marginer direction="vertical" margin="1em" />
-                    <MotivitionalText>
-                        To make the hiring process easier and more organized
-                    </MotivitionalText>
-                    <Marginer direction="vertical" margin="2em" />
-                    <Button onClick={handleApplicant}>
-                        Apply as Applicant
-                    </Button>
-                    <Marginer direction="vertical" margin="1em" />
-                    <Button onClick={handleRecruiter}>
-                        Apply as Recruiter
-                    </Button>
-                    <DownArrowContainer onClick={scrollToNextSection}>
-                        <DownArrow />
-                    </DownArrowContainer>
-                </BackgroundFilter>
-            </TopContainer>
-        </Element>
+        <>
+            <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+                <Alert
+                    onClose={handleClose}
+                    severity="success"
+                    sx={{ width: "100%" }}
+                >
+                    {localStorage.getItem("message")}
+                </Alert>
+            </Snackbar>
+
+            <Element name="topSection">
+                <TopContainer>
+                    <BackgroundFilter>
+                        <Marginer direction="vertical" margin="3em" />
+                        <Logo />
+                        <Marginer direction="vertical" margin="1em" />
+                        <MotivitionalText>
+                            To make the hiring process easier and more organized
+                        </MotivitionalText>
+                        <Marginer direction="vertical" margin="2em" />
+                        <Button onClick={handleApplicant}>
+                            Apply as Applicant
+                        </Button>
+                        <Marginer direction="vertical" margin="1em" />
+                        <Button onClick={handleRecruiter}>
+                            Apply as Recruiter
+                        </Button>
+                        <DownArrowContainer onClick={scrollToNextSection}>
+                            <DownArrow />
+                        </DownArrowContainer>
+                    </BackgroundFilter>
+                </TopContainer>
+            </Element>
+        </>
     );
 }

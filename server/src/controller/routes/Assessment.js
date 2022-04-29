@@ -45,7 +45,19 @@ router.get("/assessments", applicantAuth, async (req, res) => {
         // console.log(jobs);
         const assessments = await Promise.all(
             jobs.map(async (job) => {
-                let everyMCQ = await MCQ.findAll({
+                let jobData = await Job.findByPk(job.JobId, {
+                    model: Job,
+                    attributes: ["id", "title", "description"],
+                    include: [
+                        {
+                            model: Recruiter,
+                            attributes: ["company", "avatar"]
+                        }
+                    ]
+                });
+                jobData = JSON.parse(JSON.stringify(jobData));
+                // console.log(jobData);
+                /* let everyMCQ = await MCQ.findAll({
                     where: { id: job.assigned.MCQs },
                     attributes: ["id", "title"],
                     include: [
@@ -59,6 +71,18 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                                     attributes: ["company", "avatar"]
                                 }
                             ],
+                            through: { attributes: ["duration", "expiryDate"] }
+                        }
+                    ]
+                }); */
+                let everyMCQ = await MCQ.findAll({
+                    where: { id: job.assigned.MCQs },
+                    attributes: ["id", "title"],
+                    include: [
+                        {
+                            model: Job,
+                            where: { id: job.JobId },
+                            attributes: ["id"],
                             through: { attributes: ["duration", "expiryDate"] }
                         }
                     ]
@@ -80,11 +104,11 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                 everyTask = JSON.parse(JSON.stringify(everyTask));
                 // console.log(everyTask[0].Jobs);
                 const jobAssessments = {
-                    jobId: everyMCQ[0].Jobs[0].id,
-                    jobTitle: everyMCQ[0].Jobs[0].title,
-                    description: everyMCQ[0].Jobs[0].description,
-                    company: everyMCQ[0].Jobs[0].Recruiter.company,
-                    avatar: everyMCQ[0].Jobs[0].Recruiter.avatar,
+                    jobId: jobData.id,
+                    jobTitle: jobData.title,
+                    description: jobData.description,
+                    company: jobData.Recruiter.company,
+                    avatar: jobData.Recruiter.avatar,
                     ...(everyMCQ.length && {
                         MCQ: everyMCQ.map(({ id, title, Jobs }) => ({
                             MCQId: id,

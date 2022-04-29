@@ -15,6 +15,7 @@ const Job = require("../../models/Job");
 const ApplyFor = require("../../models/ApplyFor");
 
 const { response } = require("express");
+const Applicant = require("../../models/Applicant");
 
 const router = new express.Router();
 
@@ -84,12 +85,13 @@ router.post(
                 },
                 raw: true
             });
+            // console.log(assigned)
             if (!assigned) {
                 throw new Error("You did not apply for this job");
             }
             assignedObj = JSON.parse(assigned.assigned);
-            // console.log(assignedObj.tasks,req.params.TaskId)
 
+            //\"2\"
             if (!assignedObj.tasks.includes(req.params.TaskId)) {
                 throw new Error("You are not assigned this task.");
             }
@@ -99,6 +101,23 @@ router.post(
                 uploadedTask: req.file.buffer,
                 ApplicantId: req.applicant.id
             });
+
+            // removing the task id from the assigned tasks after submission
+            const deletedIndex = assignedObj.tasks.indexOf(
+                req.params.TaskId.toString()
+            );
+            assignedObj.tasks.splice(deletedIndex, 1);
+            await ApplyFor.update(
+                {
+                    assigned: JSON.stringify(assignedObj)
+                },
+                {
+                    where: {
+                        JobId: req.params.JobId,
+                        ApplicantId: req.applicant.id
+                    }
+                }
+            );
             res.status(201).send("Task uploaded successfully.");
         } catch (error) {
             // console.log(error);
@@ -106,6 +125,7 @@ router.post(
         }
     }
 );
+
 // returned JSON:
 // 1-) "You did not apply for this job"
 // 2-) "You are not assigned this task."
@@ -115,42 +135,50 @@ router.post(
 
 // recruiter can see all of a certain task details
 // Accepted JSON: None
-router.get(
-    "*/:JobId/:TaskId/taskDetails",
-    recruiterAuth,
-    async (req, res) => {
-        try {
-            // checking if you're the one who posted this job or not
-            const result = await Job.findOne({
-                attributes: ["RecruiterId"],
-                where: {
-                    id: req.params.JobId
-                },
-                raw: true
-            });
-            if (req.recruiter.id !== result.RecruiterId) {
-                throw new Error("You are not authorized to view this job");
-            }
-            // getting all tasks uploaded by the applicants
-            const solutions = await TaskUploads.findAll({
-                attributes: ["ApplicantId", "uploadedTask", "createdAt","score","feedback"],
-                where: {
-                    JobId: req.params.JobId,
-                    TaskId: req.params.TaskId
-                }
-            });
-            for(let i = 0 ; i <solutions.length ; i++){
-                if (Buffer.byteLength(solutions[i].uploadedTask)) {
-                    const buffer = solutions[i].uploadedTask ;
-                    solutions[i].dataValues.type = fileType(buffer); 
-                }
-            }
-            res.send(solutions);
-        } catch (error) {
-            res.status(400).send(error.message);
+router.get("*/:JobId/:TaskId/taskDetails", recruiterAuth, async (req, res) => {
+    try {
+        // checking if you're the one who posted this job or not
+        const result = await Job.findOne({
+            attributes: ["RecruiterId"],
+            where: {
+                id: req.params.JobId
+            },
+            raw: true
+        });
+        if (req.recruiter.id !== result.RecruiterId) {
+            throw new Error("You are not authorized to view this job");
         }
+        // getting all tasks uploaded by the applicants
+        const solutions = await TaskUploads.findAll({
+            attributes: [
+                "ApplicantId",
+                "uploadedTask",
+                "createdAt",
+                "score",
+                "feedback"
+            ],
+            where: {
+                JobId: req.params.JobId,
+                TaskId: req.params.TaskId
+            }
+        });
+        for (let i = 0; i < solutions.length; i++) {
+            if (Buffer.byteLength(solutions[i].uploadedTask)) {
+                const buffer = solutions[i].uploadedTask;
+                solutions[i].dataValues.type = fileType(buffer);
+            }
+            solutions[i].dataValues.applicantName = await Applicant.findOne({
+                attributes: ["firstName", "lastName"],
+                where: {
+                    id: solutions[i].ApplicantId
+                }
+            });
+        }
+        res.send(solutions);
+    } catch (error) {
+        res.status(400).send(error.message);
     }
-);
+});
 // retruned JSON:
 // [
 //     {
@@ -165,26 +193,18 @@ router.get(
 //         "type": {
 //             "ext": "pdf",
 //             "mime": "application/pdf"
-//         }
-//     },{
-//         "ApplicantId": 1,
-//         "uploadedTask": {
-//             "type": "Buffer",
-//             "data": []
 //         },
-//         "createdAt": "2022-04-28T14:18:17.000Z",
-//         "score": null,
-//         "feedback": null,
-//         "type": {
-//             "ext": "pdf",
-//             "mime": "application/pdf"
-//         }
+//           "applicantName": {
+//                      "firstName": "Marwan",
+//                      "lastName": "Emad"
+//                    }
 //     }
 // ]
 
 // ************************************************************************************************
 // recruiter can give score and feedback to a certain task upload
-// Accepted JSON: {   "JobId":1,
+// Accepted JSON: {
+//     "JobId":1,
 //     "TaskId":1,
 //     "Marks":[
 //         {
