@@ -407,9 +407,9 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
 
 
         const jobId = req.params.id;
-        const applicantsApplied = ApplyFor.count({
+        const applicantsApplied = await ApplyFor.count({
             where: {
-                jobId: jobId
+                JobId: jobId
             }
         })
 
@@ -435,7 +435,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
 
         // }) 
 
-        const mcqResults = await db.query(
+        const mcqsStats = await db.query(
             "SELECT A.userName, M.title, MS.score  FROM mcqstats AS MS INNER JOIN Applicants AS A ON MS.ApplicantId = A.id INNER JOIN mcqs AS M ON MS.MCQId = M.id WHERE MS.JobId=?;",
             {
                 replacements: [jobId],
@@ -443,7 +443,23 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             }
         );
 
-        const average_MCQS_score = await db.query( "SELECT MCQId, AVG(score) AS average_MCQ_score FROM mcqstats GROUP BY MCQId;", {type: db.QueryTypes.SELECT});
+        mcqsResults = mcqsStats.map( (mcq) => {
+            obj = {}
+            obj[mcq.title] = { 
+                applicantName : mcq.userName,
+                score : mcq.score
+            }  
+            return obj
+        })
+        
+
+        const average_MCQS_score = await db.query(
+            "SELECT MCQId, AVG(score) AS average_MCQ_score FROM mcqstats GROUP BY MCQId;", 
+            {
+                type: db.QueryTypes.SELECT
+            }
+        );
+
         console.log(average_MCQS_score)
         // const tasks = await TaskUploads.findAndCountAll({
         //     include: {
@@ -456,20 +472,43 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         //         jobId: jobId,
         //     }
         // });
-        const taskResults = await TaskUploads.findAll({
-            attributes: ["ApplicantId","TaskId", "score"],
-            where: {
-                jobId: jobId
+
+        // const taskResults = await TaskUploads.findAll({
+        //     attributes: ["ApplicantId","TaskId", "score"],
+        //     where: {
+        //         jobId: jobId
+        //     }
+        // }) 
+        const taskStats = await db.query(
+            "SELECT A.userName, T.title, TA.score  FROM `gp-db`.taskuploads AS TA INNER JOIN `gp-db`.Applicants AS A ON TA.ApplicantId = A.id INNER JOIN `gp-db`.tasks AS T ON TA.taskId = T.id WHERE TA.JobId=?;",
+            {
+                replacements: [jobId],
+                type: db.QueryTypes.SELECT
             }
-        }) 
+        );
         
-        const average_Tasks_score = await db.query( "SELECT TaskId, AVG(score) AS average_Task_score FROM `gp-db`.taskuploads GROUP BY TaskId;" );
+        tasksResults = taskStats.map( (task) => {
+            obj = {}
+            obj[task.title] = { 
+                applicantName : task.userName,
+                score : task.score
+            }  
+            return obj
+        })
+
+        const average_Tasks_score = await db.query( "SELECT TaskId, AVG(score) AS average_Task_score FROM `gp-db`.taskuploads GROUP BY TaskId;" ,
+            {
+                type: db.QueryTypes.SELECT
+            }
+            
+        );
 
         res.send({
-            mcqResults: mcqResults,
-            taskResults: taskResults,
+            mcqsResults : mcqsResults,
+            tasksResults: tasksResults,
             applicantsAppliedCount: applicantsApplied,
             avgMCQsScore: average_MCQS_score,
+            avgTasksScore: average_Tasks_score
             // MCQs: mcqs.rows,
             // MCQSCount: mcqs.count,
             // tasks: tasks.rows,
