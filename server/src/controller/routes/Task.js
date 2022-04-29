@@ -243,7 +243,7 @@ router.post("/setTaskMark", recruiterAuth, async (req, res) => {
                 }
             );
         });
-        res.send(req.body);
+        res.send();
     } catch (error) {
         res.send(error.message);
     }
