@@ -78,10 +78,10 @@ const UpdatesPage = (props) => {
         setModalData(obj);
         handleOpen();
     };
-    const handleTask = (TaskID)=>{
+    const handleTask = (TaskID) => {
         console.log(TaskID);
-        history.push(`/job/task/${TaskID}`)
-    }
+        history.push(`/job/task/${TaskID}`);
+    };
     return (
         <div className="c">
             {!userInfo.hasOwnProperty("hasAssessments") ? (
@@ -129,8 +129,12 @@ const UpdatesPage = (props) => {
                                             <p>{update.description}</p>
                                             <p>
                                                 <strong>
-                                                    {update.MCQ.length +
-                                                        update.task.length >
+                                                    {(update.MCQ
+                                                        ? update.MCQ.length
+                                                        : 0) +
+                                                        (update.task
+                                                            ? update.task.length
+                                                            : 0) >
                                                     1
                                                         ? "Assessments"
                                                         : "Assessment"}
@@ -139,116 +143,121 @@ const UpdatesPage = (props) => {
                                             </p>
                                             <ul class="nav">
                                                 <div className="assessment">
-                                                    {update.MCQ.map((obj) => (
-                                                        <>
-                                                            <div>
-                                                                <OverlayTrigger
-                                                                    key={
-                                                                        obj.title
-                                                                    }
-                                                                    placement="auto-start"
-                                                                    delay={{
-                                                                        show: 250,
-                                                                        hide: 400
-                                                                    }}
-                                                                    overlay={
-                                                                        <Popover
-                                                                            id={
+                                                    {update.MCQ &&
+                                                        update.MCQ.map(
+                                                            (obj) => (
+                                                                <>
+                                                                    <div>
+                                                                        <OverlayTrigger
+                                                                            key={
                                                                                 obj.title
                                                                             }
-                                                                        >
-                                                                            <Popover.Header as="h3">
-                                                                                MCQ
-                                                                            </Popover.Header>
-                                                                            <Popover.Body>
-                                                                                <strong>
-                                                                                    Expiry
-                                                                                    Date:
-                                                                                </strong>{" "}
-                                                                                {moment
-                                                                                    .parseZone(
-                                                                                        obj.expiryDate
-                                                                                    )
-                                                                                    .utc(
-                                                                                        "-02:00"
-                                                                                    )
-                                                                                    .format(
-                                                                                        "DD-MM-YYYY [at] hh:mm a"
-                                                                                    )}
-                                                                                <br></br>
-                                                                                <strong>
-                                                                                    Duration:
-                                                                                </strong>{" "}
-                                                                                {
-                                                                                    obj.duration
-                                                                                }{" "}
-                                                                                minutes
-                                                                                <br></br>
-                                                                            </Popover.Body>
-                                                                        </Popover>
-                                                                    }
-                                                                >
-                                                                    <li
-                                                                        key={
-                                                                            obj.title
-                                                                        }
-                                                                        class="nav-item"
-                                                                    >
-                                                                        {/*redirect*/}
-                                                                        <span
-                                                                            onClick={() =>
-                                                                                handleMCQ(
-                                                                                    obj
-                                                                                )
+                                                                            placement="auto-start"
+                                                                            delay={{
+                                                                                show: 250,
+                                                                                hide: 400
+                                                                            }}
+                                                                            overlay={
+                                                                                <Popover
+                                                                                    id={
+                                                                                        obj.title
+                                                                                    }
+                                                                                >
+                                                                                    <Popover.Header as="h3">
+                                                                                        MCQ
+                                                                                    </Popover.Header>
+                                                                                    <Popover.Body>
+                                                                                        <strong>
+                                                                                            Expiry
+                                                                                            Date:
+                                                                                        </strong>{" "}
+                                                                                        {moment
+                                                                                            .parseZone(
+                                                                                                obj.expiryDate
+                                                                                            )
+                                                                                            .utc(
+                                                                                                "-02:00"
+                                                                                            )
+                                                                                            .format(
+                                                                                                "DD-MM-YYYY [at] hh:mm a"
+                                                                                            )}
+                                                                                        <br></br>
+                                                                                        <strong>
+                                                                                            Duration:
+                                                                                        </strong>{" "}
+                                                                                        {
+                                                                                            obj.duration
+                                                                                        }{" "}
+                                                                                        minutes
+                                                                                        <br></br>
+                                                                                    </Popover.Body>
+                                                                                </Popover>
                                                                             }
-                                                                            className="redirect"
                                                                         >
-                                                                            {
+                                                                            <li
+                                                                                key={
+                                                                                    obj.title
+                                                                                }
+                                                                                class="nav-item"
+                                                                            >
+                                                                                {/*redirect*/}
+                                                                                <span
+                                                                                    onClick={() =>
+                                                                                        handleMCQ(
+                                                                                            obj
+                                                                                        )
+                                                                                    }
+                                                                                    className="redirect"
+                                                                                >
+                                                                                    {
+                                                                                        obj.title
+                                                                                    }
+                                                                                </span>
+                                                                            </li>
+                                                                        </OverlayTrigger>
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        )}
+                                                    {update.task &&
+                                                        update.task.map(
+                                                            (obj) => (
+                                                                <>
+                                                                    <div>
+                                                                        <OverlayTrigger
+                                                                            key={
                                                                                 obj.title
                                                                             }
-                                                                        </span>
-                                                                    </li>
-                                                                </OverlayTrigger>
-                                                            </div>
-                                                        </>
-                                                    ))}
-                                                    {update.task.map((obj) => (
-                                                        <>
-                                                            <div>
-                                                                <OverlayTrigger
-                                                                    key={
-                                                                        obj.title
-                                                                    }
-                                                                    placement="auto-start"
-                                                                    delay={{
-                                                                        show: 250,
-                                                                        hide: 400
-                                                                    }}
-                                                                    overlay={
-                                                                        <Popover
-                                                                            id={
-                                                                                obj.title
-                                                                            }
-                                                                        >
-                                                                            <Popover.Header as="h3">
-                                                                                Task
-                                                                            </Popover.Header>
-                                                                            <Popover.Body>
-                                                                                <strong>
-                                                                                    Deadline:
-                                                                                </strong>{" "}
-                                                                                {moment
-                                                                                    .parseZone(
-                                                                                        obj.deadline
-                                                                                    )
-                                                                                    .utc(
-                                                                                        "-02:00"
-                                                                                    )
-                                                                                    .format(
-                                                                                        "DD-MM-YYYY [at] hh:mm a"
-                                                                                    )}
-                                                                                <br></br>
-                                                                                {/* <strong>
+                                                                            placement="auto-start"
+                                                                            delay={{
+                                                                                show: 250,
+                                                                                hide: 400
+                                                                            }}
+                                                                            overlay={
+                                                                                <Popover
+                                                                                    id={
+                                                                                        obj.title
+                                                                                    }
+                                                                                >
+                                                                                    <Popover.Header as="h3">
+                                                                                        Task
+                                                                                    </Popover.Header>
+                                                                                    <Popover.Body>
+                                                                                        <strong>
+                                                                                            Deadline:
+                                                                                        </strong>{" "}
+                                                                                        {moment
+                                                                                            .parseZone(
+                                                                                                obj.deadline
+                                                                                            )
+                                                                                            .utc(
+                                                                                                "-02:00"
+                                                                                            )
+                                                                                            .format(
+                                                                                                "DD-MM-YYYY [at] hh:mm a"
+                                                                                            )}
+                                                                                        <br></br>
+                                                                                        {/* <strong>
                                                                                     Duration:
                                                                                 </strong>{" "}
                                                                                 {
@@ -256,34 +265,35 @@ const UpdatesPage = (props) => {
                                                                                 }{" "}
                                                                                 minutes
                                                                                 <br></br> */}
-                                                                            </Popover.Body>
-                                                                        </Popover>
-                                                                    }
-                                                                >
-                                                                    <li
-                                                                        key={
-                                                                            obj.title
-                                                                        }
-                                                                        class="nav-item"
-                                                                    >
-                                                                        {/*redirect*/}
-                                                                        <span
-                                                                            onClick={() =>
-                                                                                handleTask(
-                                                                                    obj.taskId
-                                                                                )
+                                                                                    </Popover.Body>
+                                                                                </Popover>
                                                                             }
-                                                                            className="redirect"
                                                                         >
-                                                                            {
-                                                                                obj.title
-                                                                            }
-                                                                        </span>
-                                                                    </li>
-                                                                </OverlayTrigger>
-                                                            </div>
-                                                        </>
-                                                    ))}
+                                                                            <li
+                                                                                key={
+                                                                                    obj.title
+                                                                                }
+                                                                                class="nav-item"
+                                                                            >
+                                                                                {/*redirect*/}
+                                                                                <span
+                                                                                    onClick={() =>
+                                                                                        handleTask(
+                                                                                            obj.taskId
+                                                                                        )
+                                                                                    }
+                                                                                    className="redirect"
+                                                                                >
+                                                                                    {
+                                                                                        obj.title
+                                                                                    }
+                                                                                </span>
+                                                                            </li>
+                                                                        </OverlayTrigger>
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        )}
                                                 </div>
                                             </ul>
                                         </div>
