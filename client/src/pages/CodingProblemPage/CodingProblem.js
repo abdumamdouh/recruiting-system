@@ -45,6 +45,12 @@ export default function AddProblem() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [expiryDate, setExpiryDate] = useState(new Date());
+    const [memoryConstraints, setMemoryConstraints] = useState(0);
+
+    const [timeConstraints, setTimeConstraints] = useState("");
+
+    const [duration, setDuration] = useState("");
+
     // const [uploadFormat, setUploadFormat] = useState("");
 
     const [modalOpen, setModalOpen] = useState(false);
