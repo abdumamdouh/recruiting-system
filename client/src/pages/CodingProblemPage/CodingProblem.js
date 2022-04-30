@@ -110,7 +110,7 @@ export default function AddProblem() {
             duration,
             testCases,
             jobId,
-            expiryDate
+            deadline:expiryDate
         }
         console.log(codingProblem)
         //console.log()
