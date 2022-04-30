@@ -460,6 +460,19 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             }
         );
 
+        const overallMCQs = await MCQStat.findAll({
+            attributes: [
+              'applicantId',
+              [sequelize.fn('sum', db.col('score')), 'overallMCQsScore'],
+            ],
+            where: {
+                jobId: jobId
+            },
+            group: ['applicantId'],
+            raw: true
+          });
+          
+
         console.log(average_MCQS_score)
         // const tasks = await TaskUploads.findAndCountAll({
         //     include: {
@@ -508,7 +521,9 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             tasksResults: tasksResults,
             applicantsAppliedCount: applicantsApplied,
             avgMCQsScore: average_MCQS_score,
-            avgTasksScore: average_Tasks_score
+            avgTasksScore: average_Tasks_score,
+            overallMCQs: overallMCQs
+
             // MCQs: mcqs.rows,
             // MCQSCount: mcqs.count,
             // tasks: tasks.rows,
