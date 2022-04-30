@@ -12,6 +12,7 @@ import assignedExamReducer from "./reducers/assignedExams";
 import bankReducer from "./reducers/bank";
 import taskReducer from "./reducers/task";
 import taskSubmissionReducer from "./reducers/taskSubmission"; 
+import MarksReducer from "./reducers/Mark"; 
 const persistConfig = {
   key: "root",
   storage,
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   bank:bankReducer,
   tasks: taskReducer,
   taskSubmissions: taskSubmissionReducer,
+  marks:MarksReducer
 });
 
 export default persistReducer(persistConfig, rootReducer);

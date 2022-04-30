@@ -427,6 +427,7 @@ const McqTestPage = (props) => {
         //remove time from loccal storage
         localStorage.removeItem("time");
         try {
+            const jobId = localStorage.getItem("jobId");
             console.log(McqAnswers);
             console.log(JSON.stringify(McqAnswers));
             console.log(userInfo.token);
@@ -440,12 +441,13 @@ const McqTestPage = (props) => {
                         "Content-Type": "application/json",
                         Authorization: "Bearer " + userInfo.token
                     },
-                    body: JSON.stringify({ McqAnswers })
+                    body: JSON.stringify({ McqAnswers, jobId })
                 }
             );
             const data = await rawResponse;
             console.log(data);
             if (data.status === 202) {
+                localStorage.removeItem("jobId");
                 setMcqTaken(true);
                 setModalOpen(true);
             }
