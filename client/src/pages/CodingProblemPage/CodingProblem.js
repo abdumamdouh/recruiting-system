@@ -74,7 +74,7 @@ export default function AddProblem() {
 
     const AddTestCase = ()=>{
         setTestCases(testCases.concat([{}]))
-        console.log(testCases)
+       // console.log(testCases)
     }
     const handleTestCaseInput = (event)=>{
         
@@ -152,8 +152,8 @@ export default function AddProblem() {
         // }
 
         try {
-            console.log(codingProblem)
-            console.log(userInfo.token);
+           // console.log(codingProblem)
+            //console.log(userInfo.token);
             const response = await fetch(`http://localhost:5000/SubmitCodingProblem`, {
                 method: "POST",
                 headers: {
@@ -165,7 +165,7 @@ export default function AddProblem() {
                 body: JSON.stringify(codingProblem)
             });
             const data = await response;
-            console.log(data);
+            //console.log(data);
             //TODO: condition for success
             showSuccessMessage();
         } catch (error) {
