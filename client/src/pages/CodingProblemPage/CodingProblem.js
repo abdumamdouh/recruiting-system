@@ -101,6 +101,16 @@ export default function AddProblem() {
 
     const handleClick = async () => {
 
+
+        const codingProblem={
+            title,
+            description,
+            memoryConstraints,
+            timeConstraints,
+            duration,
+            testCases
+        }
+        console.log(codingProblem)
         //console.log()
         /*
         {
