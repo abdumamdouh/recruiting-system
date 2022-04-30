@@ -24,11 +24,11 @@ router.post('/SubmitCodingProblem', recruiterAuth , async (req,res) => {
     try {
        // console.log(req.body)
       req.body.recruiterId=req.recruiter.id
-       console.log(req.body)
+       //console.log(req.body)
 
         const codingProblem = await CodingProblemBank.create(req.body)
         const testcases = req.body.testcases 
-        console.log(testcases)
+       // console.log(testcases)
         
         testcases.forEach(async testCase => {
             await TestCases.create({
