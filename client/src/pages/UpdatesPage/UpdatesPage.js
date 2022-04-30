@@ -68,9 +68,11 @@ const UpdatesPage = (props) => {
         if (userInfo.hasOwnProperty("hasAssessments")) fetchUpdates();
     }, []);
 
-    const handleRedirection = (id) => {
+    const handleRedirection = (data) => {
+        console.log(data);
         // console.log("redii");
-        history.push(`/job/exam/${id}`);
+        localStorage.setItem("jobId", data.jobId);
+        history.push(`/job/exam/${data.MCQId}`);
     };
 
     const handleMCQ = (obj) => {
@@ -204,7 +206,10 @@ const UpdatesPage = (props) => {
                                                                                 <span
                                                                                     onClick={() =>
                                                                                         handleMCQ(
-                                                                                            obj
+                                                                                            {
+                                                                                                ...obj,
+                                                                                                jobId: update.jobId
+                                                                                            }
                                                                                         )
                                                                                     }
                                                                                     className="redirect"
@@ -350,7 +355,7 @@ const UpdatesPage = (props) => {
                                 <Button
                                     variant="contained"
                                     onClick={() => {
-                                        handleRedirection(modalData.MCQId);
+                                        handleRedirection(modalData);
                                     }}
                                     style={{
                                         marginTop: "15px",
