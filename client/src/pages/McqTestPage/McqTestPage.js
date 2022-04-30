@@ -354,6 +354,7 @@ let MCQQ = {
 
 const McqTestPage = (props) => {
     //TODO: check if it's taken or not from BE on componentDidMount
+    const { ID } = useParams();
     const [McqTaken, setMcqTaken] = useState(false);
     const [Mcq, setMcq] = useState([]);
     //pop up message state
@@ -371,16 +372,20 @@ const McqTestPage = (props) => {
 
     useEffect(() => {
         const getQuestion = async () => {
+            console.log(ID);
             console.log(userInfo.token);
             try {
-                const response = await fetch(`http://localhost:5000/getMCQ/1`, {
-                    method: "GET",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        Authorization: "Bearer " + userInfo.token
+                const response = await fetch(
+                    `http://localhost:5000/getMCQ/${ID}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + userInfo.token
+                        }
                     }
-                });
+                );
                 const data = await response.json();
                 //TODO: check taken flag and update the state based on it
                 console.log("alo");
@@ -406,7 +411,6 @@ const McqTestPage = (props) => {
 
     let McqAnswers = {};
     //ID of the job
-    const { ID } = useParams();
     let margin = Mcq.questions?.length > 17 ? 55 * 4 : 40 * 5;
     margin = Mcq.questions?.length > 25 ? 65 * 3.4 : margin;
     margin = Mcq.questions?.length > 35 ? 75 * 3 : margin;
