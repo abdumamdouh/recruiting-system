@@ -22,9 +22,13 @@ const router = new express.Router();
 // body must contain deadline and diraution as well as job_id
 router.post('/SubmitCodingProblem', recruiterAuth , async (req,res) => {
     try {
-        req.body.recruiterId = req.recruiter.id
+       // console.log(req.body)
+      
+       console.log(req.body)
+
         const codingProblem = await CodingProblemBank.create(req.body)
         const testcases = req.body.testcases 
+        console.log(testcases)
         
         testcases.forEach(async testCase => {
             await TestCases.create({
