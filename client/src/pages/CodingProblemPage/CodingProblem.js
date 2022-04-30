@@ -256,8 +256,54 @@ export default function AddProblem() {
                         />
                     </LocalizationProvider>
                 </div>
-            </div>
+
+                
+                <Typography color="black" variant="h6">
+                    Duration of coding problem
+                </Typography>
+                <div style={{ marginTop: "10px" }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        < TextField
+                            renderInput={(props) => <TextField {...props} />}
+                            label="Duration"
+                        />
+                    </LocalizationProvider>
+                </div>
             
+            </div>
+
+
+
+            
+
+
+
+
+            <div className="mb black">
+                <Typography color="black" variant="h6">
+                    Time Constraints
+                </Typography>
+                <div style={{ marginTop: "10px" }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        < TextField
+                            renderInput={(props) => <TextField {...props} />}
+                            label="Time Constraints"
+                        />
+                    </LocalizationProvider>
+                </div>
+                <Typography color="black" variant="h6">
+                     Memory Constraints
+                </Typography>
+                <div style={{ marginTop: "10px" }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        < TextField
+                            renderInput={(props) => <TextField {...props} />}
+                            label="Memory Constraints"
+                        />
+                    </LocalizationProvider>
+                </div>
+            </div>
+
             <div>
                 <h4
                     style={{
