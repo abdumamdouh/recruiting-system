@@ -23,7 +23,7 @@ const router = new express.Router();
 router.post('/SubmitCodingProblem', recruiterAuth , async (req,res) => {
     try {
        // console.log(req.body)
-      
+      req.body.recruiterId=req.recruiter.id
        console.log(req.body)
 
         const codingProblem = await CodingProblemBank.create(req.body)
