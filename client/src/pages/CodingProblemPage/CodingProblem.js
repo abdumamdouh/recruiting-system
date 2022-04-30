@@ -202,7 +202,7 @@ export default function AddProblem() {
                     variant="h6"
                     sx={{ marginBottom: "10px" }}
                 >
-                    Task Title
+                    Coding problem Title
                 </Typography>
                 <TextField
                     id="outlined-static"
@@ -224,12 +224,12 @@ export default function AddProblem() {
                     variant="h6"
                     sx={{ marginBottom: "10px" }}
                 >
-                    Task Description
+                    Coding problem Description
                 </Typography>
                 <TextField
                     sx={{ marginTop: "10px" }}
                     id="outlined-multiline-static"
-                    label="Task Description"
+                    label="Coding problem Description"
                     multiline
                     rows={6}
                     fullWidth
@@ -240,7 +240,7 @@ export default function AddProblem() {
 
             <div className="mb black">
                 <Typography color="black" variant="h6">
-                    Deadline for this Task
+                    Deadline for this Coding problem
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -257,90 +257,7 @@ export default function AddProblem() {
                     </LocalizationProvider>
                 </div>
             </div>
-
-            <Box
-                component="form"
-                sx={{ marginBottom: "25px" }}
-                noValidate
-                autoComplete="off"
-            >
-                <Typography
-                    className="black"
-                    variant="h6"
-                    sx={{ marginBottom: "10px" }}
-                >
-                    Uploaded File Extension
-                </Typography>
-                <small style={{ fontSize: 15, color: "#827F7E" }}>
-                    <em>
-                        Restrict applicants for this job to a certain file
-                        upload format.
-                    </em>
-                </small>
-                {/* <TextField
-                    sx={{ marginTop: "10px" }}
-                    id="outlined-static"
-                    label="Uploaded File Extension"
-                    variant="outlined"
-                    onChange={(e) => setTitle(e.target.value)}
-                /> */}
-                {/* <Autocomplete
-                    sx={{ marginTop: "10px", width: "15rem" }}
-                    id="free-solo-demo"
-                    freeSolo
-                    options={options}
-                    renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                            <Chip
-                                variant="outlined"
-                                label={option}
-                                {...getTagProps({ index })}
-                            />
-                        ))
-                    }
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Uploaded File Extension"
-                            onChange={(e) => setUploadFormat(e.target.value)}
-                        />
-                    )}
-                /> */}
-                <div>
-                    <Autocomplete
-                        sx={{ marginTop: "10px", width: "15rem" }}
-                        value={option}
-                        onChange={(event, newValue) => {
-                            // console.log(newValue);
-                            // console.log(option);
-                            setOption(newValue);
-                        }}
-                        multiple
-                        id="tags-filled"
-                        options={availableOptions}
-                        freeSolo
-                        renderTags={(value, getTagProps) =>
-                            value.map((option, index) => (
-                                <Chip
-                                    variant="outlined"
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                />
-                            ))
-                        }
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Uploaded File Extension"
-                                placeholder={
-                                    !option.length ? "example: cpp" : ""
-                                }
-                            />
-                        )}
-                    />
-                </div>
-            </Box>
-
+            
             <div>
                 <h4
                     style={{
@@ -362,7 +279,7 @@ export default function AddProblem() {
                     }}
                 >
                     <em>
-                        Explain more details about the task through uploading a
+                        Explain more details about the Coding problem through uploading a
                         docx or pdf file.
                     </em>
                 </small>
@@ -419,7 +336,7 @@ export default function AddProblem() {
                     variant="contained"
                     onClick={handleClick}
                 >
-                    Upload Task
+                    Upload Coding problem
                 </Button>
             </div>
         </div>
