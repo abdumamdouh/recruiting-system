@@ -299,6 +299,8 @@ export default function AddProblem() {
                         < TextField
                             renderInput={(props) => <TextField {...props} />}
                             label="Duration"
+                            onChange={event=>setDuration(event.target.value)}
+
                         />
                     </LocalizationProvider>
                 </div>
@@ -321,6 +323,7 @@ export default function AddProblem() {
                         < TextField
                             renderInput={(props) => <TextField {...props} />}
                             label="Time Constraints"
+                            onChange={event=>setTimeConstraints(event.target.value)}
                         />
                     </LocalizationProvider>
                 </div>
@@ -332,6 +335,8 @@ export default function AddProblem() {
                         < TextField
                             renderInput={(props) => <TextField {...props} />}
                             label="Memory Constraints"
+                            onChange={event=>setMemoryConstraints(event.target.value)}
+
                         />
                     </LocalizationProvider>
                 </div>
