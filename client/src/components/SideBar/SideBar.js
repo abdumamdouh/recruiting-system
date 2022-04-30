@@ -56,7 +56,7 @@ const SideBar = () => {
                         {
                             //////////////////////////////////////////////////////
                         }
-                        <Link to="/products" className="link">
+                        <Link to="/dashboard/codingProblem" className="link">
                             <li className="sidebarListItem">
                                 <AdbIcon className="sidebarIcon" />
                                 Coding Problem
