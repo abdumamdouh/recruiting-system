@@ -26,7 +26,6 @@ const TaskReviewPage = () => {
     const {Marks} = useSelector(state => state.marks)
     const markk = Marks
     const[returnedScore,setReturnedScore] =useState()
-    console.log('sss',markk)
     useEffect(() => {
         dispatch(getTaskSubmissionsAction(JobId, TaskId));
         setSubmissionData(submissions) 
@@ -72,7 +71,7 @@ const TaskReviewPage = () => {
                   score: s.score !== null ? s.score : "_______",
                   uploadedTask: s.uploadedTask.data,
                   type: s.type,
-                  Name: s.applicantName.firstName + s.applicantName.lastName
+                  Name: s.applicantName.firstName + " "+ s.applicantName.lastName
               }))
             : null;
     console.log("arr", data);
@@ -127,15 +126,15 @@ const TaskReviewPage = () => {
    
     if (rows !== null) {
         return (
-            <div style={{ height: 400, width: "100%" }}>
+            <div  style={{ marginTop: '40px',height: 400, width: "100%" }}>
                 {modalOpen && (
                     <Message
                         setOpenModal={setModalOpen}
                         message="Mark is Added successfully!"
                     />
                 )}
-                <div style={{ display: "flex", height: "100%" }}>
-                    <div style={{ flexGrow: 1 }}>
+                <div style={{ height: 450, width: '120%' }}>
+                   
                         <DataGrid
                             rows={rows}
                             columns={columns}
@@ -146,7 +145,7 @@ const TaskReviewPage = () => {
                             }}
                             selectionModel={selectionModel}
                         />
-                    </div>
+                 
                 </div>
                 {showTaskMark && (
                     <div>
