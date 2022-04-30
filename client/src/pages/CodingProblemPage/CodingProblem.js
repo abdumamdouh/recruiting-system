@@ -45,9 +45,9 @@ export default function AddProblem() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [expiryDate, setExpiryDate] = useState(new Date());
-    const [memoryConstraints, setMemoryConstraints] = useState(0);
+    const [memoryConstraint, setMemoryConstraint] = useState(0);
 
-    const [timeConstraints, setTimeConstraints] = useState("");
+    const [timeConstraint, setTimeConstraint] = useState("");
 
     const [duration, setDuration] = useState("");
 
@@ -105,10 +105,12 @@ export default function AddProblem() {
         const codingProblem={
             title,
             description,
-            memoryConstraints,
-            timeConstraints,
+            memoryConstraint,
+            timeConstraint,
             duration,
-            testCases
+            testCases,
+            jobId,
+            expiryDate
         }
         console.log(codingProblem)
         //console.log()
@@ -333,7 +335,7 @@ export default function AddProblem() {
                         < TextField
                             renderInput={(props) => <TextField {...props} />}
                             label="Time Constraints"
-                            onChange={event=>setTimeConstraints(event.target.value)}
+                            onChange={event=>setTimeConstraint(event.target.value)}
                         />
                     </LocalizationProvider>
                 </div>
@@ -345,7 +347,7 @@ export default function AddProblem() {
                         < TextField
                             renderInput={(props) => <TextField {...props} />}
                             label="Memory Constraints"
-                            onChange={event=>setMemoryConstraints(event.target.value)}
+                            onChange={event=>setMemoryConstraint(event.target.value)}
 
                         />
                     </LocalizationProvider>
