@@ -78,12 +78,12 @@ export default function AddProblem() {
     }
     const handleTestCaseInput = (event)=>{
         
-            testCases[event.target.id].inputs=event.target.value           
+            testCases[event.target.id].inputs=JSON.parse(event.target.value)                  
         
         
     }
     const handleTestCaseOutput = (event)=>{
-        testCases[event.target.id].outputs=event.target.value           
+        testCases[event.target.id].outputs=JSON.parse(event.target.value)           
 
         
     }
@@ -103,16 +103,17 @@ export default function AddProblem() {
 
 
         const codingProblem={
-            title,
+            name:title,
             description,
-            memoryConstraint,
-            timeConstraint,
-            duration,
-            testCases,
+            memoryConstraint:Number(memoryConstraint),
+            timeConstraint:Number(timeConstraint),
+            duration:Number(duration),
+            testcases:testCases,
             jobId,
-            deadline:expiryDate
+            deadline:expiryDate,
+            private:0
         }
-        console.log(codingProblem)
+       // console.log(codingProblem)
         //console.log()
         /*
         {
@@ -150,26 +151,27 @@ export default function AddProblem() {
         //     console.log(pair[0] + " - " + pair[1]);
         // }
 
-        // try {
-        //     console.log(userInfo.token);
-        //     const response = await fetch(`http://localhost:5000/createTask`, {
-        //         method: "POST",
-        //         body: formData,
-        //         headers: {
-        //             Accept: "multipart/form-data",
-        //             // "Content-Type": "application/json",
-        //             // "Content-Type": "multipart/form-data",
-        //             Authorization: "Bearer " + userInfo.token
-        //         }
-        //     });
-        //     const data = await response;
-        //     console.log(data);
-        //     //TODO: condition for success
-        //     showSuccessMessage();
-        // } catch (error) {
-        //     console.error("Error:", error);
-        //     handleOnError(error);
-        // }
+        try {
+            console.log(codingProblem)
+            console.log(userInfo.token);
+            const response = await fetch(`http://localhost:5000/SubmitCodingProblem`, {
+                method: "POST",
+                headers: {
+                    Accept: "multipart/form-data",
+                     "Content-Type": "application/json",
+                    // "Content-Type": "multipart/form-data",
+                    Authorization: "Bearer " + userInfo.token
+                },
+                body: JSON.stringify(codingProblem)
+            });
+            const data = await response;
+            console.log(data);
+            //TODO: condition for success
+            showSuccessMessage();
+        } catch (error) {
+            console.error("Error:", error);
+            handleOnError(error);
+        }
     };
 
     const showSuccessMessage = () => {
