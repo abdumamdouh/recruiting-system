@@ -94,6 +94,8 @@ export default function AddProblem() {
     };
 
     const handleClick = async () => {
+
+        //console.log()
         /*
         {
             "title":"Some title",
@@ -105,51 +107,51 @@ export default function AddProblem() {
         */
         //Check if selected options are in the avaialble options or not
 
-        if (!option.length) {
-            setOpen(true);
-            return;
-        }
+        // if (!option.length) {
+        //     setOpen(true);
+        //     return;
+        // }
 
-        console.log(jobId);
-        const task = {
-            title,
-            description,
-            deadline: expiryDate,
-            JobId: jobId,
-            uploadFormat: option.join("-")
-        };
+        // console.log(jobId);
+        // const task = {
+        //     title,
+        //     description,
+        //     deadline: expiryDate,
+        //     JobId: jobId,
+        //     uploadFormat: option.join("-")
+        // };
 
-        console.log(task);
-        //
-        const formData = new FormData();
-        formData.append("task", selectedFile);
-        formData.append("data", JSON.stringify(task));
-        console.log(formData);
+        // console.log(task);
+        // //
+        // const formData = new FormData();
+        // formData.append("task", selectedFile);
+        // formData.append("data", JSON.stringify(task));
+        // console.log(formData);
 
         // for (let pair of formData.entries()) {
         //     console.log(pair[0] + " - " + pair[1]);
         // }
 
-        try {
-            console.log(userInfo.token);
-            const response = await fetch(`http://localhost:5000/createTask`, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    Accept: "multipart/form-data",
-                    // "Content-Type": "application/json",
-                    // "Content-Type": "multipart/form-data",
-                    Authorization: "Bearer " + userInfo.token
-                }
-            });
-            const data = await response;
-            console.log(data);
-            //TODO: condition for success
-            showSuccessMessage();
-        } catch (error) {
-            console.error("Error:", error);
-            handleOnError(error);
-        }
+        // try {
+        //     console.log(userInfo.token);
+        //     const response = await fetch(`http://localhost:5000/createTask`, {
+        //         method: "POST",
+        //         body: formData,
+        //         headers: {
+        //             Accept: "multipart/form-data",
+        //             // "Content-Type": "application/json",
+        //             // "Content-Type": "multipart/form-data",
+        //             Authorization: "Bearer " + userInfo.token
+        //         }
+        //     });
+        //     const data = await response;
+        //     console.log(data);
+        //     //TODO: condition for success
+        //     showSuccessMessage();
+        // } catch (error) {
+        //     console.error("Error:", error);
+        //     handleOnError(error);
+        // }
     };
 
     const showSuccessMessage = () => {
