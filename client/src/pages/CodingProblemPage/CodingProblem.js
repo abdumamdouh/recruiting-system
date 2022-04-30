@@ -56,6 +56,31 @@ export default function AddProblem() {
     const jobId = useSelector((state) => state.job.id);
     const { userInfo } = useSelector((state) => state.user);
 
+
+    const [testCases,setTestCases]=useState([{}])
+
+
+
+
+
+
+
+
+    const AddTestCase = ()=>{
+        setTestCases(testCases.concat([{}]))
+        console.log(testCases)
+    }
+    const handleTestCaseInput = (event)=>{
+        
+            testCases[event.target.id].inputs=event.target.value           
+        
+        
+    }
+    const handleTestCaseOutput = (event)=>{
+        testCases[event.target.id].outputs=event.target.value           
+
+        
+    }
     const handleOnError = (err) => {
         console.log(err);
     };
@@ -303,6 +328,69 @@ export default function AddProblem() {
                     </LocalizationProvider>
                 </div>
             </div>
+
+
+            {//testcases
+            }
+
+            {
+                testCases.map((testcase,index)=>{
+                    return (
+                    <div key = {index}>
+                            <Typography key = {index} color="black" variant="h6">
+                                testcase {index+1}
+                            </Typography>
+
+  
+                        <div  key = {`input${index}`} style={{display: "inline-block",marginBottom: "10px",marginRight:"10px" }}>
+                        <Typography key = {`input${index}`} color="black" variant="h6">
+                            inputs array
+                        </Typography>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                < TextField
+                                    id = {index}
+                                    renderInput={(props) => <TextField key = {`input${index}`} {...props} />}
+                                    label="input"
+                                    onChange={handleTestCaseInput}
+                                />
+                            </LocalizationProvider>
+                        </div>
+                       
+                        <div  key = {`h${index}`} style={{display: "inline-block",marginBottom: "10px",marginRight:"10px" }}>
+                        <Typography key = {index} color="black" variant="h6">
+                            outputs array 
+                        </Typography>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                < TextField
+                                    id = {index}
+                                    renderInput={(props) => <TextField key = {`outputs${index}`} {...props} />}
+                                    label="output"
+                                    onChange={handleTestCaseOutput}
+                                />
+                            </LocalizationProvider>
+                        </div>
+                           
+                    </div>)
+
+                })
+
+            }
+            <div className="mb">
+                <Button
+                    style={{ marginBottom: "10px" }}
+                    variant="contained"
+                    onClick={AddTestCase}
+                >
+                    Add testCase
+                </Button>
+            </div>
+
+
+
+
+
+
+
 
             <div>
                 <h4
