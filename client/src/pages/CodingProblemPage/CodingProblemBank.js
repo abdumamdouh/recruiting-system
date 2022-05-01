@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getExamsAction } from "../../redux/actions/exam";
 import { useDispatch, useSelector } from "react-redux";
-import Card from "../../components/Card/Card";
+import CodingProblemSample from "./CodingProblemSample";
 import "./CodingProblemBank.scss";
 import ReactPaginate from "react-paginate";
 import Stack from "@mui/material/Stack";
@@ -42,7 +42,7 @@ const CodingProblemBank = () => {
                                 style={{ marginLeft: "30px" }}
                                 className="examli"
                             >
-                                <Card
+                                <CodingProblemSample
                                     title={m.title}
                                     Count={Count}
                                     number={(pageNumber - 1) * 4 + (index + 1)}
