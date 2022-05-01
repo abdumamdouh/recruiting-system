@@ -134,8 +134,8 @@ router.get("*/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
 
 
 //get all coding problems for recruiter to choose from them:
-router.post("/codingProblems",recruiterAuth, async (req, res) => {
-    const pageNumber = req.body.pageNumber;
+router.get("/codingProblems/:pageNumber",recruiterAuth, async (req, res) => {
+    const {pageNumber} = req.params;
     // const Limit = req.body.limit
     try {
         const result = await CodingProblemBank.findAndCountAll({
