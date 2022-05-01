@@ -77,10 +77,10 @@ const SideBar = () => {
                                 MCQ Exam
                             </li>
                         </Link>
-                        <Link to="/products" className="link">
+                        <Link to="/dashboard/codingProblemBank" className="link">
                             <li className="sidebarListItem">
                                 <AdbIcon className="sidebarIcon" />
-                                Coding Problem
+                                Coding Problem Bank
                             </li>
                         </Link>
                         <Link to="/dashboard/availableTasks" className="link">
