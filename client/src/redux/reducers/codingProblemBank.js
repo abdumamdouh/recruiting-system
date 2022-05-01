@@ -36,7 +36,7 @@ const codingProblemsReducer = (state = {}, action) => {
         case GET_PROBLEM_BY_ID_SUCCESS:
             console.log( 'redux',action.payload)
             return  {...state,
-                selected:action.payload};
+                codingProblem:action.payload};
 
         case GET_PROBLEM_BY_ID_FAIL:
             return {
