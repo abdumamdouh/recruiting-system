@@ -159,6 +159,7 @@ router.get("/codingProblems/:pageNumber",recruiterAuth, async (req, res) => {
         });
         res.send({
             codingProblems: result.rows,  
+            Count:result.count
         });
     } catch (error) {
         res.status(400).send(error.message);
