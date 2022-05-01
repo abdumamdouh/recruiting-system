@@ -136,6 +136,11 @@ const UpdatesPage = (props) => {
                                                         : 0) +
                                                         (update.task
                                                             ? update.task.length
+                                                            : 0) +
+                                                        (update.codingProblem
+                                                            ? update
+                                                                  .codingProblem
+                                                                  .length
                                                             : 0) >
                                                     1
                                                         ? "Assessments"
@@ -285,6 +290,86 @@ const UpdatesPage = (props) => {
                                                                                     onClick={() =>
                                                                                         handleTask(
                                                                                             obj.taskId
+                                                                                        )
+                                                                                    }
+                                                                                    className="redirect"
+                                                                                >
+                                                                                    {
+                                                                                        obj.title
+                                                                                    }
+                                                                                </span>
+                                                                            </li>
+                                                                        </OverlayTrigger>
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        )}
+                                                    {update.codingProblem &&
+                                                        update.codingProblem.map(
+                                                            (obj) => (
+                                                                <>
+                                                                    <div>
+                                                                        <OverlayTrigger
+                                                                            key={
+                                                                                obj.title
+                                                                            }
+                                                                            placement="auto-start"
+                                                                            delay={{
+                                                                                show: 250,
+                                                                                hide: 400
+                                                                            }}
+                                                                            overlay={
+                                                                                <Popover
+                                                                                    id={
+                                                                                        obj.title
+                                                                                    }
+                                                                                >
+                                                                                    <Popover.Header as="h3">
+                                                                                        Coding
+                                                                                        Problem
+                                                                                    </Popover.Header>
+                                                                                    <Popover.Body>
+                                                                                        <strong>
+                                                                                            Expiry
+                                                                                            Date:
+                                                                                        </strong>{" "}
+                                                                                        {moment
+                                                                                            .parseZone(
+                                                                                                obj.expiryDate
+                                                                                            )
+                                                                                            .utc(
+                                                                                                "-02:00"
+                                                                                            )
+                                                                                            .format(
+                                                                                                "DD-MM-YYYY [at] hh:mm a"
+                                                                                            )}
+                                                                                        <br></br>
+                                                                                        <strong>
+                                                                                            Duration:
+                                                                                        </strong>{" "}
+                                                                                        {
+                                                                                            obj.duration
+                                                                                        }{" "}
+                                                                                        minutes
+                                                                                        <br></br>
+                                                                                    </Popover.Body>
+                                                                                </Popover>
+                                                                            }
+                                                                        >
+                                                                            <li
+                                                                                key={
+                                                                                    obj.title
+                                                                                }
+                                                                                class="nav-item"
+                                                                            >
+                                                                                {/*redirect*/}
+                                                                                <span
+                                                                                    onClick={() =>
+                                                                                        handleMCQ(
+                                                                                            {
+                                                                                                ...obj,
+                                                                                                jobId: update.jobId
+                                                                                            }
                                                                                         )
                                                                                     }
                                                                                     className="redirect"
