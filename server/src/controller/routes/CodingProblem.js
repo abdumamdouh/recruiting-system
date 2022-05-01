@@ -120,7 +120,7 @@ router.get("/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
             });
            const [results, metadata] = await db.query(`SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.params.id}`);
            codingProblem.dataValues.testcases=results;
-
+           // console.log(results)
            res.send(codingProblem);
 
         }
