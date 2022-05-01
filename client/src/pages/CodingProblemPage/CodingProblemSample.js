@@ -66,7 +66,7 @@ const CodingProblemSample = (props) => {
                         Exam title: {props.title}
                     </h6>
                     <p className="card-text">
-                        Number of questions: {props.questions.length}{" "}
+                        Number of questions:
                     </p>
                     <button
                         className="btn btn-primary mb-2"
