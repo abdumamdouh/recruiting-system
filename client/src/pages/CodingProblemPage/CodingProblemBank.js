@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getExamsAction } from "../../redux/actions/exam";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/Card/Card";
-import "./AvailableMCQ.scss";
+import "./CodingProblemBank.scss";
 import ReactPaginate from "react-paginate";
 import Stack from "@mui/material/Stack";
 import Skeleton from "@mui/material/Skeleton";
