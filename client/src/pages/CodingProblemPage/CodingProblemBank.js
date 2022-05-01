@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getExamsAction } from "../../redux/actions/exam";
+import { getCodingProblemsAction } from "../../redux/actions/codingProblemBank";
 import { useDispatch, useSelector } from "react-redux";
 import CodingProblemSample from "./CodingProblemSample";
 import "./CodingProblemBank.scss";
@@ -11,7 +11,7 @@ const CodingProblemBank = () => {
     const dispatch = useDispatch();
     const { RecruiterId } = useSelector((state) => state.job);
     useEffect(() => {
-        dispatch(getExamsAction(1));
+        dispatch(getCodingProblemsAction(1));
     }, [dispatch]);
     const { MCQs } = useSelector((state) => state.exam);
     const { Count } = useSelector((state) => state.exam);
@@ -20,7 +20,7 @@ const CodingProblemBank = () => {
 
     const changePage = ({ selected }) => {
         setPageNumber(selected + 1);
-        dispatch(getExamsAction(selected + 1));
+        dispatch(getCodingProblemsAction(selected + 1));
     };
     console.log(MCQs);
     if (MCQs !== undefined) {
