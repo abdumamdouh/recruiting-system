@@ -15,21 +15,22 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./AssignedCodingProblemPage.scss";
 export default function CodingProblem() {
     const theme = createTheme({
-        overrides: {
+        palette: { mode: "dark" },
+        components: {
             MuiOutlinedInput: {
-                root: {
-                    // Hover state
-                    "&:hover $notchedOutline": {
-                        borderColor: "red"
-                    },
-                    // Focused state
-                    "&$focused $notchedOutline": {
-                        borderColor: "green"
+                styleOverrides: {
+                    root: {
+                        height: "4vh",
+                        width: "15ch",
+                        marginTop: "5px",
+                        marginLeft: "5px",
+                        color: "#FFFFFF",
+                        paddingBottom: "2px"
                     }
-                },
-                // Default State
-                notchedOutline: {
-                    borderColor: "gray"
+                    // Default State
+                    // notchedOutline: {
+                    //     borderColor: "yellow"
+                    // }
                 }
             }
         }
@@ -64,7 +65,7 @@ int main() {
         },
         {
             languague: "JavaScript",
-            code: 'console.log("Hello World");',
+            code: 'console.log("Hello World!");',
             view: javascript()
         },
         {
@@ -74,6 +75,7 @@ int main() {
         }
     ];
     const [programmingLanguage, setProgrammingLanguage] = useState("C");
+    const [index, setIndex] = useState(0);
     // const globalCppCompletions = cppLanguage.data.of({
     //     autocomplete: completeFromGlobalScope
     // });
@@ -108,26 +110,54 @@ int main() {
                 <div className="editorHeader">
                     <ThemeProvider theme={theme}>
                         <TextField
-                            id="outlined-select"
+                            className="combobox"
+                            id="outlined-basic"
                             select
-                            size="small"
-                            // InputProps={{
-                            //     style: {
-                            //         color:
-                            //             difficulty === "Easy"
-                            //                 ? "#027D6F"
-                            //                 : difficulty === "Medium"
-                            //                 ? "#FFC01E"
-                            //                 : "#FF375F"
-                            //     }
-                            // }}
+                            variant="outlined"
+                            label={null}
+                            sx={{
+                                "& .MuiInputLabel-root.Mui-disabled": {
+                                    ":disabled": true
+                                }
+                                // "& .MuiOutlinedInput-root:hover": {
+                                //     "& > fieldset": {
+                                //         border: "none"
+                                //     }
+                                // },
+                                // "& .MuiOutlinedInput-root.Mui-focused": {
+                                //     "& > fieldset": {
+                                //         borderColor: "green"
+                                //     }
+                                // }
+                            }}
+                            SelectProps={{
+                                MenuProps: {
+                                    sx: { marginTop: "-0.9rem" }
+                                    // anchorOrigin: {
+                                    //     vertical: "bottom",
+                                    //     horizontal: "center"
+                                    // },
+                                    // transformOrigin: {
+                                    //     vertical: "bottom",
+                                    //     horizontal: "center"
+                                    // },
+                                    // getContentAnchorEl: null
+                                }
+                            }}
                             value={programmingLanguage}
-                            onChange={(e) =>
-                                setProgrammingLanguage(e.target.value)
-                            }
+                            onChange={(e) => {
+                                setProgrammingLanguage(e.target.value);
+                                setIndex(
+                                    programmingLanguages.findIndex(
+                                        ({ languague }) =>
+                                            languague === e.target.value
+                                    )
+                                );
+                            }}
                         >
                             {programmingLanguages.map((option) => (
                                 <MenuItem
+                                    sx={{ height: "4vh" }}
                                     key={option.languague}
                                     value={option.languague}
                                 >
@@ -139,14 +169,14 @@ int main() {
                 </div>
                 <div>
                     <CodeMirror
-                        value={`#include <iostream>
-int main() {
-    std::cout << Hello World;
-    return 0;
-}`}
+                        value={programmingLanguages[index].code}
                         height="80vh"
                         theme={oneDark}
-                        extensions={[basicSetup, cpp(), autocompletion()]}
+                        extensions={[
+                            basicSetup,
+                            programmingLanguages[index].view,
+                            autocompletion()
+                        ]}
                     />
                 </div>
             </ReflexElement>

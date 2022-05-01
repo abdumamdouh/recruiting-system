@@ -48,3 +48,10 @@
         width: 5px !important;
     }
 }
+.combobox {
+    fieldset {
+        legend {
+            width: unset;
+        }
+    }
+}
