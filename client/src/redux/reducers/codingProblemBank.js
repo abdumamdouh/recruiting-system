@@ -3,6 +3,9 @@ import {
     GET_CODINGPROBLEMS_REQUEST,
     GET_CODINGPROBLEMS_SUCCESS,
     GET_CODINGPROBLEMS_FAIL,
+    GET_PROBLEM_BY_ID_REQUEST,
+    GET_PROBLEM_BY_ID_SUCCESS,
+    GET_PROBLEM_BY_ID_FAIL,
 } from "../types";
 
 const codingProblemsReducer = (state = {}, action) => {

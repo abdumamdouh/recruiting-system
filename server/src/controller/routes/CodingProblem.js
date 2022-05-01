@@ -84,7 +84,7 @@ router.post("/assignProblemToApplicants" , recruiterAuth , async (req,res) =>{
 // seq: job_id --> codingproblem_id (many_to_many table)
 // (apply_for table) get applicants applied for this job and status "waiting for coding problem"
 // render coding problem to only those applicants  
-router.get("*/getCodingProblem/:id" , applicantAuth , async (req,res) => {
+router.get("/getCodingProblem/:id" , applicantAuth , async (req,res) => {
     try { 
             const codingProblem = await CodingProblemBank.findOne({
 
@@ -111,7 +111,7 @@ router.get("*/getCodingProblem/:id" , applicantAuth , async (req,res) => {
 
 //get coding problem by id for recruiter with full testcases :
 
-router.get("*/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
+router.get("/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
     try { 
             const codingProblem = await CodingProblemBank.findOne({
                 where: {
