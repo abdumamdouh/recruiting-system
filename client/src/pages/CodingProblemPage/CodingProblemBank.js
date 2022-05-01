@@ -13,7 +13,7 @@ const CodingProblemBank = () => {
     useEffect(() => {
         dispatch(getCodingProblemsAction(1));
     }, [dispatch]);
-    const { MCQs } = useSelector((state) => state.exam);
+    const { codingProblems } = useSelector((state) => state.codingProblems);
     const { Count } = useSelector((state) => state.exam);
 
     const [pageNumber, setPageNumber] = useState(1);
@@ -22,12 +22,12 @@ const CodingProblemBank = () => {
         setPageNumber(selected + 1);
         dispatch(getCodingProblemsAction(selected + 1));
     };
-    console.log(MCQs);
-    if (MCQs !== undefined) {
+    console.log(codingProblems);
+    if (codingProblems !== undefined) {
         return (
             <div>
                 <div className="card-container">
-                    {MCQs.map((m, index) => (
+                    {codingProblems.map((m, index) => (
                         <ul
                             style={{
                                 listStyle: "none",
