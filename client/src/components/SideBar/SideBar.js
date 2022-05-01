@@ -80,7 +80,7 @@ const SideBar = () => {
                         <Link to="/products" className="link">
                             <li className="sidebarListItem">
                                 <AdbIcon className="sidebarIcon" />
-                                Coding Problem
+                                Coding Problem Bank
                             </li>
                         </Link>
                         <Link to="/dashboard/availableTasks" className="link">
