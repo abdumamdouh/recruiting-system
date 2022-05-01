@@ -15,7 +15,7 @@ const CodingProblemView = (props) => {
     }, [dispatch]);
 
 
-    const { selected } = useSelector((state) => state.codingProblems);
+    const { codingProblem } = useSelector((state) => state.codingProblems);
     console.log(id)
 
 
@@ -23,12 +23,12 @@ const CodingProblemView = (props) => {
 
 
 
-if(selected!==undefined){
+if(codingProblem!==undefined){
 
     return(
     
         <div>
-           <h3>{selected.name}</h3>
+           <h3>{codingProblem.name}</h3>
         </div>
     
     
