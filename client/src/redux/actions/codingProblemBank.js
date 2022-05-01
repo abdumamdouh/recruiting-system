@@ -3,6 +3,10 @@ import {
     GET_CODINGPROBLEMS_SUCCESS,
     GET_CODINGPROBLEMS_FAIL,
 } from "../types/index";
+
+const serverURL = "http://localhost:5000";
+
+
 export const getCodingProblemsAction = (pageNumber) => {
     return async (dispatch, getState) => {
         try {
