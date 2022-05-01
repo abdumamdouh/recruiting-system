@@ -22,7 +22,7 @@ const CodingProblemSample = (props) => {
 
     //redirect to questions' page
     const handleClick = () => {
-        history.push(`/dashboard/exam/${props.id}`);
+        history.push(`/dashboard/problem/${props.id}`);
     };
     const handleChooseExam = () => {
         setChoosed(true);
@@ -33,9 +33,9 @@ const CodingProblemSample = (props) => {
     };
     const handleSubmit = () => {
         const MCQId = props.id;
-        dispatch(pickExamAction(jobId, MCQId, expiryDate, duration));
+        //dispatch(pickExamAction(jobId, MCQId, expiryDate, duration));
     };
-    console.log(props.number);
+    console.log(props);
     return (
         <div className="container">
             {modalOpen && (
@@ -49,7 +49,7 @@ const CodingProblemSample = (props) => {
             <div className="card" style={{ width: "18rem" }}>
                 <div className="card-body">
                     <div className="inline-group">
-                        <span className="card-title">Exam {props.number} </span>
+                        <span className="card-title">problem {props.number} </span>
                         {/* <span className='ml-4 black p-2  bg-success text-whites'>{props.owned? 'Owned Exam': 'Public Exam'}</span> */}
                         {props.owned ? (
                             <span className="ml-4 black p-2  bg-light  text-dark bg-opacity-25">
@@ -58,28 +58,26 @@ const CodingProblemSample = (props) => {
                             </span>
                         ) : (
                             <span className="ml-4 black p-2  bg-light text-whites">
-                                Public Exam{" "}
+                                Public problem{" "}
                             </span>
                         )}
                     </div>
                     <h6 className="card-subtitle mb-2 mt-2 text-muted">
-                        Exam title: {props.title}
+                    problem title: {props.name}
                     </h6>
-                    <p className="card-text">
-                        Number of questions:
-                    </p>
+
                     <button
                         className="btn btn-primary mb-2"
                         onClick={handleClick}
                     >
-                        View MCQ Exam
+                        View problem 
                     </button>
                     {/* <button className="btn btn-primary" onClick={handleChooseExam}>Choose MCQ Exam</button> */}
                     <button
                         className="btn btn-primary"
                         onClick={() => setModalOpen(true)}
                     >
-                        Choose MCQ Exam
+                        Choose problem 
                     </button>
                     {choosed && (
                         <div>
@@ -97,7 +95,7 @@ const CodingProblemSample = (props) => {
                             </div>
                             <div className="black mb">
                                 <Typography color="black" variant="h6">
-                                    Exam Duration (in minutes)
+                                problem Duration (in minutes)
                                 </Typography>
                             </div>
                             <div className="mb">
@@ -121,7 +119,7 @@ const CodingProblemSample = (props) => {
                                 className="btn btn-primary"
                                 onClick={handleSubmit}
                             >
-                                Submit MCQ Exam
+                                Submit problem
                             </button>
                         </div>
                     )}
