@@ -146,6 +146,7 @@ router.get("/codingProblems/:pageNumber",recruiterAuth, async (req, res) => {
                 "memoryConstraint",
                 "name",
                 "private",
+                "recruiterId"
 
             ],
             where:{
