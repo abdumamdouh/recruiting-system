@@ -24,11 +24,45 @@ const CodingProblemView = (props) => {
 
 
 if(codingProblem!==undefined){
+    const {testcases}=codingProblem
 
     return(
     
         <div>
            <h3>{codingProblem.name}</h3>
+           <div>
+               <p>
+                time limit: {codingProblem.timeConstraint} seconds
+               </p>
+           </div> <p>
+                memory limit: {codingProblem.memoryConstraint} MegaBytes
+               </p>
+
+
+           <div>
+               <p>
+               {codingProblem.description}
+               </p>
+           </div>
+           <div>
+               {
+                   testcases.map((testcase,index)=>{
+                       return(
+                            <div>
+                                testcase {index+1}
+                                
+                                <p>
+                                <span>input array: {testcase.inputs} </span>
+                                <span>output array: {testcase.outputs}</span>
+                                </p>
+                           
+                               
+                            </div>
+                       )
+                   })
+
+               }
+           </div>
         </div>
     
     
