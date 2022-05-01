@@ -21,6 +21,7 @@ import AddExam from "./components/MCQExam/AddExam";
 import McqTestPage from "./pages/McqTestPage/McqTestPage";
 import UpdatesPage from "./pages/UpdatesPage/UpdatesPage";
 import AssignedTaskPage from "./pages/AssignedTaskPage/AssignedTaskPage";
+import AssignedCodingProblemPage from "./pages/AssignedCodingProblemPage/AssignedCodingProblemPage";
 // components
 import Layout from "./components/layout/Layout";
 // import HelloWorld from "./components/HelloWorld";
@@ -141,7 +142,12 @@ const App = () => {
                         component={AssignedTaskPage}
                         name="taskApplicantView"
                     />
-
+                    <ProtectedRoute
+                        exact
+                        path="/job/codingproblem/:codingProblemId"
+                        component={AssignedCodingProblemPage}
+                        name="codingProblemApplicantView"
+                    />
                     <Route
                         exact
                         path="/404"
