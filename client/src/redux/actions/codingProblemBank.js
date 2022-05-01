@@ -13,7 +13,7 @@ export const getCodingProblemsAction = (pageNumber) => {
             const { userInfo } = getState().user;
             console.log(userInfo.token);
             const rawResponse = await fetch(
-                `${serverURL}/getAllMCQs/${pageNumber}`,
+                `${serverURL}/codingProblems/${pageNumber}`,
                 {
                     method: "GET",
                     headers: {
