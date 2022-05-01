@@ -56,7 +56,7 @@ const CodingProblemBank = () => {
                                     memoryConstraint={m.memoryConstraint}
                                     timeConstraint={m.timeConstraint}
                                     duration={m.duration}
-                                    descrition={m.descrition}
+                                    description={m.description}
 
 
 
