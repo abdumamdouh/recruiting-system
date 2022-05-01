@@ -14,6 +14,7 @@ import ApplicantPage from "../ApplicantPage/ApplicantPage";
 import QuestionBank from "../../components/QuestionBank/QuestionBank";
 import TaskPage from "../TaskPage/TaskPage";
 import TaskReviewPage from '../TaskReviewPage/TaskReviewPage'
+import CodingProblem from '../CodingProblemPage/CodingProblem'
 const DashBoardPage = () => {
     return (
         <Router>
@@ -56,6 +57,9 @@ const DashBoardPage = () => {
                         </Route>
                         <Route path="/dashboard/uploadedexams/reviewsubmissions/:id">
                             <TaskReviewPage />
+                        </Route>
+                        <Route path="/dashboard/codingProblem">
+                            <CodingProblem />
                         </Route>
                     </Switch>
                 </div>
