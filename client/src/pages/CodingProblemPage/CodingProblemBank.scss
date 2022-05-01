@@ -1,0 +1,50 @@
+.card-container {
+    display: grid;
+    padding: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-gap: 1rem;
+}
+
+
+  
+.paginationBttns {
+    width: 80%;
+    height: 40px;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+  
+    a {
+      padding: 10px;
+      margin: 8px;
+      border-radius: 5px;
+      border: 1px solid #2b2eff;
+      color: #2b2eff;
+      cursor: pointer;
+  
+      &:hover {
+        //color: white;
+        background-color: #bcbdf3;
+      }
+    }
+  }
+  
+  .paginationActive a {
+  
+    color: white;
+    background-color: #bcbdf3;
+  }
+  
+  
+  .paginationDisabled a {
+    border: 1px solid grey;
+    color: grey;
+    &:hover{
+      border: 1px solid grey;
+      color: grey;
+      background-color: white;
+      text-decoration: none;
+      cursor:default;
+    }
+   
+  }
