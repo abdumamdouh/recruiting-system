@@ -25,6 +25,24 @@ const codingProblemsReducer = (state = {}, action) => {
                 error: action.payload,
                 loading: false
             };
+
+
+
+        case GET_PROBLEM_BY_ID_REQUEST:
+            return {
+                loading: true,
+                ...state
+            };
+        case GET_PROBLEM_BY_ID_SUCCESS:
+            console.log( 'redux',action.payload)
+            return  {...state,
+                selected:action.payload};
+
+        case GET_PROBLEM_BY_ID_FAIL:
+            return {
+                error: action.payload,
+                loading: false
+            };    
        
         default:
             return state;
