@@ -27,11 +27,11 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
     };
     const handleSubmit = () => {
         console.log(id);
-        const MCQId = id;
+        const codingProblemId = id;
         dispatch(
             pickExamAction(
                 jobId,
-                MCQId,
+                codingProblemId,
                 startDate,
                 expiryDate,
                 duration,
@@ -113,7 +113,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                     <div className="body">
                         <div className="black mb">
                             <Typography color="black" variant="h6">
-                                Exam Duration
+                                Duration
                             </Typography>
                             <Typography color="gray" variant="h6">
                                 (in minutes)
@@ -140,7 +140,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
 
                     <div className="footer">
                         <button id="submitBtn" onClick={handleSubmit}>
-                            Choose Exam
+                            Choose Problem
                         </button>
 
                         <button
