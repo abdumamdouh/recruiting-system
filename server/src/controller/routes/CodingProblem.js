@@ -48,6 +48,26 @@ router.post('/SubmitCodingProblem', recruiterAuth , async (req,res) => {
         res.send(error.message)
     }
 })
+//choose from given problems
+router.post('/chooseCodingProblem', recruiterAuth , async (req,res) => {
+    try {
+    
+      req.body.recruiterId=req.recruiter.id
+       
+        await ActiveCodingProblem.create({
+            codingProblemId:req.body.codingProblemId,
+            jobId:req.body.jobId,
+            deadline:req.body.deadline,
+            duration:req.body.duration
+        })
+        res.status(201).send("Problem is Choosen successfully.")
+    } catch (error) {
+        res.send(error.message)
+    }
+})
+
+
+
 
 // assign coding problem to the filtered applicants (Update status in apply for table)
 // body contains job id with applicants ids that will be assigned to solve the coding problem
