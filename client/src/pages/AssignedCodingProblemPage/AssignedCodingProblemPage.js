@@ -41,7 +41,8 @@ export default function CodingProblem() {
             languague: "C",
             code: `#include <stdio.h>
 int main() {
-    printf("Hello World!");
+    // Code here
+    
     return 0;
 }`,
             view: cpp()
@@ -49,8 +50,10 @@ int main() {
         {
             languague: "C++",
             code: `#include <iostream>
+using namespace std;
 int main() {
-    std::cout << "Hello World!";
+    // Code here
+    
     return 0;
 }`,
             view: cpp()
@@ -59,19 +62,22 @@ int main() {
             languague: "Java",
             code: `class HelloWorld {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        // Code here
+        
     }
 }`,
             view: java()
         },
         {
             languague: "JavaScript",
-            code: 'console.log("Hello World!");',
+            code: `// Code here
+`,
             view: javascript()
         },
         {
             languague: "Python",
-            code: 'print("Hello World!")',
+            code: `# Code here
+`,
             view: python()
         }
     ];
