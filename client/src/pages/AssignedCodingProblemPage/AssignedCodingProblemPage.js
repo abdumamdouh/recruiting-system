@@ -10,22 +10,25 @@ import { EditorState, EditorStateConfig, Extension } from "@codemirror/state";
 import { EditorView, ViewUpdate } from "@codemirror/view";
 import { Completion, autocompletion } from "@codemirror/autocomplete";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { Button, TextField, MenuItem } from "@mui/material";
+import { Button, TextField, MenuItem, Switch } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MyTimer from "./MyTimer";
 import "./AssignedCodingProblemPage.scss";
 export default function CodingProblem() {
+    const [mode, setMode] = useState(true);
+    const [programmingLanguage, setProgrammingLanguage] = useState("C");
+    const [index, setIndex] = useState(0);
     const theme = createTheme({
-        palette: { mode: "dark" },
+        palette: { mode: mode ? "dark" : "light" },
         components: {
             MuiOutlinedInput: {
                 styleOverrides: {
                     root: {
                         height: "4vh",
                         width: "15ch",
-                        marginTop: "5px",
-                        marginLeft: "5px",
-                        color: "#FFFFFF",
+                        // marginTop: "5px",
+                        marginLeft: "0.6rem",
+                        // color: mode ? "#FFFFFF" : "#212529",
                         paddingBottom: "2px"
                     }
                     // Default State
@@ -81,8 +84,6 @@ int main() {
             view: python()
         }
     ];
-    const [programmingLanguage, setProgrammingLanguage] = useState("C");
-    const [index, setIndex] = useState(0);
     let time = new Date();
     time.setSeconds(time.getSeconds() + 5 * 60);
     // const globalCppCompletions = cppLanguage.data.of({
@@ -114,9 +115,17 @@ int main() {
                     <div>description</div>
                 </div>
             </ReflexElement>
-            <ReflexSplitter className="ReflexSplitter" />
+            <ReflexSplitter
+                className={`ReflexSplitter ${
+                    mode ? "ReflexSplitterDarkMode" : "ReflexSplitterLightMode"
+                }`}
+            />
             <ReflexElement className="rightPanel">
-                <div className="editorHeader">
+                <div
+                    className={`editorHeader ${
+                        mode ? "darkMode" : "lightMode"
+                    }`}
+                >
                     <ThemeProvider theme={theme}>
                         <TextField
                             className="combobox"
@@ -124,21 +133,23 @@ int main() {
                             select
                             variant="outlined"
                             label={null}
-                            sx={{
-                                "& .MuiInputLabel-root.Mui-disabled": {
-                                    ":disabled": true
-                                }
-                                // "& .MuiOutlinedInput-root:hover": {
-                                //     "& > fieldset": {
-                                //         border: "none"
-                                //     }
-                                // },
-                                // "& .MuiOutlinedInput-root.Mui-focused": {
-                                //     "& > fieldset": {
-                                //         borderColor: "green"
-                                //     }
-                                // }
-                            }}
+                            // sx={
+                            //     {
+                            // "& .MuiInputLabel-root.Mui-disabled": {
+                            //     ":disabled": true
+                            // }
+                            // "& .MuiOutlinedInput-root:hover": {
+                            //     "& > fieldset": {
+                            //         border: "none"
+                            //     }
+                            // },
+                            // "& .MuiOutlinedInput-root.Mui-focused": {
+                            //     "& > fieldset": {
+                            //         borderColor: "green"
+                            //     }
+                            // }
+                            //     }
+                            // }
                             SelectProps={{
                                 MenuProps: {
                                     sx: { marginTop: "-0.9rem" }
@@ -174,13 +185,42 @@ int main() {
                                 </MenuItem>
                             ))}
                         </TextField>
+                        <div
+                            style={{
+                                marginLeft: "0.4rem",
+                                marginRight: "0.6rem",
+                                whiteSpace: "nowrap"
+                            }}
+                        >
+                            <span
+                                className={
+                                    mode ? "switchDarkMode" : "switchLightMode"
+                                }
+                            >
+                                Light
+                            </span>
+                            <Switch
+                                checked={mode}
+                                onChange={() => {
+                                    setMode(!mode);
+                                }}
+                                size="small"
+                            ></Switch>
+                            <span
+                                className={
+                                    mode ? "switchDarkMode" : "switchLightMode"
+                                }
+                            >
+                                Dark
+                            </span>
+                        </div>
                     </ThemeProvider>
                 </div>
                 <div>
                     <CodeMirror
                         value={programmingLanguages[index].code}
                         height="75vh"
-                        theme={oneDark}
+                        theme={mode ? "dark" : "light"}
                         extensions={[
                             basicSetup,
                             programmingLanguages[index].view,
@@ -188,9 +228,15 @@ int main() {
                         ]}
                     />
                 </div>
-                <div className="editorFooter">
+                <div
+                    className={`editorFooter ${
+                        mode ? "darkMode" : "lightMode"
+                    }`}
+                >
                     <MyTimer
-                        expiryTimestamp={time} /*handleOnExpire={handleSubmit}*/
+                        expiryTimestamp={time}
+                        // handleOnExpire={handleSubmit}
+                        mode={mode}
                     />
                     <Button
                         sx={{
