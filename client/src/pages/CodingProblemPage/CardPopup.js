@@ -10,12 +10,12 @@ import TextField from "@mui/material/TextField";
 import { useHistory } from "react-router-dom";
 
 import Message from "../../components/modal/Message";
-import { pickExamAction } from "../../redux/actions/exam";
+import {chooseProblemAction} from "../../redux/actions/codingProblemBank"
 function CardPopup({ setOpenModal, message, id, jobId }) {
     const history = useHistory();
     const dispatch = useDispatch();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [expiryDate, setExpiryDate] = useState(new Date());
+    const [deadline, setdeadline] = useState(new Date());
     const [startDate, setStartDate] = useState(new Date());
     const [duration, setDuration] = useState(0);
     const [value, setValue] = useState(new Date());
@@ -23,17 +23,25 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
     const [modalOpen, setModalOpen] = useState(false);
     
     const showSuccessMessage = () => {
-        history.push(`/dashboard/uploadedexams`);
+        history.push(`/dashboard/codingProblemBank`);
     };
     const handleSubmit = () => {
         console.log(id);
         const codingProblemId = id;
+        const debug={ jobId,
+            codingProblemId,
+            startDate,
+            deadline,
+            duration,
+
+        }
+        console.log("debugger",debug)
         dispatch(
-            pickExamAction(
+            chooseProblemAction(
                 jobId,
                 codingProblemId,
                 startDate,
-                expiryDate,
+                deadline,
                 duration,
                 showSuccessMessage
             )
@@ -102,7 +110,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                                         value={value}
                                         onChange={newValue => {
                                             setValue(newValue);
-                                            setExpiryDate(value);
+                                            setdeadline(value);
                                             console.log(value);
                                         }}
                                     />
