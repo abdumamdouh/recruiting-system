@@ -1,12 +1,12 @@
 .sidebar {
-    flex: 2;
+   
     height: calc(100vh - 80px);
-    width: calc(100vh - 250px);
+    width:20%;
     background-color: rgb(251, 251, 255);
     position: sticky;
     top: 50px;
     margin-right: 50px;
-    margin-left: -8rem;
+    margin-left: -0.25rem;
     // margin-top:20px;
 }
 
