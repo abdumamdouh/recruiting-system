@@ -24,7 +24,7 @@
     // border: 5px solid red;
 }
 .rightPanel {
-    background-color: red; /*#282c34;*/
+    // background-color: red; /*#282c34;*/
     justify-content: start;
     align-content: end;
     // min-width: 50%;
@@ -36,6 +36,16 @@
 }
 .editorHeader {
     height: 5vh;
+    width: 100%;
+    background-color: #282c34;
+    // color: #940404;
+}
+.editorFooter {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 10vh;
     width: 100%;
     background-color: #282c34;
 }

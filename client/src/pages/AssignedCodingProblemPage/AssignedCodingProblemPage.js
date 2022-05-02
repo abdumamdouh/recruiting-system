@@ -10,8 +10,9 @@ import { EditorState, EditorStateConfig, Extension } from "@codemirror/state";
 import { EditorView, ViewUpdate } from "@codemirror/view";
 import { Completion, autocompletion } from "@codemirror/autocomplete";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { TextField, MenuItem } from "@mui/material";
+import { Button, TextField, MenuItem } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import MyTimer from "./MyTimer";
 import "./AssignedCodingProblemPage.scss";
 export default function CodingProblem() {
     const theme = createTheme({
@@ -76,6 +77,8 @@ int main() {
     ];
     const [programmingLanguage, setProgrammingLanguage] = useState("C");
     const [index, setIndex] = useState(0);
+    let time = new Date();
+    time.setSeconds(time.getSeconds() + 5 * 60);
     // const globalCppCompletions = cppLanguage.data.of({
     //     autocomplete: completeFromGlobalScope
     // });
@@ -170,7 +173,7 @@ int main() {
                 <div>
                     <CodeMirror
                         value={programmingLanguages[index].code}
-                        height="80vh"
+                        height="75vh"
                         theme={oneDark}
                         extensions={[
                             basicSetup,
@@ -178,6 +181,22 @@ int main() {
                             autocompletion()
                         ]}
                     />
+                </div>
+                <div className="editorFooter">
+                    <MyTimer
+                        expiryTimestamp={time} /*handleOnExpire={handleSubmit}*/
+                    />
+                    <Button
+                        sx={{
+                            marginRight: "0.6rem",
+                            margin: "0.4rem",
+                            fontSize: "1rem"
+                        }}
+                        variant="contained"
+                        // onClick={showModal}
+                    >
+                        Submit
+                    </Button>
                 </div>
             </ReflexElement>
         </ReflexContainer>
