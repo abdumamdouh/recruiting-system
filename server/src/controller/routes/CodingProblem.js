@@ -84,7 +84,7 @@ router.post("/assignProblemToApplicants" , recruiterAuth , async (req,res) =>{
 // seq: job_id --> codingproblem_id (many_to_many table)
 // (apply_for table) get applicants applied for this job and status "waiting for coding problem"
 // render coding problem to only those applicants  
-router.get("*/getCodingProblem/:id" , applicantAuth , async (req,res) => {
+router.get("/getCodingProblem/:id" , applicantAuth , async (req,res) => {
     try { 
             const codingProblem = await CodingProblemBank.findOne({
 
@@ -111,7 +111,7 @@ router.get("*/getCodingProblem/:id" , applicantAuth , async (req,res) => {
 
 //get coding problem by id for recruiter with full testcases :
 
-router.get("*/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
+router.get("/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
     try { 
             const codingProblem = await CodingProblemBank.findOne({
                 where: {
@@ -120,7 +120,7 @@ router.get("*/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
             });
            const [results, metadata] = await db.query(`SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.params.id}`);
            codingProblem.dataValues.testcases=results;
-
+           // console.log(results)
            res.send(codingProblem);
 
         }
@@ -134,8 +134,8 @@ router.get("*/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
 
 
 //get all coding problems for recruiter to choose from them:
-router.post("/codingProblems",recruiterAuth, async (req, res) => {
-    const pageNumber = req.body.pageNumber;
+router.get("/codingProblems/:pageNumber",recruiterAuth, async (req, res) => {
+    const {pageNumber} = req.params;
     // const Limit = req.body.limit
     try {
         const result = await CodingProblemBank.findAndCountAll({
@@ -146,6 +146,7 @@ router.post("/codingProblems",recruiterAuth, async (req, res) => {
                 "memoryConstraint",
                 "name",
                 "private",
+                "recruiterId"
 
             ],
             where:{
@@ -159,6 +160,7 @@ router.post("/codingProblems",recruiterAuth, async (req, res) => {
         });
         res.send({
             codingProblems: result.rows,  
+            Count:result.count
         });
     } catch (error) {
         res.status(400).send(error.message);
