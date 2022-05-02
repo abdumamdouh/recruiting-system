@@ -5,6 +5,9 @@ import {
     GET_PROBLEM_BY_ID_REQUEST,
     GET_PROBLEM_BY_ID_SUCCESS,
     GET_PROBLEM_BY_ID_FAIL,
+    CHOOSE_CODING_PROBLEM_REQUEST,
+    CHOOSE_CODING_PROBLEM_SUCCESS,
+    CHOOSE_CODING_PROBLEM_FAIL
 } from "../types/index";
 
 const serverURL = "http://localhost:5000";
