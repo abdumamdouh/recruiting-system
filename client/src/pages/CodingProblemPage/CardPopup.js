@@ -24,6 +24,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
     
     const showSuccessMessage = () => {
         history.push(`/dashboard/codingProblemBank`);
+        setOpenModal(false);
     };
     const handleSubmit = () => {
         console.log(id);
