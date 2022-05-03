@@ -5,8 +5,7 @@ const Recruiter = require("../../models/Recruiter");
 const Job = require("../../models/Job");
 const MCQ = require("../../models/MCQ");
 const Task = require("../../models/Task");
-const ActiveTask = require("../../models/ActiveTask");
-const JobMCQ = require("../../models/JobMCQ");
+const CodingProblemBank = require("../../models/CodingProblemBank");
 const Requirment = require("../../models/Requirment");
 const ApplyFor = require("../../models/ApplyFor");
 const Sequelize = require("sequelize");
@@ -103,6 +102,22 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                 });
                 everyTask = JSON.parse(JSON.stringify(everyTask));
                 // console.log(everyTask[0].Jobs);
+                let everyCodingProblem = await CodingProblemBank.findAll({
+                    where: { id: job.assigned.codingProblems },
+                    attributes: ["id", "title"],
+                    include: [
+                        {
+                            model: Job,
+                            where: { id: job.JobId },
+                            attributes: ["id"],
+                            through: { attributes: ["deadline", "duration"] }
+                        }
+                    ]
+                });
+                everyCodingProblem = JSON.parse(
+                    JSON.stringify(everyCodingProblem)
+                );
+                // console.log(everyCodingProblem);
                 const jobAssessments = {
                     jobId: jobData.id,
                     jobTitle: jobData.title,
@@ -123,6 +138,16 @@ router.get("/assessments", applicantAuth, async (req, res) => {
                             title,
                             deadline: Jobs[0].ActiveTask.deadline
                         }))
+                    }),
+                    ...(everyCodingProblem.length && {
+                        codingProblem: everyCodingProblem.map(
+                            ({ id, title, Jobs }) => ({
+                                codingProblemId: id,
+                                title,
+                                deadline: Jobs[0].ActiveCodingProblem.deadline,
+                                duration: Jobs[0].ActiveCodingProblem.duration
+                            })
+                        )
                     })
                 };
                 return jobAssessments;
