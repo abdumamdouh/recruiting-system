@@ -103,7 +103,7 @@ router.post(
             });
 
             // removing the task id from the assigned tasks after submission 
-            const deletedIndex = assignedObj.tasks.indexOf(req.params.TaskId.toString())
+            const deletedIndex = assignedObj.tasks.indexOf(req.params.TaskId)
             assignedObj.tasks.splice(deletedIndex,1)
             await ApplyFor.update({
                 assigned:assignedObj
