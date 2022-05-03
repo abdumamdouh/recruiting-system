@@ -1,4 +1,5 @@
 const express = require("express");
+const _ = require("lodash");
 const CodingProblemBank = require("../../models/CodingProblemBank");
 const CodingProblemStats = require("../../models/CodingProblemStats");
 const TestCases = require("../../models/TestCases");
@@ -106,17 +107,33 @@ router.post("/assignProblemToApplicants", recruiterAuth, async (req, res) => {
 // render coding problem to only those applicants
 router.get("/getCodingProblem/:id", applicantAuth, async (req, res) => {
     try {
-        const codingProblem = await CodingProblemBank.findOne({
-            where: {
-                id: req.params.id
-            }
+        let codingProblem = await CodingProblemBank.findByPk(req.params.id, {
+            attributes: [
+                "description",
+                "title",
+                "timeConstraint",
+                "memoryConstraint"
+            ],
+            include: [
+                {
+                    model: TestCases,
+                    attributes: ["inputs", "outputs"],
+                    limit: 1
+                },
+                {
+                    model: Job,
+                    attributes: ["id"],
+                    through: { attributes: ["duration", "deadline"] }
+                }
+            ]
         });
-        const [results, metadata] = await db.query(
-            `SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.params.id} limit 1`
-        );
-
-        codingProblem.dataValues.testcases = results;
-
+        codingProblem = JSON.parse(JSON.stringify(codingProblem));
+        codingProblem.duration =
+            codingProblem.Jobs[0].ActiveCodingProblem.duration;
+        codingProblem.deadline =
+            codingProblem.Jobs[0].ActiveCodingProblem.deadline;
+        _.unset(codingProblem, "Jobs");
+        _.unset(codingProblem, "id");
         res.send(codingProblem);
     } catch (error) {
         res.status(400).send(error.message);
