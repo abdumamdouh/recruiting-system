@@ -72,10 +72,14 @@ const UpdatesPage = (props) => {
         console.log(data);
         // console.log("redii");
         localStorage.setItem("jobId", data.jobId);
-        history.push(`/job/exam/${data.MCQId}`);
+        if (data.MCQId) {
+            history.push(`/job/exam/${data.MCQId}`);
+        } else if (data.codingProblemId) {
+            history.push(`/job/codingproblem/${data.codingProblemId}`);
+        }
     };
 
-    const handleMCQ = (obj) => {
+    const handleModalOpen = (obj) => {
         console.log(obj);
         setModalData(obj);
         handleOpen();
@@ -210,7 +214,7 @@ const UpdatesPage = (props) => {
                                                                                 {/*redirect*/}
                                                                                 <span
                                                                                     onClick={() =>
-                                                                                        handleMCQ(
+                                                                                        handleModalOpen(
                                                                                             {
                                                                                                 ...obj,
                                                                                                 jobId: update.jobId
@@ -330,12 +334,11 @@ const UpdatesPage = (props) => {
                                                                                     </Popover.Header>
                                                                                     <Popover.Body>
                                                                                         <strong>
-                                                                                            Expiry
-                                                                                            Date:
+                                                                                            Deadline:
                                                                                         </strong>{" "}
                                                                                         {moment
                                                                                             .parseZone(
-                                                                                                obj.expiryDate
+                                                                                                obj.deadline
                                                                                             )
                                                                                             .utc(
                                                                                                 "-02:00"
@@ -365,7 +368,7 @@ const UpdatesPage = (props) => {
                                                                                 {/*redirect*/}
                                                                                 <span
                                                                                     onClick={() =>
-                                                                                        handleMCQ(
+                                                                                        handleModalOpen(
                                                                                             {
                                                                                                 ...obj,
                                                                                                 jobId: update.jobId
@@ -415,7 +418,9 @@ const UpdatesPage = (props) => {
                                     fontSize: "1.75rem"
                                 }}
                             >
-                                MCQ Test
+                                {modalData.MCQId
+                                    ? "MCQ Test"
+                                    : "Coding Problem"}
                             </Typography>
 
                             {modalData.hasOwnProperty("title") && (
@@ -424,9 +429,13 @@ const UpdatesPage = (props) => {
                                     sx={{ mt: 2 }}
                                     style={{ textAlign: "center" }}
                                 >
-                                    Now you will be redirect to a MCQ Test with
-                                    title <strong>{modalData.title}</strong> and
-                                    its duration is{" "}
+                                    Now you will be redirected to{" "}
+                                    {modalData.MCQId
+                                        ? "MCQ Test"
+                                        : "Coding Problem"}{" "}
+                                    with title{" "}
+                                    <strong>{modalData.title}</strong> and its
+                                    duration is{" "}
                                     <strong>{modalData.duration}</strong>{" "}
                                     minutes.
                                 </Typography>
@@ -447,7 +456,7 @@ const UpdatesPage = (props) => {
                                         marginRight: "15px"
                                     }}
                                 >
-                                    Take MCQ NOW
+                                    Take Assessment NOW
                                 </Button>
                                 <Button
                                     variant="contained"
