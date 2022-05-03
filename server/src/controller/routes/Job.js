@@ -463,7 +463,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         const overallMCQs = await MCQStat.findAll({
             attributes: [
               'applicantId',
-              [sequelize.fn('sum', db.col('score')), 'overallMCQsScore'],
+              [Sequelize.fn('sum', Sequelize.col('score')), 'overallMCQsScore'],
             ],
             where: {
                 jobId: jobId
