@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import CodeMirror from "@uiw/react-codemirror";
 import { basicSetup } from "@codemirror/basic-setup";
 import { cpp, cppLanguage } from "@codemirror/lang-cpp";
@@ -15,9 +17,39 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MyTimer from "./MyTimer";
 import "./AssignedCodingProblemPage.scss";
 export default function CodingProblem() {
+    const { codingProblemId } = useParams();
     const [mode, setMode] = useState(true);
     const [programmingLanguage, setProgrammingLanguage] = useState("C");
+    const [codingProblem, setCodingProblem] = useState();
     const [index, setIndex] = useState(0);
+    const { userInfo } = useSelector((state) => state.user);
+    useEffect(() => {
+        const fetchCodingProblem = async () => {
+            try {
+                console.log(userInfo.token);
+                const response = await fetch(
+                    //TODO: make it dynamic
+                    `http://localhost:5000/getCodingProblem/${codingProblemId}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer " + userInfo.token
+                        }
+                    }
+                );
+                const data = await response.json();
+                console.log(data);
+                setCodingProblem(data);
+                //TODO: condition for success
+                // showModal();
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+        fetchCodingProblem();
+    }, []);
     const theme = createTheme({
         palette: { mode: mode ? "dark" : "light" },
         components: {
@@ -44,7 +76,7 @@ export default function CodingProblem() {
             languague: "C",
             code: `#include <stdio.h>
 int main() {
-    // Code here
+    // Write your code here
     
     return 0;
 }`,
@@ -55,7 +87,7 @@ int main() {
             code: `#include <iostream>
 using namespace std;
 int main() {
-    // Code here
+    // Write your code here
     
     return 0;
 }`,
@@ -63,9 +95,9 @@ int main() {
         },
         {
             languague: "Java",
-            code: `class HelloWorld {
+            code: `class Problem {
     public static void main(String[] args) {
-        // Code here
+        // Write your code here
         
     }
 }`,
@@ -73,19 +105,19 @@ int main() {
         },
         {
             languague: "JavaScript",
-            code: `// Code here
+            code: `// Write your code here
 `,
             view: javascript()
         },
         {
             languague: "Python",
-            code: `# Code here
+            code: `# Write your code here
 `,
             view: python()
         }
     ];
     let time = new Date();
-    time.setSeconds(time.getSeconds() + 5 * 60);
+    time.setSeconds(time.getSeconds() + 50 * 60);
     // const globalCppCompletions = cppLanguage.data.of({
     //     autocomplete: completeFromGlobalScope
     // });
@@ -111,8 +143,8 @@ int main() {
         <ReflexContainer className="container" orientation="vertical">
             <ReflexElement className="leftPanel" minSize={350}>
                 <div>
-                    <h3 className="title">Title</h3>
-                    <div>description</div>
+                    <h3 className="title">{codingProblem?.title}</h3>
+                    <div>{codingProblem?.description}</div>
                 </div>
             </ReflexElement>
             <ReflexSplitter
