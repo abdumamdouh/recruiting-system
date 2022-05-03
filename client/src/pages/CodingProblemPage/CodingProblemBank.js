@@ -43,8 +43,7 @@ const CodingProblemBank = () => {
                                 className="examli"
                             >
                                 <CodingProblemSample
-                                    name={m.name}
-                                   
+                                    title={m.title}
                                     number={(pageNumber - 1) * 4 + (index + 1)}
                                     id={m.id}
                                     owned={
@@ -57,9 +56,6 @@ const CodingProblemBank = () => {
                                     timeConstraint={m.timeConstraint}
                                     duration={m.duration}
                                     description={m.description}
-
-
-
                                 />{" "}
                             </li>{" "}
                         </ul>
