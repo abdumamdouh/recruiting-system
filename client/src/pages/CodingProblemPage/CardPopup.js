@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import { useHistory } from "react-router-dom";
 
 import Message from "../../components/modal/Message";
-import {chooseProblemAction} from "../../redux/actions/codingProblemBank"
+import { chooseProblemAction } from "../../redux/actions/codingProblemBank";
 function CardPopup({ setOpenModal, message, id, jobId }) {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -21,7 +21,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
     const [value, setValue] = useState(new Date());
     const [dateValue, setDateValue] = useState(new Date());
     const [modalOpen, setModalOpen] = useState(false);
-    
+
     const showSuccessMessage = () => {
         history.push(`/dashboard/codingProblemBank`);
         setOpenModal(false);
@@ -29,14 +29,8 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
     const handleSubmit = () => {
         console.log(id);
         const codingProblemId = id;
-        const debug={ jobId,
-            codingProblemId,
-            startDate,
-            deadline,
-            duration,
-
-        }
-        console.log("debugger",debug)
+        const debug = { jobId, codingProblemId, startDate, deadline, duration };
+        console.log("debugger", debug);
         dispatch(
             chooseProblemAction(
                 jobId,
@@ -66,7 +60,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                         {modalOpen && (
                             <Message
                                 setOpenModal={setModalOpen}
-                                message="choosed successfully!"
+                                message="Choosed successfully!"
                             />
                         )}
                         <div className="mb black">
@@ -78,12 +72,12 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                                     dateAdapter={AdapterDateFns}
                                 >
                                     <DateTimePicker
-                                        renderInput={props => (
+                                        renderInput={(props) => (
                                             <TextField {...props} />
                                         )}
                                         label="DateTimePicker"
                                         value={dateValue}
-                                        onChange={newValue => {
+                                        onChange={(newValue) => {
                                             setDateValue(newValue);
                                             setStartDate(newValue);
                                             console.log(newValue);
@@ -92,10 +86,9 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                                 </LocalizationProvider>
                             </div>
                         </div>
-                       
                     </div>
                     <div className="body">
-                    <div className="mb black">
+                        <div className="mb black">
                             <Typography color="black" variant="h6">
                                 End Date
                             </Typography>
@@ -104,12 +97,12 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                                     dateAdapter={AdapterDateFns}
                                 >
                                     <DateTimePicker
-                                        renderInput={props => (
+                                        renderInput={(props) => (
                                             <TextField {...props} />
                                         )}
                                         label="DateTimePicker"
                                         value={value}
-                                        onChange={newValue => {
+                                        onChange={(newValue) => {
                                             setValue(newValue);
                                             setdeadline(value);
                                             console.log(value);
@@ -140,7 +133,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
                                 label="duration"
                                 size="md"
                                 value={duration}
-                                onChange={e => {
+                                onChange={(e) => {
                                     setDuration(e.target.value);
                                 }}
                             />
