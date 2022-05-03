@@ -15,7 +15,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import Message from "../../components/modal/Message";
 import styled from "@emotion/styled";
 
-
 export default function AddProblem() {
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -62,31 +61,18 @@ export default function AddProblem() {
     const jobId = useSelector((state) => state.job.id);
     const { userInfo } = useSelector((state) => state.user);
 
+    const [testCases, setTestCases] = useState([{}]);
 
-    const [testCases,setTestCases]=useState([{}])
-
-
-
-
-
-
-
-
-    const AddTestCase = ()=>{
-        setTestCases(testCases.concat([{}]))
-       // console.log(testCases)
-    }
-    const handleTestCaseInput = (event)=>{
-        
-            testCases[event.target.id].inputs=JSON.parse(event.target.value)                  
-        
-        
-    }
-    const handleTestCaseOutput = (event)=>{
-        testCases[event.target.id].outputs=JSON.parse(event.target.value)           
-
-        
-    }
+    const AddTestCase = () => {
+        setTestCases(testCases.concat([{}]));
+        // console.log(testCases)
+    };
+    const handleTestCaseInput = (event) => {
+        testCases[event.target.id].inputs = JSON.parse(event.target.value);
+    };
+    const handleTestCaseOutput = (event) => {
+        testCases[event.target.id].outputs = JSON.parse(event.target.value);
+    };
     const handleOnError = (err) => {
         console.log(err);
     };
@@ -100,20 +86,18 @@ export default function AddProblem() {
     };
 
     const handleClick = async () => {
-
-
-        const codingProblem={
-            name:title,
+        const codingProblem = {
+            title,
             description,
-            memoryConstraint:Number(memoryConstraint),
-            timeConstraint:Number(timeConstraint),
-            duration:Number(duration),
-            testcases:testCases,
+            memoryConstraint: Number(memoryConstraint),
+            timeConstraint: Number(timeConstraint),
+            duration: Number(duration),
+            testcases: testCases,
             jobId,
-            deadline:expiryDate,
-            private:0
-        }
-       // console.log(codingProblem)
+            deadline: expiryDate,
+            isPrivate: 0
+        };
+        // console.log(codingProblem)
         //console.log()
         /*
         {
@@ -152,18 +136,21 @@ export default function AddProblem() {
         // }
 
         try {
-           // console.log(codingProblem)
+            // console.log(codingProblem)
             //console.log(userInfo.token);
-            const response = await fetch(`http://localhost:5000/SubmitCodingProblem`, {
-                method: "POST",
-                headers: {
-                    Accept: "multipart/form-data",
-                     "Content-Type": "application/json",
-                    // "Content-Type": "multipart/form-data",
-                    Authorization: "Bearer " + userInfo.token
-                },
-                body: JSON.stringify(codingProblem)
-            });
+            const response = await fetch(
+                `http://localhost:5000/SubmitCodingProblem`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "multipart/form-data",
+                        "Content-Type": "application/json",
+                        // "Content-Type": "multipart/form-data",
+                        Authorization: "Bearer " + userInfo.token
+                    },
+                    body: JSON.stringify(codingProblem)
+                }
+            );
             const data = await response;
             //console.log(data);
             //TODO: condition for success
@@ -304,29 +291,21 @@ export default function AddProblem() {
                     </LocalizationProvider>
                 </div>
 
-                
                 <Typography color="black" variant="h6">
                     Duration of coding problem
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        < TextField
+                        <TextField
                             renderInput={(props) => <TextField {...props} />}
                             label="Duration"
-                            onChange={event=>setDuration(event.target.value)}
-
+                            onChange={(event) =>
+                                setDuration(event.target.value)
+                            }
                         />
                     </LocalizationProvider>
                 </div>
-            
             </div>
-
-
-
-            
-
-
-
 
             <div className="mb black">
                 <Typography color="black" variant="h6">
@@ -334,74 +313,100 @@ export default function AddProblem() {
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        < TextField
+                        <TextField
                             renderInput={(props) => <TextField {...props} />}
                             label="Time Constraints"
-                            onChange={event=>setTimeConstraint(event.target.value)}
+                            onChange={(event) =>
+                                setTimeConstraint(event.target.value)
+                            }
                         />
                     </LocalizationProvider>
                 </div>
                 <Typography color="black" variant="h6">
-                     Memory Constraints
+                    Memory Constraints
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        < TextField
+                        <TextField
                             renderInput={(props) => <TextField {...props} />}
                             label="Memory Constraints"
-                            onChange={event=>setMemoryConstraint(event.target.value)}
-
+                            onChange={(event) =>
+                                setMemoryConstraint(event.target.value)
+                            }
                         />
                     </LocalizationProvider>
                 </div>
             </div>
 
-
-            {//testcases
+            {
+                //testcases
             }
 
-            {
-                testCases.map((testcase,index)=>{
-                    return (
-                    <div key = {index}>
-                            <Typography key = {index} color="black" variant="h6">
-                                testcase {index+1}
-                            </Typography>
-
-  
-                        <div  key = {`input${index}`} style={{display: "inline-block",marginBottom: "10px",marginRight:"10px" }}>
-                        <Typography key = {`input${index}`} color="black" variant="h6">
-                            inputs array
+            {testCases.map((testcase, index) => {
+                return (
+                    <div key={index}>
+                        <Typography key={index} color="black" variant="h6">
+                            testcase {index + 1}
                         </Typography>
+
+                        <div
+                            key={`input${index}`}
+                            style={{
+                                display: "inline-block",
+                                marginBottom: "10px",
+                                marginRight: "10px"
+                            }}
+                        >
+                            <Typography
+                                key={`input${index}`}
+                                color="black"
+                                variant="h6"
+                            >
+                                inputs array
+                            </Typography>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                < TextField
-                                    id = {index}
-                                    renderInput={(props) => <TextField key = {`input${index}`} {...props} />}
+                                <TextField
+                                    id={index}
+                                    renderInput={(props) => (
+                                        <TextField
+                                            key={`input${index}`}
+                                            {...props}
+                                        />
+                                    )}
                                     label="input"
                                     onChange={handleTestCaseInput}
                                 />
                             </LocalizationProvider>
                         </div>
-                       
-                        <div  key = {`h${index}`} style={{display: "inline-block",marginBottom: "10px",marginRight:"10px" }}>
-                        <Typography key = {index} color="black" variant="h6">
-                            outputs array 
-                        </Typography>
+
+                        <div
+                            key={`h${index}`}
+                            style={{
+                                display: "inline-block",
+                                marginBottom: "10px",
+                                marginRight: "10px"
+                            }}
+                        >
+                            <Typography key={index} color="black" variant="h6">
+                                outputs array
+                            </Typography>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                < TextField
-                                    id = {index}
-                                    renderInput={(props) => <TextField key = {`outputs${index}`} {...props} />}
+                                <TextField
+                                    id={index}
+                                    renderInput={(props) => (
+                                        <TextField
+                                            key={`outputs${index}`}
+                                            {...props}
+                                        />
+                                    )}
                                     label="output"
                                     onChange={handleTestCaseOutput}
                                 />
                             </LocalizationProvider>
                         </div>
-                           
-                    </div>)
-
-                })
-
-            }
+                    </div>
+                );
+            })}
             <div className="mb">
                 <Button
                     style={{ marginBottom: "10px" }}
@@ -411,13 +416,6 @@ export default function AddProblem() {
                     Add testCase
                 </Button>
             </div>
-
-
-
-
-
-
-
 
             <div>
                 <h4
@@ -440,8 +438,8 @@ export default function AddProblem() {
                     }}
                 >
                     <em>
-                        Explain more details about the Coding problem through uploading a
-                        docx or pdf file.
+                        Explain more details about the Coding problem through
+                        uploading a docx or pdf file.
                     </em>
                 </small>
                 <div className="mb" style={{ marginTop: "5px" }}>
