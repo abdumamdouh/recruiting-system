@@ -43,13 +43,15 @@ const CodingProblemSample = (props) => {
                     setOpenModal={setModalOpen}
                     id={props.id}
                     jobId={jobId}
-                    message="uploaded successfully!"
+                    message="Uploaded successfully!"
                 />
             )}
             <div className="card" style={{ width: "18rem" }}>
                 <div className="card-body">
                     <div className="inline-group">
-                        <span className="card-title">problem {props.number} </span>
+                        <span className="card-title">
+                            Problem {props.number}{" "}
+                        </span>
                         {/* <span className='ml-4 black p-2  bg-success text-whites'>{props.owned? 'Owned Exam': 'Public Exam'}</span> */}
                         {props.owned ? (
                             <span className="ml-4 black p-2  bg-light  text-dark bg-opacity-25">
@@ -63,21 +65,21 @@ const CodingProblemSample = (props) => {
                         )}
                     </div>
                     <h6 className="card-subtitle mb-2 mt-2 text-muted">
-                    problem title: {props.name}
+                        Problem title: {props.title}
                     </h6>
 
                     <button
                         className="btn btn-primary mb-2"
                         onClick={handleClick}
                     >
-                        View problem 
+                        View problem
                     </button>
                     {/* <button className="btn btn-primary" onClick={handleChooseExam}>Choose MCQ Exam</button> */}
                     <button
                         className="btn btn-primary"
                         onClick={() => setModalOpen(true)}
                     >
-                        Choose problem 
+                        Choose problem
                     </button>
                     {choosed && (
                         <div>
@@ -95,7 +97,7 @@ const CodingProblemSample = (props) => {
                             </div>
                             <div className="black mb">
                                 <Typography color="black" variant="h6">
-                                problem Duration (in minutes)
+                                    problem Duration (in minutes)
                                 </Typography>
                             </div>
                             <div className="mb">
