@@ -179,8 +179,7 @@ const UpdatesPage = (props) => {
                                                                                     </Popover.Header>
                                                                                     <Popover.Body>
                                                                                         <strong>
-                                                                                            Expiry
-                                                                                            Date:
+                                                                                            Deadline:
                                                                                         </strong>{" "}
                                                                                         {moment
                                                                                             .parseZone(
