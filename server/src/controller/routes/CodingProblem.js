@@ -6,7 +6,7 @@ const ActiveCodingProblem = require("../../models/ActiveCodingProbelms")
 const ApplyFor = require("../../models/ApplyFor")
 const Job = require("../../models/Job");
 const {writeCodeToFile,testCode,inject} = require('../helper functions/CodingProblemLogic')
-
+const _ = require("lodash");
 
 const recruiterAuth = require('../middleware/recruiterAuth') 
 const applicantAuth = require('../middleware/applicantAuth')
@@ -126,9 +126,6 @@ router.get("*/getFullCodingProblem/:id" , recruiterAuth , async (req,res) => {
 })
 
 
-
-
-
 //get all coding problems for recruiter to choose from them:
 router.post("/codingProblems",recruiterAuth, async (req, res) => {
     const pageNumber = req.body.pageNumber;
@@ -169,11 +166,10 @@ router.post("/codingProblems",recruiterAuth, async (req, res) => {
 // compare output of the program with the correct output
 router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
     try {
-        // validate that the applicant can solve the problem
-
+        // validate that the appSlicant can solve the problem
         // inject time measuring code
         req.body.code = inject(req.body.code,req.body.language)
-
+        
         // writing the coming code in the solutions directory
         writeCodeToFile(req.body.code,
             req.body.jobId,
@@ -184,7 +180,8 @@ router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
         // testing code correctness 
         const [results, metadata] = await db.query(`SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.body.codingProblemId}`);
         const [specs, Metadata] = await db.query(`SELECT timeConstraint,memoryConstraint FROM codingproblembanks WHERE id=${req.body.codingProblemId}`);
-            console.log(specs)
+        // console.log(specs)
+
         //to store the result of each test case
         let finalResult={};
         const index ={
@@ -207,6 +204,28 @@ router.post("*/submitSolution/" , applicantAuth , async(req,res) => {
             const numOfTests=results.length
             const correct = await testCode(req.body.code,req.body.language,5,testCase.inputs,testCase.outputs,index,numOfTests,finalResult,cb,specs)
             
+            // getting the assigned array from apply-fors table
+            const {assigned} = await ApplyFor.findOne({
+                attributes: ["assigned"],
+                where: {
+                    JobId: req.body.jobId,
+                    ApplicantId: req.applicant.id
+                },
+                raw: true
+            });
+           
+            // removing the coding problem id from the assigned tasks after submission 
+            _.pull(assigned.codingProblems, req.body.codingProblemId);
+
+            await ApplyFor.update({
+                assigned:assigned
+            },{
+                where:{
+                    JobId: req.body.jobId,
+                    ApplicantId: req.applicant.id
+                }
+            })
+ 
             // console.log(correct)
         })
         res.send("submitted successfully")
