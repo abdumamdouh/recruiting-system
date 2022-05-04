@@ -106,7 +106,7 @@ router.post(
             const deletedIndex = assignedObj.tasks.indexOf(req.params.TaskId)
             assignedObj.tasks.splice(deletedIndex,1)
             await ApplyFor.update({
-                assigned:assignedObj
+                assigned:JSON.stringify(assignedObj)
             },{
                 where:{
                     JobId: req.params.JobId,
