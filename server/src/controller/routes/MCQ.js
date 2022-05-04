@@ -289,7 +289,8 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
     try {
         const MCQId = req.params.id;
         const applicantId = req.applicant.id;
-        // const jobId = req.body;
+        const { jobId } = req.body;
+        // console.log(MCQId);
         let data = await MCQ.findByPk(MCQId, {
             include: [
                 {
@@ -297,32 +298,33 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
                     as: "questions",
                     attributes: ["id", "answer"],
                     through: { attributes: [] }
-                },
-                {
-                    model: Job,
-                    attributes: ["id"],
-                    through: { attributes: [] }
                 }
+                // {
+                //     model: Job,
+                //     attributes: ["id"],
+                //     through: { attributes: [] }
+                // }
             ],
             attributes: []
         });
         data = JSON.parse(JSON.stringify(data));
+        // console.log(data);
         let { assigned } = await ApplyFor.findOne({
             where: {
                 ApplicantId: applicantId,
-                JobId: data.Jobs[0].id
+                JobId: jobId
             },
             attributes: ["assigned"],
             raw: true
         });
         assigned = JSON.parse(assigned);
-        assigned.MCQs = _.without(Number(assigned.MCQs), Number(MCQId));
+        _.pull(assigned.MCQs, MCQId);
         // console.log(assigned);
         assigned = JSON.stringify(assigned);
         await ApplyFor.update(
             { assigned },
             {
-                where: { ApplicantId: applicantId, JobId: data.Jobs[0].id }
+                where: { ApplicantId: applicantId, JobId: jobId }
             }
         );
         const answers = data.questions.reduce(
@@ -344,7 +346,7 @@ router.post("/submit/:id", applicantAuth, async (req, res) => {
         await MCQStat.create({
             MCQId,
             applicantId,
-            jobId: data.Jobs[0].id,
+            jobId,
             score
         });
         res.status(202).send(`${score}%`);

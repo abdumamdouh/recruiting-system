@@ -10,6 +10,7 @@ const ApplyFor = require("../../models/ApplyFor");
 const ActiveTask = require("../../models/ActiveTask")
 
 
+
 const Sequelize = require("sequelize");
 const db = require("../../db/db");
 const Op = require("Sequelize").Op;
@@ -20,6 +21,9 @@ const applicantAuth = require("../middleware/applicantAuth");
 const RecOrApp = require("../middleware/RecOrApp");
 const { where } = require("sequelize");
 const { object } = require("joi");
+const Task = require("../../models/Task");
+const MCQStat = require("../../models/MCQStat");
+const TaskUploads = require("../../models/TaskUploads");
 
 const router = new express.Router();
 
@@ -393,6 +397,151 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
             res.send("Task assigned successfully.");
         } else {
         }
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+router.get("/report/:id", recruiterAuth, async (req, res) => {
+    try {
+
+
+        const jobId = req.params.id;
+        const applicantsApplied = await ApplyFor.count({
+            where: {
+                JobId: jobId
+            }
+        })
+
+        // Candidates = 50%
+
+        
+        // const mcqs = await JobMCQ.findAndCountAll({
+        //     include: {
+        //         model: MCQ,
+        //         attributes: ["title"],
+        //     },
+        //     attributes: ["MCQId"],
+        //     where: {
+        //         jobId: jobId
+        //     }
+        // });
+
+        // const mcqResults = await MCQStat.findAll({
+        //     attributes: ["applicantId","MCQId", "score"],
+        //     where: {
+        //         jobId: jobId
+        //     }
+
+        // }) 
+
+        const mcqsStats = await db.query(
+            "SELECT A.userName, M.title, MS.score  FROM mcqstats AS MS INNER JOIN Applicants AS A ON MS.ApplicantId = A.id INNER JOIN mcqs AS M ON MS.MCQId = M.id WHERE MS.JobId=?;",
+            {
+                replacements: [jobId],
+                type: db.QueryTypes.SELECT
+            }
+        );
+
+        mcqsResults = mcqsStats.map( (mcq) => {
+            obj = {}
+            obj[mcq.title] = { 
+                applicantName : mcq.userName,
+                score : mcq.score
+            }  
+            return obj
+        })
+        
+
+        const average_MCQS_score = await db.query(
+            "SELECT MCQId, AVG(score) AS average_MCQ_score FROM mcqstats GROUP BY MCQId;", 
+            {
+                type: db.QueryTypes.SELECT
+            }
+        );
+
+        const overallMCQs = await MCQStat.findAll({
+            attributes: [
+              'applicantId',
+              [Sequelize.fn('sum', Sequelize.col('score')), 'overallMCQsScore'],
+            ],
+            where: {
+                jobId: jobId
+            },
+            group: ['applicantId'],
+            raw: true
+          });
+
+        const overallTasks = await TaskUploads.findAll({
+        attributes: [
+            'applicantId',
+            [Sequelize.fn('sum', Sequelize.col('score')), 'overallTasksScore'],
+        ],
+        where: {
+            jobId: jobId
+        },
+        group: ['applicantId'],
+        raw: true
+        }); 
+          
+
+        console.log(average_MCQS_score)
+        // const tasks = await TaskUploads.findAndCountAll({
+        //     include: {
+        //         model: Task,
+        //         attributes: ["title"]
+
+        //     },
+        //     attributes: ["TaskId"],
+        //     where: {
+        //         jobId: jobId,
+        //     }
+        // });
+
+        // const taskResults = await TaskUploads.findAll({
+        //     attributes: ["ApplicantId","TaskId", "score"],
+        //     where: {
+        //         jobId: jobId
+        //     }
+        // }) 
+        const taskStats = await db.query(
+            "SELECT A.userName, T.title, TA.score  FROM `gp-db`.taskuploads AS TA INNER JOIN `gp-db`.Applicants AS A ON TA.ApplicantId = A.id INNER JOIN `gp-db`.tasks AS T ON TA.taskId = T.id WHERE TA.JobId=?;",
+            {
+                replacements: [jobId],
+                type: db.QueryTypes.SELECT
+            }
+        );
+        
+        tasksResults = taskStats.map( (task) => {
+            obj = {}
+            obj[task.title] = { 
+                applicantName : task.userName,
+                score : task.score
+            }  
+            return obj
+        })
+
+        const average_Tasks_score = await db.query( "SELECT TaskId, AVG(score) AS average_Task_score FROM `gp-db`.taskuploads GROUP BY TaskId;" ,
+            {
+                type: db.QueryTypes.SELECT
+            }
+            
+        );
+
+        res.send({
+            mcqsResults : mcqsResults,
+            tasksResults: tasksResults,
+            applicantsAppliedCount: applicantsApplied,
+            avgMCQsScore: average_MCQS_score,
+            avgTasksScore: average_Tasks_score,
+            overallMCQs: overallMCQs,
+            overallTasks: overallTasks
+
+            // MCQs: mcqs.rows,
+            // MCQSCount: mcqs.count,
+            // tasks: tasks.rows,
+            // tasksCount: tasks.count
+        });
     } catch (error) {
         res.status(400).send(error.message);
     }

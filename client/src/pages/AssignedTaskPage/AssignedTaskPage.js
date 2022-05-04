@@ -1,32 +1,38 @@
 import "./AssignedTaskPage.scss";
+import React from "react";
 import Box from "@mui/material/Box";
 import { Typography } from "@material-ui/core";
-import { Button } from "@mui/material";
+import { Button, Snackbar, Modal } from "@mui/material";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "@emotion/styled";
 import moment from "moment";
+import MuiAlert from "@mui/material/Alert";
 
 //Hooks
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Message from "../../components/modal/Message";
 import MyTimer from "./MyTimer";
 
 export default function Task() {
+    const history = useHistory();
     //ID of the task
-    const { ID } = useParams();
-
+    const { TaskID } = useParams();
     const Input = styled("input")({ display: "none" });
 
     // const [uploadFormat, setUploadFormat] = useState("");
 
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
     const [modalOpen, setModalOpen] = useState(false);
     //file
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
     const [task, setTask] = useState();
-
+    const [open, setOpen] = useState(false);
     const jobId = useSelector((state) => state.job.id);
     const { userInfo } = useSelector((state) => state.user);
 
@@ -36,7 +42,7 @@ export default function Task() {
                 console.log(userInfo.token);
                 const response = await fetch(
                     //TODO: make it dynamic
-                    `http://localhost:5000/${1}/${5}`,
+                    `http://localhost:5000/${jobId}/${TaskID}`,
                     {
                         method: "GET",
                         headers: {
@@ -50,7 +56,7 @@ export default function Task() {
                 console.log(data);
                 setTask(data);
                 //TODO: condition for success
-                // showSuccessMessage();
+                // showModal();
             } catch (error) {
                 console.error("Error:", error);
                 handleOnError(error);
@@ -63,9 +69,21 @@ export default function Task() {
         console.log(err);
     };
 
+    const handleClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        setOpen(false);
+    };
+
     const handleClick = async () => {
         console.log(jobId);
-
+        setModalOpen(false);
+        if (!isFilePicked) {
+            setOpen(true);
+            return;
+        }
         const formData = new FormData();
         formData.append("task", selectedFile);
         console.log(formData);
@@ -80,7 +98,7 @@ export default function Task() {
                 //TODO make it dynamic
                 // /uploadTask/:TaskId/:JobId
 
-                `http://localhost:5000/uploadTask/${1}/${5}`,
+                `http://localhost:5000/uploadTask/${jobId}/${TaskID}`,
 
                 {
                     method: "POST",
@@ -94,19 +112,25 @@ export default function Task() {
                 }
             );
             const data = await response;
-            console.log(data);
-            //TODO: condition for success
-            showSuccessMessage();
+
+            if (data.status === 201) {
+                localStorage.setItem(
+                    "message",
+                    "The task is submitted successfully."
+                );
+                history.push("/");
+            }
         } catch (error) {
             console.error("Error:", error);
             handleOnError(error);
         }
     };
 
-    const showSuccessMessage = () => {
+    const showModal = () => {
         setModalOpen(true);
     };
 
+    const handleCloseModal = () => setModalOpen(false);
     //upload file
 
     const changeHandler = (event) => {
@@ -137,22 +161,104 @@ export default function Task() {
                 width: "100%"
             }}
         >
+            {!isFilePicked && (
+                <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={handleClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity="error"
+                        sx={{ width: "100%" }}
+                    >
+                        No File is uploaded!
+                    </Alert>
+                </Snackbar>
+            )}
+            {modalOpen && (
+                <Modal
+                    open={modalOpen}
+                    onClose={handleCloseModal}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: 400,
+                            bgcolor: "background.paper",
+                            border: "2px solid #000",
+                            boxShadow: 24,
+                            p: 4
+                        }}
+                        style={{
+                            display: "flex",
+                            flexDirection: "column"
+                        }}
+                    >
+                        <Typography
+                            id="modal-modal-title"
+                            variant="h6"
+                            component="h2"
+                            style={{
+                                color: "black",
+                                fontWeight: 600,
+                                fontSize: "1.75rem"
+                            }}
+                        >
+                            Are you sure you want to submit?
+                        </Typography>
+
+                        <Typography
+                            id="modal-modal-description"
+                            sx={{ mt: 2 }}
+                            style={{ textAlign: "center" }}
+                        >
+                            (No turning back after clicking Submit)
+                        </Typography>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center"
+                            }}
+                        >
+                            <Button
+                                variant="contained"
+                                onClick={handleClick}
+                                style={{
+                                    marginTop: "15px",
+                                    marginRight: "15px"
+                                }}
+                            >
+                                Submit
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="error"
+                                onClick={handleCloseModal}
+                                style={{ marginTop: "15px" }}
+                            >
+                                Exit
+                            </Button>
+                        </div>
+                    </Box>
+                </Modal>
+            )}
             <div
                 style={{
                     width: "60%",
-                    // justifyContent: "flex-end",
+                    // justifyContent: "flex-start",
                     flexDirection: "column"
                 }}
             >
                 {/* {JSON.stringify(task)} */}
-                <div className="container">
-                    {modalOpen && (
-                        <Message
-                            setOpenModal={setModalOpen}
-                            message="uploaded successfully!"
-                        />
-                    )}
-                </div>
+                {/* <div className="container"></div> */}
 
                 <Box
                     component="form"
@@ -261,7 +367,7 @@ export default function Task() {
                     <Button
                         // sx={{ width: 135 }}
                         variant="contained"
-                        onClick={handleClick}
+                        onClick={showModal}
                     >
                         Submit
                     </Button>
