@@ -184,7 +184,6 @@ router.post("*/submitSolution/", applicantAuth, async (req, res) => {
     try {
         // validate that the appSlicant can solve the problem
         // inject time measuring code
-        console.log(req.body)
         req.body.code = inject(req.body.code, req.body.language);
 
         // writing the coming code in the solutions directory
@@ -218,7 +217,7 @@ router.post("*/submitSolution/", applicantAuth, async (req, res) => {
         results.forEach(async (testCase) => {
             // call back to be called when the last test is executed
             const cb = async () => {
-                console.log(finalResult);
+                console.log(finalResult); 
                 await CodingProblemStats.create({
                     applicantId: req.applicant.id,
                     jobId: req.body.jobId,

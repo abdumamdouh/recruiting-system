@@ -145,7 +145,7 @@ const testCode = async function (
                         const valuesObj = {
                             memory: values[0],
                             output: values
-                                .slice(1, values.length - 1)
+                                .slice(1, -2)
                                 .join(" "),
                             time: values[values.length - 1]
                         };
