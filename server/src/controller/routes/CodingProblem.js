@@ -184,6 +184,7 @@ router.post("*/submitSolution/", applicantAuth, async (req, res) => {
     try {
         // validate that the appSlicant can solve the problem
         // inject time measuring code
+        console.log(req.body)
         req.body.code = inject(req.body.code, req.body.language);
 
         // writing the coming code in the solutions directory
@@ -229,7 +230,7 @@ router.post("*/submitSolution/", applicantAuth, async (req, res) => {
             const correct = await testCode(
                 req.body.code,
                 req.body.language,
-                10,
+                20000,
                 testCase.inputs,
                 testCase.outputs,
                 index,
@@ -250,13 +251,13 @@ router.post("*/submitSolution/", applicantAuth, async (req, res) => {
             });
 
             // removing the coding problem id from the assigned tasks after submission
-            _.pull(assigned.codingProblems, req.body.codingProblemId);
-
+            const assignedObj = JSON.parse(assigned);
+            _.pull(assignedObj.codingProblems, req.body.codingProblemId.toString());
             await ApplyFor.update(
                 {
-                    assigned: assigned
+                    assigned: JSON.stringify(assignedObj)
                 },
-                {
+                { 
                     where: {
                         JobId: req.body.jobId,
                         ApplicantId: req.applicant.id
