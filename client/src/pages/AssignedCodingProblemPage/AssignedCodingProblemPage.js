@@ -118,7 +118,7 @@ int main() {
         fetchCodingProblem();
     }, []);
     const handleSubmit = async () => {
-        console.log(codingProblemSolution);
+        // console.log(codingProblemSolution);
         //remove time from loccal storage
         // localStorage.removeItem("time");
         try {
@@ -135,7 +135,7 @@ int main() {
                     body: JSON.stringify({
                         jobId: Number(jobId),
                         codingProblemId: Number(codingProblemId),
-                        languague: programmingLanguages[index].server,
+                        language: programmingLanguages[index].server,
                         code: codingProblemSolution
                     })
                 }
