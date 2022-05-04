@@ -112,7 +112,7 @@ router.post(
                     JobId: req.params.JobId,
                     ApplicantId: req.applicant.id
                 }
-            );
+            });
             res.status(201).send("Task uploaded successfully.");
         } catch (error) {
             // console.log(error);
