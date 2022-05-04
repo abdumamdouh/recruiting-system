@@ -102,22 +102,17 @@ router.post(
                 ApplicantId: req.applicant.id
             });
 
-            // removing the task id from the assigned tasks after submission
-            const deletedIndex = assignedObj.tasks.indexOf(
-                req.params.TaskId.toString()
-            );
-            assignedObj.tasks.splice(deletedIndex, 1);
-            await ApplyFor.update(
-                {
-                    assigned: JSON.stringify(assignedObj)
-                },
-                {
-                    where: {
-                        JobId: req.params.JobId,
-                        ApplicantId: req.applicant.id
-                    }
+            // removing the task id from the assigned tasks after submission 
+            const deletedIndex = assignedObj.tasks.indexOf(req.params.TaskId)
+            assignedObj.tasks.splice(deletedIndex,1)
+            await ApplyFor.update({
+                assigned:assignedObj
+            },{
+                where:{
+                    JobId: req.params.JobId,
+                    ApplicantId: req.applicant.id
                 }
-            );
+            });
             res.status(201).send("Task uploaded successfully.");
         } catch (error) {
             // console.log(error);
