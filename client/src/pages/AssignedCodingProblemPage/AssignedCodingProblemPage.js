@@ -28,11 +28,66 @@ import MyTimer from "./MyTimer";
 import "./AssignedCodingProblemPage.scss";
 import { display, margin } from "@mui/system";
 export default function CodingProblem() {
+    const programmingLanguages = [
+        {
+            languague: "C",
+            code: `#include <stdio.h>
+int main() {
+    // Write your code here
+    
+    return 0;
+}`,
+            view: cpp(),
+            server: "c"
+        },
+        {
+            languague: "C++",
+            code: `#include <iostream>
+using namespace std;
+int main() {
+    // Write your code here
+    
+    return 0;
+}`,
+            view: cpp(),
+            server: "cpp"
+        },
+        {
+            languague: "Java",
+            code: `class Problem {
+    public static void main(String[] args) {
+        // Write your code here
+        
+    }
+}`,
+            view: java(),
+            server: "java"
+        },
+        {
+            languague: "JavaScript",
+            code: `// Write your code here
+`,
+            view: javascript(),
+            server: "javascript"
+        },
+        {
+            languague: "Python",
+            code: `# Write your code here
+`,
+            view: python(),
+            server: "python"
+        }
+    ];
     const { codingProblemId } = useParams();
     const [mode, setMode] = useState(true);
-    const [programmingLanguage, setProgrammingLanguage] = useState("C");
+    const [programmingLanguage, setProgrammingLanguage] = useState(
+        programmingLanguages[0].languague
+    );
     const [codingProblem, setCodingProblem] = useState();
     const [index, setIndex] = useState(0);
+    const [codingProblemSolution, setCodingProblemSolution] = useState(
+        programmingLanguages[0].code
+    );
     const [modalOpen, setModalOpen] = useState(false);
     const { userInfo } = useSelector((state) => state.user);
     useEffect(() => {
@@ -62,6 +117,41 @@ export default function CodingProblem() {
         };
         fetchCodingProblem();
     }, []);
+    const handleSubmit = async () => {
+        // console.log(codingProblemSolution);
+        //remove time from loccal storage
+        // localStorage.removeItem("time");
+        try {
+            const jobId = localStorage.getItem("jobId");
+            const rawResponse = await fetch(
+                `http://localhost:5000/submitSolution`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    },
+                    body: JSON.stringify({
+                        jobId: Number(jobId),
+                        codingProblemId: Number(codingProblemId),
+                        language: programmingLanguages[index].server,
+                        code: codingProblemSolution
+                    })
+                }
+            );
+            const data = await rawResponse;
+            console.log(data);
+            if (data.status === 200) {
+                localStorage.removeItem("jobId");
+                // setMcqTaken(true);
+                // setModalOpen(true);
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+        // setMcqTaken(true);
+    };
     const handleCloseModal = () => setModalOpen(false);
     const theme = createTheme({
         palette: { mode: mode ? "dark" : "light" },
@@ -84,51 +174,7 @@ export default function CodingProblem() {
             }
         }
     });
-    const programmingLanguages = [
-        {
-            languague: "C",
-            code: `#include <stdio.h>
-int main() {
-    // Write your code here
-    
-    return 0;
-}`,
-            view: cpp()
-        },
-        {
-            languague: "C++",
-            code: `#include <iostream>
-using namespace std;
-int main() {
-    // Write your code here
-    
-    return 0;
-}`,
-            view: cpp()
-        },
-        {
-            languague: "Java",
-            code: `class Problem {
-    public static void main(String[] args) {
-        // Write your code here
-        
-    }
-}`,
-            view: java()
-        },
-        {
-            languague: "JavaScript",
-            code: `// Write your code here
-`,
-            view: javascript()
-        },
-        {
-            languague: "Python",
-            code: `# Write your code here
-`,
-            view: python()
-        }
-    ];
+
     if (codingProblem?.duration !== undefined) {
         let time = new Date();
         time.setSeconds(time.getSeconds() + 50 * 60);
@@ -216,7 +262,7 @@ int main() {
                             >
                                 <Button
                                     variant="contained"
-                                    // onClick={handleClick}
+                                    onClick={handleSubmit}
                                     style={{
                                         marginTop: "15px",
                                         marginRight: "15px"
@@ -249,7 +295,11 @@ int main() {
                                 }}
                             >
                                 <div
-                                    style={{ flexFlow: "column", width: "80%" }}
+                                    style={{
+                                        flexFlow: "column",
+                                        width: "70%",
+                                        textAlign: "justify"
+                                    }}
                                 >
                                     <div>{codingProblem?.description}</div>
                                     {codingProblem.TestCases.map(
@@ -326,9 +376,7 @@ int main() {
                                                         <strong>
                                                             Time Constraint:
                                                         </strong>{" "}
-                                                        {
-                                                            codingProblem.timeConstraint
-                                                        }
+                                                        {`${codingProblem.timeConstraint} seconds`}
                                                     </div>
                                                 </pre>
                                             </li>
@@ -348,9 +396,7 @@ int main() {
                                                         <strong>
                                                             Space Constraint:
                                                         </strong>{" "}
-                                                        {
-                                                            codingProblem.memoryConstraint
-                                                        }
+                                                        {`${codingProblem.memoryConstraint} MB`}
                                                     </div>
                                                 </pre>
                                             </li>
@@ -420,6 +466,9 @@ int main() {
                                                     languague === e.target.value
                                             )
                                         );
+                                        setCodingProblemSolution(
+                                            programmingLanguages[index].code
+                                        );
                                     }}
                                 >
                                     {programmingLanguages.map((option) => (
@@ -477,6 +526,9 @@ int main() {
                                     programmingLanguages[index].view,
                                     autocompletion()
                                 ]}
+                                onChange={(value) => {
+                                    setCodingProblemSolution(value);
+                                }}
                             />
                         </div>
                         <div
