@@ -435,23 +435,34 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
 
         // }) 
 
-        const mcqsStats = await db.query(
-            "SELECT A.userName, M.title, MS.score  FROM mcqstats AS MS INNER JOIN Applicants AS A ON MS.ApplicantId = A.id INNER JOIN mcqs AS M ON MS.MCQId = M.id WHERE MS.JobId=?;",
+        let mcqsStats = await db.query(
+            "SELECT A.firstName, A.lastName, M.title, MS.score  FROM mcqstats AS MS INNER JOIN Applicants AS A ON MS.ApplicantId = A.id INNER JOIN mcqs AS M ON MS.MCQId = M.id WHERE MS.JobId=?;",
             {
                 replacements: [jobId],
                 type: db.QueryTypes.SELECT
             }
         );
 
-        mcqsResults = mcqsStats.map( (mcq) => {
+        
+        
+        mcqsStats = mcqsStats.map( (mcq) => {
             obj = {}
             obj[mcq.title] = { 
-                applicantName : mcq.userName,
+                applicantName : `${mcq.firstName} ${mcq.lastName}`,
                 score : mcq.score
             }  
             return obj
         })
         
+        const mcqsResults = {};
+        mcqsStats.forEach((mcq) => {
+            console.log(mcq)
+            const key = Object.keys(mcq)[0];
+            const value = Object.values(mcq)[0];
+            let values = mcqsResults[key] || [];
+            values.push( value );
+            mcqsResults[key] = values;
+        })
 
         const average_MCQS_score = await db.query(
             "SELECT MCQId, AVG(score) AS average_MCQ_score FROM mcqstats GROUP BY MCQId;", 
@@ -460,32 +471,40 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             }
         );
 
-        const overallMCQs = await MCQStat.findAll({
-            attributes: [
-              'applicantId',
-              [Sequelize.fn('sum', Sequelize.col('score')), 'overallMCQsScore'],
-            ],
-            where: {
-                jobId: jobId
-            },
-            group: ['applicantId'],
-            raw: true
-          });
 
-        const overallTasks = await TaskUploads.findAll({
-        attributes: [
-            'applicantId',
-            [Sequelize.fn('sum', Sequelize.col('score')), 'overallTasksScore'],
-        ],
-        where: {
-            jobId: jobId
-        },
-        group: ['applicantId'],
-        raw: true
-        }); 
+        const overallMCQs = await db.query(
+            "SELECT A.firstName , A.lastName, MS.applicantId, SUM(MS.score) AS overallMCQsScore FROM mcqstats AS MS  INNER JOIN applicants AS A ON  MS.applicantId = A.id WHERE MS.jobId = ? GROUP BY MS.applicantId;", 
+            {
+                replacements: [jobId],
+                type: db.QueryTypes.SELECT
+            }
+        );
+        // const overallMCQs = await MCQStat.findAll({
+        //     attributes: [
+        //       'applicantId',
+        //       [Sequelize.fn('sum', Sequelize.col('score')), 'overallMCQsScore'],
+        //     ],
+        //     where: {
+        //         jobId: jobId
+        //     },
+        //     group: ['applicantId'],
+        //     raw: true
+        // });
+
+        // const overallTasks = await TaskUploads.findAll({
+        // attributes: [
+        //     'applicantId',
+        //     [Sequelize.fn('sum', Sequelize.col('score')), 'overallTasksScore'],
+        // ],
+        // where: {
+        //     jobId: jobId
+        // },
+        // group: ['applicantId'],
+        // raw: true
+        // }); 
           
 
-        console.log(average_MCQS_score)
+        // console.log(average_MCQS_score)
         // const tasks = await TaskUploads.findAndCountAll({
         //     include: {
         //         model: Task,
@@ -528,14 +547,36 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             
         );
 
+        const overallTasks = await db.query(
+            "SELECT A.firstName , A.lastName, TU.applicantId, SUM(TU.score) AS overallTasksScore FROM taskuploads AS TU  INNER JOIN applicants AS A ON  TU.applicantId = A.id WHERE TU.jobId = ? GROUP BY TU.applicantId;", 
+            {
+                replacements: [jobId],
+                type: db.QueryTypes.SELECT
+            }
+        );
+
+        const overallScore = overallMCQs.map( (mcq) => {
+            const task = overallTasks.find( (task) => {
+                return task.applicantId === mcq.applicantId 
+            }) 
+            
+            return {
+                applicantName: `${mcq.firstName} + ${mcq.lastName}`,
+                applicantId: mcq.applicantId,
+                overallScore: Math.round( parseFloat(mcq.overallMCQsScore) + parseFloat(task.overallTasksScore))
+            }
+        })
+
+
         res.send({
             mcqsResults : mcqsResults,
             tasksResults: tasksResults,
             applicantsAppliedCount: applicantsApplied,
             avgMCQsScore: average_MCQS_score,
             avgTasksScore: average_Tasks_score,
-            overallMCQs: overallMCQs,
-            overallTasks: overallTasks
+            // overallMCQs: overallMCQs,
+            // overallTasks: overallTasks,
+            overallScore: overallScore
 
             // MCQs: mcqs.rows,
             // MCQSCount: mcqs.count,
