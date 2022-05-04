@@ -68,12 +68,18 @@ const UpdatesPage = (props) => {
         if (userInfo.hasOwnProperty("hasAssessments")) fetchUpdates();
     }, []);
 
-    const handleRedirection = (id) => {
+    const handleRedirection = (data) => {
+        console.log(data);
         // console.log("redii");
-        history.push(`/job/exam/${id}`);
+        localStorage.setItem("jobId", data.jobId);
+        if (data.MCQId) {
+            history.push(`/job/exam/${data.MCQId}`);
+        } else if (data.codingProblemId) {
+            history.push(`/job/codingproblem/${data.codingProblemId}`);
+        }
     };
 
-    const handleMCQ = (obj) => {
+    const handleModalOpen = (obj) => {
         console.log(obj);
         setModalData(obj);
         handleOpen();
@@ -134,6 +140,11 @@ const UpdatesPage = (props) => {
                                                         : 0) +
                                                         (update.task
                                                             ? update.task.length
+                                                            : 0) +
+                                                        (update.codingProblem
+                                                            ? update
+                                                                  .codingProblem
+                                                                  .length
                                                             : 0) >
                                                     1
                                                         ? "Assessments"
@@ -168,8 +179,7 @@ const UpdatesPage = (props) => {
                                                                                     </Popover.Header>
                                                                                     <Popover.Body>
                                                                                         <strong>
-                                                                                            Expiry
-                                                                                            Date:
+                                                                                            Deadline:
                                                                                         </strong>{" "}
                                                                                         {moment
                                                                                             .parseZone(
@@ -203,8 +213,11 @@ const UpdatesPage = (props) => {
                                                                                 {/*redirect*/}
                                                                                 <span
                                                                                     onClick={() =>
-                                                                                        handleMCQ(
-                                                                                            obj
+                                                                                        handleModalOpen(
+                                                                                            {
+                                                                                                ...obj,
+                                                                                                jobId: update.jobId
+                                                                                            }
                                                                                         )
                                                                                     }
                                                                                     className="redirect"
@@ -294,6 +307,85 @@ const UpdatesPage = (props) => {
                                                                 </>
                                                             )
                                                         )}
+                                                    {update.codingProblem &&
+                                                        update.codingProblem.map(
+                                                            (obj) => (
+                                                                <>
+                                                                    <div>
+                                                                        <OverlayTrigger
+                                                                            key={
+                                                                                obj.title
+                                                                            }
+                                                                            placement="auto-start"
+                                                                            delay={{
+                                                                                show: 250,
+                                                                                hide: 400
+                                                                            }}
+                                                                            overlay={
+                                                                                <Popover
+                                                                                    id={
+                                                                                        obj.title
+                                                                                    }
+                                                                                >
+                                                                                    <Popover.Header as="h3">
+                                                                                        Coding
+                                                                                        Problem
+                                                                                    </Popover.Header>
+                                                                                    <Popover.Body>
+                                                                                        <strong>
+                                                                                            Deadline:
+                                                                                        </strong>{" "}
+                                                                                        {moment
+                                                                                            .parseZone(
+                                                                                                obj.deadline
+                                                                                            )
+                                                                                            .utc(
+                                                                                                "-02:00"
+                                                                                            )
+                                                                                            .format(
+                                                                                                "DD-MM-YYYY [at] hh:mm a"
+                                                                                            )}
+                                                                                        <br></br>
+                                                                                        <strong>
+                                                                                            Duration:
+                                                                                        </strong>{" "}
+                                                                                        {
+                                                                                            obj.duration
+                                                                                        }{" "}
+                                                                                        minutes
+                                                                                        <br></br>
+                                                                                    </Popover.Body>
+                                                                                </Popover>
+                                                                            }
+                                                                        >
+                                                                            <li
+                                                                                key={
+                                                                                    obj.title
+                                                                                }
+                                                                                class="nav-item"
+                                                                            >
+                                                                                {/*redirect*/}
+                                                                                <span
+                                                                                    onClick={() =>
+                                                                                        handleModalOpen(
+                                                                                            {
+                                                                                                ...obj,
+                                                                                                jobId: update.jobId
+                                                                                            }
+                                                                                        )
+                                                                                    }
+                                                                                    className="redirect"
+                                                                                >
+                                                                                    {
+                                                                                        obj.title
+                                                                                    }
+                                                                                </span>
+                                                                            </li>
+                                                                        </OverlayTrigger>
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        )}
                                                 </div>
                                             </ul>
                                         </div>
@@ -325,7 +417,9 @@ const UpdatesPage = (props) => {
                                     fontSize: "1.75rem"
                                 }}
                             >
-                                MCQ Test
+                                {modalData.MCQId
+                                    ? "MCQ Test"
+                                    : "Coding Problem"}
                             </Typography>
 
                             {modalData.hasOwnProperty("title") && (
@@ -334,9 +428,13 @@ const UpdatesPage = (props) => {
                                     sx={{ mt: 2 }}
                                     style={{ textAlign: "center" }}
                                 >
-                                    Now you will be redirect to a MCQ Test with
-                                    title <strong>{modalData.title}</strong> and
-                                    its duration is{" "}
+                                    Now you will be redirected to{" "}
+                                    {modalData.MCQId
+                                        ? "MCQ Test"
+                                        : "Coding Problem"}{" "}
+                                    with title{" "}
+                                    <strong>{modalData.title}</strong> and its
+                                    duration is{" "}
                                     <strong>{modalData.duration}</strong>{" "}
                                     minutes.
                                 </Typography>
@@ -350,14 +448,14 @@ const UpdatesPage = (props) => {
                                 <Button
                                     variant="contained"
                                     onClick={() => {
-                                        handleRedirection(modalData.MCQId);
+                                        handleRedirection(modalData);
                                     }}
                                     style={{
                                         marginTop: "15px",
                                         marginRight: "15px"
                                     }}
                                 >
-                                    Take MCQ NOW
+                                    Take Assessment NOW
                                 </Button>
                                 <Button
                                     variant="contained"

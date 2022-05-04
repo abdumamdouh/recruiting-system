@@ -10,6 +10,7 @@ data
 
 # testing
 /coverage
+/temp
 
 # production
 /build

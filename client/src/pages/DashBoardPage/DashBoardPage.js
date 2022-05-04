@@ -14,6 +14,9 @@ import ApplicantPage from "../ApplicantPage/ApplicantPage";
 import QuestionBank from "../../components/QuestionBank/QuestionBank";
 import TaskPage from "../TaskPage/TaskPage";
 import TaskReviewPage from '../TaskReviewPage/TaskReviewPage'
+import CodingProblem from '../CodingProblemPage/CodingProblem'
+import CodingProblemBank from '../CodingProblemPage/CodingProblemBank'
+import CodingProblemView from "../CodingProblemPage/CodingProblemView";
 const DashBoardPage = () => {
     return (
         <Router>
@@ -57,6 +60,16 @@ const DashBoardPage = () => {
                         <Route path="/dashboard/uploadedexams/reviewsubmissions/:id">
                             <TaskReviewPage />
                         </Route>
+                        <Route path="/dashboard/problem/:id">
+                            <CodingProblemView />
+                        </Route>
+                        <Route path="/dashboard/codingProblemBank">
+                            <CodingProblemBank />
+                        </Route>
+                        <Route path="/dashboard/codingProblem">
+                            <CodingProblem />
+                        </Route>
+
                     </Switch>
                 </div>
             </div>
