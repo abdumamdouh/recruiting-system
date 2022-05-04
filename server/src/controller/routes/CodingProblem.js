@@ -107,6 +107,7 @@ router.post("/assignProblemToApplicants", recruiterAuth, async (req, res) => {
 // render coding problem to only those applicants
 router.get("/getCodingProblem/:id", applicantAuth, async (req, res) => {
     try {
+        // Change route
         let codingProblem = await CodingProblemBank.findByPk(req.params.id, {
             attributes: [
                 "description",
