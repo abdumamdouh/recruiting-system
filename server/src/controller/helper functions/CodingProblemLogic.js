@@ -4,13 +4,7 @@ var options = { stats: true };
 compiler.init(options);
 const fs = require("fs");
 
-// function sleep(milliseconds) {
-//     const date = Date.now();
-//     let currentDate = null;
-//     do {
-//       currentDate = Date.now();
-//     } while (currentDate - date < milliseconds);
-// }
+
 
 const injectBeforeReturnStatment = function (code, start, end) {
     let temp = "";
@@ -29,7 +23,7 @@ const injectBeforeReturnStatment = function (code, start, end) {
                     printStmt +
                     code.slice(i - 6);
                 i += 150;
-                end + 150;
+                end += 150;
             }
             temp = temp.slice(1);
         }
@@ -38,9 +32,7 @@ const injectBeforeReturnStatment = function (code, start, end) {
 };
 
 const inject = function (code, language) {
-    code =
-        "#include <time.h>\n#include <windows.h>\n#include <Psapi.h>\n" +
-        code.slice(0);
+    code = "#include <time.h>\n#include <windows.h>\n#include <Psapi.h>\n" + code.slice(0);
     const t1 = "\ndouble __measuringExecutionTimeAM1 = clock();\n";
     const t2 = "\ndouble __measuringExecutionTimeAM2 ;\n";
     const secondClk = "__measuringExecutionTimeAM2 = clock() ;\n";
@@ -102,7 +94,7 @@ const writeCodeToFile = function (
         }
     );
 };
-
+ 
 const testCode = async function (
     code,
     langauge,
@@ -145,8 +137,9 @@ const testCode = async function (
                     stringInput,
                     function (data) {
                         index.advance(); //index++
-                        //console.log(data)
-
+                        // console.log(data)
+ 
+                        // try catch block is needed 
                         const values = data.output.split(" ");
 
                         const valuesObj = {

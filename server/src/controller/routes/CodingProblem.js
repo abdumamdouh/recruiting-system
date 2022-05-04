@@ -1,5 +1,4 @@
 const express = require("express");
-const _ = require("lodash");
 const CodingProblemBank = require("../../models/CodingProblemBank");
 const CodingProblemStats = require("../../models/CodingProblemStats");
 const TestCases = require("../../models/TestCases");
@@ -11,6 +10,7 @@ const {
     testCode,
     inject
 } = require("../helper functions/CodingProblemLogic");
+const _ = require("lodash");
 
 const recruiterAuth = require("../middleware/recruiterAuth");
 const applicantAuth = require("../middleware/applicantAuth");
@@ -24,13 +24,9 @@ const router = new express.Router();
 // body must contain deadline and diraution as well as job_id
 router.post("/SubmitCodingProblem", recruiterAuth, async (req, res) => {
     try {
-        // console.log(req.body)
         req.body.recruiterId = req.recruiter.id;
-        //console.log(req.body)
-
         const codingProblem = await CodingProblemBank.create(req.body);
         const testcases = req.body.testcases;
-        // console.log(testcases)
 
         testcases.forEach(async (testCase) => {
             await TestCases.create({
@@ -46,22 +42,6 @@ router.post("/SubmitCodingProblem", recruiterAuth, async (req, res) => {
             duration: req.body.duration
         });
         res.status(201).send("Problem added successfully.");
-    } catch (error) {
-        res.send(error.message);
-    }
-});
-//choose from given problems
-router.post("/chooseCodingProblem", recruiterAuth, async (req, res) => {
-    try {
-        req.body.recruiterId = req.recruiter.id;
-
-        await ActiveCodingProblem.create({
-            codingProblemId: req.body.codingProblemId,
-            jobId: req.body.jobId,
-            deadline: req.body.deadline,
-            duration: req.body.duration
-        });
-        res.status(201).send("Problem is Choosen successfully.");
     } catch (error) {
         res.send(error.message);
     }
@@ -104,7 +84,7 @@ router.post("/assignProblemToApplicants", recruiterAuth, async (req, res) => {
 // render coding problem from coding problem bank to applicants
 // seq: job_id --> codingproblem_id (many_to_many table)
 // (apply_for table) get applicants applied for this job and status "waiting for coding problem"
-// render coding problem to only those applicants
+
 router.get("/getCodingProblem/:id", applicantAuth, async (req, res) => {
     try {
         // Change route
@@ -148,7 +128,7 @@ router.get("/getCodingProblem/:id", applicantAuth, async (req, res) => {
 
 //get coding problem by id for recruiter with full testcases :
 
-router.get("/getFullCodingProblem/:id", recruiterAuth, async (req, res) => {
+router.get("*/getFullCodingProblem/:id", recruiterAuth, async (req, res) => {
     try {
         const codingProblem = await CodingProblemBank.findOne({
             where: {
@@ -159,7 +139,7 @@ router.get("/getFullCodingProblem/:id", recruiterAuth, async (req, res) => {
             `SELECT inputs,outputs FROM testcases WHERE codingProblemId=${req.params.id}`
         );
         codingProblem.dataValues.testcases = results;
-        // console.log(results)
+
         res.send(codingProblem);
     } catch (error) {
         res.status(400).send(error.message);
@@ -167,8 +147,8 @@ router.get("/getFullCodingProblem/:id", recruiterAuth, async (req, res) => {
 });
 
 //get all coding problems for recruiter to choose from them:
-router.get("/codingProblems/:pageNumber", recruiterAuth, async (req, res) => {
-    const { pageNumber } = req.params;
+router.post("/codingProblems", recruiterAuth, async (req, res) => {
+    const pageNumber = req.body.pageNumber;
     // const Limit = req.body.limit
     try {
         const result = await CodingProblemBank.findAndCountAll({
@@ -177,9 +157,8 @@ router.get("/codingProblems/:pageNumber", recruiterAuth, async (req, res) => {
                 "description",
                 "timeConstraint",
                 "memoryConstraint",
-                "title",
-                "isPrivate",
-                "recruiterId"
+                "name",
+                "isPrivate"
             ],
             where: {
                 [Op.or]: [{ isPrivate: 0 }, { recruiterId: req.recruiter.id }]
@@ -188,8 +167,7 @@ router.get("/codingProblems/:pageNumber", recruiterAuth, async (req, res) => {
             limit: 10
         });
         res.send({
-            codingProblems: result.rows,
-            Count: result.count
+            codingProblems: result.rows
         });
     } catch (error) {
         res.status(400).send(error.message);
@@ -204,8 +182,7 @@ router.get("/codingProblems/:pageNumber", recruiterAuth, async (req, res) => {
 // compare output of the program with the correct output
 router.post("*/submitSolution/", applicantAuth, async (req, res) => {
     try {
-        // validate that the applicant can solve the problem
-
+        // validate that the appSlicant can solve the problem
         // inject time measuring code
         req.body.code = inject(req.body.code, req.body.language);
 
@@ -225,7 +202,8 @@ router.post("*/submitSolution/", applicantAuth, async (req, res) => {
         const [specs, Metadata] = await db.query(
             `SELECT timeConstraint,memoryConstraint FROM codingproblembanks WHERE id=${req.body.codingProblemId}`
         );
-        // console.log(specs);
+        // console.log(specs)
+
         //to store the result of each test case
         let finalResult = {};
         const index = {
@@ -239,7 +217,7 @@ router.post("*/submitSolution/", applicantAuth, async (req, res) => {
         results.forEach(async (testCase) => {
             // call back to be called when the last test is executed
             const cb = async () => {
-                // console.log(finalResult);
+                console.log(finalResult);
                 await CodingProblemStats.create({
                     applicantId: req.applicant.id,
                     jobId: req.body.jobId,
@@ -251,7 +229,7 @@ router.post("*/submitSolution/", applicantAuth, async (req, res) => {
             const correct = await testCode(
                 req.body.code,
                 req.body.language,
-                5,
+                10,
                 testCase.inputs,
                 testCase.outputs,
                 index,
@@ -261,6 +239,30 @@ router.post("*/submitSolution/", applicantAuth, async (req, res) => {
                 specs
             );
 
+            // getting the assigned array from apply-fors table
+            const { assigned } = await ApplyFor.findOne({
+                attributes: ["assigned"],
+                where: {
+                    JobId: req.body.jobId,
+                    ApplicantId: req.applicant.id
+                },
+                raw: true
+            });
+
+            // removing the coding problem id from the assigned tasks after submission
+            _.pull(assigned.codingProblems, req.body.codingProblemId);
+
+            await ApplyFor.update(
+                {
+                    assigned: assigned
+                },
+                {
+                    where: {
+                        JobId: req.body.jobId,
+                        ApplicantId: req.applicant.id
+                    }
+                }
+            );
             // console.log(correct)
         });
         res.send("submitted successfully");
