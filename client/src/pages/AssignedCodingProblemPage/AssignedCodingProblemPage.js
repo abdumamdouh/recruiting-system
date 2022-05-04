@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import CodeMirror from "@uiw/react-codemirror";
 import { basicSetup } from "@codemirror/basic-setup";
 import { cpp, cppLanguage } from "@codemirror/lang-cpp";
@@ -78,6 +78,7 @@ int main() {
             server: "python"
         }
     ];
+    const history = useHistory();
     const { codingProblemId } = useParams();
     const [mode, setMode] = useState(true);
     const [programmingLanguage, setProgrammingLanguage] = useState(
@@ -88,6 +89,7 @@ int main() {
     const [codingProblemSolution, setCodingProblemSolution] = useState(
         programmingLanguages[0].code
     );
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const { userInfo } = useSelector((state) => state.user);
     useEffect(() => {
@@ -120,7 +122,7 @@ int main() {
     const handleSubmit = async () => {
         // console.log(codingProblemSolution);
         //remove time from loccal storage
-        // localStorage.removeItem("time");
+        localStorage.removeItem("time");
         try {
             const jobId = localStorage.getItem("jobId");
             const rawResponse = await fetch(
@@ -144,7 +146,12 @@ int main() {
             console.log(data);
             if (data.status === 200) {
                 localStorage.removeItem("jobId");
-                // setMcqTaken(true);
+                localStorage.setItem(
+                    "message",
+                    "The coding problem is submitted successfully."
+                );
+                history.push("/");
+                // setIsSubmitted(true);
                 // setModalOpen(true);
             }
         } catch (error) {
@@ -179,13 +186,13 @@ int main() {
         let time = new Date();
         time.setSeconds(time.getSeconds() + 50 * 60);
         console.log(time);
-        // if (localStorage.getItem("time") !== null) {
-        //     console.log(localStorage.getItem("time"));
-        //     time = new Date(localStorage.getItem("time"));
-        // }
-        // if (localStorage.getItem("time") === null) {
-        //     localStorage.setItem("time", time);
-        // }
+        if (localStorage.getItem("time") !== null) {
+            console.log(localStorage.getItem("time"));
+            time = new Date(localStorage.getItem("time"));
+        }
+        if (localStorage.getItem("time") === null) {
+            localStorage.setItem("time", time);
+        }
         // const globalCppCompletions = cppLanguage.data.of({
         //     autocomplete: completeFromGlobalScope
         // });
