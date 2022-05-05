@@ -59,6 +59,26 @@ const AssignApplicantsPage = () => {
             showSuccessMessage()
         }
     }
+    //handle assigning coding problem
+    const handleAssignProblem = async()=>{
+        let codingProblem={jobId:jobId, codingProblem:{ codingProblemId: id,applicants:selectionModel}}
+        const rawResponse = await fetch(
+            `http://localhost:5000/assignTasks`,
+            {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + user.userInfo.token
+                },
+                body: JSON.stringify(codingProblem)
+            }
+        );
+        const data = await rawResponse;
+        if(data.status ===200){
+            showSuccessMessage()
+        }
+    }
     return (
         <div style={{ height: 400, width: '100%' }}>
           {modalOpen && (
@@ -80,6 +100,7 @@ const AssignApplicantsPage = () => {
       />
     {t === 'MCQ' &&     <button className="btn btn-primary" style={{marginTop: '20px'}} onClick={handleAllApplicants}> Assign MCQ to  Applicants</button>}
        {t === 'task' &&  <button className="btn btn-primary" style={{marginTop: '20px',marginLeft: '20px'}} onClick={handleAssignTask}> Assign Task to  Applicants</button>}
+       {t === 'codingProblem' &&  <button className="btn btn-primary" style={{marginTop: '20px',marginLeft: '20px'}} onClick={handleAssignProblem}> Assign Problem to  Applicants</button>}
     </div>
     );
 }
