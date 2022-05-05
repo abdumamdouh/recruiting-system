@@ -1,7 +1,6 @@
 import React from "react";
 import { Element, scroller } from "react-scroll";
-import MuiAlert from "@mui/material/Alert";
-import { Snackbar } from "@mui/material";
+// import { Snackbar } from "@mui/material";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -10,6 +9,8 @@ import { Logo } from "../../components/Logo/Logo";
 import { Marginer } from "../../components/Marginer/Marginer";
 import { Button } from "../../components/Button/Button";
 import { DownArrow } from "../../components/DownArrow/DownArrow";
+// import MuiAlert from "@mui/material/Alert";
+
 const TopContainer = styled.div`
     width: 100%;
     height: 90vh;
@@ -44,22 +45,22 @@ const DownArrowContainer = styled.div`
 
 export function TopSection(props) {
     const history = useHistory();
-    useEffect(() => {
-        if (localStorage.getItem("message")) {
-            setOpen(true);
-        }
-    }, []);
-    const Alert = React.forwardRef(function Alert(props, ref) {
-        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-    });
-    const [open, setOpen] = useState(false);
-    const handleClose = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        setOpen(false);
-        localStorage.removeItem("message");
-    };
+    // useEffect(() => {
+    //     if (localStorage.getItem("message")) {
+    //         setOpen(true);
+    //     }
+    // }, []);
+    // const Alert = React.forwardRef(function Alert(props, ref) {
+    //     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    // });
+    // const [open, setOpen] = useState(false);
+    // const handleClose = (event, reason) => {
+    //     if (reason === "clickaway") {
+    //         return;
+    //     }
+    //     setOpen(false);
+    //     localStorage.removeItem("message");
+    // };
     const handleApplicant = () => {
         history.push("/signup-applicant");
     };
@@ -74,7 +75,7 @@ export function TopSection(props) {
 
     return (
         <>
-            <Snackbar
+            {/* <Snackbar
                 open={open}
                 autoHideDuration={6000}
                 onClose={handleClose}
@@ -87,7 +88,7 @@ export function TopSection(props) {
                 >
                     {localStorage.getItem("message")}
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
 
             <Element name="topSection">
                 <TopContainer>
