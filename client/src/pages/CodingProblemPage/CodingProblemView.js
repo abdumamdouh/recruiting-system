@@ -54,7 +54,7 @@ if(codingProblem!==undefined){
             <div
                 style={{
                     flexFlow: "column",
-                    width: "70%",
+                    width: "85%",
                     textAlign: "justify"
                 }}
             >
