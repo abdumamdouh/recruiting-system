@@ -24,7 +24,8 @@ const ActiveCodingProblem = db.define("ActiveCodingProblem", {
     // },
     deadline: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
+        primaryKey:true,
     },
     duration: {
         type: Sequelize.INTEGER,
