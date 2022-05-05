@@ -148,7 +148,10 @@ router.get("*/getFullCodingProblem/:id", recruiterAuth, async (req, res) => {
 
 //get all coding problems for recruiter to choose from them:
 router.post("/codingProblems", recruiterAuth, async (req, res) => {
+    console.log(req.body)
     const pageNumber = req.body.pageNumber;
+    console.log('ss')
+   
     // const Limit = req.body.limit
     try {
         const result = await CodingProblemBank.findAndCountAll({
@@ -157,7 +160,7 @@ router.post("/codingProblems", recruiterAuth, async (req, res) => {
                 "description",
                 "timeConstraint",
                 "memoryConstraint",
-                "name",
+                "title",
                 "isPrivate"
             ],
             where: {
@@ -270,5 +273,21 @@ router.post("*/submitSolution/", applicantAuth, async (req, res) => {
         res.send(error.message);
     }
 });
+router.post('/chooseCodingProblem', recruiterAuth , async (req,res) => {
+    try {
+      req.body.recruiterId=req.recruiter.id
 
+      const record=  await ActiveCodingProblem.create({
+            codingProblemId:req.body.codingProblemId,
+            jobId:req.body.jobId,
+            deadline:req.body.deadline,
+            duration:req.body.duration
+        })
+        console.log('record',record)
+        res.status(201).send("Problem is Choosen successfully.")
+    
+    } catch (error) {
+        res.status(400).send(error)
+    }
+})
 module.exports = router;
