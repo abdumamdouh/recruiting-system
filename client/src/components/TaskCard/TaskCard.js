@@ -30,7 +30,7 @@ function TaskCard({ description, number,id,title }) {
                      onClick={() => handleAssign(id)}>
                        Assign Task to Applicants
                     </button>
-                    <button href="#" className="ml-3 btn btn-primary"
+                    <button href="#" className="mt-3 btn btn-primary"
                     onClick={() => handleAssignCanidate(id)}>
                        Assign Task to Candidates
                     </button>
