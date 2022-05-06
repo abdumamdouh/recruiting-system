@@ -12,8 +12,9 @@ import {
 const serverURL = "http://localhost:5000";
 
 //get all tasks
-export const getTaskAction = (id, TaskId) => {
+export const getTaskAction = (id, pageNumber) => {
     const JobId = id;
+    console.log('pageNum', pageNumber);
     return async (dispatch, getState) => {
         try {
             dispatch({
@@ -23,7 +24,7 @@ export const getTaskAction = (id, TaskId) => {
             console.log(userInfo.token);
             console.log("tessssst", JobId);
             const rawResponse = await fetch(
-                `${serverURL}/${JobId}/allTasks`,
+                `${serverURL}/${JobId}/allTasks/${pageNumber}`,
 
                 // `${serverURL}/getAllMCQs/${pageNumber}`,
                 {
