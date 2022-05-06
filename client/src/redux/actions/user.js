@@ -223,10 +223,44 @@ const getRecruiterProfileAction = userData => {
 };
 
 //Log out
-const logoutUserAction = () => {
-    return {
-        type: LOGOUT
-    };
+const logoutUserAction = () => { 
+     return async (dispatch, getState) => {
+    try {
+      // console.log(userData)
+        dispatch({
+            type: LOGOUT,
+            loading: true,
+        })
+        const {userInfo} = getState().user
+        //console.log(userInfo.token)
+        const rawResponse = await fetch(`http://localhost:5000/logout`, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + userInfo.token
+            }
+        });
+        const data = await rawResponse.json();
+        console.log(data);
+  
+
+        // dispatch({
+        //     type: GET_PROFILE_SUCCESS,
+        //     payload: data
+        //     //payload:userData
+        // });
+    } catch (error) {
+        console.log(error)
+        // dispatch({
+        //     type: GET_PROFILE_FAIL,
+        //     payload: error.response && error.response.data
+        // });
+    }
+};
+    // return {
+    //     type: LOGOUT
+    // };
 };
 
 //logout with local storage
