@@ -481,7 +481,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         // }) 
 
         let mcqsStats = await db.query(
-            "SELECT A.firstName, A.lastName, M.title, MS.score  FROM mcqstats AS MS INNER JOIN Applicants AS A ON MS.ApplicantId = A.id INNER JOIN mcqs AS M ON MS.MCQId = M.id WHERE MS.JobId=?;",
+            "SELECT A.firstName, A.lastName, M.id, M.title, MS.score  FROM mcqstats AS MS INNER JOIN Applicants AS A ON MS.ApplicantId = A.id INNER JOIN mcqs AS M ON MS.MCQId = M.id WHERE MS.JobId=?;",
             {
                 replacements: [jobId],
                 type: db.QueryTypes.SELECT
@@ -492,21 +492,36 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         
         mcqsStats = mcqsStats.map( (mcq) => {
             obj = {}
-            obj[mcq.title] = { 
-                applicantName : `${mcq.firstName} ${mcq.lastName}`,
-                score : mcq.score
+            obj[mcq.id] = { 
+                title: mcq.title,
+                applicantScore: {
+                    
+                    applicantName : `${mcq.firstName} ${mcq.lastName}`,
+                    score : mcq.score
+                }
             }  
             return obj
         })
         
         const mcqsResults = {};
         mcqsStats.forEach((mcq) => {
-            console.log(mcq)
             const key = Object.keys(mcq)[0];
-            const value = Object.values(mcq)[0];
-            let values = mcqsResults[key] || [];
-            values.push( value );
-            mcqsResults[key] = values;
+            const title = Object.values(mcq)[0].title;
+            const value = Object.values(mcq)[0].applicantScore;
+            let values
+            if( typeof mcqsResults[key] == 'undefined' ) {
+                values = mcqsResults[key] || [];
+                values.push( value );
+            } else {
+                values = mcqsResults[key].values || [];
+                values.push( value );
+
+            }
+
+            mcqsResults[key] = {
+                title: title,
+                values: values
+            };
         })
 
         const average_MCQS_score = await db.query(
@@ -568,21 +583,46 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         //         jobId: jobId
         //     }
         // }) 
-        const taskStats = await db.query(
-            "SELECT A.userName, T.title, TA.score  FROM `gp-db`.taskuploads AS TA INNER JOIN `gp-db`.Applicants AS A ON TA.ApplicantId = A.id INNER JOIN `gp-db`.tasks AS T ON TA.taskId = T.id WHERE TA.JobId=?;",
+        let taskStats = await db.query(
+            "SELECT A.firstName, A.lastName, T.id, T.title, TA.score  FROM `gp-db`.taskuploads AS TA INNER JOIN `gp-db`.Applicants AS A ON TA.ApplicantId = A.id INNER JOIN `gp-db`.tasks AS T ON TA.taskId = T.id WHERE TA.JobId=?;",
             {
                 replacements: [jobId],
                 type: db.QueryTypes.SELECT
             }
         );
         
-        tasksResults = taskStats.map( (task) => {
+        taskStats = taskStats.map( (task) => {
             obj = {}
-            obj[task.title] = { 
-                applicantName : task.userName,
-                score : task.score
+            obj[task.id] = { 
+                title: task.title,
+                applicantScore : {
+                    applicantName : `${task.firstName} ${task.lastName}`,
+                    score : task.score
+                }
             }  
             return obj
+        })
+        const tasksResults = {};
+        taskStats.forEach((task) => {
+            const key = Object.keys(task)[0];
+            const title = Object.values(task)[0].title;
+            const value = Object.values(task)[0].applicantScore;
+
+            let values
+            if( typeof tasksResults[key] == 'undefined' ) {
+                values = tasksResults[key] || [];
+                values.push( value );
+            } else {
+                values = tasksResults[key].values;
+                console.log(value)
+                console.log(values)
+                values.push( value );
+
+            }
+            tasksResults[key] = {
+                title: title,
+                values: values
+            };
         })
 
         const average_Tasks_score = await db.query( "SELECT TaskId, AVG(score) AS average_Task_score FROM `gp-db`.taskuploads GROUP BY TaskId;" ,
@@ -606,7 +646,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             }) 
             
             return {
-                applicantName: `${mcq.firstName} + ${mcq.lastName}`,
+                applicantName: `${mcq.firstName} ${mcq.lastName}`,
                 applicantId: mcq.applicantId,
                 overallScore: Math.round( parseFloat(mcq.overallMCQsScore) + parseFloat(task.overallTasksScore))
             }
