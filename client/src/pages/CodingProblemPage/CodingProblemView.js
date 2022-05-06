@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCodingProblemByIdAction } from "../../redux/actions/codingProblemBank";
 import Stack from "@mui/material/Stack";
 import Skeleton from "@mui/material/Skeleton";
+import "./View.scss"
+import CardPopup from "./CardPopup";
 
 const CodingProblemView = (props) => {
 
@@ -13,7 +15,9 @@ const CodingProblemView = (props) => {
         dispatch(getCodingProblemByIdAction(id));
         // console.log("execcc");
     }, [dispatch]);
+    const [modalOpen, setModalOpen] = useState(false);
 
+    const jobId = useSelector((state) => state.job.id);
 
     const { codingProblem } = useSelector((state) => state.codingProblems);
     console.log(id)
@@ -27,45 +31,143 @@ if(codingProblem!==undefined){
     const {testcases}=codingProblem
 
     return(
+     
     
         <div>
-           <h3>{codingProblem.name}</h3>
-           <div>
-               <p>
-                time limit: {codingProblem.timeConstraint} seconds
-               </p>
-           </div> <p>
-                memory limit: {codingProblem.memoryConstraint} MegaBytes
-               </p>
-
-
-           <div>
-               <p>
-               {codingProblem.description}
-               </p>
-           </div>
-           <div>
-               {
-                   testcases.map((testcase,index)=>{
-                       return(
-                            <div>
-                                testcase {index+1}
-                                
-                                <p>
-                                <span>input array: {testcase.inputs} </span>
-                                <span>output array: {testcase.outputs}</span>
-                                </p>
-                           
-                               
+        {modalOpen && (
+            <CardPopup
+                setOpenModal={setModalOpen}
+                id={id}
+                jobId={jobId}
+                message="Uploaded successfully!"
+            />
+        )}
+        <h3 className="title">{codingProblem?.title}</h3>
+        <div
+            style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "center",
+                margin: "0.2rem"
+            }}
+        >
+            <div
+                style={{
+                    flexFlow: "column",
+                    width: "85%",
+                    textAlign: "justify"
+                }}
+            >
+                <div>{codingProblem?.description}</div>
+                {codingProblem.testcases.map(
+                    ({ inputs, outputs }, count = 1) => {
+                        return (
+                            <div
+                                style={{
+                                    marginTop: "0.8rem"
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        fontSize: "1.5rem",
+                                        fontWeight: "bold"
+                                    }}
+                                >{`Example${
+                                    codingProblem.testcases
+                                        .length > 1
+                                        ? ` ${++count}`
+                                        : ""
+                                }:`}</span>
+                                <pre
+                                    style={{
+                                        backgroundColor:
+                                            "#f7f9fa",
+                                        padding: "0.4rem",
+                                        display: "grid",
+                                        gridRowGap:
+                                            "0.2rem",
+                                        fontSize: "1rem",
+                                        marginTop: "0.8rem"
+                                    }}
+                                >
+                                    <span>
+                                        <strong>
+                                            Input:
+                                        </strong>{" "}
+                                        {inputs}
+                                    </span>
+                                    <span>
+                                        <strong>
+                                            Output:
+                                        </strong>{" "}
+                                        {outputs}
+                                    </span>
+                                </pre>
                             </div>
-                       )
-                   })
-
-               }
-           </div>
+                        );
+                    }
+                )}
+                <div style={{ marginTop: "0.8rem" }}>
+                    <span
+                        style={{
+                            fontSize: "1.5rem",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        Constraints:
+                    </span>
+                    <ul>
+                        <li>
+                            <pre
+                                style={{
+                                    backgroundColor:
+                                        "#f7f9fa",
+                                    padding: "0.4rem",
+                                    display: "grid",
+                                    gridRowGap: "0.2rem",
+                                    fontSize: "1rem",
+                                    marginTop: "0.8rem"
+                                }}
+                            >
+                                <div>
+                                    <strong>
+                                        Time Constraint:
+                                    </strong>{" "}
+                                    {`${codingProblem.timeConstraint} seconds`}
+                                </div>
+                            </pre>
+                        </li>
+                        <li>
+                            <pre
+                                style={{
+                                    backgroundColor:
+                                        "#f7f9fa",
+                                    padding: "0.4rem",
+                                    display: "grid",
+                                    gridRowGap: "0.2rem",
+                                    fontSize: "1rem",
+                                    marginTop: "0.8rem"
+                                }}
+                            >
+                                <div>
+                                    <strong>
+                                        Space Constraint:
+                                    </strong>{" "}
+                                    {`${codingProblem.memoryConstraint} MB`}
+                                </div>
+                            </pre>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    
-    
+        <button  styel={{textAlign:'center'}}
+                        className="btn btn-primary mb-2"
+                        onClick={() => setModalOpen(true)}
+                    >
+                        Choose problem
+                    </button>
+    </div>
     
     
     
