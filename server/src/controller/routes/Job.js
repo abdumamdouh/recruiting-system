@@ -523,7 +523,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         //         jobId: jobId
         //     }
         // }) 
-        const taskStats = await db.query(
+        let taskStats = await db.query(
             "SELECT A.userName, T.title, TA.score  FROM `gp-db`.taskuploads AS TA INNER JOIN `gp-db`.Applicants AS A ON TA.ApplicantId = A.id INNER JOIN `gp-db`.tasks AS T ON TA.taskId = T.id WHERE TA.JobId=?;",
             {
                 replacements: [jobId],
@@ -531,13 +531,22 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             }
         );
         
-        tasksResults = taskStats.map( (task) => {
+        taskStats = taskStats.map( (task) => {
             obj = {}
             obj[task.title] = { 
                 applicantName : task.userName,
                 score : task.score
             }  
             return obj
+        })
+        const tasksResults = {};
+        taskStats.forEach((task) => {
+            console.log(task)
+            const key = Object.keys(task)[0];
+            const value = Object.values(task)[0];
+            let values = tasksResults[key] || [];
+            values.push( value );
+            tasksResults[key] = values;
         })
 
         const average_Tasks_score = await db.query( "SELECT TaskId, AVG(score) AS average_Task_score FROM `gp-db`.taskuploads GROUP BY TaskId;" ,
@@ -561,7 +570,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             }) 
             
             return {
-                applicantName: `${mcq.firstName} + ${mcq.lastName}`,
+                applicantName: `${mcq.firstName} ${mcq.lastName}`,
                 applicantId: mcq.applicantId,
                 overallScore: Math.round( parseFloat(mcq.overallMCQsScore) + parseFloat(task.overallTasksScore))
             }
