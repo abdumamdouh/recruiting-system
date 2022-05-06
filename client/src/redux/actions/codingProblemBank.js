@@ -22,15 +22,18 @@ export const getCodingProblemsAction = (pageNumber) => {
             });
             const { userInfo } = getState().user;
             console.log(userInfo.token);
+            const body = {pageNumber: pageNumber}
             const rawResponse = await fetch(
-                `${serverURL}/codingProblems/${pageNumber}`,
+                `${serverURL}/codingProblems`,
                 {
-                    method: "GET",
+                    method: "POST",
                     headers: {
                         Accept: "application/json",
                         "Content-Type": "application/json",
                         Authorization: "Bearer " + userInfo.token
-                    }
+                    },
+                    body: JSON.stringify(body)
+                
                 }
             );
             const data = await rawResponse.json();

@@ -150,7 +150,7 @@ int main() {
                     "message",
                     "The coding problem is submitted successfully."
                 );
-                history.push("/");
+                history.push("/feed");
                 // setIsSubmitted(true);
                 // setModalOpen(true);
             }

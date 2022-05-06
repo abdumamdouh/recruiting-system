@@ -1,21 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "@mui/material/Skeleton";
+import { Snackbar } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import JobPost from "./JobPost";
 import classes from "./Feed.module.scss";
 import ReactPaginate from "react-paginate";
+import MuiAlert from "@mui/material/Alert";
 import { getJobsAction } from "../../redux/actions/jobs";
 
 const Feed = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        if (localStorage.getItem("message")) {
+            setOpen(true);
+        }
         dispatch(getJobsAction(1));
     }, [dispatch]);
-
-    const Jobs = useSelector(state => state.jobs.Jobs);
-    const { Count } = useSelector(state => state.jobs);
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+    const [open, setOpen] = useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpen(false);
+        localStorage.removeItem("message");
+    };
+    const Jobs = useSelector((state) => state.jobs.Jobs);
+    const { Count } = useSelector((state) => state.jobs);
     //console.log('cc',Count)
     // const Count = 0;
 
@@ -30,23 +45,39 @@ const Feed = () => {
     };
     if (Jobs !== undefined) {
         return (
-            <div className={classes.list}>
-                {Jobs.map(job => (
-                    <JobPost job={job} />
-                ))}
-                <br />
-                <ReactPaginate
-                    previousLabel={"Previous"}
-                    nextLabel={"Next"}
-                    pageCount={Math.ceil(Count / 10)}
-                    onPageChange={changePage}
-                    containerClassName={classes.paginationBttns}
-                    previousLinkClassName={classes.previousBttn}
-                    nextLinkClassName={classes.nextBttn}
-                    disabledClassName={classes.paginationDisabled}
-                    activeClassName={classes.paginationActive}
-                />
-            </div>
+            <>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={handleClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                >
+                    <Alert
+                        onClose={handleClose}
+                        severity="success"
+                        sx={{ width: "100%" }}
+                    >
+                        {localStorage.getItem("message")}
+                    </Alert>
+                </Snackbar>
+                <div className={classes.list}>
+                    {Jobs.map((job) => (
+                        <JobPost job={job} />
+                    ))}
+                    <br />
+                    <ReactPaginate
+                        previousLabel={"Previous"}
+                        nextLabel={"Next"}
+                        pageCount={Math.ceil(Count / 10)}
+                        onPageChange={changePage}
+                        containerClassName={classes.paginationBttns}
+                        previousLinkClassName={classes.previousBttn}
+                        nextLinkClassName={classes.nextBttn}
+                        disabledClassName={classes.paginationDisabled}
+                        activeClassName={classes.paginationActive}
+                    />
+                </div>
+            </>
         );
     } else
         return (

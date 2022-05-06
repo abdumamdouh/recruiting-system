@@ -248,8 +248,10 @@ router.post("/setTaskMark", recruiterAuth, async (req, res) => {
 
 // get all available tasks
 // Accepted JSON: None
-router.get("/:JobId/allTasks", recruiterAuth, async (req, res) => {
+router.get("/:JobId/allTasks/:pageNumber", recruiterAuth, async (req, res) => {
     try {
+        const { pageNumber } = req.params;
+        
         const taskIds = await ActiveTask.findAll({
             attributes: ["TaskId"],
             where: {
@@ -258,7 +260,7 @@ router.get("/:JobId/allTasks", recruiterAuth, async (req, res) => {
             raw: true
         });
 
-        const allTasks = await Task.findAll({
+        const result = await Task.findAndCountAll({
             attributes: [
                 "title",
                 "description",
@@ -268,24 +270,26 @@ router.get("/:JobId/allTasks", recruiterAuth, async (req, res) => {
             ],
             where: {
                 RecruiterId: req.recruiter.id
-            }
+            },
+            offset: (pageNumber - 1) * 4,
+            limit: 4
         });
+        
+        const allTasks = result.rows
+        const count = result.count 
         const tasks = {
             relatedToThisJob: [],
             createdPrevByYou: []
         };
+
         allTasks.forEach((task) => {
-            if (
-                taskIds.find(
-                    (element) => element.TaskId === task.dataValues.id
-                ) !== undefined
-            ) {
+            if (taskIds.find((element) => element.TaskId === task.dataValues.id) !== undefined) {
                 tasks.relatedToThisJob.push(task);
             } else {
                 tasks.createdPrevByYou.push(task);
             }
         });
-        res.send(tasks);
+        res.send({tasks,count});
     } catch (error) {
         res.status(400).send(error.message);
     }

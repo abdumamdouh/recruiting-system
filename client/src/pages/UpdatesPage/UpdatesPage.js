@@ -376,9 +376,8 @@ const UpdatesPage = (props) => {
                                                                                     }
                                                                                     className="redirect"
                                                                                 >
-                                                                                    {
-                                                                                        obj.title
-                                                                                    }
+                                                                                    Coding
+                                                                                    Problem
                                                                                 </span>
                                                                             </li>
                                                                         </OverlayTrigger>

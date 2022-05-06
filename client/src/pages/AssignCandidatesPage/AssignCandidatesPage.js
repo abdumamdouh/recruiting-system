@@ -52,6 +52,25 @@ const CandidatesPage = () => {
             showSuccessMessage()
         }
     }
+    const handleAssignProblem = async()=>{
+        let codingProblem={jobId:jobId, codingProblem:{ codingProblemId: id,applicants:selectionModel}}
+        const rawResponse = await fetch(
+            `http://localhost:5000/assignTasks`,
+            {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + user.userInfo.token
+                },
+                body: JSON.stringify(codingProblem)
+            }
+        );
+        const data = await rawResponse;
+        if(data.status ===200){
+            showSuccessMessage()
+        }
+    }
     const rows = [...filteredApplicants];
     const columns = [
         { field: "id", headerName: "ID", width: 70 },
@@ -106,6 +125,7 @@ const CandidatesPage = () => {
                 Assign MCQ to Candidates
             </button>}
            {t === 'task' &&  <button className="btn btn-primary" style={{marginTop: '20px',marginLeft: '20px'}} onClick={handleAssignTask}> Assign Task to  Candidates</button>}
+           {t === 'codingProblem' &&  <button className="btn btn-primary" style={{marginTop: '20px',marginLeft: '20px'}} onClick={handleAssignProblem}> Assign Problem to  Candidates</button>}
         </div>
     );
 };

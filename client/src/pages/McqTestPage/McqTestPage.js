@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 // import "react-notifications/lib/notifications.css";
 // import Notification from "../../components/Notification";
@@ -354,6 +354,7 @@ let MCQQ = {
 
 const McqTestPage = (props) => {
     //TODO: check if it's taken or not from BE on componentDidMount
+    const history = useHistory();
     const { ID } = useParams();
     const [McqTaken, setMcqTaken] = useState(false);
     const [Mcq, setMcq] = useState([]);
@@ -452,8 +453,16 @@ const McqTestPage = (props) => {
             console.log(data);
             if (data.status === 202) {
                 localStorage.removeItem("jobId");
-                setMcqTaken(true);
-                setModalOpen(true);
+                localStorage.setItem(
+                    "message",
+                    "The MCQ test is submitted successfully."
+                );
+                // window.top = 0;
+                // window.scroll(0, 0);
+                // history.scrollRestoration = "auto";
+                history.push("/feed");
+                // setMcqTaken(true);
+                // setModalOpen(true);
             }
         } catch (error) {
             console.log(error.message);
@@ -467,7 +476,7 @@ const McqTestPage = (props) => {
     time.setSeconds(time.getSeconds() + Mcq.duration * 60); // 10 minutes timer
 */
 
-    if (Mcq.duration !== undefined && !McqTaken) {
+    if (Mcq.duration !== undefined) {
         let time = new Date();
         time.setSeconds(time.getSeconds() + Mcq.duration * 60);
         if (localStorage.getItem("time") !== null) {

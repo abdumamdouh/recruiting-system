@@ -118,7 +118,7 @@ export default function Task() {
                     "message",
                     "The task is submitted successfully."
                 );
-                history.push("/");
+                history.push("/feed");
             }
         } catch (error) {
             console.error("Error:", error);

@@ -19,7 +19,16 @@ const CodingProblemSample = (props) => {
     const [duration, setDuration] = useState(0);
     const [choosed, setChoosed] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-
+    const t ='codingProblem'
+    //handle assigning
+    const handleAssign = id => {
+        console.log("ay 7aga");
+        history.push(`/dashboard/uploadedexams/assignapplicants/${t}/${id}`);
+    };
+    const handleAssignCanidate = id => {
+        console.log("ay 7aga");
+        history.push(`/dashboard/uploadedexams/assigncandidates/${t}/${id}`);
+    };
     //redirect to questions' page
     const handleClick = () => {
         history.push(`/dashboard/problem/${props.id}`);
@@ -76,10 +85,20 @@ const CodingProblemSample = (props) => {
                     </button>
                     {/* <button className="btn btn-primary" onClick={handleChooseExam}>Choose MCQ Exam</button> */}
                     <button
-                        className="btn btn-primary"
+                        className="btn btn-primary mb-2"
                         onClick={() => setModalOpen(true)}
                     >
                         Choose problem
+                    </button>
+                    <button
+                        className="btn btn-primary mb-2"
+                        onClick={() => handleAssign(props.id)}>
+                        Assign Problem to Applicants
+                    </button>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => handleAssignCanidate(props.id)}>
+                        Assign Problem to Candidates
                     </button>
                     {choosed && (
                         <div>
