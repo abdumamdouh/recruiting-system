@@ -240,7 +240,7 @@ export default function AddProblem() {
                 </Typography>
                 <TextField
                     id="outlined-static"
-                    label="coding Problem Title"
+                    label="Coding Problem Title"
                     variant="outlined"
                     sx={{ marginTop: "10px" }}
                     onChange={(e) => setTitle(e.target.value)}
@@ -346,7 +346,7 @@ export default function AddProblem() {
                 return (
                     <div key={index}>
                         <Typography key={index} color="black" variant="h6">
-                            testcase {index + 1}
+                            Testcase {index + 1}
                         </Typography>
 
                         <div
@@ -362,7 +362,7 @@ export default function AddProblem() {
                                 color="black"
                                 variant="h6"
                             >
-                                inputs array
+                                Inputs array
                             </Typography>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <TextField
@@ -388,7 +388,7 @@ export default function AddProblem() {
                             }}
                         >
                             <Typography key={index} color="black" variant="h6">
-                                outputs array
+                                Outputs array
                             </Typography>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <TextField
@@ -416,8 +416,6 @@ export default function AddProblem() {
                     Add testCase
                 </Button>
             </div>
-
-           
 
             <div className="mb">
                 <Button
