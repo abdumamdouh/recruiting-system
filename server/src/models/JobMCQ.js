@@ -6,6 +6,14 @@ const MCQ = require("./MCQ");
 const JobMCQ = db.define(
     "JobMCQ",
     {
+        JobId: {
+            type: Sequelize.INTEGER,
+            primaryKey: true
+        },
+        MCQId: {
+            type: Sequelize.INTEGER,
+            primaryKey: true
+        },
         startDate: {
             type: Sequelize.DATE,
             allowNull: false
