@@ -545,7 +545,7 @@ int main() {
                         >
                             <MyTimer
                                 expiryTimestamp={time}
-                                // handleOnExpire={handleSubmit}
+                                handleOnExpire={handleSubmit}
                                 mode={mode}
                             />
                             <Button
