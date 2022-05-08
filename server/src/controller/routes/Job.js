@@ -511,7 +511,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             let values
             if( typeof mcqsResults[key] == 'undefined' ) {
                 values = mcqsResults[key] || [];
-                values.push( value );
+                values.push( value ); 
             } else {
                 values = mcqsResults[key].values || [];
                 values.push( value );
