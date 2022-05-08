@@ -292,7 +292,7 @@ export default function AddProblem() {
                 </div>
 
                 <Typography color="black" variant="h6">
-                    Duration of coding problem
+                    Duration of Coding problem
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -310,6 +310,7 @@ export default function AddProblem() {
             <div className="mb black">
                 <Typography color="black" variant="h6">
                     Time Constraints
+                    <span style={{ color: "#827F7E" }}> (in seconds)</span>
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -324,6 +325,7 @@ export default function AddProblem() {
                 </div>
                 <Typography color="black" variant="h6">
                     Memory Constraints
+                    <span style={{ color: "#827F7E" }}> (in MB)</span>
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
