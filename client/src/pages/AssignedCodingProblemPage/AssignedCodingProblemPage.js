@@ -184,7 +184,7 @@ int main() {
 
     if (codingProblem?.duration !== undefined) {
         let time = new Date();
-        time.setSeconds(time.getSeconds() + 50 * 60);
+        time.setSeconds(time.getSeconds() + codingProblem.duration * 60);
         console.log(time);
         if (localStorage.getItem("time") !== null) {
             console.log(localStorage.getItem("time"));
