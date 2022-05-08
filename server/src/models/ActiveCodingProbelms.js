@@ -34,26 +34,28 @@ const ActiveCodingProblem = db.define(
             type: Sequelize.INTEGER,
             allowNull: false
         }
+    },
+    {
+        uniqueKeys: {
+            actions_unique: {
+                fields: ["codingProblemId", "jobId", "deadline"]
+            }
+        }
     }
-    // {
-    //     uniqueKeys: {
-    //         actions_unique: {
-    //             fields: ["codingProblemId", "jobId", "deadline"]
-    //         }
-    //     }
-    // }
 );
 
 // M->N relation between Job and task
 Job.belongsToMany(CodingProblemBank, {
-    foreignKey: "codingProblemId",
-    otherKey: "jobId",
-    through: ActiveCodingProblem
+    foreignKey: "jobId",
+    otherKey: "codingProblemId",
+    through: ActiveCodingProblem,
+    uniqueKeys: "actions_unique"
 });
 CodingProblemBank.belongsToMany(Job, {
     through: ActiveCodingProblem,
-    foreignKey: "jobId",
-    otherKey: "codingProblemId"
+    foreignKey: "codingProblemId",
+    otherKey: "jobId",
+    uniqueKeys: "actions_unique"
 });
 
 module.exports = ActiveCodingProblem;
