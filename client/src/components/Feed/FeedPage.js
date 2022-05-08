@@ -8,6 +8,7 @@ import classes from "./Feed.module.scss";
 import ReactPaginate from "react-paginate";
 import MuiAlert from "@mui/material/Alert";
 import { getJobsAction } from "../../redux/actions/jobs";
+import { getApplicantProfileAction } from "../../redux/actions/user";
 
 const Feed = () => {
     const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Feed = () => {
             setOpen(true);
         }
         dispatch(getJobsAction(1));
+        dispatch(getApplicantProfileAction());
     }, [dispatch]);
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -48,7 +50,7 @@ const Feed = () => {
             <>
                 <Snackbar
                     open={open}
-                    autoHideDuration={6000}
+                    autoHideDuration={2000}
                     onClose={handleClose}
                     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 >
