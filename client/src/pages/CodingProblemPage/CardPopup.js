@@ -142,7 +142,7 @@ function CardPopup({ setOpenModal, message, id, jobId }) {
 
                     <div className="footer">
                         <button id="submitBtn" onClick={handleSubmit}>
-                            Choose Problem
+                            Choose
                         </button>
 
                         <button
