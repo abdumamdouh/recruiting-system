@@ -28,12 +28,19 @@ const JobMCQ = db.define(
             allowNull: false
         }
     },
-    { freezeTableName: true }
+    {
+        freezeTableName: true,
+        uniqueKeys: {
+            actions_unique: {
+                fields: ["MCQId", "jobId", "expiryDate"]
+            }
+        }
+    }
 );
 
 // relation between job and MCQ ( M-->N )
-Job.belongsToMany(MCQ, { through: JobMCQ });
-MCQ.belongsToMany(Job, { through: JobMCQ });
+Job.belongsToMany(MCQ, { through: JobMCQ, uniqueKeys: "actions_unqiue" });
+MCQ.belongsToMany(Job, { through: JobMCQ, uniqueKeys: "actions_unqiue" });
 Job.hasMany(JobMCQ);
 JobMCQ.belongsTo(Job);
 MCQ.hasMany(JobMCQ);
