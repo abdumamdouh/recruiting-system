@@ -38,28 +38,30 @@ function Header() {
         setMenuOpen((p) => !p);
     };
 
-    const handleLogOut = async () => {
-        // console.log("Log Out");
+    // const handleLogOut = async () => {
+    //     // console.log("Log Out");
 
-        try {
-            const rawResponse = await fetch(`http://localhost:5000/logout`, {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + user.userInfo.token
-                }
-            });
-            const data = await rawResponse.json();
-            console.log(data);
-        } catch (error) {
-            console.log(error.message);
-        }
+    //     try {
+    //         const rawResponse = await fetch(`http://localhost:5000/logout`, {
+    //             method: "POST",
+    //             headers: {
+    //                 Accept: "application/json",
+    //                 "Content-Type": "application/json",
+    //                 Authorization: "Bearer " + user.userInfo.token
+    //             }
+    //         });
+    //         const data = await rawResponse.json();
+    //         console.log(data);
+    //     } catch (error) {
+    //         console.log(error.message);
+    //     }
 
+    //     dispatch(logoutUserAction());
+    //     // console.log(user);
+    // };
+    const handleLogOut=()=>{
         dispatch(logoutUserAction());
-        // console.log(user);
-    };
-
+    }
     return (
         <header className={classes.header}>
             <div className={classes.header__content}>

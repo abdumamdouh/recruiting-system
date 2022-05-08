@@ -373,7 +373,7 @@ export default function AddProblem() {
                                             {...props}
                                         />
                                     )}
-                                    label="input"
+                                    label="Example: ['input1','input2']"
                                     onChange={handleTestCaseInput}
                                 />
                             </LocalizationProvider>
@@ -399,7 +399,7 @@ export default function AddProblem() {
                                             {...props}
                                         />
                                     )}
-                                    label="output"
+                                    label="Example: ['ex1','ex2']"
                                     onChange={handleTestCaseOutput}
                                 />
                             </LocalizationProvider>
@@ -417,77 +417,7 @@ export default function AddProblem() {
                 </Button>
             </div>
 
-            <div>
-                <h4
-                    style={{
-                        color: "black",
-                        display: "inline",
-                        marginBottom: "5px"
-                    }}
-                >
-                    Upload Additional Resources{" "}
-                </h4>
-                <span style={{ fontSize: 20, color: "#827F7E" }}>
-                    (Optional)
-                </span>
-                <small
-                    style={{
-                        display: "block",
-                        fontSize: 15,
-                        color: "#827F7E"
-                    }}
-                >
-                    <em>
-                        Explain more details about the Coding problem through
-                        uploading a docx or pdf file.
-                    </em>
-                </small>
-                <div className="mb" style={{ marginTop: "5px" }}>
-                    {/* <div>
-                        <input
-                            type="file"
-                            name="file"
-                            onChange={changeHandler}
-                            accept={".pdf, .docx"}
-                        />
-                        {isFilePicked ? (
-                            <div>
-                                <p>Filename: {selectedFile.name}</p>
-                                <p>Filetype: {selectedFile.type}</p>
-                                <p>Size in bytes: {selectedFile.size}</p>
-                                <p>
-                                    lastModifiedDate:{" "}
-                                    {selectedFile.lastModifiedDate.toLocaleDateString()}
-                                </p>
-                            </div>
-                        ) : (
-                            <p>Select a file to show details</p>
-                        )} */}
-                    {/* TODO: move the handleSubmission into handleClick */}
-                    {/* <div>
-                            <button onClick={handleSubmission}>Submit</button>
-                        </div>
-                        </div> */}
-                    <label htmlFor="contained-button-file">
-                        <Input
-                            accept=".pdf, .docx, .zip, .rar"
-                            id="contained-button-file"
-                            type="file"
-                            onChange={changeHandler}
-                        />
-                        <Button variant="contained" component="span">
-                            Upload file
-                        </Button>
-                    </label>
-                    {isFilePicked ? (
-                        <span style={{ marginLeft: 10, color: "#827F7E" }}>
-                            {selectedFile.name}
-                        </span>
-                    ) : (
-                        ""
-                    )}
-                </div>
-            </div>
+           
 
             <div className="mb">
                 <Button

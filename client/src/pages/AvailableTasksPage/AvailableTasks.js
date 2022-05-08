@@ -11,20 +11,20 @@ const AvailableTasks = () => {
     console.log('jobid', id)
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getTaskAction(id));
+        dispatch(getTaskAction(id,pageNumber));
     }, [dispatch]);
-    const { tasks } = useSelector(state => state);
+    const { tasks } = useSelector(state => state.tasks);
 
-    // const { Count } = useSelector(state => state.exam);
+    const { count } = useSelector(state => state.tasks);
 
     const [pageNumber, setPageNumber] = useState(1);
 
-    // const changePage = ({ selected }) => {
-    //     setPageNumber(selected + 1);
-    //     dispatch(getExamsAction(selected + 1));
-    // };
+    const changePage = ({ selected }) => {
+        setPageNumber(selected + 1);
+        dispatch(getTaskAction(id, selected + 1));
+    };
 
-    if (Object.entries(tasks).length !== 0 && tasks!== undefined && tasks.relatedToThisJob!== undefined && tasks.createdPrevByYou!== undefined) {
+    if ( tasks!== undefined && tasks.relatedToThisJob!== undefined && tasks.createdPrevByYou!== undefined) {
         const {relatedToThisJob } = tasks
         console.log('related', relatedToThisJob)
         const {createdPrevByYou} = tasks
@@ -58,7 +58,8 @@ const AvailableTasks = () => {
                         </ul>
                     ))}
                 </div>
-            <h6>Tasks Created Previously by you </h6>
+           {tasks.createdPrevByYou.length!==0 &&  <>
+           <h6>Tasks Created Previously by you </h6>
                 <div className="card-container">
                     {createdPrevByYou.map((m, index) => (
                         <ul
@@ -86,11 +87,13 @@ const AvailableTasks = () => {
                         </ul>
                     ))}
                 </div>
-                {/* <div className="footer">
+                </>
+                }
+                <div className="footer">
         <ReactPaginate
                     previousLabel={"Previous"}
                     nextLabel={"Next"}
-                    pageCount={Math.ceil(Count/4)}
+                    pageCount={Math.ceil(count/4)}
                     onPageChange={changePage}
                     containerClassName={"paginationBttns"}
                     previousLinkClassName={"previousBttn"}
@@ -98,7 +101,7 @@ const AvailableTasks = () => {
                     disabledClassName={"paginationDisabled"}
                     activeClassName={"paginationActive"}
                 />  
-        </div> */}
+        </div>
             </div>
         );
     } else
