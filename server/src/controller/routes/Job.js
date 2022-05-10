@@ -296,6 +296,8 @@ router.get("/getAllTasks/:id", recruiterAuth, async (req, res) => {
     }
 });
 
+
+
 // assign the diffrent tasks of the job to applicants
 router.post("/assignTasks", recruiterAuth, async (req, res) => {
     try {
@@ -303,12 +305,12 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
         if (req.body.MCQ) {
             const mcq = req.body.MCQ;
             const MCQId = mcq.MCQId;
-
+            
             const mcqRecord = await MCQ.findByPk(MCQId);
             if(!mcqRecord) {
                 throw new Error("This MCQ id is invalid");
             }
-
+            
             const jobRecord = await Job.findByPk(jobId);
             if(!jobRecord) {
                 throw new Error("This Job id is invalid");
@@ -343,10 +345,10 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
                     await applicant.save();
                 });
             }
-
+            
             res.send("MCQ Assigned");
         } else if (req.body.codingProblem) {
-            console.log('coding',req.body.codingProblem)
+            // console.log('coding',req.body.codingProblem)
             const codingProblems = req.body.codingProblem;
             const codingProblemId = codingProblems.codingProblemId;
 
@@ -357,7 +359,7 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
             if(!problemRecord) {
                 throw new Error("This Problem is not Active");
             }
-
+            
             const jobRecord = await Job.findByPk(jobId);
             if(!jobRecord) {
                 throw new Error("This Job id is invalid");
@@ -433,7 +435,7 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
                     assigned.tasks.push(TaskId);
                     assigned.tasks = assigned.tasks.filter(
                         (v, i, a) => a.indexOf(v) === i
-                    );
+                        );
                     applicant.assigned = JSON.stringify(assigned);
                     // console.log(typeof applicant)
                     await applicant.save();
@@ -447,10 +449,126 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
     }
 });
 
+
+// m[6] = {(time+memory,1),(2),(3)}
+// m[5] = {4,5}
+//     |
+//     -
+// m[6] = {3,2,1}
+// m[5] = {5,4} 
+
+
+const calculateCodingScore = async function(id,testcasesCount){
+    // return: name , id ,  results , overallscore(scoreMap)
+    let score = {} ;
+    let scoreMap = new Map() ;
+    const lastKeyInMap = map => Array.from(map)[map.size-1][0]
+    const firstKeyInMap = map => Array.from(map)[0][0]
+
+    score = await db.query(`SELECT A.firstName, A.lastName , A.id , ST.results FROM codingproblemstats AS ST INNER JOIN Applicants AS A ON ST.applicantId = A.id WHERE ST.JobId=${id};`,
+    {
+        type: db.QueryTypes.SELECT
+    }) ;
+
+    score.forEach(cp => {
+        let passedCount = 0 ;
+        let totalTime = 0 ;
+        let totalMemory = 0 ;
+        // console.log(cp.results);
+        for (const testCase in cp.results) {
+            // console.log(cp.results[testCase]);
+            if(cp.results[testCase].result === "PASSED")
+                {
+                    passedCount++;
+                    totalTime += (Number(cp.results[testCase].timeConsumption.split(" ")[0]) )
+                    totalMemory += (Number(cp.results[testCase].memoryConsumption.split(" ")[0]) / 1e6)
+                }
+        }
+        let temp = scoreMap.get(passedCount) || []
+        temp.push([totalTime,totalMemory,cp.id])
+        scoreMap.set(passedCount ,temp ) 
+    })
+    scoreMap = new Map([...scoreMap].sort());
+    for (let [key, value] of scoreMap) {
+        value.sort((a, b) => { 
+            if (a[0] < b[0])
+                return -1 ;
+            else if (a[0] > b[0])
+                return 1 ;
+            else if (a[0] === b[0]) {
+                // a[1] > b[1] ? 1 : -1 ;
+                if (a[1] > b[1]) 
+                    return 1
+                else
+                    return -1 ; 
+            } else
+                return 0 ;
+        })
+    }
+    const maxTestcase = lastKeyInMap(scoreMap)
+    const minTestcase = firstKeyInMap(scoreMap)
+    // loop on the map from the bottom (Bohemyaaa)
+    for(let i = testcasesCount ; i >= 0; i--){
+        if (scoreMap.get(i) !== undefined){
+            let minTime = 1e7+9 
+            let maxTime = 0 
+            let minMemory = 1e7+9  
+            let maxMemory = 0 
+            
+            const currList = scoreMap.get(i)
+            currList.forEach((tinyList) => {
+                maxTime = Math.max(maxTime,tinyList[0])
+                minTime = Math.min(minTime,tinyList[0])
+
+                maxMemory = Math.max(maxTime,tinyList[1])
+                minMemory = Math.min(minMemory,tinyList[1])
+            })
+            // (max-value / max - min) * 100
+            currList.forEach((tinyList) => {
+                let correctnessMark 
+                let timeMark
+                let memoryMark 
+
+                if (maxTestcase === minTestcase && maxTestcase === 0){
+                    correctnessMark = 0
+                } else if (maxTestcase === minTestcase && maxTestcase !== 0){
+                    correctnessMark = 50
+                } else {
+                    correctnessMark = (((i-minTestcase) / (maxTestcase-minTestcase))*100)/2
+                }
+
+                if (maxTime === minTime && maxTime === 0){
+                    timeMark = 25
+                } else if (maxTime === minTime && maxTime !== 0){
+                    timeMark = 0
+                } else {
+                    timeMark = (((maxTime-tinyList[0]) / (maxTime-minTime))*100)/4
+                }
+                
+                if (maxMemory === minMemory && maxMemory === 0){
+                    memoryMark = 25
+                } else if (maxMemory === minMemory && maxMemory !== 0){
+                    memoryMark = 0
+                } else {
+                    memoryMark = (((maxMemory-tinyList[1]) / (maxMemory-minMemory))*100)/4
+                }
+                // console.log(correctnessMark,timeMark,memoryMark)
+
+                // adding total mark to each applicant
+                const index  = score.findIndex((applicant) => applicant.id === tinyList[2])
+                score[index].mark = (correctnessMark+timeMark+memoryMark)
+            })
+
+        }
+    }
+    console.log(score);
+    // console.log(scoreMap)
+    
+    return score ;
+}
+
 router.get("/report/:id", recruiterAuth, async (req, res) => {
     try {
-
-
         const jobId = req.params.id;
         const applicantsApplied = await ApplyFor.count({
             where: {
@@ -484,7 +602,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             "SELECT A.firstName, A.lastName, M.id, M.title, MS.score  FROM mcqstats AS MS INNER JOIN Applicants AS A ON MS.ApplicantId = A.id INNER JOIN mcqs AS M ON MS.MCQId = M.id WHERE MS.JobId=?;",
             {
                 replacements: [jobId],
-                type: db.QueryTypes.SELECT
+                type: db.QueryTypes.SELECT 
             }
         );
 
@@ -511,7 +629,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             let values
             if( typeof mcqsResults[key] == 'undefined' ) {
                 values = mcqsResults[key] || [];
-                values.push( value ); 
+                values.push( value );
             } else {
                 values = mcqsResults[key].values || [];
                 values.push( value );
@@ -614,8 +732,8 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
                 values.push( value );
             } else {
                 values = tasksResults[key].values;
-                console.log(value)
-                console.log(values)
+                // console.log(value)
+                // console.log(values)
                 values.push( value );
 
             }
@@ -639,6 +757,22 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
                 type: db.QueryTypes.SELECT
             }
         );
+
+        // coding problem
+
+        // 1-) get all coding problem ids to this job
+        const codingProblemIds = await ActiveCodingProblems.findAll({
+            attributes:['codingProblemId'],
+            where:{
+                jobId:jobId
+            },
+            raw:true
+        })
+        console.log(codingProblemIds)
+        
+        // 3-) call function to each coding problem obtained in 1
+        // calculateCodingScore(codingProblemIds,testcasesCount)
+        calculateCodingScore(1,6)
 
         const overallScore = overallMCQs.map( (mcq) => {
             const task = overallTasks.find( (task) => {
