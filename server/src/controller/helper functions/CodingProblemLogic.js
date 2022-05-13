@@ -137,7 +137,7 @@ const testCode = async function (
                     stringInput,
                     function (data) {
                         index.advance(); //index++
-                        // console.log(data)
+                        console.log(data)
  
                         // try catch block is needed 
                         const values = data.output.split(" ");
@@ -145,7 +145,7 @@ const testCode = async function (
                         const valuesObj = {
                             memory: values[0],
                             output: values
-                                .slice(1, -2)
+                                .slice(1, -1)
                                 .join(" "),
                             time: values[values.length - 1]
                         };
