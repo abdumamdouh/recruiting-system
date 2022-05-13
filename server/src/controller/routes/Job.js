@@ -19,7 +19,7 @@ const Op = require("Sequelize").Op;
 const recruiterAuth = require("../middleware/recruiterAuth");
 const applicantAuth = require("../middleware/applicantAuth");
 const RecOrApp = require("../middleware/RecOrApp");
-const { where } = require("sequelize");
+const { where, TINYINT } = require("sequelize");
 const { object } = require("joi");
 const Task = require("../../models/Task");
 const MCQStat = require("../../models/MCQStat");
@@ -458,7 +458,7 @@ router.post("/assignTasks", recruiterAuth, async (req, res) => {
 // m[5] = {5,4} 
 
 
-const calculateCodingScore = async function(id,testcasesCount){
+const calculateCodingScore = async function(id){
     // return: name , id ,  results , overallscore(scoreMap)
     let score = {} ;
     let scoreMap = new Map() ;
@@ -469,6 +469,8 @@ const calculateCodingScore = async function(id,testcasesCount){
     {
         type: db.QueryTypes.SELECT
     }) ;
+
+    const testcasesCount = Object.keys(score[0].results).length;
 
     score.forEach(cp => {
         let passedCount = 0 ;
@@ -505,6 +507,8 @@ const calculateCodingScore = async function(id,testcasesCount){
                 return 0 ;
         })
     }
+
+
     const maxTestcase = lastKeyInMap(scoreMap)
     const minTestcase = firstKeyInMap(scoreMap)
     // loop on the map from the bottom (Bohemyaaa)
@@ -520,7 +524,7 @@ const calculateCodingScore = async function(id,testcasesCount){
                 maxTime = Math.max(maxTime,tinyList[0])
                 minTime = Math.min(minTime,tinyList[0])
 
-                maxMemory = Math.max(maxTime,tinyList[1])
+                maxMemory = Math.max(maxMemory,tinyList[1])
                 minMemory = Math.min(minMemory,tinyList[1])
             })
             // (max-value / max - min) * 100
@@ -552,7 +556,8 @@ const calculateCodingScore = async function(id,testcasesCount){
                 } else {
                     memoryMark = (((maxMemory-tinyList[1]) / (maxMemory-minMemory))*100)/4
                 }
-                // console.log(correctnessMark,timeMark,memoryMark)
+                // console.log(maxMemory - minMemory)
+                // console.log(correctnessMark,timeMark,memoryMark,tinyList[2])
 
                 // adding total mark to each applicant
                 const index  = score.findIndex((applicant) => applicant.id === tinyList[2])
@@ -561,8 +566,8 @@ const calculateCodingScore = async function(id,testcasesCount){
 
         }
     }
-    console.log(score);
-    // console.log(scoreMap)
+    // console.log(score);
+    //     console.log(scoreMap)
     
     return score ;
 }
@@ -768,11 +773,70 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             },
             raw:true
         })
-        console.log(codingProblemIds)
+        const codingProblems = await db.query(
+            `SELECT AC.codingProblemId , CP.title FROM activeCodingProblems AS AC INNER JOIN codingproblembanks AS CP ON AC.codingProblemId = CP.id WHERE AC.jobId = ${jobId};`, 
+            {
+                replacements: [jobId],
+                type: db.QueryTypes.SELECT
+            }
+        );
+
+        
+        console.log(codingProblems)
         
         // 3-) call function to each coding problem obtained in 1
         // calculateCodingScore(codingProblemIds,testcasesCount)
-        calculateCodingScore(1,6)
+
+        const codingProblemsScores = await Promise.all(codingProblems.map( async (cb) => {
+
+            const codingProblemScore = await calculateCodingScore( cb.codingProblemId )
+
+            console.log(codingProblemScore)
+            const score = codingProblemScore.map( (cbs) => {
+                const cbScore  = {}
+                cbScore[cb.codingProblemId] = {
+                    title : cb.title,
+                    applicantScore : {
+                        applicantName : `${cbs.firstName} ${cbs.lastName}`,
+                        score : cbs.mark
+                    }
+                }
+                return cbScore;
+            })
+            return score;
+        
+        }));
+
+        console.log(codingProblemsScores);
+        // codingProblemsScores = codingProblemsScores.flat();
+        const codingProblemsResults = {};
+        codingProblemsScores.flat().forEach((cb) => {
+            const key = Object.keys(cb)[0];
+            const title = Object.values(cb)[0].title;
+            const value = Object.values(cb)[0].applicantScore;
+
+            console.log(key,title,value)
+
+            let values
+            if( typeof codingProblemsResults[key] == 'undefined' ) {
+                values = codingProblemsResults[key] || [];
+                values.push( value );
+            } else {
+                values = codingProblemsResults[key].values;
+                // console.log(value)
+                // console.log(values)
+                values.push( value );
+
+            }
+            codingProblemsResults[key] = {
+                title: title,
+                values: values
+            };
+        })
+
+        // console.log(codingProblemsResults)
+
+
 
         const overallScore = overallMCQs.map( (mcq) => {
             const task = overallTasks.find( (task) => {
@@ -789,14 +853,15 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
 
         res.send({
             mcqsResults : mcqsResults,
-            tasksResults: tasksResults,
+            tasksResults : tasksResults,
+            codingProblemsResults : codingProblemsResults,
             applicantsAppliedCount: applicantsApplied,
             avgMCQsScore: average_MCQS_score,
             avgTasksScore: average_Tasks_score,
             // overallMCQs: overallMCQs,
             // overallTasks: overallTasks,
-            overallScore: overallScore
-
+            overallScore: overallScore,
+            // codingProblemsScores: codingProblemsScores
             // MCQs: mcqs.rows,
             // MCQSCount: mcqs.count,
             // tasks: tasks.rows,
