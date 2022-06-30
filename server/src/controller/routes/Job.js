@@ -8,7 +8,8 @@ const JobMCQ = require("../../models/JobMCQ");
 const Requirment = require("../../models/Requirment");
 const ApplyFor = require("../../models/ApplyFor");
 const ActiveTask = require("../../models/ActiveTask")
-const ActiveCodingProblems= require("../../models/ActiveCodingProbelms")
+const ActiveCodingProblems = require("../../models/ActiveCodingProbelms")
+const CodingProblemStats = require("../../models/CodingProblemStats")
 
 
 const Sequelize = require("sequelize");
@@ -24,6 +25,7 @@ const { object } = require("joi");
 const Task = require("../../models/Task");
 const MCQStat = require("../../models/MCQStat");
 const TaskUploads = require("../../models/TaskUploads");
+const CodingProblemBank = require("../../models/CodingProblemBank");
 
 const router = new express.Router();
 
@@ -566,7 +568,7 @@ const calculateCodingScore = async function(id){
 
         }
     }
-    // console.log(score);
+    console.log(score);
     //     console.log(scoreMap)
     
     return score ;
@@ -647,6 +649,16 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             };
         })
 
+        for (const [key, value] of Object.entries(mcqsResults)) {
+            // console.log(`${key}: ${value.values}`);
+            mcqsResults[key].values = value.values.sort( (a, b)=> {
+                if ( a.score < b.score ) {
+                    return 1
+                }
+                else 
+                    return -1
+            })
+        }
         const average_MCQS_score = await db.query(
             "SELECT MCQId, AVG(score) AS average_MCQ_score FROM mcqstats GROUP BY MCQId;", 
             {
@@ -748,6 +760,17 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             };
         })
 
+        for (const [key, value] of Object.entries(tasksResults)) {
+            // console.log(`${key}: ${value.values}`);
+            tasksResults[key].values = value.values.sort( (a, b)=> {
+                if ( a.score < b.score ) {
+                    return 1
+                }
+                else 
+                    return -1
+            })
+        }
+
         const average_Tasks_score = await db.query( "SELECT TaskId, AVG(score) AS average_Task_score FROM `gp-db`.taskuploads GROUP BY TaskId;" ,
             {
                 type: db.QueryTypes.SELECT
@@ -762,6 +785,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
                 type: db.QueryTypes.SELECT
             }
         );
+        // console.log(overallTasks)
 
         // coding problem
 
@@ -782,21 +806,23 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         );
 
         
-        console.log(codingProblems)
+        // console.log(codingProblems)
         
         // 3-) call function to each coding problem obtained in 1
         // calculateCodingScore(codingProblemIds,testcasesCount)
 
         const codingProblemsScores = await Promise.all(codingProblems.map( async (cb) => {
 
+
             const codingProblemScore = await calculateCodingScore( cb.codingProblemId )
 
-            console.log(codingProblemScore)
+            // console.log(codingProblemScore)
             const score = codingProblemScore.map( (cbs) => {
                 const cbScore  = {}
                 cbScore[cb.codingProblemId] = {
                     title : cb.title,
                     applicantScore : {
+                        applicantId : cbs.id,
                         applicantName : `${cbs.firstName} ${cbs.lastName}`,
                         score : cbs.mark
                     }
@@ -807,7 +833,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         
         }));
 
-        console.log(codingProblemsScores);
+        // console.log(codingProblemsScores);
         // codingProblemsScores = codingProblemsScores.flat();
         const codingProblemsResults = {};
         codingProblemsScores.flat().forEach((cb) => {
@@ -815,7 +841,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             const title = Object.values(cb)[0].title;
             const value = Object.values(cb)[0].applicantScore;
 
-            console.log(key,title,value)
+            // console.log(key,title,value)
 
             let values
             if( typeof codingProblemsResults[key] == 'undefined' ) {
@@ -834,19 +860,54 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             };
         })
 
-        // console.log(codingProblemsResults)
+        for (const [key, value] of Object.entries(codingProblemsResults)) {
+            // console.log(`${key}: ${value.values}`);
+            codingProblemsResults[key].values = value.values.sort( (a, b)=> {
+                if ( a.score < b.score ) {
+                    return 1
+                }
+                else 
+                    return -1
+            })
+        }
 
+        const codingProblemsApplicants = await CodingProblemStats.findAll({
+            attributes:['applicantId', 'codingProblemId'],
+            where:{
+                jobId:jobId
+            },
+            raw:true
+        })
+
+        const applicantsCodingProblems  = _.groupBy(codingProblemsApplicants, cp => cp.applicantId)
+        
+        console.log(applicantsCodingProblems)
+
+        const overAllCodingProblems = {};
+
+        for (const [key, value] of Object.entries(applicantsCodingProblems)) {
+            // console.log(`${key}: ${value.values}`);
+            let score = 0
+            for (let index = 0; index < value.length; index++) {
+                const applicantScore = await codingProblemsResults[value[index].codingProblemId].values.find( applicant => {
+                    return applicant.applicantId == key
+                })    
+                score = score + applicantScore.score            
+            }
+            overAllCodingProblems[key] = score 
+        }
 
 
         const overallScore = overallMCQs.map( (mcq) => {
+            const id = mcq.applicantId
             const task = overallTasks.find( (task) => {
-                return task.applicantId === mcq.applicantId 
+                return task.applicantId === id 
             }) 
             
             return {
                 applicantName: `${mcq.firstName} ${mcq.lastName}`,
-                applicantId: mcq.applicantId,
-                overallScore: Math.round( parseFloat(mcq.overallMCQsScore) + parseFloat(task.overallTasksScore))
+                applicantId: id,
+                overallScore: Math.round( parseFloat(mcq.overallMCQsScore) + parseFloat(task.overallTasksScore) + overAllCodingProblems[id])
             }
         })
 
