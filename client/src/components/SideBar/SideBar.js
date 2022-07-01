@@ -106,10 +106,13 @@ const SideBar = () => {
                                 Assign Exams
                             </li>
                         </Link>
+                        <Link to="/dashboard/reports" className="link">
                         <li className="sidebarListItem">
                             <BarChart className="sidebarIcon" />
                             Reports
                         </li>
+                        </Link>
+                       
                     </ul>
                 </div>
                 {/* <div className="sidebarMenu">
