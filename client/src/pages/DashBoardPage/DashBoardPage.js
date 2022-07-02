@@ -17,6 +17,7 @@ import TaskReviewPage from '../TaskReviewPage/TaskReviewPage'
 import CodingProblem from '../CodingProblemPage/CodingProblem'
 import CodingProblemBank from '../CodingProblemPage/CodingProblemBank'
 import CodingProblemView from "../CodingProblemPage/CodingProblemView";
+import Reports from "../ReportsPage/Reports";
 const DashBoardPage = () => {
     return (
         <Router>
@@ -68,6 +69,9 @@ const DashBoardPage = () => {
                         </Route>
                         <Route path="/dashboard/codingProblem">
                             <CodingProblem />
+                        </Route>
+                        <Route path="/dashboard/reports">
+                            <Reports />
                         </Route>
 
                     </Switch>

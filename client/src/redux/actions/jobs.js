@@ -11,7 +11,10 @@ import {
     GET_JOB_BY_ID_FAIL,
     EDIT_JOB_REQUEST,
     EDIT_JOB_SUCCESS,
-    EDIT_JOB_FAIL
+    EDIT_JOB_FAIL, 
+    GET_JOB_RESULTS_REQUEST,
+    GET_JOB_RESULTS_SUCCESS,
+    GET_JOB_RESULTS_FAIL
 
 } from "../types/index";
 import axios from "axios";
@@ -146,3 +149,35 @@ export const editJobAction = (job) => {
 };
 };
 
+//job results
+export const getJobResultsAction = (id,setLoading) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: GET_JOB_RESULTS_REQUEST,
+                loading: true
+            });
+            const { userInfo } = getState().user;
+            console.log(userInfo.token);
+            const rawResponse = await fetch(
+                `${serverURL}/report/${id}`,
+                {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + userInfo.token
+                    }
+                }
+            );
+            const data = await rawResponse.json();        
+    dispatch({ type: GET_JOB_RESULTS_SUCCESS, payload: data });
+   setLoading(true)
+} catch (error) {
+    dispatch({
+        type: GET_JOB_RESULTS_FAIL,
+        payload: error.response && error.response.data
+    });
+}
+};
+}

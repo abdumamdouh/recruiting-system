@@ -14,6 +14,7 @@ import taskReducer from "./reducers/task";
 import taskSubmissionReducer from "./reducers/taskSubmission"; 
 import MarksReducer from "./reducers/Mark"; 
 import codingProblemsReducer from './reducers/codingProblemBank'
+import resultsReducer from "./reducers/results"
 const persistConfig = {
   key: "root",
   storage,
@@ -32,7 +33,8 @@ const rootReducer = combineReducers({
   tasks: taskReducer,
   taskSubmissions: taskSubmissionReducer,
   marks:MarksReducer,
-  codingProblems:codingProblemsReducer
+  codingProblems:codingProblemsReducer,
+  results: resultsReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);
