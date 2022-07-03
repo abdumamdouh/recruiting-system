@@ -1,13 +1,13 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import ResultPopup from './ResultPopup'
+import ResultPopup from "./ResultPopup";
 function ResultCard({ title, values }) {
     const history = useHistory();
-    const [openResult,setOpenResult] = useState(false)
+    const [openResult, setOpenResult] = useState(false);
     const showResults = () => {
         console.log(values);
-        setOpenResult(true)
+        setOpenResult(true);
     };
     return (
         <div className="container">
@@ -15,7 +15,7 @@ function ResultCard({ title, values }) {
                 <div class="card-header">{title}</div>
                 <div class="card-body">
                     {/* <h5 class="card-title">{title}</h5> */}
-                    <p class="card-text">view applicants' results</p>
+                    <p class="card-text">View applicants' results</p>
 
                     <div>
                         <button
@@ -27,11 +27,11 @@ function ResultCard({ title, values }) {
                         </button>
                     </div>
                     {openResult && (
-                    <ResultPopup
-                        setOpenResult={setOpenResult}
-                        values = {values}
-                    />
-                )}
+                        <ResultPopup
+                            setOpenResult={setOpenResult}
+                            values={values}
+                        />
+                    )}
                 </div>
             </div>
         </div>
