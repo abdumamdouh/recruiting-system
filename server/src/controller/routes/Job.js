@@ -568,7 +568,7 @@ const calculateCodingScore = async function(id){
 
         }
     }
-    console.log(score);
+    // console.log(score);
     //     console.log(scoreMap)
     
     return score ;
@@ -613,8 +613,6 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             }
         );
 
-        
-        
         mcqsStats = mcqsStats.map( (mcq) => {
             obj = {}
             obj[mcq.id] = { 
@@ -627,7 +625,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             }  
             return obj
         })
-        
+
         const mcqsResults = {};
         mcqsStats.forEach((mcq) => {
             const key = Object.keys(mcq)[0];
@@ -790,13 +788,13 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         // coding problem
 
         // 1-) get all coding problem ids to this job
-        const codingProblemIds = await ActiveCodingProblems.findAll({
-            attributes:['codingProblemId'],
-            where:{
-                jobId:jobId
-            },
-            raw:true
-        })
+        // const codingProblemIds = await ActiveCodingProblems.findAll({
+        //     attributes:['codingProblemId'],
+        //     where:{
+        //         jobId:jobId
+        //     },
+        //     raw:true
+        // })
         const codingProblems = await db.query(
             `SELECT AC.codingProblemId , CP.title FROM activeCodingProblems AS AC INNER JOIN codingproblembanks AS CP ON AC.codingProblemId = CP.id WHERE AC.jobId = ${jobId};`, 
             {
@@ -807,7 +805,6 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
 
         
         // console.log(codingProblems)
-        
         // 3-) call function to each coding problem obtained in 1
         // calculateCodingScore(codingProblemIds,testcasesCount)
 
@@ -860,6 +857,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             };
         })
 
+
         for (const [key, value] of Object.entries(codingProblemsResults)) {
             // console.log(`${key}: ${value.values}`);
             codingProblemsResults[key].values = value.values.sort( (a, b)=> {
@@ -879,9 +877,11 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             raw:true
         })
 
+        // console.log(codingProblemsApplicants);
+
         const applicantsCodingProblems  = _.groupBy(codingProblemsApplicants, cp => cp.applicantId)
         
-        console.log(applicantsCodingProblems)
+        // console.log(applicantsCodingProblems)
 
         const overAllCodingProblems = {};
 
@@ -897,20 +897,57 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             overAllCodingProblems[key] = score 
         }
 
+        // console.log(overallMCQs)
+        // console.log(overallTasks)
+        // console.log(overAllCodingProblems)
+        const overall = await db.query(
+            "SELECT A.firstName , A.lastName, AF.applicantId FROM applyfors AS AF  INNER JOIN applicants AS A ON  AF.applicantId = A.id WHERE AF.jobId = ?;", 
+            {
+                replacements: [jobId],
+                type: db.QueryTypes.SELECT
+            }
+        );
+        
+        const overallScore = overall.map((app) => {
+            
+            const id = app.applicantId
+            
+            const mcq = overallMCQs.find( (mcq) => {
+                return mcq.applicantId === id 
+            }) 
 
-        const overallScore = overallMCQs.map( (mcq) => {
-            const id = mcq.applicantId
+            let overallMCQsScore = 0
+            if(typeof mcq == 'undefined') {
+                overallMCQsScore = 0
+            } else {
+                overallMCQsScore = mcq.overallMCQsScore
+            }
+
             const task = overallTasks.find( (task) => {
                 return task.applicantId === id 
             }) 
+
+            let overallTasksScore = 0
+
+            if(typeof task == 'undefined') {
+                overallTasksScore = 0
+            } else {
+                overallTasksScore = task.overallTasksScore
+            }
+
+            
+            let overAllCodingProblemsScore = overAllCodingProblems[id]
+
+            if(typeof overAllCodingProblemsScore == 'undefined') {
+                overAllCodingProblemsScore = 0
+            }
             
             return {
-                applicantName: `${mcq.firstName} ${mcq.lastName}`,
+                applicantName: `${app.firstName} ${app.lastName}`,
                 applicantId: id,
-                overallScore: Math.round( parseFloat(mcq.overallMCQsScore) + parseFloat(task.overallTasksScore) + overAllCodingProblems[id])
+                overallScore: Math.round( parseFloat(overallMCQsScore) + parseFloat(overallTasksScore) + overAllCodingProblemsScore)
             }
         })
-
 
         res.send({
             mcqsResults : mcqsResults,
