@@ -37,6 +37,7 @@ const Reports = () => {
             amt: 2400
         })
     );
+    console.log(results.overallScore[0].overallScore + 200);
     const renderCustomBarLabel = ({ payload, x, y, width, height, value }) => {
         return (
             <text
@@ -140,7 +141,17 @@ const Reports = () => {
                     <ResponsiveContainer width={600} height={400}>
                         <BarChart width={150} height={40} data={data}>
                             <XAxis dataKey="name" />
-                            <YAxis />
+                            <YAxis
+                                domain={[
+                                    0,
+                                    Math.ceil(
+                                        results.overallScore[0].overallScore /
+                                            10
+                                    ) *
+                                        10 +
+                                        20
+                                ]}
+                            />
                             <Bar
                                 dataKey="uv"
                                 barSize={40}
