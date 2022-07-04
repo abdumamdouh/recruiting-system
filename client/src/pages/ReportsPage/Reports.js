@@ -100,7 +100,10 @@ const Reports = () => {
                                 <ResultCard
                                     key={index}
                                     title={item.title}
-                                    // avg={results.avgTasksScore[index]}
+                                    avg={
+                                        results.avgCodingProblemsScore[index]
+                                            .average_CodingProblem_score
+                                    }
                                     values={item.values}
                                 />
                             ))}
