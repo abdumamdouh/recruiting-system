@@ -868,7 +868,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             })
             const avgScore = {
                 CodingProblemId : parseInt(key),
-                average_CodingProblem_score : Math.round(score / value.values.length).toString()
+                average_CodingProblem_score : (score / value.values.length).toString()
             }
             avgCodingProblemsScore.push(avgScore)
 
@@ -977,7 +977,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
                     return -1
         })
     
-
+ 
         res.send({
             mcqsResults : mcqsResults,
             tasksResults : tasksResults,
