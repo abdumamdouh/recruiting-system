@@ -658,8 +658,9 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             })
         }
         const average_MCQS_score = await db.query(
-            "SELECT MCQId, AVG(score) AS average_MCQ_score FROM mcqstats GROUP BY MCQId;", 
+            "SELECT MCQId, AVG(score) AS average_MCQ_score FROM mcqstats WHERE jobId = ? GROUP BY MCQId;", 
             {
+                replacements: [jobId],
                 type: db.QueryTypes.SELECT
             }
         );
@@ -769,8 +770,9 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             })
         }
 
-        const average_Tasks_score = await db.query( "SELECT TaskId, AVG(score) AS average_Task_score FROM `gp-db`.taskuploads GROUP BY TaskId;" ,
-            {
+        const average_Tasks_score = await db.query( "SELECT TaskId, AVG(score) AS average_Task_score FROM `gp-db`.taskuploads WHERE jobId = ? GROUP BY TaskId;" ,
+            {                
+                replacements: [jobId],
                 type: db.QueryTypes.SELECT
             }
             
@@ -916,7 +918,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             overAllCodingProblems[key] = score 
         }
 
-        // console.log(overallMCQs)
+        console.log(overallMCQs)
         // console.log(overallTasks)
         // console.log(overAllCodingProblems)
         const overall = await db.query(
@@ -977,7 +979,6 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
                     return -1
         })
     
- 
         res.send({
             mcqsResults : mcqsResults,
             tasksResults : tasksResults,
