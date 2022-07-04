@@ -41,7 +41,7 @@ function ResultCard({ title, avg, values }) {
                                 fontSize: "24.5455px",
                                 alignSelf: "center"
                             }}
-                        >{`${Number(avg)}/100`}</span>
+                        >{`${Number(Number(avg).toFixed(2))}/100`}</span>
                     </div>
                     {/* <p class="card-text">View applicants' results</p> */}
 
