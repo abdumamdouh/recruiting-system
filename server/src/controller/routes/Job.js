@@ -968,6 +968,16 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             }
         })
 
+
+        overallScore.sort( (a, b)=> {
+                if ( a.overallScore < b.overallScore ) {
+                    return 1
+                }
+                else 
+                    return -1
+        })
+    
+
         res.send({
             mcqsResults : mcqsResults,
             tasksResults : tasksResults,
