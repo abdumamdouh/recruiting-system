@@ -857,6 +857,22 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             };
         })
 
+        
+        const avgCodingProblemsScore = []
+
+        for (const [key, value] of Object.entries(codingProblemsResults)) {
+            // console.log(`${key}: ${value.values}`);
+            let score = 0
+            value.values.forEach( (app) => {
+                score = score + app.score
+            })
+            const avgScore = {
+                CodingProblemId : parseInt(key),
+                average_CodingProblem_score : Math.round(score / value.values.length).toString()
+            }
+            avgCodingProblemsScore.push(avgScore)
+
+        }
 
         for (const [key, value] of Object.entries(codingProblemsResults)) {
             // console.log(`${key}: ${value.values}`);
@@ -868,6 +884,9 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
                     return -1
             })
         }
+
+
+        // console.log(avgCodingProblemsScore)
 
         const codingProblemsApplicants = await CodingProblemStats.findAll({
             attributes:['applicantId', 'codingProblemId'],
@@ -956,6 +975,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             applicantsAppliedCount: applicantsApplied,
             avgMCQsScore: average_MCQS_score,
             avgTasksScore: average_Tasks_score,
+            avgCodingProblemsScore : avgCodingProblemsScore,
             // overallMCQs: overallMCQs,
             // overallTasks: overallTasks,
             overallScore: overallScore,
