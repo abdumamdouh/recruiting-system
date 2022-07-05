@@ -26,6 +26,7 @@ const Task = require("../../models/Task");
 const MCQStat = require("../../models/MCQStat");
 const TaskUploads = require("../../models/TaskUploads");
 const CodingProblemBank = require("../../models/CodingProblemBank");
+const { over } = require("lodash");
 
 const router = new express.Router();
 
@@ -665,6 +666,14 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             }
         );
 
+        const applicant_MCQS_score = await db.query(
+            "SELECT applicantId,MCQId, score FROM mcqstats WHERE jobId = ?;", 
+            {
+                replacements: [jobId],
+                type: db.QueryTypes.SELECT
+            }
+        );
+     
 
         const overallMCQs = await db.query(
             "SELECT A.firstName , A.lastName, MS.applicantId, SUM(MS.score) AS overallMCQsScore FROM mcqstats AS MS  INNER JOIN applicants AS A ON  MS.applicantId = A.id WHERE MS.jobId = ? GROUP BY MS.applicantId;", 
@@ -778,6 +787,14 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             
         );
 
+        const applicant_Tasks_score = await db.query(
+            "SELECT ApplicantId, TaskId, score FROM `gp-db`.taskuploads WHERE jobId = ?;", 
+            {
+                replacements: [jobId],
+                type: db.QueryTypes.SELECT
+            }
+        );
+
         const overallTasks = await db.query(
             "SELECT A.firstName , A.lastName, TU.applicantId, SUM(TU.score) AS overallTasksScore FROM taskuploads AS TU  INNER JOIN applicants AS A ON  TU.applicantId = A.id WHERE TU.jobId = ? GROUP BY TU.applicantId;", 
             {
@@ -840,8 +857,6 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             const title = Object.values(cb)[0].title;
             const value = Object.values(cb)[0].applicantScore;
 
-            // console.log(key,title,value)
-
             let values
             if( typeof codingProblemsResults[key] == 'undefined' ) {
                 values = codingProblemsResults[key] || [];
@@ -849,7 +864,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             } else {
                 values = codingProblemsResults[key].values;
                 // console.log(value)
-                // console.log(values)
+                // console.log(values)s
                 values.push( value );
 
             }
@@ -859,6 +874,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             };
         })
 
+        // console.log(codingProblemsResults);
         
         const avgCodingProblemsScore = []
 
@@ -905,20 +921,28 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         // console.log(applicantsCodingProblems)
 
         const overAllCodingProblems = {};
+        const applicant_CodingProblems_score = {}
 
+        // console.log(codingProblemsResults); 
         for (const [key, value] of Object.entries(applicantsCodingProblems)) {
-            // console.log(`${key}: ${value.values}`);
+            const applicantCodingProblemScore = []
             let score = 0
             for (let index = 0; index < value.length; index++) {
                 const applicantScore = await codingProblemsResults[value[index].codingProblemId].values.find( applicant => {
                     return applicant.applicantId == key
-                })    
+                }) 
+                
+                applicantCodingProblemScore.push({
+                    codingProblemId: value[index].codingProblemId,
+                    score :  applicantScore.score
+                })
                 score = score + applicantScore.score            
             }
+            applicant_CodingProblems_score[key] = applicantCodingProblemScore
             overAllCodingProblems[key] = score 
         }
-
-        console.log(overallMCQs)
+        // console.log(applicant_CodingProblems_score);
+        // console.log(overallMCQs)
         // console.log(overallTasks)
         // console.log(overAllCodingProblems)
         const overall = await db.query(
@@ -932,7 +956,20 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
         const overallScore = overall.map((app) => {
             
             const id = app.applicantId
-            
+
+            let mcqs_score = applicant_MCQS_score.filter( (mcq)=> {
+                return mcq.applicantId === id 
+            })
+
+            mcqs_score = mcqs_score.map( mcq => {
+                return {
+                    MCQId : mcq.MCQId,
+                    score : mcq.score
+                }
+            })
+            // console.log(mcqs_score)
+
+
             const mcq = overallMCQs.find( (mcq) => {
                 return mcq.applicantId === id 
             }) 
@@ -944,9 +981,23 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
                 overallMCQsScore = mcq.overallMCQsScore
             }
 
+            let tasks_score = applicant_Tasks_score.filter( (task)=> {
+                return task.ApplicantId === id 
+            })
+
+            tasks_score = tasks_score.map( task => {
+                return {
+                    TaskId : task.TaskId,
+                    score : task.score
+                }
+            })
+
             const task = overallTasks.find( (task) => {
                 return task.applicantId === id 
             }) 
+
+
+            
 
             let overallTasksScore = 0
 
@@ -962,11 +1013,16 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             if(typeof overAllCodingProblemsScore == 'undefined') {
                 overAllCodingProblemsScore = 0
             }
+
+
             
             return {
                 applicantName: `${app.firstName} ${app.lastName}`,
                 applicantId: id,
-                overallScore: Math.round( parseFloat(overallMCQsScore) + parseFloat(overallTasksScore) + overAllCodingProblemsScore)
+                overallScore: Math.round( parseFloat(overallMCQsScore) + parseFloat(overallTasksScore) + overAllCodingProblemsScore),
+                mcqsScore: mcqs_score,
+                tasksScore: tasks_score,
+                codingProblemsScore: applicant_CodingProblems_score[id]
             }
         })
 
