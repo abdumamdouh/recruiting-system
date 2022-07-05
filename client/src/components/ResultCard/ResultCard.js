@@ -1,7 +1,19 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import {
+    BarChart,
+    Bar,
+    Cell,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer
+} from "recharts";
 import GaugeChart from "react-gauge-chart";
+
 import ResultPopup from "./ResultPopup";
 function ResultCard({ title, avg, values }) {
     const history = useHistory();
@@ -10,56 +22,106 @@ function ResultCard({ title, avg, values }) {
         console.log(values);
         setOpenResult(true);
     };
+    const renderCustomBarLabel = ({ payload, x, y, width, height, value }) => {
+        return (
+            <text
+                x={x + width / 2}
+                y={y}
+                fill="#666"
+                textAnchor="middle"
+                dy={-6}
+            >{`${value}`}</text>
+        );
+    };
+    const data = values.map(({ applicantName, score }) => ({
+        name: applicantName,
+        uv: score,
+        pv: 2400,
+        amt: 2400
+    }));
     return (
         <div className="container">
             <div class="card" style={{ marginBottom: "10px" }}>
                 <div class="card-header">{title}</div>
-                <div class="card-body">
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignContent: "center",
-                            justifyContent: "center"
-                        }}
-                    >
-                        <h5 class="card-title">Average Score</h5>
-                        <GaugeChart
-                            id="gauge-chart"
-                            textColor="#333"
-                            nrOfLevels={3}
-                            arcsLength={[0.5, 0.3, 0.2]}
-                            colors={["#EA4228", "#F5CD19", "#5BE12C"]}
-                            needleColor="#999"
-                            percent={Number(avg) / 100}
-                            arcPadding={0.02}
-                            hideText
-                        />
-                        <span
-                            style={{
-                                fill: "rgb(51, 51, 51)",
-                                fontSize: "24.5455px",
-                                alignSelf: "center"
-                            }}
-                        >{`${Number(Number(avg).toFixed(2))}/100`}</span>
-                    </div>
-                    {/* <p class="card-text">View applicants' results</p> */}
 
-                    <div>
-                        <button
-                            href="#"
-                            className="mt-3 btn btn-primary"
-                            onClick={showResults}
+                <div className="row">
+                    {" "}
+                    <div className=" card-body">
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignContent: "center",
+                                justifyContent: "center"
+                            }}
+                            className="column"
                         >
-                            Show Results
-                        </button>
+                            <h5 class="card-title">Average Score</h5>
+                            <GaugeChart
+                                id="gauge-chart"
+                                textColor="#333"
+                                nrOfLevels={3}
+                                arcsLength={[0.5, 0.3, 0.2]}
+                                colors={["#EA4228", "#F5CD19", "#5BE12C"]}
+                                needleColor="#999"
+                                percent={Number(avg) / 100}
+                                arcPadding={0.02}
+                                hideText
+                            />
+                            <span
+                                style={{
+                                    fill: "rgb(51, 51, 51)",
+                                    fontSize: "24.5455px",
+                                    alignSelf: "center"
+                                }}
+                            >{`${Number(Number(avg).toFixed(2))}/100`}</span>
+                        </div>
+                        <div
+                            style={{
+                                display: "flex",
+                                alignSelf: "center",
+                                flexDirection: "column",
+                            }}
+                            className="column"
+                        >
+                            <h5
+                                style={{ marginLeft: "2rem" }}
+                                class="card-title"
+                            >
+                                Applicants' Score
+                            </h5>
+                            <ResponsiveContainer width={500} height={300}>
+                                <BarChart width={150} height={40} data={data}>
+                                    <XAxis dataKey="name" />
+                                    <YAxis domain={[0, "dataMax + 10"]} />
+                                    <Bar
+                                        dataKey="uv"
+                                        barSize={40}
+                                        fill="#8884d8"
+                                        isAnimationActive={false}
+                                        label={renderCustomBarLabel}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                        {/* <p class="card-text">View applicants' results</p> */}
+
+                        {/* <div>
+                            <button
+                                href="#"
+                                className="mt-3 btn btn-primary"
+                                onClick={showResults}
+                            >
+                                Show Results
+                            </button>
+                        </div> */}
+                        {openResult && (
+                            <ResultPopup
+                                setOpenResult={setOpenResult}
+                                values={values}
+                            />
+                        )}
                     </div>
-                    {openResult && (
-                        <ResultPopup
-                            setOpenResult={setOpenResult}
-                            values={values}
-                        />
-                    )}
                 </div>
             </div>
         </div>
