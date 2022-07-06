@@ -13,15 +13,15 @@ import {
     ResponsiveContainer
 } from "recharts";
 import GaugeChart from "react-gauge-chart";
-
 import ResultPopup from "./ResultPopup";
-function ResultCard({ title, avg, values }) {
+function ResultCard({ title, avg, values, fill }) {
     const history = useHistory();
     const [openResult, setOpenResult] = useState(false);
     const showResults = () => {
         console.log(values);
         setOpenResult(true);
     };
+    console.log(fill);
     const renderCustomBarLabel = ({ payload, x, y, width, height, value }) => {
         return (
             <text
@@ -30,7 +30,7 @@ function ResultCard({ title, avg, values }) {
                 fill="#666"
                 textAnchor="middle"
                 dy={-6}
-            >{`${value}`}</text>
+            >{`${Number(Number(value).toFixed(2))}`}</text>
         );
     };
     const data = values.map(({ applicantName, score }) => ({
@@ -80,7 +80,7 @@ function ResultCard({ title, avg, values }) {
                             style={{
                                 display: "flex",
                                 alignSelf: "center",
-                                flexDirection: "column",
+                                flexDirection: "column"
                             }}
                             className="column"
                         >
@@ -93,11 +93,18 @@ function ResultCard({ title, avg, values }) {
                             <ResponsiveContainer width={500} height={300}>
                                 <BarChart width={150} height={40} data={data}>
                                     <XAxis dataKey="name" />
-                                    <YAxis domain={[0, "dataMax + 10"]} />
+                                    <YAxis
+                                        domain={[
+                                            0,
+                                            (dataMax) =>
+                                                Math.ceil(dataMax / 10) * 10 +
+                                                20
+                                        ]}
+                                    />
                                     <Bar
                                         dataKey="uv"
                                         barSize={40}
-                                        fill="#8884d8"
+                                        fill={fill}
                                         isAnimationActive={false}
                                         label={renderCustomBarLabel}
                                     />
