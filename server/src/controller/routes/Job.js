@@ -659,7 +659,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             })
         }
         const average_MCQS_score = await db.query(
-            "SELECT MCQId, AVG(score) AS average_MCQ_score FROM mcqstats WHERE jobId = ? GROUP BY MCQId;", 
+            "SELECT MCQId, round( AVG(score), 2) AS average_MCQ_score FROM mcqstats WHERE jobId = ? GROUP BY MCQId;", 
             {
                 replacements: [jobId],
                 type: db.QueryTypes.SELECT
@@ -779,7 +779,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             })
         }
 
-        const average_Tasks_score = await db.query( "SELECT TaskId, AVG(score) AS average_Task_score FROM `gp-db`.taskuploads WHERE jobId = ? GROUP BY TaskId;" ,
+        const average_Tasks_score = await db.query( "SELECT TaskId, round( AVG(score), 2) AS average_Task_score FROM `gp-db`.taskuploads WHERE jobId = ? GROUP BY TaskId;" ,
             {                
                 replacements: [jobId],
                 type: db.QueryTypes.SELECT
@@ -840,7 +840,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
                     applicantScore : {
                         applicantId : cbs.id,
                         applicantName : `${cbs.firstName} ${cbs.lastName}`,
-                        score : cbs.mark
+                        score : parseFloat((cbs.mark).toPrecision(3))
                     }
                 }
                 return cbScore;
@@ -886,7 +886,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             })
             const avgScore = {
                 CodingProblemId : parseInt(key),
-                average_CodingProblem_score : (score / value.values.length).toString()
+                average_CodingProblem_score : (score / value.values.length).toPrecision(3)
             }
             avgCodingProblemsScore.push(avgScore)
 
@@ -939,7 +939,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
                 score = score + applicantScore.score            
             }
             applicant_CodingProblems_score[key] = applicantCodingProblemScore
-            overAllCodingProblems[key] = score 
+            overAllCodingProblems[key] = parseFloat(score.toPrecision(3))
         }
         // console.log(applicant_CodingProblems_score);
         // console.log(overallMCQs)
@@ -964,7 +964,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             mcqs_score = mcqs_score.map( mcq => {
                 return {
                     MCQId : mcq.MCQId,
-                    score : mcq.score
+                    score : parseFloat(mcq.score)
                 }
             })
             // console.log(mcqs_score)
