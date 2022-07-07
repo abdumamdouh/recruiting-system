@@ -52,11 +52,20 @@ function ResultPopup({ setOpenResult, results }) {
     }
     let columns2 = [];
     let columns = [];
-    columns2 = col.map(d => ({ field: d.name, width: 80 }));
+    columns2 = col.map((d) => ({ field: d.name, width: 80 }));
 
     const arrayofFields = Object.keys(columns2[0].field);
     const b = arrayofFields.slice(1);
-    columns = b.map(d => ({ field: d }));
+    // columns = b.map((d) => ({ field: d }));
+    columns = b.map((key) => {
+        if (key === "name") {
+            return { field: "name", headerName: "Applicant name" };
+        } else if (key === "overallScore") {
+            return { field: "overallScore", headerName: "Total score" };
+        }
+        return { field: key };
+    });
+    console.log(columns);
 
     return (
         <div className="customize-exam-overlay">
@@ -77,7 +86,7 @@ function ResultPopup({ setOpenResult, results }) {
                     <div className="body">
                         <DataGrid
                             style={{ height: "60vh", width: "100%" }}
-                            getRowId={row => row.id}
+                            getRowId={(row) => row.id}
                             rows={rows}
                             columns={columns}
                             pageSize={50}
