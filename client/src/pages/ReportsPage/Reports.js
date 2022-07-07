@@ -287,6 +287,7 @@ const Reports = () => {
                 <div
                     style={{
                         marginTop: "3rem",
+                        paddingBottom: "4rem",
                         width: "1000px"
                     }}
                 >
