@@ -19,6 +19,7 @@ import {
     ResponsiveContainer,
     Text
 } from "recharts";
+import { height } from "@mui/system";
 function SampleNextArrow(props) {
     const { className, style, onClick } = props;
     return (
@@ -195,87 +196,137 @@ const Reports = () => {
                     style={{
                         marginLeft: "-3rem",
                         display: "flex",
-                        alignSelf: "center",
+                        alignSelf: "flex-center",
                         justifyContent: "flex-start",
                         flexDirection: "column"
                     }}
                 >
-                    <h5 style={{ marginLeft: "2rem" }} class="card-title">
-                        Overall Score
-                    </h5>
-                    <ResponsiveContainer width="120%" height={400}>
-                        <BarChart width={150} height={40} data={data}>
-                            <XAxis
-                                dataKey="name"
-                                interval={0}
-                                tick={<CustomizedAxisTick />}
-                            />
-                            <YAxis
-                                domain={[
-                                    0,
-                                    Math.ceil(
-                                        results.overallScore[0].overallScore /
-                                            10
-                                    ) *
-                                        10 +
-                                        20
-                                ]}
-                            />
-                            <Tooltip
-                                formatter={(value, name, props) => [
-                                    value,
-                                    `${name} (${
-                                        MCQs.includes(name)
-                                            ? "MCQ"
-                                            : codingProblems.includes(name)
-                                            ? "Coding Problem"
-                                            : "Task"
-                                    })`
-                                ]}
-                            />
-                            <Legend
-                                verticalAlign="top"
-                                height={36}
-                                formatter={(value, entry, index) =>
-                                    `${value} (${
-                                        MCQs.includes(value)
-                                            ? "MCQ"
-                                            : codingProblems.includes(value)
-                                            ? "Coding Problem"
-                                            : "Task"
-                                    })`
-                                }
-                            />
-                            {Object.keys(data[0])
-                                .filter((assessment) => assessment !== "name")
-                                .map((assessment, index, { length }) => (
-                                    <Bar
-                                        dataKey={`${assessment}`}
-                                        barSize={40}
-                                        stackId="a"
-                                        fill={palette[index % 7]}
-                                        isAnimationActive={false}
-                                        label={
-                                            index === length - 1
-                                                ? renderCustomBarLabel
-                                                : ""
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column"
+                        }}
+                    >
+                        <h5
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                marginLeft: "9rem"
+                            }}
+                            class="card-title"
+                        >
+                            {data.length > 5
+                                ? "Overall Score of top 5 candidates"
+                                : "Overall Score of all candidates"}
+                        </h5>
+                        <div
+                            style={{
+                                width: "120%",
+                                display: "flex",
+                                flexDirection: "row"
+                            }}
+                        >
+                            <ResponsiveContainer width="120%" height={400}>
+                                <BarChart
+                                    width={150}
+                                    height={40}
+                                    data={
+                                        data.length > 5
+                                            ? data.slice(0, 4)
+                                            : data
+                                    }
+                                >
+                                    <XAxis
+                                        dataKey="name"
+                                        interval={0}
+                                        tick={<CustomizedAxisTick />}
+                                    />
+                                    <YAxis
+                                        domain={[
+                                            0,
+                                            Math.ceil(
+                                                results.overallScore[0]
+                                                    .overallScore / 10
+                                            ) *
+                                                10 +
+                                                20
+                                        ]}
+                                    />
+                                    <Tooltip
+                                        formatter={(value, name, props) => [
+                                            value,
+                                            `${name} (${
+                                                MCQs.includes(name)
+                                                    ? "MCQ"
+                                                    : codingProblems.includes(
+                                                          name
+                                                      )
+                                                    ? "Coding Problem"
+                                                    : "Task"
+                                            })`
+                                        ]}
+                                    />
+                                    <Legend
+                                        verticalAlign="top"
+                                        height={36}
+                                        formatter={(value, entry, index) =>
+                                            `${value} (${
+                                                MCQs.includes(value)
+                                                    ? "MCQ"
+                                                    : codingProblems.includes(
+                                                          value
+                                                      )
+                                                    ? "Coding Problem"
+                                                    : "Task"
+                                            })`
                                         }
                                     />
-                                ))}
-                            {/* <Bar dataKey="S" stackId="a" fill="#8884d8" />
+                                    {Object.keys(data[0])
+                                        .filter(
+                                            (assessment) =>
+                                                assessment !== "name"
+                                        )
+                                        .map(
+                                            (assessment, index, { length }) => (
+                                                <Bar
+                                                    dataKey={`${assessment}`}
+                                                    barSize={40}
+                                                    stackId="a"
+                                                    fill={palette[index % 7]}
+                                                    isAnimationActive={false}
+                                                    label={
+                                                        index === length - 1
+                                                            ? renderCustomBarLabel
+                                                            : ""
+                                                    }
+                                                />
+                                            )
+                                        )}
+                                    {/* <Bar dataKey="S" stackId="a" fill="#8884d8" />
                             <Bar dataKey="uv" stackId="a" fill="#82ca9d" /> */}
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
-                <div>
-                    <button
-                        href="#"
-                        className="mt-3 btn btn-primary mb-3"
-                        style={{ marginLeft: "50px" }}
-                        onClick={showResults}
-                    >
-                        Show All Results
-                    </button>
+                                </BarChart>
+                            </ResponsiveContainer>
+                            {data.length > 5 && (
+                                <span
+                                    style={{
+                                        justifyContent: "center",
+                                        alignSelf: "center",
+                                        // lineHeight: "2px",
+                                        // fontSize: "2rem",
+                                        display: "block",
+                                        // width: "auto",
+                                        minHeight: "0",
+                                        // overflow: "hidden",
+                                        margin: "-10px 0 0 0",
+                                        cursor: "pointer"
+                                    }}
+                                    onClick={showResults}
+                                >
+                                    &#9679;&#9679;&#9679;
+                                </span>
+                            )}
+                        </div>
+                    </div>
                 </div>
                 {openResult && (
                     <ResultPopup
