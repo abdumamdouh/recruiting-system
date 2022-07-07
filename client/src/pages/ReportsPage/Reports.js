@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import Slider from "react-slick";
 import ResultCard from "../../components/ResultCard/ResultCard";
 import { getJobResultsAction } from "../../redux/actions/jobs";
+import ResultPopup from "../../components/ResultCard/ResultPopup";
 import {
     BarChart,
     Bar,
@@ -101,7 +102,11 @@ const Reports = () => {
         "#171D1C",
         "#5863F8"
     ];
-
+    //over all score results
+    const [openResult, setOpenResult] = useState(false);
+    const showResults = () => {
+        setOpenResult(true);
+    };
     const renderCustomBarLabel = ({ payload, x, y, width, height, value }) => {
         return (
             <text
@@ -183,6 +188,7 @@ const Reports = () => {
         //     data.push({ name: "Mohamed Mohamed", s: 40, a: 20 });
         // }
         console.log(results.overallScore[0].overallScore + 200);
+
         return (
             <div style={{ marginTop: "40px", marginBottom: "60px" }}>
                 <div
@@ -261,6 +267,23 @@ const Reports = () => {
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
+                <div>
+                    <button
+                        href="#"
+                        className="mt-3 btn btn-primary mb-3"
+                        style={{ marginLeft: "50px" }}
+                        onClick={showResults}
+                    >
+                        Show All Results
+                    </button>
+                </div>
+                {openResult && (
+                    <ResultPopup
+                        setOpenResult={setOpenResult}
+                        results={results}
+                    />
+                )}
+                {console.log(data)}
                 <div
                     style={{
                         marginTop: "3rem",

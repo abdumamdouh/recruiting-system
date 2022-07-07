@@ -17,11 +17,7 @@ import GaugeChart from "react-gauge-chart";
 import ResultPopup from "./ResultPopup";
 function ResultCard({ title, avg, values, fill }) {
     const history = useHistory();
-    const [openResult, setOpenResult] = useState(false);
-    const showResults = () => {
-        console.log(values);
-        setOpenResult(true);
-    };
+   
     console.log(fill);
     const renderCustomBarLabel = ({ payload, x, y, width, height, value }) => {
         return (
@@ -157,21 +153,7 @@ function ResultCard({ title, avg, values, fill }) {
                         </div>
                         {/* <p class="card-text">View applicants' results</p> */}
 
-                        {/* <div>
-                            <button
-                                href="#"
-                                className="mt-3 btn btn-primary"
-                                onClick={showResults}
-                            >
-                                Show Results
-                            </button>
-                        </div> */}
-                        {openResult && (
-                            <ResultPopup
-                                setOpenResult={setOpenResult}
-                                values={values}
-                            />
-                        )}
+                       
                     </div>
                 </div>
             </div>

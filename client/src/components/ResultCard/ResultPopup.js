@@ -8,16 +8,63 @@ import { Typography } from "@material-ui/core";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { pickExamAction } from "../../redux/actions/exam";
-function ResultPopup({ setOpenResult, values }) {
-    const rows = [...values];
-    const columns = [
-        { field: "applicantName", headerName: "Applicant Name", width: 150 },
-        { field: "score", headerName: "Score  (%)", width: 80 }
-    ];
+function ResultPopup({ setOpenResult, results }) {
+    const data = results.overallScore.map(
+        ({
+            applicantId,
+            applicantName,
+            codingProblemsScore,
+            mcqsScore,
+            tasksScore,
+            overallScore
+        }) => {
+            const codingProblems = codingProblemsScore.reduce((obj, itr) => {
+                obj[results.codingProblemsResults[itr.codingProblemId].title] =
+                    itr.score;
+                return obj;
+            }, {});
+            const MCQs = mcqsScore.reduce((obj, itr) => {
+                obj[results.mcqsResults[itr.MCQId].title] = itr.score;
+                return obj;
+            }, {});
+            const tasks = tasksScore.reduce((obj, itr) => {
+                obj[results.tasksResults[itr.TaskId].title] = itr.score;
+                return obj;
+            }, {});
+            return {
+                id: applicantId,
+                name: applicantName,
+                ...MCQs,
+                ...codingProblems,
+                ...tasks,
+                overallScore
+            };
+        }
+    );
+    const rows = [...data];
+
+    let keys = [];
+    let col = [];
+    if (data) keys = Object.keys(data);
+
+    for (let i = 0; i < keys.length; i++) {
+        col.push({ key: Object.keys(data)[i], name: data[i] });
+    }
+    let columns2 = [];
+    let columns = [];
+    columns2 = col.map(d => ({ field: d.name, width: 80 }));
+
+    const arrayofFields = Object.keys(columns2[0].field);
+    const b = arrayofFields.slice(1);
+    columns = b.map(d => ({ field: d }));
+
     return (
         <div className="customize-exam-overlay">
             <div className="customize-exam-popupBackground">
-                <div className="customize-exam-popupContainer">
+                <div
+                    className="customize-exam-popupContainer"
+                    style={{ width: "700px" }}
+                >
                     <div className="customize-exam-titleCloseBtn">
                         <button
                             onClick={() => {
@@ -29,7 +76,8 @@ function ResultPopup({ setOpenResult, values }) {
                     </div>
                     <div className="body">
                         <DataGrid
-                            getRowId={row => row.applicantName}
+                            style={{ height: "60vh", width: "100%" }}
+                            getRowId={row => row.id}
                             rows={rows}
                             columns={columns}
                             pageSize={50}
