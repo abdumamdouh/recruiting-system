@@ -110,7 +110,7 @@ const Reports = () => {
                 fill="#666"
                 textAnchor="middle"
                 dy={-6}
-            >{`${value}`}</text>
+            >{`${Number(value.toFixed(2))}`}</text>
         );
     };
     const CustomizedAxisTick = ({ x, y, payload }) => {
@@ -121,6 +121,7 @@ const Reports = () => {
                 width={40}
                 textAnchor="middle"
                 verticalAnchor="start"
+                fill="#666"
             >
                 {payload.value}
             </Text>
@@ -186,6 +187,7 @@ const Reports = () => {
             <div style={{ marginTop: "40px", marginBottom: "60px" }}>
                 <div
                     style={{
+                        marginLeft: "-3rem",
                         display: "flex",
                         alignSelf: "center",
                         justifyContent: "flex-start",
@@ -246,6 +248,7 @@ const Reports = () => {
                                         barSize={40}
                                         stackId="a"
                                         fill={palette[index % 7]}
+                                        isAnimationActive={false}
                                         label={
                                             index === length - 1
                                                 ? renderCustomBarLabel
@@ -258,28 +261,35 @@ const Reports = () => {
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
-                <div>
+                <div
+                    style={{
+                        marginTop: "3rem",
+                        width: "1000px"
+                    }}
+                >
                     <Slider {...settings}>
-                        <div>
-                            {/* <br /> */}
-                            <h4>MCQ </h4>
-                            {mcqResult.map((item, index) => (
-                                <ResultCard
-                                    key={index}
-                                    title={item.title}
-                                    avg={
-                                        results.avgMCQsScore[index]
-                                            .average_MCQ_score
-                                    }
-                                    values={item.values}
-                                    fill={palette[colorIndex++]}
-                                />
-                            ))}
-                        </div>
-                        <div>
-                            <h4>Coding problems</h4>
+                        {mcqResult.map((item, index) => (
                             <div>
-                                {codingResult.map((item, index) => (
+                                {/* <br /> */}
+                                <h4>MCQ </h4>
+                                <div>
+                                    <ResultCard
+                                        key={index}
+                                        title={item.title}
+                                        avg={
+                                            results.avgMCQsScore[index]
+                                                .average_MCQ_score
+                                        }
+                                        values={item.values}
+                                        fill={palette[colorIndex++]}
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                        {codingResult.map((item, index) => (
+                            <div>
+                                <h4>Coding problems</h4>
+                                <div>
                                     <ResultCard
                                         key={index}
                                         title={item.title}
@@ -291,14 +301,14 @@ const Reports = () => {
                                         values={item.values}
                                         fill={palette[colorIndex++]}
                                     />
-                                ))}
+                                </div>
+                                {/* <br /> */}
                             </div>
-                            <br />
-                        </div>
-                        <div>
-                            <h4>Task </h4>
+                        ))}
+                        {taskResult.map((item, index) => (
                             <div>
-                                {taskResult.map((item, index) => (
+                                <h4>Task </h4>
+                                <div>
                                     <ResultCard
                                         key={index}
                                         title={item.title}
@@ -309,9 +319,9 @@ const Reports = () => {
                                         values={item.values}
                                         fill={palette[colorIndex++]}
                                     />
-                                ))}
+                                </div>
                             </div>
-                        </div>
+                        ))}
                     </Slider>
                 </div>
             </div>

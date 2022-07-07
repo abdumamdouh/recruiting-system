@@ -10,7 +10,8 @@ import {
     CartesianGrid,
     Tooltip,
     Legend,
-    ResponsiveContainer
+    ResponsiveContainer,
+    Text
 } from "recharts";
 import GaugeChart from "react-gauge-chart";
 import ResultPopup from "./ResultPopup";
@@ -33,6 +34,20 @@ function ResultCard({ title, avg, values, fill }) {
             >{`${Number(Number(value).toFixed(2))}`}</text>
         );
     };
+    const CustomizedAxisTick = ({ x, y, payload }) => {
+        return (
+            <Text
+                x={x}
+                y={y}
+                width={40}
+                textAnchor="middle"
+                verticalAnchor="start"
+                fill="#666"
+            >
+                {payload.value}
+            </Text>
+        );
+    };
     const data = values.map(({ applicantName, score }) => ({
         name: applicantName,
         uv: score,
@@ -41,22 +56,47 @@ function ResultCard({ title, avg, values, fill }) {
     }));
     return (
         <div className="container">
-            <div class="card" style={{ marginBottom: "10px" }}>
+            <div
+                class="card"
+                style={{
+                    minWidth: "100%",
+                    display: "flex",
+                    justifyContent: "space-around",
+                    marginBottom: "10px"
+                }}
+            >
                 <div class="card-header">{title}</div>
 
-                <div className="row">
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "space-around"
+                    }}
+                    className="row"
+                >
                     {" "}
-                    <div className=" card-body">
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "space-around"
+                        }}
+                        className=" card-body"
+                    >
                         <div
                             style={{
                                 display: "flex",
                                 flexDirection: "column",
-                                alignContent: "center",
+                                alignSelf: "center",
                                 justifyContent: "center"
                             }}
                             className="column"
                         >
-                            <h5 class="card-title">Average Score</h5>
+                            <h5 class="card-title">
+                                Average Score of the Assessment
+                            </h5>
                             <GaugeChart
                                 id="gauge-chart"
                                 textColor="#333"
@@ -90,9 +130,13 @@ function ResultCard({ title, avg, values, fill }) {
                             >
                                 Applicants' Score
                             </h5>
-                            <ResponsiveContainer width={500} height={300}>
+                            <ResponsiveContainer width={459} height={300}>
                                 <BarChart width={150} height={40} data={data}>
-                                    <XAxis dataKey="name" />
+                                    <XAxis
+                                        dataKey="name"
+                                        interval={0}
+                                        tick={<CustomizedAxisTick />}
+                                    />
                                     <YAxis
                                         domain={[
                                             0,
