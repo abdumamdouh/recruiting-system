@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    BarChart,
+    ComposedChart,
+    ReferenceLine,
     Bar,
     Cell,
     XAxis,
@@ -11,13 +12,13 @@ import {
     Tooltip,
     Legend,
     ResponsiveContainer,
-    Text
+    Text,
+    Label
 } from "recharts";
 import GaugeChart from "react-gauge-chart";
 import ResultPopup from "./ResultPopup";
 function ResultCard({ title, avg, values, fill }) {
     const history = useHistory();
-   
     console.log(fill);
     const renderCustomBarLabel = ({ payload, x, y, width, height, value }) => {
         return (
@@ -46,9 +47,7 @@ function ResultCard({ title, avg, values, fill }) {
     };
     const data = values.map(({ applicantName, score }) => ({
         name: applicantName,
-        uv: score,
-        pv: 2400,
-        amt: 2400
+        score
     }));
     return (
         <div className="container">
@@ -127,7 +126,11 @@ function ResultCard({ title, avg, values, fill }) {
                                 Applicants' Score
                             </h5>
                             <ResponsiveContainer width={459} height={300}>
-                                <BarChart width={150} height={40} data={data}>
+                                <ComposedChart
+                                    width={150}
+                                    height={40}
+                                    data={data}
+                                >
                                     <XAxis
                                         dataKey="name"
                                         interval={0}
@@ -142,18 +145,34 @@ function ResultCard({ title, avg, values, fill }) {
                                         ]}
                                     />
                                     <Bar
-                                        dataKey="uv"
+                                        dataKey="score"
                                         barSize={40}
                                         fill={fill}
                                         isAnimationActive={false}
                                         label={renderCustomBarLabel}
                                     />
-                                </BarChart>
+                                    <ReferenceLine
+                                        y={avg}
+                                        stroke={
+                                            Number(avg) / 100 < 0.5
+                                                ? "#EA4228"
+                                                : Number(avg) / 100 < 0.8
+                                                ? "#F5CD19"
+                                                : "#5BE12C"
+                                        }
+                                        strokeDasharray="3 3"
+                                    >
+                                        <Label
+                                            value="Avg"
+                                            position="insideBottomRight"
+                                            fill="#666"
+                                            dy={-3}
+                                        />
+                                    </ReferenceLine>
+                                </ComposedChart>
                             </ResponsiveContainer>
                         </div>
                         {/* <p class="card-text">View applicants' results</p> */}
-
-                       
                     </div>
                 </div>
             </div>
