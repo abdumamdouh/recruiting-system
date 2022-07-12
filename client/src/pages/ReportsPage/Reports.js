@@ -175,6 +175,9 @@ const Reports = () => {
                 };
             }
         );
+        const mostKeys = [...data].sort(
+            (a, b) => Object.keys(b).length - Object.keys(a).length
+        )[0];
         const MCQs = Object.keys(results.mcqsResults).map(
             (key) => results.mcqsResults[key].title
         );
@@ -281,7 +284,7 @@ const Reports = () => {
                                             })`
                                         }
                                     />
-                                    {Object.keys(data[0])
+                                    {Object.keys(mostKeys)
                                         .filter(
                                             (assessment) =>
                                                 assessment !== "name"
@@ -343,60 +346,79 @@ const Reports = () => {
                     }}
                 >
                     <Slider {...settings}>
-                        {mcqResult.map((item, index) => (
+                        {Object.keys(results.mcqsResults).map((item, index) => (
                             <div>
                                 {/* <br /> */}
                                 <h4>MCQ </h4>
                                 <div>
                                     <ResultCard
                                         key={index}
-                                        title={item.title}
+                                        title={results.mcqsResults[item].title}
                                         avg={
                                             results.avgMCQsScore[index]
                                                 .average_MCQ_score
                                         }
-                                        values={item.values}
-                                        fill={palette[colorIndex++]}
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                        {codingResult.map((item, index) => (
-                            <div>
-                                <h4>Coding problems</h4>
-                                <div>
-                                    <ResultCard
-                                        key={index}
-                                        title={item.title}
-                                        avg={
-                                            results.avgCodingProblemsScore[
-                                                index
-                                            ].average_CodingProblem_score
+                                        values={
+                                            results.mcqsResults[item].values
                                         }
-                                        values={item.values}
                                         fill={palette[colorIndex++]}
                                     />
                                 </div>
-                                {/* <br /> */}
                             </div>
                         ))}
-                        {taskResult.map((item, index) => (
-                            <div>
-                                <h4>Task </h4>
+                        {Object.keys(results.codingProblemsResults).map(
+                            (item, index) => (
                                 <div>
-                                    <ResultCard
-                                        key={index}
-                                        title={item.title}
-                                        avg={
-                                            results.avgTasksScore[index]
-                                                .average_Task_score
-                                        }
-                                        values={item.values}
-                                        fill={palette[colorIndex++]}
-                                    />
+                                    <h4>Coding problems</h4>
+                                    <div>
+                                        <ResultCard
+                                            key={index}
+                                            title={
+                                                results.codingProblemsResults[
+                                                    item
+                                                ].title
+                                            }
+                                            avg={
+                                                results.avgCodingProblemsScore[
+                                                    index
+                                                ].average_CodingProblem_score
+                                            }
+                                            values={
+                                                results.codingProblemsResults[
+                                                    item
+                                                ].values
+                                            }
+                                            fill={palette[colorIndex++]}
+                                        />
+                                    </div>
+                                    {/* <br /> */}
                                 </div>
-                            </div>
-                        ))}
+                            )
+                        )}
+                        {Object.keys(results.tasksResults).map(
+                            (item, index) => (
+                                <div>
+                                    <h4>Task </h4>
+                                    <div>
+                                        <ResultCard
+                                            key={index}
+                                            title={
+                                                results.tasksResults[item].title
+                                            }
+                                            avg={
+                                                results.avgTasksScore[index]
+                                                    .average_Task_score
+                                            }
+                                            values={
+                                                results.tasksResults[item]
+                                                    .values
+                                            }
+                                            fill={palette[colorIndex++]}
+                                        />
+                                    </div>
+                                </div>
+                            )
+                        )}
                     </Slider>
                 </div>
             </div>
