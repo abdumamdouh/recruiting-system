@@ -128,7 +128,7 @@ function Header() {
                         {user.hasOwnProperty("userInfo") &&
                             user.userInfo.hasOwnProperty("type") && (
                                 <li>
-                                    <Link to="/login">
+                                    <Link to="/Feed">
                                         <span onClick={handleLogOut}>
                                             Logout
                                         </span>
