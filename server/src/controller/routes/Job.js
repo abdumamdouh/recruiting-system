@@ -1019,7 +1019,7 @@ router.get("/report/:id", recruiterAuth, async (req, res) => {
             return {
                 applicantName: `${app.firstName} ${app.lastName}`,
                 applicantId: id,
-                overallScore: Math.round( parseFloat(overallMCQsScore) + parseFloat(overallTasksScore) + overAllCodingProblemsScore),
+                overallScore: Number((parseFloat(overallMCQsScore) + parseFloat(overallTasksScore) + overAllCodingProblemsScore).toFixed(2)),
                 mcqsScore: mcqs_score,
                 tasksScore: tasks_score,
                 codingProblemsScore: applicant_CodingProblems_score[id]
