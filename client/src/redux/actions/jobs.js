@@ -2,6 +2,9 @@ import {
     GET_JOBS_REQUEST,
     GET_JOBS_SUCCESS,
     GET_JOBS_FAIL,
+    GET_RECRUITER_JOBS_REQUEST,
+    GET_RECRUITER_JOBS_SUCCESS,
+    GET_RECRUITER_JOBS_FAIL,
     CREATE_JOB_REQUEST,
     CREATE_JOB_SUCCESS,
     CREATE_JOB_FAIL,
@@ -14,11 +17,43 @@ import {
     EDIT_JOB_FAIL, 
     GET_JOB_RESULTS_REQUEST,
     GET_JOB_RESULTS_SUCCESS,
-    GET_JOB_RESULTS_FAIL
+    GET_JOB_RESULTS_FAIL,
 
 } from "../types/index";
 import axios from "axios";
 const serverURL = "http://localhost:5000";
+
+export const getRecruiterJobsAction = (pageNumber) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({ type: GET_RECRUITER_JOBS_REQUEST });
+            const { userInfo } = getState().user;
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + userInfo.token
+                }
+            };
+
+            const { data } = await axios.post(
+                `${serverURL}/recruiter/myjobs`,
+                {
+                    pageNumber: pageNumber
+                },
+                config
+            );
+
+            dispatch({ type: GET_RECRUITER_JOBS_SUCCESS, payload: data });
+            
+        } catch (error) {
+            dispatch({
+                type: GET_RECRUITER_JOBS_FAIL,
+                payload: error
+            });
+        }
+    };
+};
+
 export const getJobsAction = (pageNumber) => {
     return async dispatch => {
         try {
