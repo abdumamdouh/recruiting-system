@@ -203,7 +203,7 @@ const EditQualifications = ({ setOnEditQualifications, setQual }) => {
                                     You are more into{" "}
                                 </h4>
                                 <ul
-                                    style={{ margin: "10px" }}
+                                    // style={{ margin: "5px" }}
                                     className={classes.Ul}
                                 >
                                     <li className={classes.Li}>
@@ -330,11 +330,13 @@ const EditQualifications = ({ setOnEditQualifications, setQual }) => {
                             </div>
 
                             <div className={classes.Box}>
-                                <h4 style={{ margin: "10px" }}>
+                                <h4 
+                                style={{ margin: "10px" }}
+                                >
                                     You consider yourself{" "}
                                 </h4>
                                 <ul
-                                    style={{ margin: "10px" }}
+                                    // style={{ margin: "10px" }}
                                     className={classes.Ul}
                                 >
                                     <li className={classes.Li}>
@@ -436,7 +438,7 @@ const EditQualifications = ({ setOnEditQualifications, setQual }) => {
                                     Your favourite stack
                                 </h4>
                                 <ul
-                                    style={{ margin: "10px" }}
+                                    // style={{ margin: "10px" }}
                                     className={classes.Ul}
                                 >
                                     {stacks.map((stack, index) => {
@@ -470,13 +472,16 @@ const EditQualifications = ({ setOnEditQualifications, setQual }) => {
                                                     <FormControl
                                                         style={{
                                                             minWidth: 120
+                                                        
                                                         }}
                                                     >
                                                         <Select
+                                                        style={{fontColor: 'black'}}
                                                             labelId="demo-simple-select-label"
                                                             id="demo-simple-select"
                                                             key={index}
-                                                            value={skills}
+                                                            // value={skills}
+                                                            value={stacks[stack]}
                                                             label="stack"
                                                             onChange={(e) => {
                                                                 setSkills(

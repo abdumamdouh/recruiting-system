@@ -149,13 +149,13 @@ const TaskReviewPage = () => {
                 </div>
                 {showTaskMark && (
                     <div>
-                        <div>
-                            <label>
+                        <div className= 'mt-2'>
+                            <p style={{fontWeight: 'bold'}}>
                                 {" "}
                                 Add Score and feedback for task submissions
-                            </label>
+                            </p>
                         </div>
-                        <label>Score</label>
+                        <p>Score</p>
                         <div className="position-relative">
                             <TextField
                                 id="outlined-multiline-flexible"
@@ -178,7 +178,7 @@ const TaskReviewPage = () => {
                                 onChange={e => setFeedBack(e.target.value)}
                             />
                         </div>
-                        <button className="btn btn-primary mt-2" onClick={submitMark}>
+                        <button className="btn btn-primary mb-2 mt-2" onClick={submitMark}>
                         Add Mark
                     </button>
                     </div>
