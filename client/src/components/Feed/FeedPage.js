@@ -7,17 +7,21 @@ import JobPost from "./JobPost";
 import classes from "./Feed.module.scss";
 import ReactPaginate from "react-paginate";
 import MuiAlert from "@mui/material/Alert";
-import { getJobsAction } from "../../redux/actions/jobs";
+import { getJobsAction, getRecruiterJobsAction } from "../../redux/actions/jobs";
 import { getApplicantProfileAction } from "../../redux/actions/user";
 
 const Feed = () => {
     const dispatch = useDispatch();
-
+    const {type} = useSelector((state) => state.user.userInfo)
+    console.log(type)
     useEffect(() => {
         if (localStorage.getItem("message")) {
             setOpen(true);
         }
-        dispatch(getJobsAction(1));
+        if(type === 'Applicant')
+        {   dispatch(getJobsAction(1))}
+         else
+        {dispatch(getRecruiterJobsAction(1))}
         dispatch(getApplicantProfileAction());
     }, [dispatch]);
     const Alert = React.forwardRef(function Alert(props, ref) {
@@ -62,12 +66,14 @@ const Feed = () => {
                         {localStorage.getItem("message")}
                     </Alert>
                 </Snackbar>
+                {Jobs.length == 0 && <div className= "h-100 d-flex align-items-center justify-content-center"> <h1> There is no posted jobs yet</h1></div> }
                 <div className={classes.list}>
                     {Jobs.map((job) => (
                         <JobPost job={job} />
                     ))}
                     <br />
-                    <ReactPaginate
+
+                    {Jobs.length > 4 && <ReactPaginate
                         previousLabel={"Previous"}
                         nextLabel={"Next"}
                         pageCount={Math.ceil(Count / 10)}
@@ -77,7 +83,8 @@ const Feed = () => {
                         nextLinkClassName={classes.nextBttn}
                         disabledClassName={classes.paginationDisabled}
                         activeClassName={classes.paginationActive}
-                    />
+                    />}
+                    
                 </div>
             </>
         );
