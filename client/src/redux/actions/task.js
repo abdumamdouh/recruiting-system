@@ -14,7 +14,7 @@ const serverURL = "http://localhost:5000";
 //get all tasks
 export const getTaskAction = (id, pageNumber) => {
     const JobId = id;
-    console.log('pageNum', pageNumber);
+    console.log("pageNum", pageNumber);
     return async (dispatch, getState) => {
         try {
             dispatch({
@@ -46,17 +46,15 @@ export const getTaskAction = (id, pageNumber) => {
         }
     };
 };
-export const getTaskSubmissionsAction = (JobId,TaskId) => {
-    
+export const getTaskSubmissionsAction = (JobId, TaskId) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
-                type: GET_TASK_SUBMISSIONS_REQUEST,
-                
+                type: GET_TASK_SUBMISSIONS_REQUEST
             });
             const { userInfo } = getState().user;
             console.log(userInfo.token);
-            console.log('tessssst',JobId)
+            console.log("tessssst", JobId);
             const rawResponse = await fetch(
                 `${serverURL}/${JobId}/${TaskId}/taskDetails`,
                 // `${serverURL}/getAllMCQs/${pageNumber}`,
@@ -69,19 +67,18 @@ export const getTaskSubmissionsAction = (JobId,TaskId) => {
                     }
                 }
             );
-            const data = await rawResponse.json();        
-    dispatch({ type: GET_TASK_SUBMISSIONS_SUCCESS, payload: data });
-   
-} catch (error) {
-    dispatch({
-        type: GET_TASK_SUBMISSIONS_FAIL,
-        payload: error.response && error.response.data
-    });
-}
+            const data = await rawResponse.json();
+            dispatch({ type: GET_TASK_SUBMISSIONS_SUCCESS, payload: data });
+        } catch (error) {
+            dispatch({
+                type: GET_TASK_SUBMISSIONS_FAIL,
+                payload: error.response && error.response.data
+            });
+        }
+    };
 };
-}
 
-export const setTaskMarkAction = (JobId, TaskId,Marks,showSuccessMessage) => {
+export const setTaskMarkAction = (JobId, TaskId, Marks, showSuccessMessage) => {
     return async (dispatch, getState) => {
         try {
             dispatch({
@@ -89,11 +86,13 @@ export const setTaskMarkAction = (JobId, TaskId,Marks,showSuccessMessage) => {
             });
             const { userInfo } = getState().user;
             console.log(userInfo.token);
-            
-            const body ={JobId,TaskId,Marks}
-            try {
-                console.log(userInfo.token);
-                const rawResponse = await fetch(`http://localhost:5000/setTaskMark`, {
+
+            const body = { JobId, TaskId, Marks };
+
+            console.log(userInfo.token);
+            const rawResponse = await fetch(
+                `http://localhost:5000/setTaskMark`,
+                {
                     method: "POST",
                     headers: {
                         Accept: "application/json",
@@ -101,20 +100,15 @@ export const setTaskMarkAction = (JobId, TaskId,Marks,showSuccessMessage) => {
                         Authorization: "Bearer " + userInfo.token
                     },
                     body: JSON.stringify(body)
-                });
-                const data = await rawResponse.json();
-                console.log(data);
-                //TODO: condition for success
-                dispatch({ type: SET_TASK_MARK_SUCCESS, payload: data });
-                
-                setTimeout(() =>{dispatch(getTaskSubmissionsAction(JobId, TaskId))},500)
-                showSuccessMessage()
-                
-            } catch (error) {
-                console.error("Error:", error);
-            }
-           
-            
+                }
+            );
+
+            dispatch({ type: SET_TASK_MARK_SUCCESS, payload: "done" });
+
+            setTimeout(() => {
+                dispatch(getTaskSubmissionsAction(JobId, TaskId));
+            }, 500);
+            showSuccessMessage();
         } catch (error) {
             dispatch({
                 type: SET_TASK_MARK_FAIL,
